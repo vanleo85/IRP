@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<build-type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="30f0c91e-5ea3-4f1f-ab5f-ca78a39f428e" xsi:noNamespaceSchemaLocation="https://www.jetbrains.com/teamcity/schemas/2020.1/project-config.xsd">
+  <name>5. ReleaseGitHub</name>
+  <description />
+  <settings>
+    <options>
+      <option name="allowPersonalBuildTriggering" value="false" />
+      <option name="artifactRules" value="IRP_master.cf" />
+      <option name="branchFilter" value="+:master" />
+      <option name="buildConfigurationType" value="DEPLOYMENT" />
+      <option name="cleanBuild" value="true" />
+      <option name="maximumNumberOfBuilds" value="1" />
+      <option name="publishArtifactCondition" value="SUCCESSFUL" />
+    </options>
+    <disabled-settings>
+      <setting-ref ref="RUNNER_17" />
+      <setting-ref ref="TRIGGER_6" />
+    </disabled-settings>
+    <parameters>
+      <param name="env.Database1CName" value="IRP_master" />
+      <param name="env.GitHubSecurityToken" value="credentialsJSON:dea25710-6762-4b8c-ad3c-c8ea384b82c1" spec="password display='hidden'" />
+      <param name="env.Version" value="0.7.2" />
+    </parameters>
+    <build-runners>
+      <runner id="RUNNER_17" name="Upload to github" type="simpleRunner">
+        <parameters>
+          <param name="script.content"><![CDATA[%teamcity.tool.windows-amd64-github-release%\bin\windows\amd64\github-release.exe release --security-token %env.GitHubSecurityToken% --user DitriXNew --repo irp --tag Release-v%env.Version%.%build.number% 
+%teamcity.tool.windows-amd64-github-release%\bin\windows\amd64\github-release.exe upload  --security-token %env.GitHubSecurityToken% --user DitriXNew --repo irp --tag Release-v%env.Version%.%build.number%  --name Release-v%env.Version%.%build.number%.cf --file %system.teamcity.build.workingDir%\IRP_develop.cf]]></param>
+          <param name="teamcity.step.mode" value="default" />
+          <param name="use.custom.script" value="true" />
+        </parameters>
+      </runner>
+    </build-runners>
+    <vcs-settings>
+      <vcs-entry-ref root-id="IRP_GitTC" />
+    </vcs-settings>
+    <requirements />
+    <build-triggers>
+      <build-trigger id="TRIGGER_6" type="buildDependencyTrigger">
+        <parameters>
+          <param name="afterSuccessfulBuildOnly" value="true" />
+          <param name="branchFilter" value="+:&lt;default&gt;" />
+          <param name="dependsOn" value="Irp_Build" />
+        </parameters>
+      </build-trigger>
+    </build-triggers>
+    <artifact-dependencies>
+      <dependency id="ARTIFACT_DEPENDENCY_7" sourceBuildTypeId="IRP_BuildCF" cleanDestination="true">
+        <revisionRule name="lastSuccessful" revision="latest.lastSuccessful" branch="+:master" />
+        <artifact sourcePath="IRP_master.cf" />
+      </dependency>
+    </artifact-dependencies>
+    <cleanup />
+  </settings>
+</build-type>
+

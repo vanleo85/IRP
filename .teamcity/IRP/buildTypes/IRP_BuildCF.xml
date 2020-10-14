@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<build-type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="cad3ba1b-b3c6-4310-bc39-b5c670c0fc01" xsi:noNamespaceSchemaLocation="https://www.jetbrains.com/teamcity/schemas/2020.1/project-config.xsd">
+  <name>2. Build CF and Update DB</name>
+  <description />
+  <settings ref="IRP_BuildCF_FromEDT">
+    <disabled-settings>
+      <setting-ref ref="RUNNER_22" />
+    </disabled-settings>
+    <parameters />
+    <build-runners order="RUNNER_22, RUNNER_5, RUNNER_32, RUNNER_8, RUNNER_9, RUNNER_11, RUNNER_43">
+      <runner id="RUNNER_22" name="Drop DB MetaRunner" type="DropDB">
+        <parameters>
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+    </build-runners>
+    <vcs-settings />
+    <requirements />
+    <build-triggers />
+    <cleanup />
+  </settings>
+</build-type>
+

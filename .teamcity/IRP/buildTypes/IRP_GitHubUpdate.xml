@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<build-type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="721bf779-20d2-47bd-b4c6-dfa6b0402e5f" xsi:noNamespaceSchemaLocation="https://www.jetbrains.com/teamcity/schemas/2020.1/project-config.xsd">
+  <name>1. GitHubUpdate</name>
+  <description />
+  <settings>
+    <options>
+      <option name="cleanBuild" value="true" />
+    </options>
+    <parameters>
+      <param name="env.BranchToStartVA" value="develop" />
+      <param name="env.Database1CName" value="%teamcity.project.id%" />
+      <param name="env.SonarParamCover" value="" />
+      <param name="env.StartVA" value="false" />
+      <param name="env.VA_Tags" value="" />
+    </parameters>
+    <build-runners>
+      <runner id="RUNNER_19" name="Set infobase name" type="jetbrains_powershell">
+        <parameters>
+          <param name="jetbrains_powershell_execution" value="PS1" />
+          <param name="jetbrains_powershell_noprofile" value="true" />
+          <param name="jetbrains_powershell_script_code"><![CDATA[echo "BranchToStartVA %env.BranchToStartVA%"
+echo "teamcity.pullRequest.target.branch %teamcity.pullRequest.target.branch%"
+echo "teamcity.build.branch %teamcity.build.branch%"
+$VA_Tags = ""
+
+if('%teamcity.pullRequest.target.branch%' -eq '%env.BranchToStartVA%')
+{
+	$StartVA = 'true'
+	$SonarParamCover = "-Dsonar.coverageReportPaths=%system.teamcity.build.workingDir%/Cover.xml"
+ 	$InfobaseName = "%env.Database1CName%_%teamcity.pullRequest.target.branch%_pull%teamcity.pullRequest.number%"
+    $VA_Tags = "Test"
+}
+elseif('%teamcity.build.branch%' -eq '%env.BranchToStartVA%')
+{
+	$StartVA = 'true'
+	$SonarParamCover = "-Dsonar.coverageReportPaths=%system.teamcity.build.workingDir%/Cover.xml"
+	$InfobaseName = "%env.Database1CName%_%teamcity.build.branch%"
+    
+}
+else
+{
+	$VA_Tags = "Test"
+	$StartVA = 'false'
+	$SonarParamCover = ""
+	$InfobaseName = "%env.Database1CName%_%teamcity.build.branch%"
+}
+
+$InfobaseName = $InfobaseName -replace "\\", "_" 
+$InfobaseName = $InfobaseName -replace "\/", "_" 
+$InfobaseName = $InfobaseName -replace "\-", "_"
+
+echo "##teamcity[setParameter name='env.Database1CName' value='$InfobaseName']"
+echo "##teamcity[setParameter name='env.SonarParamCover' value='$SonarParamCover']"
+echo "##teamcity[setParameter name='env.StartVA' value='$StartVA']"
+echo "##teamcity[setParameter name='env.VA_Tags' value='$VA_Tags']"]]></param>
+          <param name="jetbrains_powershell_script_mode" value="CODE" />
+          <param name="teamcity.step.mode" value="default" />
+        </parameters>
+      </runner>
+    </build-runners>
+    <vcs-settings>
+      <vcs-entry-ref root-id="IRP_GitTC" />
+    </vcs-settings>
+    <requirements />
+    <build-triggers>
+      <build-trigger id="vcsTrigger" type="vcsTrigger">
+        <parameters>
+          <param name="branchFilter"><![CDATA[-:*
++:develop
++:pull/*]]></param>
+          <param name="enableQueueOptimization" value="true" />
+          <param name="quietPeriodMode" value="DO_NOT_USE" />
+          <param name="triggerRules" value="-:.teamcity/**" />
+        </parameters>
+      </build-trigger>
+    </build-triggers>
+    <build-extensions>
+      <extension id="BUILD_EXT_7" type="commit-status-publisher">
+        <parameters>
+          <param name="github_authentication_type" value="token" />
+          <param name="github_host" value="https://api.github.com" />
+          <param name="github_oauth_user" value="DitriXNew" />
+          <param name="publisherId" value="githubStatusPublisher" />
+          <param name="secure:github_access_token" value="credentialsJSON:1fa3b09b-5cd9-4521-80c7-3c52664962a9" />
+        </parameters>
+      </extension>
+      <extension id="BUILD_EXT_8" type="pullRequests">
+        <parameters>
+          <param name="authenticationType" value="token" />
+          <param name="filterAuthorRole" value="MEMBER" />
+          <param name="filterTargetBranch"><![CDATA[+:develop
++:master]]></param>
+          <param name="providerType" value="github" />
+          <param name="secure:accessToken" value="credentialsJSON:1fa3b09b-5cd9-4521-80c7-3c52664962a9" />
+          <param name="vcsRootId" value="IRP_GitTC" />
+        </parameters>
+      </extension>
+    </build-extensions>
+    <cleanup />
+  </settings>
+</build-type>
+
