@@ -1,13 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <mdclass:EventSubscription xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="702d1c7e-0229-4a97-b8bc-3f503b301378">
-  <name>OpenMobileForm</name>
-  <synonym>
-    <key>en</key>
-    <value>Open mobile form</value>
-  </synonym>
-  <source>
-    <types>DocumentManager</types>
-  </source>
-  <event>FormGetProcessing</event>
-  <handler>CommonModule.MobileEvents.OpenMobileFormFormGetProcessing</handler>
+ <name>OpenMobileForm</name>
+ <synonym>
+  <key>en</key>
+  <value>Open mobile form</value>
+ </synonym>
+ <source>
+  <types>DocumentManager</types>
+ </source>
+ <event>FormGetProcessing</event>
+ <handler>CommonModule.MobileEvents.OpenMobileFormFormGetProcessing</handler>
+ <synonym>
+  <key>ru</key>
+  <value>Открытие мобильной формы</value>
+ </synonym>
+ <synonym>
+  <key>tr</key>
+  <value>Mobil form açmak</value>
+ </synonym>
+ <synonym>
+  <key>de</key>
+  <value>Mobiles Formular öffnen</value>
+ </synonym>
+ <synonym>
+  <key>fr</key>
+  <value>Ouvrir le formulaire mobile</value>
+ </synonym>
 </mdclass:EventSubscription>

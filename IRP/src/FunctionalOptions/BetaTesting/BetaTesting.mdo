@@ -1,13 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <mdclass:FunctionalOption xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="af2f6565-10ac-43ab-b9f0-7fea1d91c923">
-  <name>BetaTesting</name>
-  <synonym>
-    <key>en</key>
-    <value>Beta testing</value>
-  </synonym>
-  <location>Constant.ShowBetaTesting</location>
-  <privilegedGetMode>true</privilegedGetMode>
-  <content>Catalog.PaymentSchedules</content>
-  <content>Catalog.Workstations</content>
-  <content>Catalog.PaymentTypes</content>
+ <name>BetaTesting</name>
+ <synonym>
+  <key>en</key>
+  <value>Beta testing</value>
+ </synonym>
+ <location>Constant.ShowBetaTesting</location>
+ <privilegedGetMode>true</privilegedGetMode>
+ <content>Catalog.PaymentSchedules</content>
+ <content>Catalog.Workstations</content>
+ <content>Catalog.PaymentTypes</content>
+ <synonym>
+  <key>ru</key>
+  <value>Отображать Beta testing</value>
+ </synonym>
+ <synonym>
+  <key>tr</key>
+  <value>Beta test</value>
+ </synonym>
+ <synonym>
+  <key>de</key>
+  <value>Beta-Tests</value>
+ </synonym>
 </mdclass:FunctionalOption>

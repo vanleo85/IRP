@@ -1,13 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <mdclass:EventSubscription xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="1c8c7037-737a-491e-9234-ff2c854da18e">
-  <name>CheckUniqueID</name>
-  <synonym>
-    <key>en</key>
-    <value>Check unique ID</value>
-  </synonym>
-  <source>
-    <types>DefinedType.UseUniqueID</types>
-  </source>
-  <event>BeforeWrite</event>
-  <handler>CommonModule.UniqueID.CheckUniqueIDBeforeWrite</handler>
+ <name>CheckUniqueID</name>
+ <synonym>
+  <key>en</key>
+  <value>Check unique ID</value>
+ </synonym>
+ <source>
+  <types>DefinedType.UseUniqueID</types>
+ </source>
+ <event>BeforeWrite</event>
+ <handler>CommonModule.UniqueID.CheckUniqueIDBeforeWrite</handler>
+ <synonym>
+  <key>ru</key>
+  <value>Проверка уникальности ID</value>
+ </synonym>
+ <synonym>
+  <key>tr</key>
+  <value>Eşsiz ID kontrolü yapmak</value>
+ </synonym>
+ <synonym>
+  <key>de</key>
+  <value>ID-Eindeutigkeit überprüfen</value>
+ </synonym>
+ <synonym>
+  <key>fr</key>
+  <value>Vérifier l'unicité de l'ID</value>
+ </synonym>
 </mdclass:EventSubscription>

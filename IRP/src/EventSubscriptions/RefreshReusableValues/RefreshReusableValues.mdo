@@ -1,14 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <mdclass:EventSubscription xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="b0e15019-0e8c-46ef-9e78-6f425f976c37">
-  <name>RefreshReusableValues</name>
-  <synonym>
-    <key>en</key>
-    <value>Refresh reusable values</value>
-  </synonym>
-  <source>
-    <types>ChartOfCharacteristicTypesObject</types>
-    <types>CatalogObject</types>
-  </source>
-  <event>BeforeWrite</event>
-  <handler>CommonModule.LocalizationEvents.RefreshReusableValuesBeforeWrite</handler>
+ <name>RefreshReusableValues</name>
+ <synonym>
+  <key>en</key>
+  <value>Refresh reusable values</value>
+ </synonym>
+ <source>
+  <types>ChartOfCharacteristicTypesObject</types>
+  <types>CatalogObject</types>
+ </source>
+ <event>BeforeWrite</event>
+ <handler>CommonModule.LocalizationEvents.RefreshReusableValuesBeforeWrite</handler>
+ <synonym>
+  <key>ru</key>
+  <value>Обновление значений многоразового использования</value>
+ </synonym>
+ <synonym>
+  <key>tr</key>
+  <value>Yeniden kullanılabilir değerleri güncelle</value>
+ </synonym>
+ <synonym>
+  <key>de</key>
+  <value>Wiederverwendbare Werte aktualisieren</value>
+ </synonym>
+ <synonym>
+  <key>fr</key>
+  <value>Mettre à jour les valeurs réutilisables</value>
+ </synonym>
 </mdclass:EventSubscription>

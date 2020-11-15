@@ -1,14 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <mdclass:EventSubscription xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="b4a42279-681b-48da-910f-cb1d995b63f5">
-  <name>FindDataForInputString</name>
-  <synonym>
-    <key>en</key>
-    <value>Find data for input string</value>
-  </synonym>
-  <source>
-    <types>CatalogManager</types>
-    <types>ChartOfCharacteristicTypesManager.CurrencyMovementType</types>
-  </source>
-  <event>ChoiceDataGetProcessing</event>
-  <handler>CommonModule.LocalizationEvents.FindDataForInputStringChoiceDataGetProcessing</handler>
+ <name>FindDataForInputString</name>
+ <synonym>
+  <key>en</key>
+  <value>Find data for input string</value>
+ </synonym>
+ <source>
+  <types>CatalogManager</types>
+  <types>ChartOfCharacteristicTypesManager.CurrencyMovementType</types>
+ </source>
+ <event>ChoiceDataGetProcessing</event>
+ <handler>CommonModule.LocalizationEvents.FindDataForInputStringChoiceDataGetProcessing</handler>
+ <synonym>
+  <key>ru</key>
+  <value>Поиск при вводе по строке</value>
+ </synonym>
+ <synonym>
+  <key>tr</key>
+  <value>Giriş satırı için veri bulmak</value>
+ </synonym>
+ <synonym>
+  <key>de</key>
+  <value>Eingabesuche nach Zeichenfolge</value>
+ </synonym>
+ <synonym>
+  <key>fr</key>
+  <value>Rechercher les données par chaîne au cours d'entrée</value>
+ </synonym>
 </mdclass:EventSubscription>

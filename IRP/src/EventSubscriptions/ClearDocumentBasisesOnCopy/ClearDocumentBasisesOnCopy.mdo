@@ -1,13 +1,29 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <mdclass:EventSubscription xmlns:mdclass="http://g5.1c.ru/v8/dt/metadata/mdclass" uuid="d688f223-7102-41a5-88f9-6b37ab01f7fa">
-  <name>ClearDocumentBasisesOnCopy</name>
-  <synonym>
-    <key>en</key>
-    <value>Clear document basises on copy</value>
-  </synonym>
-  <source>
-    <types>DocumentObject</types>
-  </source>
-  <event>OnCopy</event>
-  <handler>CommonModule.FillingWithDefaultDataEvent.ClearDocumentBasisesOnCopy</handler>
+ <name>ClearDocumentBasisesOnCopy</name>
+ <synonym>
+  <key>en</key>
+  <value>Clear document basises on copy</value>
+ </synonym>
+ <source>
+  <types>DocumentObject</types>
+ </source>
+ <event>OnCopy</event>
+ <handler>CommonModule.FillingWithDefaultDataEvent.ClearDocumentBasisesOnCopy</handler>
+ <synonym>
+  <key>ru</key>
+  <value>Очистка документов-оснований при копировании</value>
+ </synonym>
+ <synonym>
+  <key>tr</key>
+  <value>Kopyada kaynak evrakı temizle</value>
+ </synonym>
+ <synonym>
+  <key>de</key>
+  <value>Basisdokumente beim Kopieren löschen</value>
+ </synonym>
+ <synonym>
+  <key>fr</key>
+  <value>Effacer documents de base au cours de copie</value>
+ </synonym>
 </mdclass:EventSubscription>
