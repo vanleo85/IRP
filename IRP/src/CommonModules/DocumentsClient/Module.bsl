@@ -1,7 +1,17 @@
-#Region FormEvents
+#Region FormEventHandlers
 
 Procedure OnOpen(Object, Form, Cancel) Export
 	Return;
+EndProcedure
+
+Procedure NotificationProcessing(Form, EventName, Parameter, Source, AddInfo = Undefined) Export	
+	If EventName = "UpdateAddAttributeAndPropertySets" Then
+		AddAttributesAndPropertiesServer.CreateFormControls(Form, "GroupOther");
+	EndIf;
+	
+	If EventName = "NewBarcode" And Form.IsInputAvailable() Then
+		Form.SearchByBarcode(Undefined, Parameter);
+	EndIf;	
 EndProcedure
 			
 Procedure OpenChoiceForm(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings) Export	
@@ -37,6 +47,7 @@ Procedure DescriptionClick(Object, Form, Item, StandardProcessing) Export
 	StandardProcessing = False;
 	CommonFormActions.EditMultilineText(Item.Name, Form);
 EndProcedure
+
 #EndRegion
 
 #Region Account

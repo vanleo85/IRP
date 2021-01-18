@@ -1,5 +1,5 @@
 
-#Region FormEvents
+#Region FormEventHandlers
 
 &AtServer
 Procedure OnCreateAtServer(Cancel, StandardProcessing)
@@ -18,9 +18,7 @@ EndProcedure
 
 &AtClient
 Procedure NotificationProcessing(EventName, Parameter, Source, AddInfo = Undefined) Export
-	If EventName = "UpdateAddAttributeAndPropertySets" Then
-		AddAttributesCreateFormControl();
-	EndIf;
+	DocumentsClient.NotificationProcessing(ThisObject, EventName, Parameter, Source, AddInfo);
 	
 	If Not Source = ThisObject Then
 		Return;
@@ -31,10 +29,6 @@ Procedure NotificationProcessing(EventName, Parameter, Source, AddInfo = Undefin
 	ServerData = Undefined;		
 	If TypeOf(Parameter) = Type("Structure") And Parameter.Property("AddInfo") Then
 		ServerData = CommonFunctionsClientServer.GetFromAddInfo(Parameter.AddInfo, "ServerData");
-	EndIf;
-	
-	If EventName = "NewBarcode" And IsInputAvailable() Then
-		SearchByBarcode(Undefined, Parameter);
 	EndIf;
 	
 	If Upper(EventName) = Upper("CallbackHandler") Then
@@ -570,11 +564,6 @@ EndProcedure
 &AtClient
 Procedure AddAttributeStartChoice(Item, ChoiceData, StandardProcessing) Export
 	AddAttributesAndPropertiesClient.AddAttributeStartChoice(ThisObject, Item, StandardProcessing);
-EndProcedure
-
-&AtServer
-Procedure AddAttributesCreateFormControl()
-	AddAttributesAndPropertiesServer.CreateFormControls(ThisObject, "GroupOther");
 EndProcedure
 
 #EndRegion

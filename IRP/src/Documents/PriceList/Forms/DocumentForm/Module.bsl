@@ -57,6 +57,11 @@ Procedure NotificationProcessing(EventName, Parameter, Source, AddInfo = Undefin
 	If EventName = "UpdateAddAttributeAndPropertySets" Then
 		AddAttributesCreateFormControl();
 	EndIf;
+	
+	If EventName = "NewBarcode" And IsInputAvailable() Then
+		SearchByBarcode(Undefined, Parameter);
+	EndIf;
+	
 EndProcedure
 
 &AtClient
@@ -106,6 +111,15 @@ EndProcedure
 Procedure PriceListTypeOnChange(Item)
 	BuildForm();
 	SetVisible();
+EndProcedure
+
+#EndRegion
+
+#Region FormCommandsEventHandlers
+
+&AtClient
+Procedure SearchByBarcode(Command, Barcode = "")
+	DocSalesOrderClient.SearchByBarcode(Barcode, Object, ThisObject);
 EndProcedure
 
 #EndRegion

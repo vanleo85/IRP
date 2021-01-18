@@ -76,7 +76,7 @@ Procedure OnOpen(Object, Form, Cancel, AddInfo = Undefined) Export
 EndProcedure
 
 Procedure NotificationProcessing(Object, Form, EventName, Parameter, Source, AddInfo = Undefined) Export
-	Return;
+	DocumentsClient.NotificationProcessing(ThisObject, EventName, Parameter, Source, AddInfo = Undefined);
 EndProcedure
 
 Procedure AfterWriteAtClient(Object, Form, WriteParameters, AddInfo = Undefined) Export

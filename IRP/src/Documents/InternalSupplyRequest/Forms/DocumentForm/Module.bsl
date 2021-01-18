@@ -32,13 +32,10 @@ Procedure OnWriteAtServer(Cancel, CurrentObject, WriteParameters)
 EndProcedure
 
 &AtClient
-Procedure NotificationProcessing(EventName, Parameter, Source)
-	If EventName = "NewBarcode" And IsInputAvailable() Then
-		SearchByBarcode(Undefined, Parameter);
-	ElsIf EventName = "UpdateAddAttributeAndPropertySets" Then
-		AddAttributesCreateFormControl();
-	EndIf;
+Procedure NotificationProcessing(EventName, Parameter, Source, AddInfo = Undefined) Export
+	DocumentsClient.NotificationProcessing(ThisObject, EventName, Parameter, Source, AddInfo);
 EndProcedure
+
 #EndRegion
 
 &AtClient
@@ -169,11 +166,6 @@ EndProcedure
 &AtClient
 Procedure AddAttributeStartChoice(Item, ChoiceData, StandardProcessing) Export
 	AddAttributesAndPropertiesClient.AddAttributeStartChoice(ThisObject, Item, StandardProcessing);
-EndProcedure
-
-&AtServer
-Procedure AddAttributesCreateFormControl()
-	AddAttributesAndPropertiesServer.CreateFormControls(ThisObject);
 EndProcedure
 
 #EndRegion

@@ -50,14 +50,10 @@ EndProcedure
 
 &AtClient
 Procedure NotificationProcessing(EventName, Parameter, Source, AddInfo = Undefined) Export
+	DocumentsClient.NotificationProcessing(ThisObject, EventName, Parameter, Source, AddInfo);
+	
 	If EventName = "ChoiceReceiptBasis" Then
 		SetVisibilityAvailability(Object, ThisObject);
-	EndIf;
-	If EventName = "UpdateAddAttributeAndPropertySets" Then
-		AddAttributesCreateFormControl();
-	EndIf;	
-	If EventName = "NewBarcode" And IsInputAvailable() Then
-		SearchByBarcode(Undefined, Parameter);
 	EndIf;
 EndProcedure
 
@@ -272,11 +268,6 @@ EndProcedure
 &AtClient
 Procedure AddAttributeStartChoice(Item, ChoiceData, StandardProcessing) Export
 	AddAttributesAndPropertiesClient.AddAttributeStartChoice(ThisObject, Item, StandardProcessing);
-EndProcedure
-
-&AtServer
-Procedure AddAttributesCreateFormControl()
-	AddAttributesAndPropertiesServer.CreateFormControls(ThisObject, "GroupOther");
 EndProcedure
 
 #EndRegion
