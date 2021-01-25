@@ -64,6 +64,7 @@
     <types>CatalogRef.SerialLotNumbers</types>
     <types>CatalogRef.Agreements</types>
     <types>CatalogRef.Taxes</types>
+    <types>DocumentRef.ItemStockAdjustment</types>
     <types>CatalogRef.RetailCustomers</types>
     <types>CatalogRef.Countries</types>
     <types>CatalogRef.SpecialOfferTypes</types>
@@ -83,6 +84,5 @@
     <types>CatalogRef.ChequeBonds</types>
     <types>CatalogRef.BusinessUnits</types>
     <types>DocumentRef.CashExpense</types>
-    <types>DocumentRef.ItemStockAdjustment</types>
   </type>
 </mdclass:DefinedType>

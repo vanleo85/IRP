@@ -87,6 +87,10 @@
     <use>Use</use>
   </content>
   <content>
+    <metadata>Document.ItemStockAdjustment</metadata>
+    <use>Use</use>
+  </content>
+  <content>
     <metadata>Document.Unbundling</metadata>
     <use>Use</use>
   </content>
@@ -176,10 +180,6 @@
   </content>
   <content>
     <metadata>Document.CashStatement</metadata>
-    <use>Use</use>
-  </content>
-  <content>
-    <metadata>Document.ItemStockAdjustment</metadata>
     <use>Use</use>
   </content>
   <autoUse>DontUse</autoUse>
