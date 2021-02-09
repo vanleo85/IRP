@@ -55,10 +55,7 @@
   <defaultChoiceForm>Document.Bundling.Form.ChoiceForm</defaultChoiceForm>
   <realTimePosting>Deny</realTimePosting>
   <registerRecords>InformationRegister.BundleContents</registerRecords>
-
-
-
-
+  <registerRecords>AccumulationRegister.T10000B_RowIDMovements</registerRecords>
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>

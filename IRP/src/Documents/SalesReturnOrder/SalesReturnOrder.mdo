@@ -107,8 +107,7 @@
   <defaultListForm>Document.SalesReturnOrder.Form.ListForm</defaultListForm>
   <defaultChoiceForm>Document.SalesReturnOrder.Form.ChoiceForm</defaultChoiceForm>
   <realTimePosting>Deny</realTimePosting>
-
-
+  <registerRecords>AccumulationRegister.T10000B_RowIDMovements</registerRecords>
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>

@@ -54,12 +54,9 @@
   <defaultListForm>Document.StockAdjustmentAsWriteOff.Form.ListForm</defaultListForm>
   <defaultChoiceForm>Document.StockAdjustmentAsWriteOff.Form.ChoiceForm</defaultChoiceForm>
   <realTimePosting>Deny</realTimePosting>
-
   <registerRecords>AccumulationRegister.ExpensesTurnovers</registerRecords>
-
-
   <registerRecords>AccumulationRegister.R4014B_SerialLotNumber</registerRecords>
-
+  <registerRecords>AccumulationRegister.T10000B_RowIDMovements</registerRecords>
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>

@@ -372,6 +372,7 @@
   <commonModules>CommonModule.WorkstationServer</commonModules>
   <commonModules>CommonModule.DocPlannedReceiptReservationClient</commonModules>
   <commonModules>CommonModule.DocPlannedReceiptReservationServer</commonModules>
+  <commonModules>CommonModule.RowIDInfo</commonModules>
   <commonAttributes>CommonAttribute.Author</commonAttributes>
   <commonAttributes>CommonAttribute.BusinessUnit</commonAttributes>
   <commonAttributes>CommonAttribute.Description</commonAttributes>
@@ -409,6 +410,8 @@
   <eventSubscriptions>EventSubscription.PresentationFieldsGetProcessing_GetCatalogPresentationFields</eventSubscriptions>
   <eventSubscriptions>EventSubscription.PresentationGetProcessing_GetCatalogPresentation</eventSubscriptions>
   <eventSubscriptions>EventSubscription.BeforeWrite_FillQuantity</eventSubscriptions>
+  <eventSubscriptions>EventSubscription.Posting_RowID</eventSubscriptions>
+  <eventSubscriptions>EventSubscription.BeforeWrite_RowID</eventSubscriptions>
   <scheduledJobs>ScheduledJob.AreaUpdate</scheduledJobs>
   <scheduledJobs>ScheduledJob.ExportData</scheduledJobs>
   <settingsStorages>SettingsStorage.ReportOptions</settingsStorages>
@@ -548,6 +551,7 @@
   <catalogs>Catalog.UserGroups</catalogs>
   <catalogs>Catalog.Users</catalogs>
   <catalogs>Catalog.Workstations</catalogs>
+  <catalogs>Catalog.MovementRules</catalogs>
   <documents>Document.BankPayment</documents>
   <documents>Document.BankReceipt</documents>
   <documents>Document.Bundling</documents>
@@ -749,6 +753,7 @@
   <accumulationRegisters>AccumulationRegister.RetailSales</accumulationRegisters>
   <accumulationRegisters>AccumulationRegister.RevenuesTurnovers</accumulationRegisters>
   <accumulationRegisters>AccumulationRegister.TaxesTurnovers</accumulationRegisters>
+  <accumulationRegisters>AccumulationRegister.T10000B_RowIDMovements</accumulationRegisters>
   <chartsOfCharacteristicTypes>ChartOfCharacteristicTypes.AddAttributeAndProperty</chartsOfCharacteristicTypes>
   <chartsOfCharacteristicTypes>ChartOfCharacteristicTypes.CustomUserSettings</chartsOfCharacteristicTypes>
   <chartsOfCharacteristicTypes>ChartOfCharacteristicTypes.IDInfoTypes</chartsOfCharacteristicTypes>

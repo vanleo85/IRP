@@ -53,6 +53,7 @@
   <defaultObjectForm>Document.Labeling.Form.DocumentForm</defaultObjectForm>
   <defaultListForm>Document.Labeling.Form.ListForm</defaultListForm>
   <defaultChoiceForm>Document.Labeling.Form.ChoiceForm</defaultChoiceForm>
+  <registerRecords>AccumulationRegister.T10000B_RowIDMovements</registerRecords>
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>

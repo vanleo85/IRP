@@ -57,6 +57,7 @@
   <registerRecords>InformationRegister.PricesByItems</registerRecords>
   <registerRecords>InformationRegister.PricesByItemKeys</registerRecords>
   <registerRecords>InformationRegister.PricesByProperties</registerRecords>
+  <registerRecords>AccumulationRegister.T10000B_RowIDMovements</registerRecords>
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>

@@ -61,6 +61,7 @@
   <registerRecords>AccumulationRegister.ReconciliationStatement</registerRecords>
   <registerRecords>AccumulationRegister.RevenuesTurnovers</registerRecords>
   <registerRecords>AccumulationRegister.PartnerApTransactions</registerRecords>
+  <registerRecords>AccumulationRegister.T10000B_RowIDMovements</registerRecords>
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>

@@ -54,13 +54,11 @@
   <defaultListForm>Document.InventoryTransferOrder.Form.ListForm</defaultListForm>
   <defaultChoiceForm>Document.InventoryTransferOrder.Form.ChoiceForm</defaultChoiceForm>
   <realTimePosting>Deny</realTimePosting>
-
   <registerRecords>AccumulationRegister.R4035B_IncomingStocks</registerRecords>
-
   <registerRecords>AccumulationRegister.R4036B_IncomingStocksRequested</registerRecords>
-
   <registerRecords>AccumulationRegister.R4011B_FreeStocks</registerRecords>
   <registerRecords>AccumulationRegister.R4012B_StockReservation</registerRecords>
+  <registerRecords>AccumulationRegister.T10000B_RowIDMovements</registerRecords>
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>

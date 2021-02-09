@@ -59,6 +59,7 @@
   <defaultChoiceForm>Document.PhysicalCountByLocation.Form.ChoiceForm</defaultChoiceForm>
   <posting>Deny</posting>
   <realTimePosting>Deny</realTimePosting>
+  <registerRecords>AccumulationRegister.T10000B_RowIDMovements</registerRecords>
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>
