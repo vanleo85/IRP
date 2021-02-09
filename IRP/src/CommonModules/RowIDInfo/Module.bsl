@@ -51,6 +51,8 @@ Procedure BeforeWrite_RowID(Source, Cancel, WriteMode, PostingMode) Export
 	
 	If TypeOf(Source) = Type("DocumentObject.SalesOrder") Then
 		SalesOrder_FillRowID(Source);	
+	ElsIf TypeOf(Source) = Type("DocumentObject.SalesInvoice") Then
+		SalesInvoice_FillRowID(Source);
 	EndIf;	
 
 EndProcedure
@@ -75,12 +77,12 @@ Procedure SalesOrder_FillRowID(Source)
 		NextStep = Catalogs.MovementRules.EmptyRef();
 		
 		If Row.ProcurementMethod = Enums.ProcurementMethods.Purchase Then
-			NextStep = Catalogs.MovementRules.FromSalesOrderToPurchaseOrder;
+			NextStep = Catalogs.MovementRules.FromSOtoPO;
 		Else
 			If Source.ShipmentConfirmationsBeforeSalesInvoice Then
-				NextStep = Catalogs.MovementRules.FromSalesOrderToShipmentConfirmation;
+				NextStep = Catalogs.MovementRules.FromSOtoSC;
 			Else
-				NextStep = Catalogs.MovementRules.FromSalesOrderToSalesInvoice;
+				NextStep = Catalogs.MovementRules.FromSOtoSI;
 			EndIf;
 		EndIf;
 		
@@ -88,6 +90,31 @@ Procedure SalesOrder_FillRowID(Source)
 	EndDo;
 EndProcedure
 
+// Description
+// 	Fill Row ID List
+// Parameters:
+// 	Source - DocumentObject.SalesInvoice
+Procedure SalesInvoice_FillRowID(Source)
+	Source.RowIDInfo.Clear();
+	For Each Row In Source.ItemList Do
+		NewRow = Source.RowIDInfo.Add();
+		NewRow.Key = Row.Key;
+		NewRow.RowID = Row.Key;
+		NewRow.Quantity = Row.QuantityInBaseUnit;
+		
+		NextStep = Catalogs.MovementRules.EmptyRef();
+		
+		If Row.UseShipmentConfirmation Then
+			NextStep = Catalogs.MovementRules.FromSItoSC;
+		EndIf;
+		If Not Row.SalesOrder.IsEmpty() Then
+			NewRow.Basis = Row.SalesOrder;
+			NewRow.CurrentStep = Catalogs.MovementRules.FromSOtoSI;			
+		EndIf;
+		
+		NewRow.NextStep = NextStep;
+	EndDo;
+EndProcedure
 #Region FillBaseOnDocuments
 
 #Region SalesInvoice
@@ -110,7 +137,7 @@ Procedure FillSalesInvoiceFromSalesOrders(SalesOrderList, Object, Form) Export
 					RowByKey.Quantity * UnitFactorFrom / UnitFactorTo) + ResultRow.Quantity;
 			RowByKey.PriceType = ResultRow.PriceType;
 			RowByKey.Price = ResultRow.Price;
-			Settings.Rows.Add(RowByKey);
+			Settings.Rows.Add(RowByKey);			
 		Else
 			NewRow = Object.ItemList.Add();
 			FillPropertyValues(NewRow, ResultRow);
@@ -134,7 +161,7 @@ EndProcedure
 
 Function GetSalesOrdersInfoForSalesInvoice(FilterValues) Export
 	StepArray = New Array;
-	StepArray.Add(Catalogs.MovementRules.FromSalesOrderToSalesInvoice);
+	StepArray.Add(Catalogs.MovementRules.FromSOtoSI);
 	
 	Query = New Query;
 	Query.SetParameter("StepArray", StepArray);	

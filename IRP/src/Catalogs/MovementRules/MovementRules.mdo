@@ -31,39 +31,32 @@
   <autonumbering>true</autonumbering>
   <defaultPresentation>AsDescription</defaultPresentation>
   <predefined>
-    <items id="38e8b50b-7e6a-443e-9e6d-9bfcc7ce5075">
-      <name>FromSalesOrder</name>
-      <description></description>
-      <code xsi:type="core:StringValue">
-        <value>2</value>
-      </code>
-    </items>
     <items id="8fb2b11f-0adf-44d5-877d-0c507982babe">
-      <name>FromSalesOrderToSalesInvoice</name>
-      <description></description>
+      <name>FromSOtoSI</name>
+      <description>SO -> SI</description>
       <code xsi:type="core:StringValue">
         <value>4</value>
       </code>
     </items>
     <items id="10e2c45c-6db5-4f0e-b284-34d16ca9a429">
-      <name>FromSalesOrderToShipmentConfirmation</name>
-      <description></description>
+      <name>FromSOtoSC</name>
+      <description>SO -> SC</description>
       <code xsi:type="core:StringValue">
         <value>3</value>
       </code>
     </items>
-    <items id="6bb9cc7f-de9c-4db1-8825-c20c1b1966c3">
-      <name>FromSalesOrderAndSalesInvoiceToShipmentConfirmation</name>
-      <description></description>
-      <code xsi:type="core:StringValue">
-        <value>5</value>
-      </code>
-    </items>
     <items id="fcde3452-ae36-42cf-82ee-509a5affacaa">
-      <name>FromSalesOrderToPurchaseOrder</name>
-      <description></description>
+      <name>FromSOtoPO</name>
+      <description>SO -> PO</description>
       <code xsi:type="core:StringValue">
         <value>1</value>
+      </code>
+    </items>
+    <items id="52cbd8bc-5edd-4eb9-b6e8-8eb9393c356f">
+      <name>FromSItoSC</name>
+      <description>SI -> SC</description>
+      <code xsi:type="core:StringValue">
+        <value>6</value>
       </code>
     </items>
   </predefined>
