@@ -116,19 +116,10 @@
     <mdObject>AccumulationRegister.R1001T_Purchases</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.StockAdjustmentAsSurplus</mdObject>
-  </content>
-  <content>
     <mdObject>Catalog.CurrencyMovementSets</mdObject>
   </content>
   <content>
     <mdObject>AccumulationRegister.R1005T_PurchaseSpecialOffers</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.TransferOrderBalance</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.PurchaseReturnTurnovers</mdObject>
   </content>
   <content>
     <mdObject>Catalog.FileStoragesInfo</mdObject>
@@ -153,12 +144,6 @@
   </content>
   <content>
     <mdObject>InformationRegister.CurrencyRates</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.InventoryBalance</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.ItemsInStores</mdObject>
   </content>
   <content>
     <mdObject>InformationRegister.ItemSegments</mdObject>
@@ -209,9 +194,6 @@
     <mdObject>Catalog.TaxRates</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.GoodsInTransitOutgoing</mdObject>
-  </content>
-  <content>
     <mdObject>Document.RetailReturnReceipt</mdObject>
   </content>
   <content>
@@ -249,9 +231,6 @@
   </content>
   <content>
     <mdObject>AccumulationRegister.R2011B_SalesOrdersShipment</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.SalesReturnTurnovers</mdObject>
   </content>
   <content>
     <mdObject>Catalog.ItemSegments</mdObject>
@@ -326,9 +305,6 @@
     <mdObject>Document.ChequeBondTransaction</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.PurchaseTurnovers</mdObject>
-  </content>
-  <content>
     <mdObject>AccumulationRegister.ExpensesTurnovers</mdObject>
   </content>
   <content>
@@ -341,13 +317,7 @@
     <mdObject>AccumulationRegister.R2001T_Sales</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.OrderReservation</mdObject>
-  </content>
-  <content>
     <mdObject>AccumulationRegister.PlaningCashTransactions</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.OrderProcurement</mdObject>
   </content>
   <content>
     <mdObject>Catalog.AccessProfiles</mdObject>
@@ -407,9 +377,6 @@
     <mdObject>AccumulationRegister.TaxesTurnovers</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.GoodsInTransitIncoming</mdObject>
-  </content>
-  <content>
     <mdObject>Catalog.DataAreas</mdObject>
   </content>
   <content>
@@ -446,9 +413,6 @@
     <mdObject>InformationRegister.AddProperties</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.StockReservation</mdObject>
-  </content>
-  <content>
     <mdObject>Document.Unbundling</mdObject>
   </content>
   <content>
@@ -473,16 +437,10 @@
     <mdObject>Constant.UseLockDataModification</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.SalesTurnovers</mdObject>
-  </content>
-  <content>
     <mdObject>InformationRegister.Taxes</mdObject>
   </content>
   <content>
     <mdObject>AccumulationRegister.R2013T_SalesOrdersProcurement</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.ShipmentOrders</mdObject>
   </content>
   <content>
     <mdObject>AccumulationRegister.R5011B_PartnersAging</mdObject>
@@ -567,9 +525,6 @@
     <mdObject>Catalog.ChequeBonds</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.ReceiptOrders</mdObject>
-  </content>
-  <content>
     <mdObject>Catalog.PrintTemplates</mdObject>
   </content>
   <content>
@@ -609,9 +564,6 @@
     <mdObject>Document.InventoryTransferOrder</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.StockAdjustmentAsWriteOff</mdObject>
-  </content>
-  <content>
     <mdObject>Catalog.PriceTypes</mdObject>
   </content>
   <content>
@@ -622,9 +574,6 @@
   </content>
   <content>
     <mdObject>Document.PurchaseOrder</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.GoodsReceiptSchedule</mdObject>
   </content>
   <content>
     <mdObject>ChartOfCharacteristicTypes.CurrencyMovementType</mdObject>
@@ -706,22 +655,10 @@
     <mdObject>InformationRegister.TaxSettings</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.SalesOrderTurnovers</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.OrderBalance</mdObject>
-  </content>
-  <content>
     <mdObject>Catalog.Companies</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.StockBalance</mdObject>
-  </content>
-  <content>
     <mdObject>Catalog.TaxAnalytics</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.ShipmentConfirmationSchedule</mdObject>
   </content>
   <content>
     <mdObject>Document.CashStatement</mdObject>

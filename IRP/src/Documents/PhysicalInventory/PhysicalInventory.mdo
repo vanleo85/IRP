@@ -54,10 +54,10 @@
   <defaultListForm>Document.PhysicalInventory.Form.ListForm</defaultListForm>
   <defaultChoiceForm>Document.PhysicalInventory.Form.ChoiceForm</defaultChoiceForm>
   <realTimePosting>Deny</realTimePosting>
-  <registerRecords>AccumulationRegister.StockAdjustmentAsSurplus</registerRecords>
-  <registerRecords>AccumulationRegister.StockReservation</registerRecords>
-  <registerRecords>AccumulationRegister.StockAdjustmentAsWriteOff</registerRecords>
-  <registerRecords>AccumulationRegister.StockBalance</registerRecords>
+
+
+
+
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>

@@ -107,10 +107,10 @@
   <defaultListForm>Document.PurchaseReturnOrder.Form.ListForm</defaultListForm>
   <defaultChoiceForm>Document.PurchaseReturnOrder.Form.ChoiceForm</defaultChoiceForm>
   <realTimePosting>Deny</realTimePosting>
-  <registerRecords>AccumulationRegister.PurchaseTurnovers</registerRecords>
-  <registerRecords>AccumulationRegister.OrderReservation</registerRecords>
-  <registerRecords>AccumulationRegister.StockReservation</registerRecords>
-  <registerRecords>AccumulationRegister.OrderBalance</registerRecords>
+
+
+
+
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>

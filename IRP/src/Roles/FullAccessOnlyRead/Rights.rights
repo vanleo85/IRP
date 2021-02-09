@@ -710,17 +710,6 @@
 		</right>
 	</object>
 	<object>
-		<name>AccumulationRegister.StockAdjustmentAsSurplus</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
 		<name>Catalog.CurrencyMovementSets</name>
 		<right>
 			<name>Read</name>
@@ -755,29 +744,7 @@
 		</right>
 	</object>
 	<object>
-		<name>AccumulationRegister.TransferOrderBalance</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
 		<name>CommonForm.EditMultilineText</name>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>AccumulationRegister.PurchaseReturnTurnovers</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
 		<right>
 			<name>View</name>
 			<value>true</value>
@@ -1008,28 +975,6 @@
 		</right>
 		<right>
 			<name>ViewDataHistory</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>AccumulationRegister.InventoryBalance</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>AccumulationRegister.ItemsInStores</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
 			<value>true</value>
 		</right>
 	</object>
@@ -1432,17 +1377,6 @@
 		</right>
 	</object>
 	<object>
-		<name>AccumulationRegister.GoodsInTransitOutgoing</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
 		<name>CommonCommand.OpenPartnersVendor</name>
 		<right>
 			<name>View</name>
@@ -1709,17 +1643,6 @@
 		</right>
 		<right>
 			<name>ViewDataHistory</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>AccumulationRegister.SalesReturnTurnovers</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
 			<value>true</value>
 		</right>
 	</object>
@@ -2315,17 +2238,6 @@
 		</right>
 	</object>
 	<object>
-		<name>AccumulationRegister.PurchaseTurnovers</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
 		<name>AccumulationRegister.ExpensesTurnovers</name>
 		<right>
 			<name>Read</name>
@@ -2392,29 +2304,7 @@
 		</right>
 	</object>
 	<object>
-		<name>AccumulationRegister.OrderReservation</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
 		<name>AccumulationRegister.PlaningCashTransactions</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>AccumulationRegister.OrderProcurement</name>
 		<right>
 			<name>Read</name>
 			<value>true</value>
@@ -2810,17 +2700,6 @@
 		</right>
 	</object>
 	<object>
-		<name>AccumulationRegister.GoodsInTransitIncoming</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
 		<name>CommonAttribute.Author</name>
 		<right>
 			<name>View</name>
@@ -2982,17 +2861,6 @@
 		</right>
 		<right>
 			<name>ViewDataHistory</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>AccumulationRegister.StockReservation</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
 			<value>true</value>
 		</right>
 	</object>
@@ -3180,17 +3048,6 @@
 		</right>
 	</object>
 	<object>
-		<name>AccumulationRegister.SalesTurnovers</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
 		<name>Subsystem.MasterData.Subsystem.OpeningEntry</name>
 		<right>
 			<name>View</name>
@@ -3217,17 +3074,6 @@
 		</right>
 		<right>
 			<name>ViewDataHistory</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>AccumulationRegister.ShipmentOrders</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
 			<value>true</value>
 		</right>
 	</object>
@@ -3813,17 +3659,6 @@
 		</right>
 	</object>
 	<object>
-		<name>AccumulationRegister.ReceiptOrders</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
 		<name>Catalog.PrintTemplates</name>
 		<right>
 			<name>Read</name>
@@ -4165,17 +4000,6 @@
 		</right>
 	</object>
 	<object>
-		<name>AccumulationRegister.StockAdjustmentAsWriteOff</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
 		<name>Catalog.PriceTypes</name>
 		<right>
 			<name>Read</name>
@@ -4280,17 +4104,6 @@
 	</object>
 	<object>
 		<name>Subsystem.MasterData.Subsystem.Items</name>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>AccumulationRegister.GoodsReceiptSchedule</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
 		<right>
 			<name>View</name>
 			<value>true</value>
@@ -4894,29 +4707,7 @@
 		</right>
 	</object>
 	<object>
-		<name>AccumulationRegister.SalesOrderTurnovers</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
 		<name>CommonForm.EditDescriptions</name>
-		<right>
-			<name>View</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>AccumulationRegister.OrderBalance</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
 		<right>
 			<name>View</name>
 			<value>true</value>
@@ -4946,17 +4737,6 @@
 		</right>
 		<right>
 			<name>ViewDataHistory</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>AccumulationRegister.StockBalance</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
 			<value>true</value>
 		</right>
 	</object>
@@ -4995,17 +4775,6 @@
 		</right>
 		<right>
 			<name>Set</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>AccumulationRegister.ShipmentConfirmationSchedule</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>View</name>
 			<value>true</value>
 		</right>
 	</object>
