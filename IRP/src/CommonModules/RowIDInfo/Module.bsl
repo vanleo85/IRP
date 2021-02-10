@@ -188,10 +188,19 @@ Function GetBasisesForSalesInvoice(FilterValues) Export
 	Query.SetParameter("Ref", FilterValues.Ref);
 	Query.SetParameter("Period", New Boundary(FilterValues.Ref.PointInTime(), BoundaryType.Excluding));
 	
-	Query.SetParameter("Filter_ItemKey", ValueIsFilled(FilterValues.ItemKey));
-	Query.SetParameter("ItemKey", FilterValues.ItemKey);
-	Query.SetParameter("Filter_Store", ValueIsFilled(FilterValues.Store));
-	Query.SetParameter("Store", FilterValues.Store);
+	Filter_ItemKey = Undefined;
+	If FilterValues.Property("ItemKey") Then
+		Filter_ItemKey = FilterValues.ItemKey;
+	EndIf;
+	Query.SetParameter("Filter_ItemKey", ValueIsFilled(Filter_ItemKey));
+	Query.SetParameter("ItemKey", Filter_ItemKey);
+	
+	Filter_Store = Undefined;
+	If FilterValues.Property("Store") Then
+		Filter_Store = FilterValues.Store;
+	EndIf;
+	Query.SetParameter("Filter_Store", ValueIsFilled(Filter_Store));
+	Query.SetParameter("Store", Filter_Store);
 	
 	
 	Query.Text =

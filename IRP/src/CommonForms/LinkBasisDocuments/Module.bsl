@@ -4,7 +4,9 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	ThisObject.Filter = Parameters.Filter;
 	
 	For Each Row In Parameters.ExistingRows Do
-		FillPropertyValues(ThisObject.ExistingRows.Add(), Row);
+		NewRow = ThisObject.ExistingRows.Add();
+		FillPropertyValues(NewRow, Row);
+		NewRow.Picture = 3;
 	EndDo;
 		
 	FillDocumentsTree(Parameters.SelectedRow, Parameters.FilterBySelectedRow);
@@ -40,15 +42,16 @@ Procedure FillDocumentsTree(SelectedRow, FilterBySelectedRow);
 		TopLevelNewRow = ThisObject.DocumentsTree.GetItems().Add();
 		TopLevelNewRow.Basis = TopLevelRow.Basis;
 		TopLevelNewRow.Level = 1;
+		TopLevelNewRow.PictureLevel1 = 0;
 		
 		SecondLevelRows = BasisesTable.FindRows(New Structure("Basis", TopLevelNewRow.Basis));
 		
 		For Each SecondLevelRow In SecondLevelRows Do
 			SecondLevelNewRow = TopLevelNewRow.GetItems().Add();
-			SecondLevelNewRow.Item = SecondLevelRow.Item;
-			SecondLevelNewRow.ItemKey = SecondLevelRow.ItemKey;
-			SecondLevelNewRow.Key = SecondLevelRow.Key;
-			SecondLevelNewRow.Level = 2;
+			FillPropertyValues(SecondLevelNewRow, SecondLevelRow);
+			
+			SecondLevelNewRow.Level   = 2;
+			SecondLevelNewRow.PictureLevel2 = 3;
 			
 			If SelectedRow <> Undefined Then
 				UnitFactorFrom = Catalogs.Units.GetUnitFactor(SecondLevelRow.BasisUnit, SecondLevelRow.Quantity);
@@ -56,7 +59,7 @@ Procedure FillDocumentsTree(SelectedRow, FilterBySelectedRow);
 				SecondLevelNewRow.Quantity = ?(UnitFactorTo = 0, 0, SecondLevelRow.Quantity * UnitFactorFrom / UnitFactorTo);
 				SecondLevelNewRow.Unit = SelectedRow.Unit;
 			Else
-				SecondLevelNewRow.Quantity = SecondLevelRow.Qauntity;
+				SecondLevelNewRow.Quantity = SecondLevelRow.Quantity;
 				SecondLevelNewRow.Unit = SecondLevelRow.BasisUnit;
 			EndIf;
 		EndDo;

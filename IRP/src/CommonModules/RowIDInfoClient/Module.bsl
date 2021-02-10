@@ -22,6 +22,7 @@ Function GetExistingRowsInfo(ItemList) Export
 	ExistingRows = New Array();
 	For Each Row In ItemList Do
 		NewRow = New Structure();
+		NewRow.Insert("Key"      , Row.Key);
 		NewRow.Insert("Item"     , Row.Item); 
 		NewRow.Insert("ItemKey"  , Row.ItemKey); 
 		NewRow.Insert("Unit"     , Row.Unit);
