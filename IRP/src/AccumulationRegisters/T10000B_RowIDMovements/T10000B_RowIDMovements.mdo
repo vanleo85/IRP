@@ -71,4 +71,17 @@
     <fullTextSearch>Use</fullTextSearch>
     <useInTotals>true</useInTotals>
   </dimensions>
+  <dimensions uuid="cefc45a7-b4f7-44a5-bb26-b0b40185d01a">
+    <name>RowRef</name>
+    <synonym>
+      <key>en</key>
+      <value>Row ref</value>
+    </synonym>
+    <type>
+      <types>CatalogRef.RowIDs</types>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+  </dimensions>
 </mdclass:AccumulationRegister>
