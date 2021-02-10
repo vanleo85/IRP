@@ -58,4 +58,62 @@
 			</dcscor:item>
 		</appearance>
 	</item>
+	<item>
+		<selection>
+			<item>
+				<field>ResultsTreePictureLevel2</field>
+			</item>
+			<item>
+				<field>ResultsTreeBasis</field>
+			</item>
+		</selection>
+		<filter>
+			<item xsi:type="FilterItemComparison">
+				<left xsi:type="dcscor:Field">ResultsTree.Level</left>
+				<comparisonType>Equal</comparisonType>
+				<right xsi:type="xs:decimal">1</right>
+			</item>
+		</filter>
+		<appearance>
+			<dcscor:item xsi:type="SettingsParameterValue">
+				<dcscor:parameter>Visible</dcscor:parameter>
+				<dcscor:value xsi:type="xs:boolean">false</dcscor:value>
+			</dcscor:item>
+		</appearance>
+	</item>
+	<item>
+		<selection>
+			<item>
+				<field>ResultsTreePictureLevel1</field>
+			</item>
+			<item>
+				<field>ResultsTreeItem</field>
+			</item>
+			<item>
+				<field>ResultsTreeItemKey</field>
+			</item>
+			<item>
+				<field>ResultsTreeStore</field>
+			</item>
+			<item>
+				<field>ResultsTreeQuantity</field>
+			</item>
+			<item>
+				<field>ResultsTreeUnit</field>
+			</item>
+		</selection>
+		<filter>
+			<item xsi:type="FilterItemComparison">
+				<left xsi:type="dcscor:Field">ResultsTree.Level</left>
+				<comparisonType>Equal</comparisonType>
+				<right xsi:type="xs:decimal">2</right>
+			</item>
+		</filter>
+		<appearance>
+			<dcscor:item xsi:type="SettingsParameterValue">
+				<dcscor:parameter>Visible</dcscor:parameter>
+				<dcscor:value xsi:type="xs:boolean">false</dcscor:value>
+			</dcscor:item>
+		</appearance>
+	</item>
 </ConditionalAppearance>

@@ -13,9 +13,30 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 EndProcedure
 
 &AtClient
+Procedure OnOpen(Cancel)
+	AttachIdleHandler("ExpandTree", 1, True);
+EndProcedure
+
+&AtClient
+Procedure ExpandTree() Export
+	RowIDInfoClient.ExpandTree(Items.DocumentsTree, ThisObject.DocumentsTree.GetItems());
+	RowIDInfoClient.ExpandTree(Items.ResultsTree, ThisObject.ResultsTree.GetItems());
+EndProcedure
+
+&AtClient
 Procedure ExistingRowsOnActivateRow(Item)
 	SelectedRowInfo = RowIDInfoClient.GetSelectedRowInfo(Items.ExistingRows.CurrentData);
 	FillDocumentsTree(SelectedRowInfo.SelectedRow, SelectedRowInfo.FilterBySelectedRow);
+EndProcedure
+
+&AtClient
+Procedure DocumentsTreeOnActivateRow(Item)
+	SetButtonsEnabled();		
+EndProcedure
+
+&AtClient
+Procedure SetButtonsEnabled()
+	Items.Link.Enabled = IsCanLink().IsCan;
 EndProcedure
 
 &AtServer
@@ -65,3 +86,81 @@ Procedure FillDocumentsTree(SelectedRow, FilterBySelectedRow);
 		EndDo;
 	EndDo;
 EndProcedure
+
+&AtClient
+Procedure Link(Command)
+	LinkInfo = IsCanLink();
+	If Not LinkInfo.IsCan Then
+		Return;
+	EndIf;
+	
+	Filter = New Structure();
+	Filter.Insert("Key"   , LinkInfo.Key);
+	Filter.Insert("Level" , 1);
+	TreeRowID = RowIDInfoClient.FindRowInTree(FillingFromClassifiers, ThisObject.ResultsTree);
+	If TreeRowID = Undefined Then
+		TopLevelRow = ThisObject.ResultsTree.GetItems().Add();
+	Else
+		TopLevelRow = ThisObject.ResultsTree.FindByID(TreeRowID);
+	EndIf;
+	
+	FillPropertyValues(TopLevelRow, LinkInfo);
+	TopLevelRow.Level = 1;
+	TopLevelRow.PictureLevel1 = 3;
+	TopLevelRow.RowID = "";
+	TopLevelRow.RowRef = Undefined;
+	
+	SecondLevelNewRow = TopLevelRow.GetItems().Add();		
+	FillPropertyValues(SecondLevelNewRow, LinkInfo);
+	SecondLevelNewRow.Level = 2;
+	SecondLevelNewRow.PictureLevel2 = 0;
+	
+	SetButtonsEnabled();
+	RowIDInfoClient.ExpandTree(Items.ResultsTree, ThisObject.ResultsTree.GetItems());
+EndProcedure
+
+&AtClient
+Function IsCanLink()
+	Result = New Structure("IsCan", False);
+	
+	ExistingRowsCurrentData = Items.ExistingRows.CurrentData;
+	If ExistingRowsCurrentData = Undefined Then
+		Return Result;
+	EndIf;
+	
+	DocumentsTreeCurrentData = Items.DocumentsTree.CurrentData;
+	If DocumentsTreeCurrentData = Undefined Then
+		Return Result;
+	EndIf;
+	
+	If DocumentsTreeCurrentData.Level = 2 Then
+		Filter = New Structure();
+		Filter.Insert("Key"   , ExistingRowsCurrentData.Key);
+		Filter.Insert("RowID" , DocumentsTreeCurrentData.RowID);
+		Filter.Insert("Basis" , DocumentsTreeCurrentData.Basis);
+		If RowIDInfoClient.FindRowInTree(Filter, ThisObject.ResultsTree) <> Undefined Then
+			Return Result;
+		Else
+			Result.IsCan = True;
+			Result.Insert("Item"     , ExistingRowsCurrentData.Item);
+			Result.Insert("ItemKey"  , ExistingRowsCurrentData.ItemKey);
+			Result.Insert("Store"    , ExistingRowsCurrentData.Store);
+			Result.Insert("Quantity" , ExistingRowsCurrentData.Quantity);
+			Result.Insert("Unit"     , ExistingRowsCurrentData.Unit);
+			Result.Insert("RowRef"   , DocumentsTreeCurrentData.RowRef);
+	
+			Result.Insert("Key"      , ExistingRowsCurrentData.Key);
+			Result.Insert("Basis"    , DocumentsTreeCurrentData.Basis);
+			Result.Insert("RowID"    , DocumentsTreeCurrentData.RowID);
+		EndIf;
+	EndIf;
+	Return Result;
+EndFunction
+
+
+
+
+
+
+
+

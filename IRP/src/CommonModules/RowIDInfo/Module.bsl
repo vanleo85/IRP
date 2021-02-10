@@ -208,6 +208,7 @@ Function GetBasisesForSalesInvoice(FilterValues) Export
 		|	RowInfo.RowID,
 		|	RowInfo.Step,
 		|	RowInfo.Basis,
+		|	RowInfo.RowRef,
 		|	RowInfo.QuantityBalance AS Quantity
 		|INTO tmpQueryTable
 		|FROM
@@ -241,7 +242,9 @@ Function GetBasisesForSalesInvoice(FilterValues) Export
 		|			THEN Doc.ItemKey.Item.Unit
 		|		ELSE Doc.ItemKey.Unit
 		|	END AS BasisUnit,
-		|	tmpQueryTable.Quantity AS Quantity
+		|	tmpQueryTable.Quantity AS Quantity,
+		|	tmpQueryTable.RowRef,
+		|	tmpQueryTable.RowID
 		|FROM
 		|	Document.SalesOrder.ItemList AS Doc
 		|		INNER JOIN tmpQueryTable AS tmpQueryTable

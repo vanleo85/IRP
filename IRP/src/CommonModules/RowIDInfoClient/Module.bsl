@@ -32,3 +32,36 @@ Function GetExistingRowsInfo(ItemList) Export
 	EndDo;	
 	Return ExistingRows;
 EndFunction
+
+Function FindRowInTree(Filter, Tree) Export
+	RowID = Undefined;
+	FindRowInTreeRecursive(Filter, Tree.GetItems(), RowID);
+	Return RowID;
+EndFunction
+
+Procedure FindRowInTreeRecursive(Filter, TreeRows, RowID)
+	For Each Row In TreeRows Do
+		If RowID <> Undefined Then
+			Return;
+		EndIf;
+		Founded = True;
+		For Each ItemOfFilter In Filter Do
+			If Row[ItemOfFilter.Key] <> Filter[ItemOfFilter.Key] Then
+				Founded = False;
+				Break;
+			EndIf;
+		EndDo;
+		If Founded Then
+			RowID = Row.GetID();
+		EndIf;
+		If RowID = Undefined Then
+			FindRowInTreeRecursive(Filter, Row.GetItems(), RowID);
+		EndIf;
+	EndDo;
+EndProcedure
+
+Procedure ExpandTree(Tree, TreeRows) Export
+	For Each ItemTreeRows In TreeRows Do
+		Tree.Expand(ItemTreeRows.GetID());
+	EndDo;
+EndProcedure
