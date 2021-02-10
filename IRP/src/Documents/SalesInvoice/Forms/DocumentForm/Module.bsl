@@ -504,38 +504,19 @@ Procedure LinkBasisDocuments(Command)
 	Filter.Insert("PriceIncludeTax" , Object.PriceIncludeTax);
 	Filter.Insert("Ref"             , Object.Ref);
 	
-	SelectedRow = Undefined;
-	FilterBySelectedRow = Undefined;
-	
-	CurrentData = Items.ItemList.CurrentData;
-	If CurrentData <> Undefined Then
-		SelectedRow = New Structure();
-		SelectedRow.Insert("ItemKey"  , CurrentData.ItemKey);
-		SelectedRow.Insert("Unit"     , CurrentData.Unit);
-		SelectedRow.Insert("Quantity" , CurrentData.Quantity);
-		
-		FilterBySelectedRow = New Structure();
-		FilterBySelectedRow.Insert("ItemKey"  , CurrentData.ItemKey);		
-	EndIf;
-	
-	ExistingRows = New Array();
-	For Each Row In Object.ItemList Do
-		NewRow = New Structure();
-		NewRow.Insert("ItemKey"  , Row.ItemKey); 
-		NewRow.Insert("Unit"     , Row.Unit);
-		NewRow.Insert("Quantity" , Row.Quantity);
-		ExistingRows.Add(NewRow);
-	EndDo;
+	SelectedRowInfo = RowIDInfoClient.GetSelectedRowInfo(Items.ItemList.CurrentData);
+	ExistingRows = RowIDInfoClient.GetExistingRowsInfo(Object.ItemList);
 	
 	FormParameters = New Structure();
 	FormParameters.Insert("Filter"              , Filter);
-	FormParameters.Insert("SelectedRow"         , SelectedRow);
-	FormParameters.Insert("FilterBySelectedRow" , FilterBySelectedRow);
+	FormParameters.Insert("SelectedRow"         , SelectedRowInfo.SelectedRow);
+	FormParameters.Insert("FilterBySelectedRow" , SelectedRowInfo.FilterBySelectedRow);
 	FormParameters.Insert("ExistingRows"        , ExistingRows);
 	
 	OpenForm("CommonForm.LinkBasisDocuments"
 		, FormParameters, , , ,
-		, New NotifyDescription("LinkBasisDocumentsContinue", ThisObject));
+		, New NotifyDescription("LinkBasisDocumentsContinue", ThisObject)
+		, FormWindowOpeningMode.LockOwnerWindow);
 EndProcedure
 
 &AtClient
