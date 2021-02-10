@@ -492,6 +492,61 @@ Procedure SelectSalesOrdersContinue(Result, AdditionalParameters) Export
 	DocSalesInvoiceClient.ItemListOnChange(Object, ThisObject, Items.ItemList);
 EndProcedure
 
+//@NEW FILLING DOC
+&AtClient
+Procedure LinkBasisDocuments(Command)
+	Filter = New Structure();
+	Filter.Insert("Company"         , Object.Company);
+	Filter.Insert("Partner"         , Object.Partner);
+	Filter.Insert("LegalName"       , Object.LegalName);
+	Filter.Insert("Agreement"       , Object.Agreement);
+	Filter.Insert("Currency"        , Object.Currency);
+	Filter.Insert("PriceIncludeTax" , Object.PriceIncludeTax);
+	Filter.Insert("Ref"             , Object.Ref);
+	
+	SelectedRow = Undefined;
+	FilterBySelectedRow = Undefined;
+	
+	CurrentData = Items.ItemList.CurrentData;
+	If CurrentData <> Undefined Then
+		SelectedRow = New Structure();
+		SelectedRow.Insert("ItemKey"  , CurrentData.ItemKey);
+		SelectedRow.Insert("Unit"     , CurrentData.Unit);
+		SelectedRow.Insert("Quantity" , CurrentData.Quantity);
+		
+		FilterBySelectedRow = New Structure();
+		FilterBySelectedRow.Insert("ItemKey"  , CurrentData.ItemKey);		
+	EndIf;
+	
+	ExistingRows = New Array();
+	For Each Row In Object.ItemList Do
+		NewRow = New Structure();
+		NewRow.Insert("ItemKey"  , Row.ItemKey); 
+		NewRow.Insert("Unit"     , Row.Unit);
+		NewRow.Insert("Quantity" , Row.Quantity);
+		ExistingRows.Add(NewRow);
+	EndDo;
+	
+	FormParameters = New Structure();
+	FormParameters.Insert("Filter"              , Filter);
+	FormParameters.Insert("SelectedRow"         , SelectedRow);
+	FormParameters.Insert("FilterBySelectedRow" , FilterBySelectedRow);
+	FormParameters.Insert("ExistingRows"        , ExistingRows);
+	
+	OpenForm("CommonForm.LinkBasisDocuments"
+		, FormParameters, , , ,
+		, New NotifyDescription("LinkBasisDocumentsContinue", ThisObject));
+EndProcedure
+
+&AtClient
+Procedure LinkBasisDocumentsContinue(Result, AdditionalParameters) Export
+	If Result = Undefined Then
+		Return;
+	EndIf;
+
+EndProcedure
+//
+
 &AtServer
 Procedure SelectSalesOrdersContinueAtServer(Result, AdditionalParameters)
 	RowIDInfo.FillSalesInvoiceFromSalesOrders(Result, Object, ThisObject);

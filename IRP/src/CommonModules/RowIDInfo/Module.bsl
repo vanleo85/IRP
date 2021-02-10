@@ -62,6 +62,12 @@ EndProcedure
 // Parameters:
 // 	Source - DocumentObject.SalesOrder
 Procedure SalesOrder_FillRowID(Source)
+	//@TEST
+	If Source.RowIDInfo.Count() Then
+		Return;
+	EndIf;
+	//
+	
 	Source.RowIDInfo.Clear();
 	For Each Row In Source.ItemList Do
 		
@@ -95,6 +101,12 @@ EndProcedure
 // Parameters:
 // 	Source - DocumentObject.SalesInvoice
 Procedure SalesInvoice_FillRowID(Source)
+	//@TEST
+	If Source.RowIDInfo.Count() Then
+		Return;
+	EndIf;
+	//
+	
 	Source.RowIDInfo.Clear();
 	For Each Row In Source.ItemList Do
 		NewRow = Source.RowIDInfo.Add();
