@@ -306,15 +306,6 @@
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
-  <forms uuid="fd82f6eb-0e9d-4a82-ab12-74440617f877">
-    <name>SelectSalesOrdersForm</name>
-    <synonym>
-      <key>en</key>
-      <value>Select sales orders</value>
-    </synonym>
-    <usePurposes>PersonalComputer</usePurposes>
-    <usePurposes>MobileDevice</usePurposes>
-  </forms>
   <tabularSections uuid="d1bdb33a-c787-4851-b6cd-8f4175558478">
     <producedTypes>
       <objectType typeId="68e1319e-3959-47ba-a479-ce06dc4979ba" valueTypeId="1d31c889-72f8-4f9a-ae9b-d2066088edfa"/>

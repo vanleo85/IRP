@@ -253,29 +253,11 @@
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
-  <forms uuid="c607855c-84b0-49e6-9f7a-62290248f64b">
-    <name>SelectGoodsReceiptForm</name>
-    <synonym>
-      <key>en</key>
-      <value>Select goods receipt</value>
-    </synonym>
-    <usePurposes>PersonalComputer</usePurposes>
-    <usePurposes>MobileDevice</usePurposes>
-  </forms>
   <forms uuid="6da9235d-bbab-478c-9e81-fda0dc882d9a">
     <name>ChoiceFormWithDept</name>
     <synonym>
       <key>en</key>
       <value>Choice form with dept</value>
-    </synonym>
-    <usePurposes>PersonalComputer</usePurposes>
-    <usePurposes>MobileDevice</usePurposes>
-  </forms>
-  <forms uuid="f717d406-bd12-47af-b024-32441493f0f4">
-    <name>SelectPurchaseOrdersForm</name>
-    <synonym>
-      <key>en</key>
-      <value>Select purchase orders</value>
     </synonym>
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
@@ -1055,20 +1037,4 @@
       <fullTextSearch>Use</fullTextSearch>
     </attributes>
   </tabularSections>
-  <commands uuid="67571b12-57b7-4fed-998a-8d6f75b9e9d9">
-    <name>GeneratePurchaseInvoice</name>
-    <synonym>
-      <key>en</key>
-      <value>Purchase invoice</value>
-    </synonym>
-    <group>FormCommandBarCreateBasedOn</group>
-    <commandParameterType>
-      <types>DocumentRef.PurchaseOrder</types>
-      <types>DocumentRef.SalesOrder</types>
-      <types>DocumentRef.GoodsReceipt</types>
-    </commandParameterType>
-    <parameterUseMode>Multiple</parameterUseMode>
-    <representation>Auto</representation>
-    <shortcut></shortcut>
-  </commands>
 </mdclass:Document>

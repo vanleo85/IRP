@@ -438,24 +438,6 @@ Procedure SelectShipmentConfirmation(Command)
 EndProcedure
 
 &AtClient
-Procedure SelectSalesOrders(Command)
-	FilterValues = New Structure("Company, Partner, LegalName, Agreement, Currency, PriceIncludeTax, Ref");
-	FillPropertyValues(FilterValues, Object);
-	
-	ExistingRows = New Array;
-	For Each Row In Object.ItemList Do
-		RowStructure = New Structure("Key, Unit, Quantity");
-		FillPropertyValues(RowStructure, Row);
-		ExistingRows.Add(RowStructure);
-	EndDo;
-	
-	FormParameters = New Structure("FilterValues, ExistingRows", FilterValues, ExistingRows);
-	OpenForm("Document.SalesInvoice.Form.SelectSalesOrdersForm"
-		, FormParameters, , , ,
-		, New NotifyDescription("SelectSalesOrdersContinue", ThisObject));
-EndProcedure
-
-&AtClient
 Procedure SelectShipmentConfirmationsContinue(Result, AdditionalParameters) Export
 	If Result = Undefined Then
 		Return;
@@ -479,17 +461,6 @@ Procedure SelectShipmentConfirmationsFinish(ArrayOfBasisDocuments)
 	For Each Row In Object.ItemList Do
 		Row.Item = Row.ItemKey.Item;
 	EndDo;
-EndProcedure
-
-&AtClient
-Procedure SelectSalesOrdersContinue(Result, AdditionalParameters) Export
-	If Result = Undefined Then
-		Return;
-	EndIf;
-	
-	SelectSalesOrdersContinueAtServer(Result, AdditionalParameters);
-	
-	DocSalesInvoiceClient.ItemListOnChange(Object, ThisObject, Items.ItemList);
 EndProcedure
 
 //@NEW FILLING DOC
@@ -546,11 +517,6 @@ Procedure LinkBasisDocumentsContinue(Result, AdditionalParameters) Export
 
 EndProcedure
 //
-
-&AtServer
-Procedure SelectSalesOrdersContinueAtServer(Result, AdditionalParameters)
-	RowIDInfo.FillSalesInvoiceFromSalesOrders(Result, Object, ThisObject);
-EndProcedure
 
 &AtClient
 Procedure ShowRowKey(Command)
