@@ -476,13 +476,12 @@ Procedure LinkBasisDocuments(Command)
 	Filter.Insert("Ref"             , Object.Ref);
 	
 	SelectedRowInfo = RowIDInfoClient.GetSelectedRowInfo(Items.ItemList.CurrentData);
-	ExistingRows = RowIDInfoClient.GetExistingRowsInfo(Object.ItemList);
+	TablesInfo = RowIDInfoClient.GetTablesInfo(Object);
 	
 	FormParameters = New Structure();
-	FormParameters.Insert("Filter"              , Filter);
-	FormParameters.Insert("SelectedRow"         , SelectedRowInfo.SelectedRow);
-	FormParameters.Insert("FilterBySelectedRow" , SelectedRowInfo.FilterBySelectedRow);
-	FormParameters.Insert("ExistingRows"        , ExistingRows);
+	FormParameters.Insert("Filter"           , Filter);
+	FormParameters.Insert("SelectedRowInfo"  , SelectedRowInfo);
+	FormParameters.Insert("TablesInfo"       , TablesInfo);
 	
 	OpenForm("CommonForm.LinkBasisDocuments"
 		, FormParameters, , , ,

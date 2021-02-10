@@ -18,8 +18,15 @@ Function GetSelectedRowInfo(CurrentData) Export
 	Return Result;
 EndFunction
 
-Function GetExistingRowsInfo(ItemList) Export
-	ExistingRows = New Array();
+Function GetTablesInfo(Object) Export
+	TablesInfo = New Structure();
+	TablesInfo.Insert("ItemListRows"  , GetItemListRows(Object.ItemList));
+	TablesInfo.Insert("RowIDInfoRows" , GetRowIDInfoRows(Object.RowIDInfo));
+	Return TablesInfo;
+EndFunction
+
+Function GetItemListRows(ItemList) Export
+	ItemListRows = New Array();
 	For Each Row In ItemList Do
 		NewRow = New Structure();
 		NewRow.Insert("Key"      , Row.Key);
@@ -28,10 +35,25 @@ Function GetExistingRowsInfo(ItemList) Export
 		NewRow.Insert("Unit"     , Row.Unit);
 		NewRow.Insert("Store"    , Row.Store);
 		NewRow.Insert("Quantity" , Row.Quantity);
-		ExistingRows.Add(NewRow);
+		ItemListRows.Add(NewRow);
 	EndDo;	
-	Return ExistingRows;
+	Return ItemListRows;
 EndFunction
+
+Function GetRowIDInfoRows(RowIDInfo) Export
+	RowIDInfoRows = New Array();
+	For Each Row In RowIDInfo Do
+		NewRow = New Structure();
+		NewRow.Insert("Key"         , Row.Key);
+		NewRow.Insert("RowID"       , Row.RowID); 
+		NewRow.Insert("Quantity"    , Row.Quantity); 
+		NewRow.Insert("Basis"       , Row.Basis);
+		NewRow.Insert("CurrentStep" , Row.CurrentStep);
+		NewRow.Insert("NextStep"    , Row.NextStep);
+		NewRow.Insert("RowRef"      , Row.RowRef);
+	EndDo;
+	Return RowIDInfoRows;
+EndFunction	
 
 Function FindRowInTree(Filter, Tree) Export
 	RowID = Undefined;
