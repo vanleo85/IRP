@@ -4,75 +4,61 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	ThisObject.Filter = Parameters.Filter;
 	
 	For Each Row In Parameters.ExistingRows Do
-		NewRow = ThisObject.ExistingRows.Add();
-		NewRow.Item     = Row.ItemKey.Item;
-		NewRow.ItemKey  = Row.ItemKey;
-		NewRow.Unit     = Row.Unit;
-		NewRow.Quantity = Row.Quantity;
+		FillPropertyValues(ThisObject.ExistingRows.Add(), Row);
 	EndDo;
 		
-	FillDocumentsTree(Parameters.FilterBySelectedRow);
+	FillDocumentsTree(Parameters.SelectedRow, Parameters.FilterBySelectedRow);
 EndProcedure
 
+&AtClient
+Procedure ExistingRowsOnActivateRow(Item)
+	SelectedRowInfo = RowIDInfoClient.GetSelectedRowInfo(Items.ExistingRows.CurrentData);
+	FillDocumentsTree(SelectedRowInfo.SelectedRow, SelectedRowInfo.FilterBySelectedRow);
+EndProcedure
 
 &AtServer
-Procedure FillDocumentsTree(FilterBySelectedRow);
-
+Procedure FillDocumentsTree(SelectedRow, FilterBySelectedRow);
 	FullFilter = New Structure();
 	For Each KeyValue In ThisObject.Filter Do
-		FullFilter.Insert(KeyValue)
+		FullFilter.Insert(KeyValue.Key, KeyValue.Value);
 	EndDo;
-//
-//QueryTable = RowIDInfo.GetSalesOrdersInfoForSalesInvoice(FilterValues);
-//	
-//	OrdersTable = QueryTable.Copy( , "SalesOrder");
-//	OrdersTable.GroupBy("SalesOrder");
-//	
-//	For Each Row_Order In OrdersTable Do
-//		
-//		NewRow_Order = ThisObject.DocumentsTree.GetItems().Add();
-//		NewRow_Order.SalesOrder = Row_Order.SalesOrder;
-//		
-//		OrdersItemsArray = QueryTable.FindRows(New Structure("SalesOrder", Row_Order.SalesOrder));
-//		For Each Row_Item In OrdersItemsArray Do
-//			
-//			// exclude quantity from existing rows
-//			ExistingQuantity = 0;
-//			For i = 0 To ExistingRows.UBound() Do
-//				If i > ExistingRows.UBound() Then
-//					Break;
-//				EndIf;
-//				
-//				ExistingRow = ExistingRows[i];
-//				If ExistingRow.Key = Row_Item.Key Then
-//					UnitFactorFrom = Catalogs.Units.GetUnitFactor(ExistingRow.Unit, Row_Item.QuantityUnit);
-//					UnitFactorTo = Catalogs.Units.GetUnitFactor(Row_Item.Unit, Row_Item.QuantityUnit);
-//					PreviousExistingQuantity = ExistingQuantity;
-//					ExistingQuantity = Min(ExistingQuantity + ?(UnitFactorTo = 0, 
-//																0, 
-//																ExistingRow.Quantity * UnitFactorFrom / UnitFactorTo),
-//										 Row_Item.Quantity);
-//					ExistingRow.Quantity = ExistingRow.Quantity 
-//							- ?(UnitFactorFrom = 0, 
-//								0, 
-//								(PreviousExistingQuantity - ExistingQuantity) / UnitFactorFrom * UnitFactorTo);
-//					If ExistingRow.Quantity <= 0 Then
-//						ExistingRows.Delete(i);
-//						i = i - 1;
-//					EndIf;
-//				EndIf;
-//			EndDo;
-//			
-//			If ExistingQuantity < Row_Item.Quantity Then
-//				NewRow_Item = NewRow_Order.GetItems().Add();
-//				FillPropertyValues(NewRow_Item, Row_Item);
-//				NewRow_Item.Quantity = NewRow_Item.Quantity - ExistingQuantity;
-//			EndIf;
-//		EndDo;
-//		
-//		If Not NewRow_Order.GetItems().Count() Then
-//			DocumentsTree.GetItems().Delete(NewRow_Order);
-//		EndIf;
-//	EndDo;
-
+	
+	If FilterBySelectedRow <> Undefined Then
+		For Each KeyValue In FilterBySelectedRow Do
+			FullFilter.Insert(KeyValue.Key, KeyValue.Value);
+		EndDo;
+	EndIf;
+	
+	BasisesTable = RowIDInfo.GetBasisesForSalesInvoice(FullFilter);
+	
+	TopLevelTable = BasisesTable.Copy(,"Basis");
+	TopLevelTable.GroupBy("Basis");
+	
+	ThisObject.DocumentsTree.GetItems().Clear();
+	
+	For Each TopLevelRow In TopLevelTable Do
+		TopLevelNewRow = ThisObject.DocumentsTree.GetItems().Add();
+		TopLevelNewRow.Basis = TopLevelRow.Basis;
+		TopLevelNewRow.Level = 1;
+		
+		SecondLevelRows = BasisesTable.FindRows(New Structure("Basis", TopLevelNewRow.Basis));
+		
+		For Each SecondLevelRow In SecondLevelRows Do
+			SecondLevelNewRow = TopLevelNewRow.GetItems().Add();
+			SecondLevelNewRow.Item = SecondLevelRow.Item;
+			SecondLevelNewRow.ItemKey = SecondLevelRow.ItemKey;
+			SecondLevelNewRow.Key = SecondLevelRow.Key;
+			SecondLevelNewRow.Level = 2;
+			
+			If SelectedRow <> Undefined Then
+				UnitFactorFrom = Catalogs.Units.GetUnitFactor(SecondLevelRow.BasisUnit, SecondLevelRow.Quantity);
+				UnitFactorTo = Catalogs.Units.GetUnitFactor(SelectedRow.Unit, SelectedRow.Quantity);
+				SecondLevelNewRow.Quantity = ?(UnitFactorTo = 0, 0, SecondLevelRow.Quantity * UnitFactorFrom / UnitFactorTo);
+				SecondLevelNewRow.Unit = SelectedRow.Unit;
+			Else
+				SecondLevelNewRow.Quantity = SecondLevelRow.Qauntity;
+				SecondLevelNewRow.Unit = SecondLevelRow.BasisUnit;
+			EndIf;
+		EndDo;
+	EndDo;
 EndProcedure

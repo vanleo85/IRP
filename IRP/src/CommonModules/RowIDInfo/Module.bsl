@@ -52,7 +52,7 @@ Procedure BeforeWrite_RowID(Source, Cancel, WriteMode, PostingMode) Export
 	If TypeOf(Source) = Type("DocumentObject.SalesOrder") Then
 		SalesOrder_FillRowID(Source);	
 	ElsIf TypeOf(Source) = Type("DocumentObject.SalesInvoice") Then
-		SalesInvoice_FillRowID(Source);
+		//SalesInvoice_FillRowID(Source);
 	EndIf;	
 
 EndProcedure
@@ -174,10 +174,9 @@ Procedure FillSalesInvoiceFromSalesOrders(SalesOrderList, Object, Form) Export
 		TaxInfo);
 EndProcedure
 
-Function GetSalesOrdersInfoForSalesInvoice(FilterValues) Export
+Function GetBasisesForSalesInvoice(FilterValues) Export
 	StepArray = New Array;
 	StepArray.Add(Catalogs.MovementRules.FromSOtoSI);
-	StepArray.Add(Catalogs.MovementRules.SI_SC);
 	
 	Query = New Query;
 	Query.SetParameter("StepArray", StepArray);	
@@ -187,6 +186,14 @@ Function GetSalesOrdersInfoForSalesInvoice(FilterValues) Export
 	Query.SetParameter("Agreement", FilterValues.Agreement);
 	Query.SetParameter("Currency", FilterValues.Currency);
 	Query.SetParameter("Ref", FilterValues.Ref);
+	Query.SetParameter("Period", New Boundary(FilterValues.Ref.PointInTime(), BoundaryType.Excluding));
+	
+	Query.SetParameter("Filter_ItemKey", ValueIsFilled(FilterValues.ItemKey));
+	Query.SetParameter("ItemKey", FilterValues.ItemKey);
+	Query.SetParameter("Filter_Store", ValueIsFilled(FilterValues.Store));
+	Query.SetParameter("Store", FilterValues.Store);
+	
+	
 	Query.Text =
 		"SELECT
 		|	RowInfo.RowID,
@@ -195,12 +202,22 @@ Function GetSalesOrdersInfoForSalesInvoice(FilterValues) Export
 		|	RowInfo.QuantityBalance AS Quantity
 		|INTO tmpQueryTable
 		|FROM
-		|	AccumulationRegister.T10000B_RowIDMovements.Balance(, Step IN (&StepArray)
-		|	AND RowID.Company = &Company
-		|	AND RowID.Partner = &Partner
-		|	AND RowID.LegalName = &LegalName
-		|	AND RowID.Agreement = &Agreement
-		|	AND RowID.Currency = &Currency) AS RowInfo
+		|	AccumulationRegister.T10000B_RowIDMovements.Balance(&Period, Step IN (&StepArray)
+		|	AND RowRef.Company = &Company
+		|	AND RowRef.Partner = &Partner
+		|	AND RowRef.LegalName = &LegalName
+		|	AND RowRef.Agreement = &Agreement
+		|	AND RowRef.Currency = &Currency
+		|	AND CASE
+		|		WHEN &Filter_ItemKey
+		|			THEN RowRef.ItemKey = &ItemKey
+		|		ELSE TRUE
+		|	END
+		|	AND CASE
+		|		WHEN &Filter_Store
+		|			THEN RowRef.Store = &Store
+		|		ELSE TRUE
+		|	END) AS RowInfo
 		|;
 		|
 		|////////////////////////////////////////////////////////////////////////////////
@@ -208,21 +225,22 @@ Function GetSalesOrdersInfoForSalesInvoice(FilterValues) Export
 		|	Doc.ItemKey AS ItemKey,
 		|	Doc.ItemKey.Item AS Item,
 		|	Doc.Store AS Store,
-		|	Doc.Ref AS SalesOrder,
+		|	Doc.Ref AS Basis,
 		|	Doc.Key,
-		|	Doc.ItemKey.Item.Unit AS QuantityUnit,
-		|	tmpQueryTable.Quantity AS Quantity,
-		|	ISNULL(Doc.Price, 0) AS Price,
-		|	ISNULL(Doc.PriceType, VALUE(Catalog.PriceTypes.EmptyRef)) AS PriceType,
-		|	ISNULL(Doc.Unit, VALUE(Catalog.Units.EmptyRef)) AS Unit,
-		|	ISNULL(Doc.DeliveryDate, DATETIME(1, 1, 1)) AS DeliveryDate
+		|	CASE
+		|		WHEN Doc.ItemKey.Unit.Ref IS NULL
+		|			THEN Doc.ItemKey.Item.Unit
+		|		ELSE Doc.ItemKey.Unit
+		|	END AS BasisUnit,
+		|	tmpQueryTable.Quantity AS Quantity
 		|FROM
 		|	Document.SalesOrder.ItemList AS Doc
 		|		INNER JOIN tmpQueryTable AS tmpQueryTable
 		|		ON tmpQueryTable.RowID = Doc.Key
 		|		AND tmpQueryTable.Basis = Doc.Ref";
-
-	Return Query.Execute().Unload();
+	QueryResult = Query.Execute();
+	QueryTable = QueryResult.Unload();
+	Return QueryTable;
 EndFunction
 
 #EndRegion
