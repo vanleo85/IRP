@@ -6,6 +6,8 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	For Each Row In Parameters.TablesInfo.ItemListRows Do
 		NewRow = ThisObject.ItemListRows.Add();
 		FillPropertyValues(NewRow, Row);
+		NewRow.RowPresentation = 
+		"" + Row.Item + ", " + Row.ItemKey + ", " + Row.Store;
 		NewRow.Picture = 3;
 	EndDo;
 		
@@ -64,8 +66,10 @@ Procedure FillDocumentsTree(SelectedRow, FilterBySelectedRow);
 	For Each TopLevelRow In TopLevelTable Do
 		TopLevelNewRow = ThisObject.DocumentsTree.GetItems().Add();
 		TopLevelNewRow.Basis = TopLevelRow.Basis;
+		
+		TopLevelNewRow.RowPresentation = String(TopLevelRow.Basis);
 		TopLevelNewRow.Level = 1;
-		TopLevelNewRow.PictureLevel1 = 0;
+		TopLevelNewRow.Picture = 2;
 		
 		SecondLevelRows = BasisesTable.FindRows(New Structure("Basis", TopLevelNewRow.Basis));
 		
@@ -73,8 +77,10 @@ Procedure FillDocumentsTree(SelectedRow, FilterBySelectedRow);
 			SecondLevelNewRow = TopLevelNewRow.GetItems().Add();
 			FillPropertyValues(SecondLevelNewRow, SecondLevelRow);
 			
+			SecondLevelNewRow.RowPresentation = 
+			"" + SecondLevelRow.Item + ", " + SecondLevelRow.ItemKey + ", " + SecondLevelRow.Store;
 			SecondLevelNewRow.Level   = 2;
-			SecondLevelNewRow.PictureLevel2 = 3;
+			SecondLevelNewRow.Picture = 3;
 			
 			If SelectedRow <> Undefined Then
 				UnitFactorFrom = Catalogs.Units.GetUnitFactor(SecondLevelRow.BasisUnit, SecondLevelRow.Quantity);
@@ -99,7 +105,7 @@ Procedure Ok(Command)
 			NewRowIDInfo.Insert("RowID"        , SecondLevelRow.RowID);
 			NewRowIDInfo.Insert("Quantity"     , SecondLevelRow.Quantity);
 			NewRowIDInfo.Insert("Basis"        , SecondLevelRow.Basis);
-			//NewRowIDInfo.Insert("CurrentStep"  , SecondLevelRow.CurrentStep);
+			NewRowIDInfo.Insert("CurrentStep"  , SecondLevelRow.CurrentStep);
 			//NewRowIDInfo.Insert("NextStep"     , SecondLevelRow.NextStep);
 			NewRowIDInfo.Insert("RowRef"       , SecondLevelRow.RowRef);
 			ArrayOfRowIDInfo.Add(NewRowIDInfo);
@@ -134,15 +140,19 @@ Procedure Link(Command)
 	
 	FillPropertyValues(TopLevelRow, LinkInfo);
 	TopLevelRow.Level = 1;
-	TopLevelRow.PictureLevel1 = 3;
+	TopLevelRow.Picture = 3;
 	TopLevelRow.RowID = "";
 	TopLevelRow.RowRef = Undefined;
+	TopLevelRow.RowPresentation = 
+	"" + LinkInfo.Item + ", " + LinkInfo.ItemKey + ", " + LinkInfo.Store;
+	
 	
 	SecondLevelNewRow = TopLevelRow.GetItems().Add();		
 	FillPropertyValues(SecondLevelNewRow, LinkInfo);
 	SecondLevelNewRow.Level = 2;
-	SecondLevelNewRow.PictureLevel2 = 0;
-	
+	SecondLevelNewRow.Picture = 2;
+	SecondLevelNewRow.RowPresentation = String(LinkInfo.Basis);
+		
 	SetButtonsEnabled();
 	RowIDInfoClient.ExpandTree(Items.ResultsTree, ThisObject.ResultsTree.GetItems());
 EndProcedure
@@ -170,12 +180,13 @@ Function IsCanLink()
 			Return Result;
 		Else
 			Result.IsCan = True;
-			Result.Insert("Item"     , ExistingRowsCurrentData.Item);
-			Result.Insert("ItemKey"  , ExistingRowsCurrentData.ItemKey);
-			Result.Insert("Store"    , ExistingRowsCurrentData.Store);
-			Result.Insert("Quantity" , ExistingRowsCurrentData.Quantity);
-			Result.Insert("Unit"     , ExistingRowsCurrentData.Unit);
-			Result.Insert("RowRef"   , DocumentsTreeCurrentData.RowRef);
+			Result.Insert("Item"        , ExistingRowsCurrentData.Item);
+			Result.Insert("ItemKey"     , ExistingRowsCurrentData.ItemKey);
+			Result.Insert("Store"       , ExistingRowsCurrentData.Store);
+			Result.Insert("Quantity"    , ExistingRowsCurrentData.Quantity);
+			Result.Insert("Unit"        , ExistingRowsCurrentData.Unit);
+			Result.Insert("RowRef"      , DocumentsTreeCurrentData.RowRef);
+			Result.Insert("CurrentStep" , DocumentsTreeCurrentData.CurrentStep);
 	
 			Result.Insert("Key"      , ExistingRowsCurrentData.Key);
 			Result.Insert("Basis"    , DocumentsTreeCurrentData.Basis);

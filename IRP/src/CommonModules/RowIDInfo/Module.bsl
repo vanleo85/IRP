@@ -133,45 +133,12 @@ EndProcedure
 #Region FillBaseOnDocuments
 
 #Region SalesInvoice
-Procedure FillSalesInvoiceFromSalesOrders(SalesOrderList, Object, Form) Export
 
-	Settings = New Structure();
-	Settings.Insert("Rows", New Array());
-	Settings.Insert("CalculateSettings", New Structure());
-	Settings.CalculateSettings = CalculationStringsClientServer.GetCalculationSettings(Settings.CalculateSettings);
-		
-	For Each ResultRow In SalesOrderList Do
-		RowsByKey = Object.ItemList.FindRows(New Structure("Key", ResultRow.Key));
-		If RowsByKey.Count() Then
-			RowByKey = RowsByKey[0];
-			ItemKeyUnit = CatItemsServer.GetItemKeyUnit(ResultRow.ItemKey);
-			UnitFactorFrom = Catalogs.Units.GetUnitFactor(RowByKey.Unit, ItemKeyUnit);
-			UnitFactorTo = Catalogs.Units.GetUnitFactor(ResultRow.Unit, ItemKeyUnit);
-			FillPropertyValues(RowByKey, ResultRow, , "Quantity");
-			RowByKey.Quantity = ?(UnitFactorTo = 0,	0,
-					RowByKey.Quantity * UnitFactorFrom / UnitFactorTo) + ResultRow.Quantity;
-			RowByKey.PriceType = ResultRow.PriceType;
-			RowByKey.Price = ResultRow.Price;
-			Settings.Rows.Add(RowByKey);			
-		Else
-			NewRow = Object.ItemList.Add();
-			FillPropertyValues(NewRow, ResultRow);
-			NewRow.PriceType = ResultRow.PriceType;
-			NewRow.Price = ResultRow.Price;
-			Settings.Rows.Add(NewRow);
-		EndIf;
+Procedure FillSalesInvoice(ArrayOfLinkedDocuments, Object) Export
+	Object.RowIDInfo.Clear();
+	For Each ItemOfArray In ArrayOfLinkedDocuments Do
+		FillPropertyValues(Object.RowIDInfo.Add(), ItemOfArray);
 	EndDo;
-	
-	TaxInfo = Undefined;
-	SavedData = TaxesClientServer.GetSavedData(Form, TaxesServer.GetAttributeNames().CacheName);
-	If SavedData.Property("ArrayOfColumnsInfo") Then
-		TaxInfo = SavedData.ArrayOfColumnsInfo;
-	EndIf;
-	CalculationStringsClientServer.CalculateItemsRows(Object,
-		Form,
-		Settings.Rows,
-		Settings.CalculateSettings,
-		TaxInfo);
 EndProcedure
 
 Function GetBasisesForSalesInvoice(FilterValues) Export
@@ -244,7 +211,8 @@ Function GetBasisesForSalesInvoice(FilterValues) Export
 		|	END AS BasisUnit,
 		|	tmpQueryTable.Quantity AS Quantity,
 		|	tmpQueryTable.RowRef,
-		|	tmpQueryTable.RowID
+		|	tmpQueryTable.RowID,
+		|	tmpQueryTable.Step AS CurrentStep
 		|FROM
 		|	Document.SalesOrder.ItemList AS Doc
 		|		INNER JOIN tmpQueryTable AS tmpQueryTable
