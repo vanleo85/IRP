@@ -19,7 +19,6 @@
   <createOnInput>Use</createOnInput>
   <dataLockControlMode>Managed</dataLockControlMode>
   <fullTextSearch>Use</fullTextSearch>
-  <hierarchical>true</hierarchical>
   <hierarchyType>HierarchyOfItems</hierarchyType>
   <levelCount>2</levelCount>
   <foldersOnTop>true</foldersOnTop>
@@ -31,32 +30,25 @@
   <autonumbering>true</autonumbering>
   <defaultPresentation>AsDescription</defaultPresentation>
   <predefined>
-    <items id="8fb2b11f-0adf-44d5-877d-0c507982babe">
-      <name>FromSOtoSI</name>
-      <description>SO -> SI</description>
+    <items id="30b313b8-e751-4b31-a0cc-98eb6e6e372e">
+      <name>SI_SC</name>
+      <description>SI&amp;SC</description>
       <code xsi:type="core:StringValue">
-        <value>4</value>
+        <value>7</value>
       </code>
     </items>
-    <items id="10e2c45c-6db5-4f0e-b284-34d16ca9a429">
-      <name>FromSOtoSC</name>
-      <description>SO -> SC</description>
+    <items id="ee105b2b-3ce2-4d08-bdea-7f05f1c67682">
+      <name>SI</name>
+      <description>SI</description>
       <code xsi:type="core:StringValue">
-        <value>3</value>
+        <value>8</value>
       </code>
     </items>
-    <items id="fcde3452-ae36-42cf-82ee-509a5affacaa">
-      <name>FromSOtoPO</name>
-      <description>SO -> PO</description>
+    <items id="19caaff5-3370-4880-b5a2-365f3835053a">
+      <name>SC</name>
+      <description>SC</description>
       <code xsi:type="core:StringValue">
-        <value>1</value>
-      </code>
-    </items>
-    <items id="52cbd8bc-5edd-4eb9-b6e8-8eb9393c356f">
-      <name>FromSItoSC</name>
-      <description>SI -> SC</description>
-      <code xsi:type="core:StringValue">
-        <value>6</value>
+        <value>9</value>
       </code>
     </items>
   </predefined>

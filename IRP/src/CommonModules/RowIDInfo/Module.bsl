@@ -6,11 +6,6 @@ Procedure Posting_RowID(Source, Cancel, PostingMode) Export
 		"SELECT
 		|   Table.Ref AS Recorder,
 		|   Table.Ref.Date AS Period,
-		|	CASE When Table.Basis.Ref IS NULL Then
-		|		&Ref
-		|	ELSE
-		|		Table.Basis
-		|	END AS Basis, 
 		|	*
 		|INTO RowIDMovements
 		|FROM
@@ -23,6 +18,11 @@ Procedure Posting_RowID(Source, Cancel, PostingMode) Export
 		|SELECT
 		|	VALUE(AccumulationRecordType.Expense) AS RecordType,
 		|	Table.CurrentStep AS Step,
+		|	CASE When Table.Basis.Ref IS NULL Then
+		|		&Ref
+		|	ELSE
+		|		Table.Basis
+		|	END AS Basis, 
 		|	*
 		|FROM
 		|	RowIDMovements AS Table
@@ -34,6 +34,7 @@ Procedure Posting_RowID(Source, Cancel, PostingMode) Export
 		|SELECT
 		|	VALUE(AccumulationRecordType.Receipt),
 		|	Table.NextStep AS Step,
+		|	&Ref,
 		|	*
 		|FROM
 		|	RowIDMovements AS Table
@@ -107,7 +108,7 @@ Procedure SalesInvoice_FillRowID(Source)
 	If Source.RowIDInfo.Count() Then
 		Return;
 	EndIf;
-	//
+	
 	
 	Source.RowIDInfo.Clear();
 	For Each Row In Source.ItemList Do
@@ -143,8 +144,8 @@ EndProcedure
 
 Function GetBasisesForSalesInvoice(FilterValues) Export
 	StepArray = New Array;
-	StepArray.Add(Catalogs.MovementRules.FromSOtoSI);
-	
+	StepArray.Add(Catalogs.MovementRules.SI);
+	StepArray.Add(Catalogs.MovementRules.SI_SC);
 	Query = New Query;
 	Query.SetParameter("StepArray", StepArray);	
 	Query.SetParameter("Company", FilterValues.Company);
@@ -203,21 +204,47 @@ Function GetBasisesForSalesInvoice(FilterValues) Export
 		|	Doc.ItemKey.Item AS Item,
 		|	Doc.Store AS Store,
 		|	Doc.Ref AS Basis,
-		|	Doc.Key,
+		|	Doc.Key AS Key,
 		|	CASE
 		|		WHEN Doc.ItemKey.Unit.Ref IS NULL
 		|			THEN Doc.ItemKey.Item.Unit
 		|		ELSE Doc.ItemKey.Unit
 		|	END AS BasisUnit,
 		|	tmpQueryTable.Quantity AS Quantity,
-		|	tmpQueryTable.RowRef,
-		|	tmpQueryTable.RowID,
+		|	tmpQueryTable.RowRef AS RowRef,
+		|	tmpQueryTable.RowID AS RowID,
 		|	tmpQueryTable.Step AS CurrentStep
 		|FROM
 		|	Document.SalesOrder.ItemList AS Doc
 		|		INNER JOIN tmpQueryTable AS tmpQueryTable
-		|		ON tmpQueryTable.RowID = Doc.Key
-		|		AND tmpQueryTable.Basis = Doc.Ref";
+		|		ON (tmpQueryTable.RowID = Doc.Key)
+		|		AND (tmpQueryTable.Basis = Doc.Ref)
+		|
+		|UNION ALL
+		|
+		|SELECT
+		|	Doc.ItemKey,
+		|	Doc.ItemKey.Item,
+		|	Doc.Store,
+		|	Doc.Ref,
+		|	Doc.Key,
+		|	CASE
+		|		WHEN Doc.ItemKey.Unit.Ref IS NULL
+		|			THEN Doc.ItemKey.Item.Unit
+		|		ELSE Doc.ItemKey.Unit
+		|	END,
+		|	tmpQueryTable.Quantity,
+		|	tmpQueryTable.RowRef,
+		|	tmpQueryTable.RowID,
+		|	tmpQueryTable.Step
+		|FROM
+		|	Document.ShipmentConfirmation.ItemList AS Doc
+		|		INNER JOIN Document.ShipmentConfirmation.RowIDInfo AS ShipmentConfirmationRowIDInfo
+		|			INNER JOIN tmpQueryTable AS tmpQueryTable
+		|			ON (tmpQueryTable.RowID = ShipmentConfirmationRowIDInfo.RowID
+		|			AND tmpQueryTable.Basis = ShipmentConfirmationRowIDInfo.Ref)
+		|		ON (Doc.Ref = ShipmentConfirmationRowIDInfo.Ref
+		|		AND Doc.Key = ShipmentConfirmationRowIDInfo.Key)";
 	QueryResult = Query.Execute();
 	QueryTable = QueryResult.Unload();
 	Return QueryTable;
