@@ -51,6 +51,7 @@ Function GetRowIDInfoRows(RowIDInfo) Export
 		NewRow.Insert("CurrentStep" , Row.CurrentStep);
 		NewRow.Insert("NextStep"    , Row.NextStep);
 		NewRow.Insert("RowRef"      , Row.RowRef);
+		RowIDInfoRows.Add(NewRow);
 	EndDo;
 	Return RowIDInfoRows;
 EndFunction	

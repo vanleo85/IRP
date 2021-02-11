@@ -3,14 +3,11 @@
 Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	ThisObject.MainFilter = Parameters.Filter;
 	ThisObject.Mode = "LinkExists";
-	For Each Row In Parameters.TablesInfo.ItemListRows Do
-		NewRow = ThisObject.ItemListRows.Add();
-		FillPropertyValues(NewRow, Row);
-		NewRow.RowPresentation = 
-		"" + Row.Item + ", " + Row.ItemKey + ", " + Row.Store;
-		NewRow.Picture = 3;
-	EndDo;
-		
+	
+	FillItemListRows(Parameters.TablesInfo.ItemListRows);
+	
+	FillResultsTree(Parameters.TablesInfo.RowIDInfoRows);
+			
 	FillDocumentsTree(Parameters.SelectedRowInfo.SelectedRow, 
 		Parameters.SelectedRowInfo.FilterBySelectedRow);
 EndProcedure
@@ -27,7 +24,7 @@ Procedure ExpandAllTrees() Export
 EndProcedure
 
 &AtClient
-Procedure ExistingRowsOnActivateRow(Item)
+Procedure ItemListRowsOnActivateRow(Item)
 	SelectedRowInfo = RowIDInfoClient.GetSelectedRowInfo(Items.ItemListRows.CurrentData);
 	FillDocumentsTree(SelectedRowInfo.SelectedRow, SelectedRowInfo.FilterBySelectedRow);
 	RowIDInfoClient.ExpandTree(Items.DocumentsTree, ThisObject.DocumentsTree.GetItems());
@@ -39,9 +36,68 @@ Procedure DocumentsTreeOnActivateRow(Item)
 EndProcedure
 
 &AtClient
+Procedure ResultsTreeOnActivateRow(Item)
+	SetButtonsEnabled();	
+EndProcedure
+
+&AtClient
 Procedure SetButtonsEnabled()
 	Items.Link.Enabled = IsCanLink().IsCan;
+	Items.Unlink.Enabled = IsCanUnlink().IsCan;
 EndProcedure
+
+&AtServer
+Procedure FillItemListRows(ItemListRows)
+	For Each Row In ItemListRows Do
+		NewRow = ThisObject.ItemListRows.Add();
+		FillPropertyValues(NewRow, Row);
+		NewRow.RowPresentation = 
+		"" + Row.Item + ", " + Row.ItemKey + ", " + Row.Store;
+		NewRow.Picture = 3;
+	EndDo;
+EndProcedure
+
+&AtServer
+Procedure FillResultsTree(RowIDInfoRows)
+	RowIDInfoTable = New ValueTable();
+	RowIDInfoTable.Columns.Add("Key");
+	RowIDInfoTable.Columns.Add("RowID"); 
+	RowIDInfoTable.Columns.Add("Quantity"); 
+	RowIDInfoTable.Columns.Add("Basis");
+	RowIDInfoTable.Columns.Add("CurrentStep");
+	RowIDInfoTable.Columns.Add("NextStep");
+	RowIDInfoTable.Columns.Add("RowRef");
+	For Each ItemOfArray In RowIDInfoRows Do
+		NewRow = RowIDInfoTable.Add();
+		For Each KeyValue In ItemOfArray Do
+			NewRow[KeyValue.Key] = KeyValue.Value;
+		EndDo;
+	EndDo;
+	RowIDInfoTableGrouped = RowIDInfoTable.Copy();
+	RowIDInfoTableGrouped.GroupBy("Key", "Quantity");
+	For Each Row In RowIDInfoTableGrouped Do
+		ArrayOfTopLevelRows = ThisObject.ItemListRows.FindRows(New Structure("Key", Row.Key));
+		For Each TopLevelRow In ArrayOfTopLevelRows Do
+			TopLevelNewRow = ThisObject.ResultsTree.GetItems().Add();
+			FillPropertyValues(TopLevelNewRow, TopLevelRow);
+			TopLevelNewRow.Level = 1;
+			TopLevelNewRow.Picture = 3;
+			TopLevelNewRow.Quantity = Row.Quantity;
+			TopLevelNewRow.RowPresentation = 
+			"" + TopLevelRow.Item + ", " + TopLevelRow.ItemKey + ", " + TopLevelRow.Store;
+			
+			ArrayOfSecondLevelRows = RowIDInfoTable.FindRows(New Structure("Key", Row.Key));
+			
+			For Each SecondLevelRow In ArrayOfSecondLevelRows Do
+				SecondLevelNewRow = TopLevelNewRow.GetItems().Add();		
+				FillPropertyValues(SecondLevelNewRow, SecondLevelRow);
+				SecondLevelNewRow.Level = 2;
+				SecondLevelNewRow.Picture = 2;
+				SecondLevelNewRow.RowPresentation = String(SecondLevelRow.Basis);
+			EndDo;
+		EndDo;
+	EndDo;
+EndProcedure	
 
 &AtServer
 Procedure FillDocumentsTree(SelectedRow, FilterBySelectedRow);
@@ -133,21 +189,21 @@ Procedure Link(Command)
 	Filter.Insert("Level" , 1);
 	TreeRowID = RowIDInfoClient.FindRowInTree(Filter, ThisObject.ResultsTree);
 	If TreeRowID = Undefined Then
-		TopLevelRow = ThisObject.ResultsTree.GetItems().Add();
+		TopLevelNewRow = ThisObject.ResultsTree.GetItems().Add();
 	Else
-		TopLevelRow = ThisObject.ResultsTree.FindByID(TreeRowID);
+		TopLevelNewRow = ThisObject.ResultsTree.FindByID(TreeRowID);
 	EndIf;
 	
-	FillPropertyValues(TopLevelRow, LinkInfo);
-	TopLevelRow.Level = 1;
-	TopLevelRow.Picture = 3;
-	TopLevelRow.RowID = "";
-	TopLevelRow.RowRef = Undefined;
-	TopLevelRow.RowPresentation = 
+	FillPropertyValues(TopLevelNewRow, LinkInfo);
+	TopLevelNewRow.Level = 1;
+	TopLevelNewRow.Picture = 3;
+	TopLevelNewRow.RowID = "";
+	TopLevelNewRow.RowRef = Undefined;
+	TopLevelNewRow.RowPresentation = 
 	"" + LinkInfo.Item + ", " + LinkInfo.ItemKey + ", " + LinkInfo.Store;
 	
 	
-	SecondLevelNewRow = TopLevelRow.GetItems().Add();		
+	SecondLevelNewRow = TopLevelNewRow.GetItems().Add();		
 	FillPropertyValues(SecondLevelNewRow, LinkInfo);
 	SecondLevelNewRow.Level = 2;
 	SecondLevelNewRow.Picture = 2;
@@ -161,8 +217,8 @@ EndProcedure
 Function IsCanLink()
 	Result = New Structure("IsCan", False);
 	
-	ExistingRowsCurrentData = Items.ItemListRows.CurrentData;
-	If ExistingRowsCurrentData = Undefined Then
+	ItemListRowsCurrentData = Items.ItemListRows.CurrentData;
+	If ItemListRowsCurrentData = Undefined Then
 		Return Result;
 	EndIf;
 	
@@ -173,22 +229,22 @@ Function IsCanLink()
 	
 	If DocumentsTreeCurrentData.Level = 2 Then
 		Filter = New Structure();
-		Filter.Insert("Key"   , ExistingRowsCurrentData.Key);
+		Filter.Insert("Key"   , ItemListRowsCurrentData.Key);
 		Filter.Insert("RowID" , DocumentsTreeCurrentData.RowID);
 		Filter.Insert("Basis" , DocumentsTreeCurrentData.Basis);
 		If RowIDInfoClient.FindRowInTree(Filter, ThisObject.ResultsTree) <> Undefined Then
 			Return Result;
 		Else
 			Result.IsCan = True;
-			Result.Insert("Item"        , ExistingRowsCurrentData.Item);
-			Result.Insert("ItemKey"     , ExistingRowsCurrentData.ItemKey);
-			Result.Insert("Store"       , ExistingRowsCurrentData.Store);
-			Result.Insert("Quantity"    , ExistingRowsCurrentData.Quantity);
-			Result.Insert("Unit"        , ExistingRowsCurrentData.Unit);
+			Result.Insert("Item"        , ItemListRowsCurrentData.Item);
+			Result.Insert("ItemKey"     , ItemListRowsCurrentData.ItemKey);
+			Result.Insert("Store"       , ItemListRowsCurrentData.Store);
+			Result.Insert("Quantity"    , ItemListRowsCurrentData.Quantity);
+			Result.Insert("Unit"        , ItemListRowsCurrentData.Unit);
 			Result.Insert("RowRef"      , DocumentsTreeCurrentData.RowRef);
 			Result.Insert("CurrentStep" , DocumentsTreeCurrentData.CurrentStep);
 	
-			Result.Insert("Key"      , ExistingRowsCurrentData.Key);
+			Result.Insert("Key"      , ItemListRowsCurrentData.Key);
 			Result.Insert("Basis"    , DocumentsTreeCurrentData.Basis);
 			Result.Insert("RowID"    , DocumentsTreeCurrentData.RowID);
 		EndIf;
@@ -198,7 +254,50 @@ EndFunction
 
 #EndRegion
 
+#Region Unlink
 
+&AtClient
+Procedure Unlink(Command)
+	LinkInfo = IsCanUnlink();
+	If Not LinkInfo.IsCan Then
+		Return;
+	EndIf;
+	
+	Filter = New Structure();
+	Filter.Insert("RowID" , LinkInfo.RowID);
+	Filter.Insert("Level" , 2);
+	TreeRowID = RowIDInfoClient.FindRowInTree(Filter, ThisObject.ResultsTree);	
+	SecondLevelRow = ThisObject.ResultsTree.FindByID(TreeRowID);
+	SecondLevelRow.GetParent().GetItems().Delete(SecondLevelRow);
+	TopLevelRowsForDelete = New Array();
+	For Each TopLevelRow In ThisObject.ResultsTree.GetItems() Do
+		If Not TopLevelRow.GetItems().Count() Then
+			TopLevelRowsForDelete.Add(TopLevelRow);
+		EndIf;
+	EndDo;
+	For Each Row In TopLevelRowsForDelete Do
+		ThisObject.ResultsTree.GetItems().Delete(Row);
+	EndDo;
+EndProcedure
+
+&AtClient
+Function IsCanUnlink()
+	Result = New Structure("IsCan", False);
+	
+	ResultsTreeCurrentData = Items.ResultsTree.CurrentData;
+	If ResultsTreeCurrentData = Undefined Then
+		Return Result;
+	EndIf;
+	
+	If ResultsTreeCurrentData.Level = 2 Then
+		Result.IsCan = True;
+		Result.Insert("Key"   , ResultsTreeCurrentData.Key);
+		Result.Insert("RowID" , ResultsTreeCurrentData.RowID);
+	EndIf;
+	Return Result;
+EndFunction
+
+#EndRegion
 
 
 

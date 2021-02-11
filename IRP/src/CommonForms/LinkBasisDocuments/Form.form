@@ -433,7 +433,7 @@
         </autoCommandBar>
         <handlers>
           <event>OnActivateRow</event>
-          <name>ExistingRowsOnActivateRow</name>
+          <name>ItemListRowsOnActivateRow</name>
         </handlers>
         <searchStringAddition>
           <visible>true</visible>
@@ -1592,6 +1592,10 @@
           </userVisible>
           <horizontalAlign>Left</horizontalAlign>
         </autoCommandBar>
+        <handlers>
+          <event>OnActivateRow</event>
+          <name>ResultsTreeOnActivateRow</name>
+        </handlers>
         <searchStringAddition>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -2657,6 +2661,11 @@
     <picture xsi:type="core:PictureRef">
       <picture>StdPicture.GetURL</picture>
     </picture>
+    <action xsi:type="form:FormCommandHandlerContainer">
+      <handler>
+        <name>Unlink</name>
+      </handler>
+    </action>
     <representation>TextPicture</representation>
     <currentRowUse>Auto</currentRowUse>
   </formCommands>
