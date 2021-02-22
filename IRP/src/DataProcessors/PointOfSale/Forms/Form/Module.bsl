@@ -310,6 +310,34 @@ Procedure ItemListDrag(Item, DragParameters, StandardProcessing, Row, Field)
 	
 EndProcedure
 
+&AtClient
+Procedure SetShopAssistant(Command)
+	SelectedRows = Items.ItemList.SelectedRows;
+	Filter = New Structure("Employee", True);	
+	OpenFormParameters = New Structure("ChoiceMode, CloseOnChoice, Filter", True, True, Filter);	
+	OnChoiceNotify = New NotifyDescription("SetRetailCustomerEnd", ThisObject, 
+	New Structure("SelectedRows", SelectedRows));	
+	OpenForm("Catalog.Partners.ChoiceForm", OpenFormParameters, ThisObject, , , , OnChoiceNotify);
+EndProcedure
+
+&AtClient
+Procedure SetRetailCustomerEnd(Value, AddInfo = Undefined) Export
+	If ValueIsFilled(Value) Then
+		If AddInfo.SelectedRows.Count() Then
+			For Each RowID In AddInfo.SelectedRows Do
+				Row = Object.ItemList.FindByID(RowID);
+				Row.ShopAssistant = Value;
+			EndDo;
+		Else
+			For Each Row In Object.ItemList Do
+				Row.ShopAssistant = Value;
+			EndDo;
+		EndIf;
+		ThisObject.CurrentShopAssistant = Value;
+		ThisObject.Title = ThisObject.CurrentShopAssistant;
+	EndIf;
+EndProcedure
+
 #Region SpecialOffers
 
 #Region Offers_for_document
@@ -554,6 +582,7 @@ Procedure ItemKeysSelectionAtServer(Val ChoicedItemKey)
 	EndIf;
 	NewRow.Quantity = NewRow.Quantity + 1;	
 	NewRow.TotalAmount = NewRow.Quantity * NewRow.Price;
+	NewRow.ShopAssistant = ThisObject.CurrentShopAssistant;
 	Items.ItemList.CurrentRow = NewRow.GetID();
 	EnabledPaymentButton();
 EndProcedure
@@ -583,13 +612,15 @@ Procedure BuildDetailedInformation(ItemKey)
 		InfoOffersAmount = InfoOffersAmount + FoundItemKeyRow.OffersAmount;
 		InfoQuantity = InfoQuantity + FoundItemKeyRow.Quantity;		
 		InfoTotalAmount = InfoTotalAmount + FoundItemKeyRow.TotalAmount;
+		InfoShopAssistant = ?(ValueIsFilled(FoundItemKeyRow.ShopAssistant), " (" + FoundItemKeyRow.CurrentShopAssistant + ")", "");
 	EndDo;
 	DetailedInformation = String(InfoItem)
 						+ ?(ValueIsFilled(ItemKey), " [" + String(ItemKey) + "]", "]")
 						+ " " + InfoQuantity
 						+ " x " + Format(InfoPrice, "NFD=2; NZ=0.00;")
 						+ ?(ValueIsFilled(InfoOffersAmount), "-" + Format(InfoOffersAmount, "NFD=2; NZ=0.00;"), "")
-						+ " = " + Format(InfoTotalAmount, "NFD=2; NZ=0.00;");
+						+ " = " + Format(InfoTotalAmount, "NFD=2; NZ=0.00;")
+						+ InfoShopAssistant;
 	Items.DetailedInformation.document.getElementById("text").innerHTML = DetailedInformation;						
 EndProcedure
 

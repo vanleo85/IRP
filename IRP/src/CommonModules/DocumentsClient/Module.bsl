@@ -1164,6 +1164,9 @@ Procedure PickupItemsEnd(Result, AddInfo) Export
 			If Row.Property("ProcurementMethod") And CatItemsServer.StoreMustHave(Row.Item) Then
 				Row.ProcurementMethod = PredefinedValue("Enum.ProcurementMethods.Stock");
 			EndIf;
+			If Row.Property("ShopAssistant") Then
+				Row.ShopAssistant = Form.CurrentShopAssistant;
+			EndIf;
 		EndIf;
 		
 		If Row.Property("Quantity") Then

@@ -247,6 +247,18 @@ Procedure ItemListRevenueTypeEditTextChange(Item, Text, StandardProcessing)
 	DocRetailSalesReceiptClient.ItemListRevenueTypeEditTextChange(Object, ThisObject, Item, Text, StandardProcessing);
 EndProcedure
 
+&AtClient
+Procedure ItemListShopAssistantStartChoice(Item, ChoiceData, StandardProcessing)
+	DocRetailSalesReceiptClient.ItemListShopAssistantStartListChoice(Object, ThisObject, Item, ChoiceData, StandardProcessing);
+EndProcedure
+
+&AtClient
+Procedure ItemListShopAssistantEditTextChange(Item, Text, StandardProcessing)
+	DocRetailSalesReceiptClient.ItemListShopAssistantEditTextChange(Object, ThisObject, Item, Text, StandardProcessing);
+EndProcedure
+
+
+
 #EndRegion
 
 #Region ItemPartner

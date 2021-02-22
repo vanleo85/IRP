@@ -432,6 +432,34 @@ EndProcedure
 
 #EndRegion
 
+#Region ShopAssistant
+
+Procedure ItemListShopAssistantStartListChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
+	OpenSettings = DocumentsClient.GetOpenSettingsStructure();
+	
+	OpenSettings.ArrayOfFilters = New Array();
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, DataCompositionComparisonType.NotEqual));
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Employee", True, DataCompositionComparisonType.Equal));
+	OpenSettings.FormParameters = New Structure();
+	OpenSettings.FormParameters.Insert("Filter", New Structure("Employee" , True));
+	OpenSettings.FillingData = New Structure("Employee", True);
+	
+	DocumentsClient.PartnerStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
+EndProcedure
+
+Procedure ItemListShopAssistantEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
+	ArrayOfFilters = New Array();
+	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, ComparisonType.NotEqual));
+	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Employee", True, ComparisonType.Equal));
+	AdditionalParameters = New Structure();		
+	DocumentsClient.PartnerEditTextChange(Object, Form, Item, Text, StandardProcessing,
+		ArrayOfFilters, AdditionalParameters);
+EndProcedure
+
+#EndRegion
+
+
+
 #EndRegion
 
 #Region ItemPartner
