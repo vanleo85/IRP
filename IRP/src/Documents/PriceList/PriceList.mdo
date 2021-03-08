@@ -53,6 +53,7 @@
   <defaultObjectForm>Document.PriceList.Form.DocumentForm</defaultObjectForm>
   <defaultListForm>Document.PriceList.Form.ListForm</defaultListForm>
   <defaultChoiceForm>Document.PriceList.Form.ChoiceForm</defaultChoiceForm>
+  <realTimePosting>Deny</realTimePosting>
   <registerRecords>InformationRegister.PricesByItems</registerRecords>
   <registerRecords>InformationRegister.PricesByItemKeys</registerRecords>
   <registerRecords>InformationRegister.PricesByProperties</registerRecords>
@@ -191,7 +192,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -245,7 +246,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -298,7 +299,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>

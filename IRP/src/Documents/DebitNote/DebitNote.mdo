@@ -59,6 +59,7 @@
   <registerRecords>AccumulationRegister.AccountsStatement</registerRecords>
   <registerRecords>AccumulationRegister.ReconciliationStatement</registerRecords>
   <registerRecords>AccumulationRegister.RevenuesTurnovers</registerRecords>
+  <registerRecords>AccumulationRegister.AdvanceFromCustomers</registerRecords>
   <registerRecords>AccumulationRegister.PartnerApTransactions</registerRecords>
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
@@ -123,7 +124,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -283,7 +284,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>

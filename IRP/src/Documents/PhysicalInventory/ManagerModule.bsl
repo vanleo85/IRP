@@ -3,14 +3,23 @@
 Function PostingGetDocumentDataTables(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
 	AccReg = Metadata.AccumulationRegisters;
 	Tables = New Structure();
-	Tables.Insert("StockReservation_Expense", PostingServer.CreateTable(AccReg.StockReservation));
-	Tables.Insert("StockReservation_Receipt", PostingServer.CreateTable(AccReg.StockReservation));
-	Tables.Insert("StockBalance_Expense", PostingServer.CreateTable(AccReg.StockBalance));
-	Tables.Insert("StockBalance_Receipt", PostingServer.CreateTable(AccReg.StockBalance));
-	Tables.Insert("StockAdjustmentAsWriteOff", PostingServer.CreateTable(AccReg.StockAdjustmentAsWriteOff));
-	Tables.Insert("StockAdjustmentAsSurplus", PostingServer.CreateTable(AccReg.StockAdjustmentAsSurplus));
+	Tables.Insert("StockReservation_Expense"  , PostingServer.CreateTable(AccReg.StockReservation));
+	Tables.Insert("StockReservation_Receipt"  , PostingServer.CreateTable(AccReg.StockReservation));
+	Tables.Insert("StockBalance_Expense"      , PostingServer.CreateTable(AccReg.StockBalance));
+	Tables.Insert("StockBalance_Receipt"      , PostingServer.CreateTable(AccReg.StockBalance));
+	Tables.Insert("StockAdjustmentAsWriteOff" , PostingServer.CreateTable(AccReg.StockAdjustmentAsWriteOff));
+	Tables.Insert("StockAdjustmentAsSurplus"  , PostingServer.CreateTable(AccReg.StockAdjustmentAsSurplus));
 	
-	ObjectStatusesServer.WriteStatusToRegister(Ref, Ref.Status, CurrentUniversalDate());
+	Tables.Insert("StockReservation_Exists" , PostingServer.CreateTable(AccReg.StockReservation));
+	Tables.Insert("StockBalance_Exists"     , PostingServer.CreateTable(AccReg.StockBalance));
+	
+	Tables.StockReservation_Exists = 
+	AccumulationRegisters.StockReservation.GetExistsRecords(Ref, AccumulationRecordType.Receipt, AddInfo);
+	
+	Tables.StockBalance_Exists = 
+	AccumulationRegisters.StockBalance.GetExistsRecords(Ref, AccumulationRecordType.Receipt, AddInfo);
+	
+	ObjectStatusesServer.WriteStatusToRegister(Ref, Ref.Status);
 	StatusInfo = ObjectStatusesServer.GetLastStatusInfo(Ref);
 	
 	If Not StatusInfo.Posting Then
@@ -30,12 +39,12 @@ Function PostingGetDocumentDataTables(Ref, Cancel, PostingMode, Parameters, AddI
 	Query.SetParameter("QueryTable", QueryTableItemList);
 	QueryResults = Query.ExecuteBatch();
 		
-	Tables.StockReservation_Expense = QueryResults[1].Unload();
-	Tables.StockReservation_Receipt = QueryResults[2].Unload();
-	Tables.StockBalance_Expense = QueryResults[3].Unload();
-	Tables.StockBalance_Receipt = QueryResults[4].Unload();
+	Tables.StockReservation_Expense  = QueryResults[1].Unload();
+	Tables.StockReservation_Receipt  = QueryResults[2].Unload();
+	Tables.StockBalance_Expense      = QueryResults[3].Unload();
+	Tables.StockBalance_Receipt      = QueryResults[4].Unload();
 	Tables.StockAdjustmentAsWriteOff = QueryResults[5].Unload();
-	Tables.StockAdjustmentAsSurplus = QueryResults[6].Unload();
+	Tables.StockAdjustmentAsSurplus  = QueryResults[6].Unload();
 	
 	Parameters.IsReposting = False;
 	
@@ -234,8 +243,8 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.StockReservation,
 		New Structure("RecordSet, WriteInTransaction",
 			PostingServer.JoinTables(ArrayOfTables,
-				"RecordType, Period, Store, ItemKey, Quantity"),
-			Parameters.IsReposting));
+			"RecordType, Period, Store, ItemKey, Quantity"),
+			True));
 	
 	// StockBalance
 	ArrayOfTables = New Array();
@@ -252,8 +261,8 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.StockBalance,
 		New Structure("RecordSet, WriteInTransaction",
 			PostingServer.JoinTables(ArrayOfTables,
-				"RecordType, Period, Store, ItemKey, Quantity"),
-			Parameters.IsReposting));
+			"RecordType, Period, Store, ItemKey, Quantity"),
+			True));
 	
 	// StockAdjustmentAsWriteOff
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.StockAdjustmentAsWriteOff,
@@ -271,7 +280,7 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 EndFunction
 
 Procedure PostingCheckAfterWrite(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
-	Return;
+	CheckAfterWrite(Ref, Cancel, Parameters, AddInfo);
 EndProcedure
 
 #EndRegion
@@ -279,11 +288,22 @@ EndProcedure
 #Region Undoposting
 
 Function UndopostingGetDocumentDataTables(Ref, Cancel, Parameters, AddInfo = Undefined) Export
-	Return Undefined;
+	Return PostingGetDocumentDataTables(Ref, Cancel, Undefined, Parameters, AddInfo);
 EndFunction
 
 Function UndopostingGetLockDataSource(Ref, Cancel, Parameters, AddInfo = Undefined) Export
-	Return Undefined;
+	DocumentDataTables = Parameters.DocumentDataTables;
+	DataMapWithLockFields = New Map();
+	
+	// StockReservation
+	StockReservation = AccumulationRegisters.StockReservation.GetLockFields(DocumentDataTables.StockReservation_Exists);
+	DataMapWithLockFields.Insert(StockReservation.RegisterName, StockReservation.LockInfo);
+	
+	// StockBalance
+	StockBalance = AccumulationRegisters.StockBalance.GetLockFields(DocumentDataTables.StockBalance_Exists);
+	DataMapWithLockFields.Insert(StockBalance.RegisterName, StockBalance.LockInfo);
+	
+	Return DataMapWithLockFields;
 EndFunction
 
 Procedure UndopostingCheckBeforeWrite(Ref, Cancel, Parameters, AddInfo = Undefined) Export
@@ -291,25 +311,32 @@ Procedure UndopostingCheckBeforeWrite(Ref, Cancel, Parameters, AddInfo = Undefin
 EndProcedure
 
 Procedure UndopostingCheckAfterWrite(Ref, Cancel, Parameters, AddInfo = Undefined) Export
-	Return;
+	Parameters.Insert("Unposting", True);
+	CheckAfterWrite(Ref, Cancel, Parameters, AddInfo);
 EndProcedure
 
 #EndRegion
 
-Function GetItemListWithFillingPhysCount(Ref, ItemList) Export
+#Region CheckAfterWrite
+
+Procedure CheckAfterWrite(Ref, Cancel, Parameters, AddInfo = Undefined)
+	StatusInfo = ObjectStatusesServer.GetLastStatusInfo(Ref);
+	If StatusInfo.Posting Then
+		CommonFunctionsClientServer.PutToAddInfo(AddInfo, "BalancePeriod", 
+			New Boundary(New PointInTime(StatusInfo.Period, Ref), BoundaryType.Including));
+	EndIf;
+	If Not (Parameters.Property("Unposting") And Parameters.Unposting) Then
+		Parameters.Insert("RecordType", AccumulationRecordType.Expense);
+	EndIf;
+	PostingServer.CheckBalance_AfterWrite(Ref, Cancel, Parameters, "Document.PhysicalInventory.ItemList", AddInfo);
+EndProcedure
+
+#EndRegion
+
+Function GetItemListWithFillingPhysCount(Ref) Export
 	Query = New Query();
 	Query.Text = GetQueryTextFillPhysCount_ByItemList();
 	
-	AccReg = Metadata.AccumulationRegisters.StockBalance;
-		
-	ItemListTyped = New ValueTable();
-	ItemListTyped.Columns.Add("Key", New TypeDescription("UUID"));
-	ItemListTyped.Columns.Add("ItemKey", AccReg.Dimensions.ItemKey.Type);
-	For Each Row In ItemList Do
-		FillPropertyValues(ItemListTyped.Add(), Row);
-	EndDo;
-		
-	Query.SetParameter("ItemList", ItemListTyped);
 	Query.SetParameter("Ref", Ref);
 	
 	QueryResult = Query.Execute();
@@ -320,29 +347,48 @@ EndFunction
 Function GetQueryTextFillPhysCount_ByItemList()
 	Return
 	"SELECT
-	|	tmp.Key AS Key,
-	|	tmp.ItemKey AS ItemKey
-	|INTO ItemList
+	|	NestedSelect.ItemKey.Item AS Item,
+	|	NestedSelect.ItemKey AS ItemKey,
+	|	NestedSelect.Unit AS Unit,
+	|	SUM(NestedSelect.ExpCount) AS ExpCount,
+	|	SUM(NestedSelect.PhysCount) AS PhysCount,
+	|	SUM(NestedSelect.PhysCount) - SUM(NestedSelect.ExpCount) AS Difference
 	|FROM
-	|	&ItemList AS tmp
-	|;
-	|////////////////////////////////////////////////////////////////////////////////
-	|SELECT
-	|	PhysicalCountByLocationItemList.Key,
-	|	PhysicalCountByLocationItemList.ItemKey,
-	|	SUM(ISNULL(PhysicalCountByLocationItemList.PhysCount, 0)) AS PhysCount
-	|FROM
-	|	ItemList AS ItemList
-	|		LEFT JOIN Document.PhysicalCountByLocation.ItemList AS PhysicalCountByLocationItemList
-	|		ON ItemList.Key = PhysicalCountByLocationItemList.Key
-	|		AND ItemList.ItemKey = PhysicalCountByLocationItemList.ItemKey
-	|		AND PhysicalCountByLocationItemList.Ref.PhysicalInventory = &Ref
-	|		AND
-	|		NOT PhysicalCountByLocationItemList.Ref.DeletionMark
-	|		AND PhysicalCountByLocationItemList.Ref.Status.Posting
+	|	(SELECT
+	|		PhysicalInventoryItemList.ItemKey AS ItemKey,
+	|		PhysicalInventoryItemList.Unit AS Unit,
+	|		SUM(PhysicalInventoryItemList.ExpCount) AS ExpCount,
+	|		0 AS PhysCount
+	|	FROM
+	|		Document.PhysicalInventory.ItemList AS PhysicalInventoryItemList
+	|	WHERE
+	|		PhysicalInventoryItemList.Ref = &Ref
+	|	
+	|	GROUP BY
+	|		PhysicalInventoryItemList.ItemKey,
+	|		PhysicalInventoryItemList.Unit
+	|	
+	|	UNION ALL
+	|	
+	|	SELECT
+	|		PhysicalCountByLocationItemList.ItemKey,
+	|		PhysicalCountByLocationItemList.Unit,
+	|		0,
+	|		SUM(PhysicalCountByLocationItemList.PhysCount)
+	|	FROM
+	|		Document.PhysicalCountByLocation.ItemList AS PhysicalCountByLocationItemList
+	|	WHERE
+	|		PhysicalCountByLocationItemList.Ref.PhysicalInventory = &Ref
+	|		AND NOT PhysicalCountByLocationItemList.Ref.DeletionMark
+	|	
+	|	GROUP BY
+	|		PhysicalCountByLocationItemList.ItemKey,
+	|		PhysicalCountByLocationItemList.Unit) AS NestedSelect
+	|
 	|GROUP BY
-	|	PhysicalCountByLocationItemList.Key,
-	|	PhysicalCountByLocationItemList.ItemKey";
+	|	NestedSelect.ItemKey.Item,
+	|	NestedSelect.ItemKey,
+	|	NestedSelect.Unit";
 EndFunction
 
 Function GetItemListWithFillingExpCount(Ref, Store, ItemList = Undefined) Export
@@ -356,7 +402,7 @@ Function GetItemListWithFillingExpCount(Ref, Store, ItemList = Undefined) Export
 		AccReg = Metadata.AccumulationRegisters.StockBalance;
 		
 		ItemListTyped = New ValueTable();
-		ItemListTyped.Columns.Add("Key", New TypeDescription("UUID"));
+		ItemListTyped.Columns.Add("Key", New TypeDescription(Metadata.DefinedTypes.typeRowID.Type));
 		ItemListTyped.Columns.Add("LineNumber", New TypeDescription("Number"));
 		ItemListTyped.Columns.Add("Store", AccReg.Dimensions.Store.Type);
 		ItemListTyped.Columns.Add("ItemKey", AccReg.Dimensions.ItemKey.Type);
@@ -382,7 +428,7 @@ Function GetItemListWithFillingExpCount(Ref, Store, ItemList = Undefined) Export
 	QueryTable = QueryResult.Unload();
 	
 	If QueryTable.Columns.Find("Key") = Undefined Then
-		QueryTable.Columns.Add("Key", New TypeDescription("UUID"));
+		QueryTable.Columns.Add("Key", New TypeDescription(Metadata.DefinedTypes.typeRowID.Type));
 	EndIf;
 	
 	If QueryTable.Columns.Find("LineNumber") <> Undefined Then
@@ -466,3 +512,32 @@ Function GetQueryTextFillExpCount_ByItemList()
 	|	LineNumber";
 EndFunction
 
+#Region NewRegistersPosting
+
+Function GetInformationAboutMovements(Ref) Export
+	Str = New Structure;
+	Str.Insert("QueryParamenters", GetAdditionalQueryParamenters(Ref));
+	Str.Insert("QueryTextsMasterTables", GetQueryTextsMasterTables());
+	Str.Insert("QueryTextsSecondaryTables", GetQueryTextsSecondaryTables());
+	Return Str;
+EndFunction
+
+Function GetAdditionalQueryParamenters(Ref)
+	StrParams = New Structure();
+	StrParams.Insert("Ref", Ref);
+	Return StrParams;
+EndFunction
+
+Function GetQueryTextsSecondaryTables()
+	QueryArray = New Array;
+
+	Return QueryArray;
+EndFunction
+
+Function GetQueryTextsMasterTables()
+	QueryArray = New Array;
+
+	Return QueryArray;
+EndFunction
+
+#EndRegion

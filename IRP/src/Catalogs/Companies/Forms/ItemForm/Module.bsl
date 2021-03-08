@@ -9,12 +9,12 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	
 	If Parameters.Key.IsEmpty() Then
 		If Parameters.FillingValues.Property("Partner") Then
-			Object.Our = False;
-			Items.Our.Visible = False;
+			Object.OurCompany = False;
+			Items.OurCompany.Visible = False;
 		EndIf;
 		SetVisible();
 	EndIf;
-	ExtensionServer.AddAtributesFromExtensions(ThisObject, Object.Ref, Items.GroupPages);
+	ExtensionServer.AddAttributesFromExtensions(ThisObject, Object.Ref, Items.GroupPages);
 EndProcedure
 
 &AtServer
@@ -42,7 +42,7 @@ EndProcedure
 
 &AtServer
 Procedure OnWriteAtServer(Cancel, CurrentObject, WriteParameters)
-	If Object.Our Then
+	If Object.OurCompany Then
 		If RewriteTaxes Then
 			CatCompaniesServer.WriteTaxesIntoFormTable(ThisObject, CurrentObject.Ref);
 		EndIf;
@@ -54,7 +54,7 @@ EndProcedure
 &AtServer
 Procedure BeforeWriteAtServer(Cancel, CurrentObject, WriteParameters)
 	AddAttributesAndPropertiesServer.BeforeWriteAtServer(ThisObject, Cancel, CurrentObject, WriteParameters);
-	If Not Object.Our Then
+	If Not Object.OurCompany Then
 		CurrentObject.Currencies.Clear();
 	EndIf;
 EndProcedure
@@ -67,12 +67,12 @@ EndProcedure
 
 &AtServer
 Procedure FillCheckProcessingAtServer(Cancel, CheckedAttributes)
-	If Object.Our Then
+	If Object.OurCompany Then
 		For Index = 0 To CompanyTaxes.Count() - 1 Do
 			Row = CompanyTaxes[Index];
 			If Not ValueIsFilled(Row.Period) Then
 				Cancel = True;
-				MessageText = StrTemplate(R().Error_010, "Period");
+				MessageText = StrTemplate(R().Error_010, R().Form_032);
 				CommonFunctionsClientServer.ShowUsersMessage(MessageText,
 						"CompanyTaxes[" + Format(Index, "NG=0;") + "].Period");
 			EndIf;
@@ -121,8 +121,8 @@ EndProcedure
 
 &AtServer
 Procedure SetVisible()
-	Items.GroupCurrencies.Visible = Object.Our;
-	Items.GroupTaxes.Visible = Object.Our;
+	Items.GroupCurrencies.Visible = Object.OurCompany;
+	Items.GroupTaxes.Visible = Object.OurCompany;
 EndProcedure
 
 &AtClient

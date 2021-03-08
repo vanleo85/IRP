@@ -1,233 +1,45 @@
 ﻿#language: en
 @tree
 @Positive
-@Group18
+@Other
 
-Feature: related documents
-
+Feature: check post/unpost/mark for deletion from report Related documents
 
 
 Background:
 	Given I launch TestClient opening script or connect the existing one
 
 
-Scenario: _300501 check connection to Internal Supply Request report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.InternalSupplyRequest"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
 
-Scenario: _300502 check connection to Purchase order report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.PurchaseOrder"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 2      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-Scenario: _300503 check connection to Purchase invoice report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 2      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-Scenario: _300504 check connection to Sales order report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.SalesOrder"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-Scenario: _300505 check connection to Sales invoice report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.SalesInvoice"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-Scenario: _300506 check connection to Shipment Confirmation report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.ShipmentConfirmation"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 181      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-
-Scenario: _300507 check connection to GoodsReceipt report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.GoodsReceipt"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-Scenario: _300508 check connection to PurchaseReturnOrder report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.PurchaseReturnOrder"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-Scenario: _300509 check connection to PurchaseReturn report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.PurchaseReturn"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-Scenario: _300510 check connection to SalesReturnOrder report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.SalesReturnOrder"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-Scenario: _300511 check connection to SalesReturn report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.SalesReturn"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 2      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-Scenario: _300512 check connection to CashPayment report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.CashPayment"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-Scenario: _300513 check connection to CashReciept report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.CashReceipt"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-Scenario: _300514 check connection to BankPayment report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.BankPayment"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-Scenario: _300515 check connection to BankReciept report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.BankReceipt"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-
-Scenario: _300516 check connection to CashTransferOrder report "Related documents" and generating a report for the current item (Cash receipt)
-	Given I open hyperlink "e1cib/list/Document.CashTransferOrder"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-		And "DocumentsTree" table contains lines
-		| 'Ref'                    | 'Amount' |
-		| 'Cash transfer order 1*' | '*'      |
-		| 'Cash payment 4*'        | '500,00' |
-		| 'Cash receipt 4*'        | '400,00' |
-		| 'Cash receipt 5*'        | '100,00' |
-	*  Check the report generation from list
-		And I go to the last line in "DocumentsTree" table
-		And in the table "DocumentsTree" I click the button named "DocumentsTreeGenerateForCurrent"
-		And "DocumentsTree" table contains lines
-		| 'Ref'                    | 'Amount' |
-		| 'Cash transfer order 1*' | ''       |
-		| 'Cash receipt 5*'        | '100,00' |
-	And I close all client application windows
-
-
-
-
-
-Scenario: _300519 check connection to Bundling report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.Bundling"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
-Scenario: _300520 check connection to Unbundling report "Related documents"
-	Given I open hyperlink "e1cib/list/Document.Unbundling"
-	* Form report Related documents
-		And I go to line in "List" table
-		| Number |
-		| 1      |
-		And I click the button named "FormFilterCriterionRelatedDocumentsRelatedDocuments"
-		And Delay 1
-	Then "Related documents" window is opened
-	And I close all client application windows
-
+Scenario: _300520 preparation (check post/unpost/mark for deletion from report Related documents)
+	When set True value to the constant
+	And I close TestClient session
+	Given I open new TestClient session or connect the existing one
+	* Load info
+		When Create catalog ObjectStatuses objects
+		When Create catalog ItemKeys objects
+		When Create catalog ItemTypes objects
+		When Create catalog Units objects
+		When Create catalog Items objects
+		When Create catalog PriceTypes objects
+		When Create catalog Specifications objects
+		When Create chart of characteristic types AddAttributeAndProperty objects
+		When Create catalog AddAttributeAndPropertySets objects
+		When Create catalog AddAttributeAndPropertyValues objects
+		When Create catalog Currencies objects
+		When Create catalog Companies objects (Main company)
+		When Create catalog Stores objects
+		When Create catalog Partners objects (Ferron BP)
+		When Create catalog Partners objects (Kalipso)
+		When Create catalog Companies objects (partners company)
+		When Create information register PartnerSegments records
+		When Create catalog PartnerSegments objects
+		When Create catalog Agreements objects
+		When Create chart of characteristic types CurrencyMovementType objects
+		When Create information register PricesByItemKeys records
+		When Create catalog IntegrationSettings objects
+		When Create information register CurrencyRates records
+		When update ItemKeys
 
 Scenario: _300521 check post/unpost/mark for deletion from report "Related documents"
 	* Preparation
@@ -237,7 +49,12 @@ Scenario: _300521 check post/unpost/mark for deletion from report "Related docum
 			And I click Select button of "Partner" field
 			And I go to line in "List" table
 				| 'Description' |
-				| 'Nicoletta'   |
+				| 'Ferron BP TR'   |
+			And I select current line in "List" table
+			And I click Select button of "Partner term" field
+			And I go to line in "List" table
+				| 'Description' |
+				| 'Basic Partner terms, TRY'   |
 			And I select current line in "List" table
 			And I click Choice button of the field named "Store"
 			And I go to line in "List" table
@@ -263,39 +80,40 @@ Scenario: _300521 check post/unpost/mark for deletion from report "Related docum
 			And I select current line in "List" table
 			And I move to "Other" tab
 			And I set checkbox "Shipment confirmations before sales invoice"
-			And I input "9 092" text in "Number" field
-			Then "1C:Enterprise" window is opened
-			And I click "Yes" button
-			And I input "9 092" text in "Number" field
-			And I click "Post" button
+			And I click the button named "FormPost"
+			And I delete "$$NumberSalesOrder300521$$" variable
+			And I delete "$$SalesOrder300521$$" variable
+			And I save the value of "Number" field as "$$NumberSalesOrder300521$$"
+			And I save the window as "$$SalesOrder300521$$"
 		* Create Shipment confirmation based on SO
 			And I click "Shipment confirmation" button
-			And I move to "Other" tab
-			And I input "9 092" text in "Number" field
-			Then "1C:Enterprise" window is opened
-			And I click "Yes" button
-			And I input "9 092" text in "Number" field
-			And I click "Post and close" button
+			And I click the button named "FormPost"
+			And I delete "$$NumberShipmentConfirmation300521$$" variable
+			And I delete "$$ShipmentConfirmation300521$$" variable
+			And I save the value of "Number" field as "$$NumberShipmentConfirmation300521$$"
+			And I save the window as "$$ShipmentConfirmation300521$$"
+			And I click the button named "FormPostAndClose"
 			And Delay 5
 		* Create Sales invoice based on created SC
 			And I click "Sales invoice" button
 			And I click the button named "FormSelectAll"
 			And I click "Ok" button
 			And I move to "Other" tab
-			And I input "9 012" text in "Number" field
-			Then "1C:Enterprise" window is opened
-			And I click "Yes" button
-			And I input "9 012" text in "Number" field
-			And I click "Post and close" button
+			And I click the button named "FormPost"
+			And I delete "$$NumberSalesInvoice300521$$" variable
+			And I delete "$$SalesInvoice300521$$" variable
+			And I save the value of "Number" field as "$$NumberSalesInvoice300521$$"
+			And I save the window as "$$SalesInvoice300521$$"
+			And I click the button named "FormPostAndClose"
 			And Delay 5
 		* Open Related documents
-			When in opened panel I select "Sales order 9 092*"
+			When in opened panel I select "$$SalesOrder300521$$"
 			And I click "Related documents" button
 			And "DocumentsTree" table contains lines
-			| 'Ref'                          |
-			| 'Sales order 9 092*'           |
-			| 'Shipment confirmation 9 092*' |
-			| 'Sales invoice 9 012*'         |
+			| 'Presentation'                          |
+			| '$$SalesOrder300521$$'           |
+			| '$$ShipmentConfirmation300521$$' |
+			| '$$SalesInvoice300521$$'         |
 		* Check unpost Sales invoice from report Related documents
 			And I go to the last line in "DocumentsTree" table
 			And in the table "DocumentsTree" I click the button named "DocumentsTreeUnpost"
@@ -303,7 +121,7 @@ Scenario: _300521 check post/unpost/mark for deletion from report "Related docum
 			And Delay 10
 			And "List" table does not contain lines
 			| 'Recorder'             |
-			| 'Sales invoice 9 012*' |
+			| '$$SalesInvoice300521$$*' |
 		* Check post Sales invoice from report Related documents
 			When in opened panel I select "Related documents"
 			And I go to the last line in "DocumentsTree" table
@@ -313,7 +131,7 @@ Scenario: _300521 check post/unpost/mark for deletion from report "Related docum
 			And Delay 10
 			And "List" table contains lines
 			| 'Recorder'             |
-			| 'Sales invoice 9 012*' |
+			| '$$SalesInvoice300521$$' |
 		* Mark for deletion Sales invoice from report Related documents
 			When in opened panel I select "Related documents"
 			And I go to the last line in "DocumentsTree" table

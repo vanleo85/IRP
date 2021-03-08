@@ -3,10 +3,28 @@ Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 		Return;
 	EndIf;	
 
-	ThisObject.DocumentAmount = ItemList.Total("TotalAmount");
+	ThisObject.DocumentAmount = CalculationServer.CalculateDocumentAmount(ItemList);
+EndProcedure
+
+Procedure OnWrite(Cancel)
+	If DataExchange.Load Then
+		Return;
+	EndIf;	
+EndProcedure
+
+Procedure BeforeDelete(Cancel)
+	If DataExchange.Load Then
+		Return;
+	EndIf;
 EndProcedure
 
 Procedure FillCheckProcessing(Cancel, CheckedAttributes)
+	ClosingOrder = DocSalesOrderServer.GetLastSalesOrderClosingBySalesOrder(Ref);
+	If Not IsNew() AND Not ClosingOrder.IsEmpty() Then
+		Cancel = True;
+		CommonFunctionsClientServer.ShowUsersMessage(StrTemplate(R().InfoMessage_022, ClosingOrder));
+	EndIf;
+	
 	If DocumentsServer.CheckItemListStores(ThisObject) Then
 		Cancel = True;
 	EndIf;
@@ -16,6 +34,12 @@ Procedure FillCheckProcessing(Cancel, CheckedAttributes)
 			MessageText = StrTemplate(R().Error_010, R().S_023);
 			CommonFunctionsClientServer.ShowUsersMessage(MessageText, "Object.ItemList[" + RowIndex
 				+ "].ProcurementMethod", "Object.ItemList");
+			Cancel = True;
+		EndIf;
+		
+		If Row.Cancel And Row.CancelReason.IsEmpty() Then
+			CommonFunctionsClientServer.ShowUsersMessage(R().Error_093, "Object.ItemList[" + RowIndex
+				+ "].CancelReason", "Object.ItemList");
 			Cancel = True;
 		EndIf;
 	EndDo;
@@ -45,16 +69,4 @@ Procedure OnCopy(CopiedObject)
 	LinkedTables.Add(TaxList);
 	LinkedTables.Add(Currencies);
 	DocumentsServer.SetNewTableUUID(ItemList, LinkedTables);
-EndProcedure
-
-Procedure OnWrite(Cancel)
-	If DataExchange.Load Then
-		Return;
-	EndIf;	
-EndProcedure
-
-Procedure BeforeDelete(Cancel)
-	If DataExchange.Load Then
-		Return;
-	EndIf;
 EndProcedure

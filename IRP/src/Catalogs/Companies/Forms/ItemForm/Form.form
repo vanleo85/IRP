@@ -17,8 +17,10 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:DataPath">
-            <segments>Object.Code</segments>
+          <dataPath xsi:type="form:MultiLanguageDataPath">
+            <paths xsi:type="form:DataPath">
+              <segments>Object.Code</segments>
+            </paths>
           </dataPath>
           <extendedTooltip>
             <name>CodeExtendedTooltip</name>
@@ -297,8 +299,12 @@
         </extInfo>
       </items>
       <items xsi:type="form:FormField">
-        <name>Our</name>
+        <name>OurCompany</name>
         <id>15</id>
+        <title>
+          <key>en</key>
+          <value>Our Company</value>
+        </title>
         <visible>true</visible>
         <enabled>true</enabled>
         <userVisible>
@@ -306,7 +312,7 @@
         </userVisible>
         <dataPath xsi:type="form:MultiLanguageDataPath">
           <paths xsi:type="form:DataPath">
-            <segments>Object.Our</segments>
+            <segments>Object.OurCompany</segments>
           </paths>
         </dataPath>
         <handlers>

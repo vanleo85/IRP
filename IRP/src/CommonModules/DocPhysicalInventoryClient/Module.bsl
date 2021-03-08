@@ -63,6 +63,11 @@ Procedure OpenPickupItems(Object, Form, Command) Export
 	StoreArray = New Array;
 	StoreArray.Add(Object.Store);
 	
+	If Command.AssociatedTable <> Undefined Then
+		OpenFormParameters.Insert("AssociatedTableName", Command.AssociatedTable.Name);
+		OpenFormParameters.Insert("Object", Object);
+	EndIf;
+	
 	OpenFormParameters.Insert("Stores", StoreArray);
 	OpenFormParameters.Insert("EndPeriod", CommonFunctionsServer.GetCurrentSessionDate());
 	OpenForm("CommonForm.PickUpItems", OpenFormParameters, Form, , , , NotifyDescription);
@@ -71,7 +76,8 @@ EndProcedure
 #EndRegion
 
 Procedure ItemListItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
-	DocumentsClient.ItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing);
+	OpenSettings = DocumentsClient.GetOpenSettingsForSelectItemWithNotServiceFilter();
+	DocumentsClient.ItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
 
 Procedure ItemListItemEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
@@ -106,7 +112,6 @@ Procedure DecorationGroupTitleUncollapsedLabelClick(Object, Form, Item) Export
 EndProcedure
 
 #EndRegion
-
 
 #Region CreatePhysicalCount
 Procedure CreatePhysicalCount(ObjectRef) Export
@@ -166,15 +171,9 @@ Procedure UpdateExpCount(Object, Form) Export
 EndProcedure
 
 Procedure UpdatePhysCount(Object, Form) Export
-	ItemList = New Array();
-	For Each Row In Object.ItemList Do
-		NewRow = New Structure("Key, ItemKey");
-		FillPropertyValues(NewRow, Row);
-		ItemList.Add(NewRow);
-	EndDo;
 	UpdateItemList(Object, 
 					Form, 
-					DocPhysicalInventoryServer.GetItemListWithFillingPhysCount(Object.Ref, ItemList));
+					DocPhysicalInventoryServer.GetItemListWithFillingPhysCount(Object.Ref));
 EndProcedure
 
 Procedure FillItemList(Object, Form, Result)
@@ -193,9 +192,13 @@ Procedure UpdateItemList(Object, Form, Result)
 	EndDo;
 	
 	For Each Row In Result Do
-		For Each ItemListRow In Object.ItemList.FindRows(New Structure("Key, ItemKey", Row.Key, Row.ItemKey)) Do
-			FillPropertyValues(ItemListRow, Row);
-			ItemListRow.Difference = ItemListRow.PhysCount - ItemListRow.ExpCount;
-		EndDo;
+		ItemListFoundRows = Object.ItemList.FindRows(New Structure("Unit, ItemKey", Row.Unit, Row.ItemKey));
+		If ItemListFoundRows.Count() Then
+			ItemListRow = ItemListFoundRows[0];
+		Else
+			ItemListRow = Object.ItemList.Add();			
+		EndIf;
+		FillPropertyValues(ItemListRow, Row);
+		ItemListRow.Difference = ItemListRow.PhysCount - ItemListRow.ExpCount;
 	EndDo;
 EndProcedure

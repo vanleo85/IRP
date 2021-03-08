@@ -1,7 +1,9 @@
 ﻿#language: en
 @tree
 @Positive
-@Group11
+
+@UserSettings
+
 Feature: check filling in user settings
 
 As a developer
@@ -13,6 +15,57 @@ Background:
 	Given I launch TestClient opening script or connect the existing one
 
 
+
+Scenario: _200000 preparation (user settings)
+	When set True value to the constant
+	And I close TestClient session
+	Given I open new TestClient session or connect the existing one
+	* Load info
+		When Create catalog Users objects
+		When Create catalog ObjectStatuses objects
+		When Create catalog ItemKeys objects
+		When Create catalog ItemTypes objects
+		When Create catalog Units objects
+		When Create catalog Items objects
+		When Create catalog CashAccounts objects
+		When Create catalog PriceTypes objects
+		When Create catalog Specifications objects
+		When Create chart of characteristic types AddAttributeAndProperty objects
+		When Create catalog AddAttributeAndPropertySets objects
+		When Create catalog AddAttributeAndPropertyValues objects
+		When Create catalog Currencies objects
+		When Create catalog Companies objects (Main company)
+		When Create catalog Stores objects
+		When Create catalog Partners objects (Ferron BP)
+		When Create catalog Partners objects (Kalipso)
+		When Create catalog Companies objects (partners company)
+		When Create catalog Companies objects (own Second company)
+		When Create information register PartnerSegments records
+		When Create catalog PartnerSegments objects
+		When Create catalog Agreements objects
+		When Create chart of characteristic types CurrencyMovementType objects
+		When Create catalog TaxRates objects
+		When Create catalog Taxes objects	
+		When Create information register TaxSettings records
+		When Create information register PricesByItemKeys records
+		When Create catalog IntegrationSettings objects
+		When Create information register CurrencyRates records
+		When Create catalog Partners objects
+		When Create catalog BusinessUnits objects
+		When Create information register UserSettings records (Retail document)
+		When update ItemKeys
+	* Add plugin for taxes calculation
+		Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
+		If "List" table does not contain lines Then
+				| "Description" |
+				| "TaxCalculateVAT_TR" |
+			When add Plugin for tax calculation
+		When Create information register Taxes records (VAT)
+	* Tax settings
+		When filling in Tax settings for company
+	
+
+
 Scenario: _200001 customize the CI user settings
 	Given I open hyperlink "e1cib/list/Catalog.Users"
 	And I go to line in "List" table
@@ -20,7 +73,7 @@ Scenario: _200001 customize the CI user settings
 		| 'CI'          |
 	And I select current line in "List" table
 	And I input "CI" text in the field named "Description_en"
-	And I input "en" text in "Interface localization code" field
+	And I select "English" exact value from "Interface localization" drop-down list
 	And I click "Save" button
 	And I click "Settings" button
 	* Fill in custom settings for Sales order
@@ -774,6 +827,36 @@ Scenario: _200001 customize the CI user settings
 			| 'Store 02'    |
 		And I select current line in "List" table
 		And I finish line editing in "MetadataTree" table
+	* Fill in custom settings for PlannedReceiptReservation
+		And I go to line in "MetadataTree" table
+			| 'Group name'              |
+			| 'Planned receipt reservation' |
+		And I go to line in "MetadataTree" table
+			| 'Group name' | 'Use' |
+			| 'Company'    | 'No'  |
+		And I activate "Value" field in "MetadataTree" table
+		And I select current line in "MetadataTree" table
+		And I click choice button of "Value" attribute in "MetadataTree" table
+		And I go to line in "List" table
+			| 'Description'  |
+			| 'Main Company' |
+		And I select current line in "List" table
+		And I finish line editing in "MetadataTree" table
+	* Fill in custom settings for Sales order closing
+		And I go to line in "MetadataTree" table
+			| 'Group name'              |
+			| 'Sales order closing' |
+		And I go to line in "MetadataTree" table
+			| 'Group name' | 'Use' |
+			| 'Business unit'    | 'No'  |
+		And I activate "Value" field in "MetadataTree" table
+		And I select current line in "MetadataTree" table
+		And I click choice button of "Value" attribute in "MetadataTree" table
+		And I go to line in "List" table
+			| 'Description'  |
+			| 'Front office' |
+		And I select current line in "List" table
+		And I finish line editing in "MetadataTree" table
 	And I click "Ok" button
 	And I click "Save and close" button
 
@@ -917,6 +1000,33 @@ Scenario:  _200015 check filling in field from custom user settings in Internal 
 
 
 Scenario:  _200016 check filling in field from custom user settings in Inventory transfer
+	Given I open hyperlink "e1cib/list/InformationRegister.UserSettings"
+	If "List" table does not contain lines Then
+			| "Metadata object"            | "Attribute name" |
+			| "Document.InventoryTransfer" |"Company"         |
+		And I click the button named "FormCreate"
+		And I click Select button of "User or group" field
+		And I go to line in "" table
+			| ''     |
+			| 'User' |
+		And I select current line in "" table
+		And I go to line in "List" table
+			| 'Login' |
+			| 'CI'          |
+		And I select current line in "List" table
+		And I input "Document.InventoryTransfer" text in "Metadata object" field
+		And I input "Company" text in "Attribute name" field
+		And I select "Regular" exact value from "Kind of attribute" drop-down list
+		And I click Select button of "Value" field
+		And I go to line in "" table
+			| ''        |
+			| 'Company' |
+		And I select current line in "" table
+		And I go to line in "List" table
+			| 'Description'  |
+			| 'Main Company' |
+		And I select current line in "List" table
+		And I click the button named "FormWriteAndClose"
 	Given I open hyperlink "e1cib/list/Document.InventoryTransfer"
 	And I click the button named "FormCreate"
 	* Check that fields are filled in from user settings
@@ -939,7 +1049,7 @@ Scenario:  _200018 check filling in field from custom user settings in Outgoing 
 	Given I open hyperlink "e1cib/list/Document.OutgoingPaymentOrder"
 	And I click the button named "FormCreate"
 	* Check that fields are filled in from user settings
-		Then the form attribute named "Account" became equal to "Cash desk №3"
+		Then the form attribute named "Account" became equal to "Cash desk №2"
 		Then the form attribute named "Currency" became equal to "USD"
 		Then the form attribute named "Company" became equal to "Main Company"
 	And I close all client application windows
@@ -975,7 +1085,34 @@ Scenario:  _200022 check filling in field from custom user settings in Purchase 
 	And I close all client application windows
 
 Scenario:  _200023 check filling in field from custom user settings in Sales invoice
-	# the store is filled out of the agreement, if the agreement doesn't specify, then from user settings. So is the company.
+	# the store is filled out of the agreement, if the agreement does not specify, then from user settings. So is the company.
+	Given I open hyperlink "e1cib/list/InformationRegister.UserSettings"
+	If "List" table does not contain lines Then
+			| "Metadata object"            | "Attribute name" |
+			| "Document.SalesInvoice" |"Agreement"         |
+		And I click the button named "FormCreate"
+		And I click Select button of "User or group" field
+		And I go to line in "" table
+			| ''     |
+			| 'User' |
+		And I select current line in "" table
+		And I go to line in "List" table
+			| 'Login' |
+			| 'CI'          |
+		And I select current line in "List" table
+		And I input "Document.SalesInvoice" text in "Metadata object" field
+		And I input "Agreement" text in "Attribute name" field
+		And I select "Regular" exact value from "Kind of attribute" drop-down list
+		And I click Select button of "Value" field
+		And I go to line in "" table
+			| ''        |
+			| 'Partner term' |
+		And I select current line in "" table
+		And I go to line in "List" table
+			| 'Description'  |
+			| 'Basic Partner terms, TRY' |
+		And I select current line in "List" table
+		And I click the button named "FormWriteAndClose"
 	Given I open hyperlink "e1cib/list/Document.SalesInvoice"
 	And I click the button named "FormCreate"
 	* Check that fields are filled in from user settings
@@ -1117,7 +1254,7 @@ Scenario: _200030  adding a group of user settings for the user
 		Given I open hyperlink "e1cib/list/Catalog.Users"
 	* Select user
 		And I go to line in "List" table
-			| 'Description' |
+			| 'Login' |
 			| 'CI'          |
 		And I select current line in "List" table
 	* Specify custom settings group
@@ -1190,7 +1327,41 @@ Scenario: _200032 check the availability of editing custom settings from the use
 		Then "Edit user settings" window is opened
 	And I close all client application windows
 
+Scenario:  _200033 check filling in field from custom user settings in Retail return receipt
+	Given I open hyperlink "e1cib/list/Document.RetailReturnReceipt"
+	And I click the button named "FormCreate"
+	* Check that fields are filled in from user settings
+		Then the form attribute named "Company" became equal to "Main Company"
+		Then the form attribute named "Store" became equal to "Store 01"
+		Then the form attribute named "Partner" became equal to "Retail customer"
+		Then the form attribute named "LegalName" became equal to "Company Retail customer"
+		Then the form attribute named "Agreement" became equal to "Retail partner term"
+		Then the form attribute named "BusinessUnit" became equal to "Shop 01"
+	And I close all client application windows
 
-	
+Scenario:  _200034 check filling in field from custom user settings in Cash statement
+	Given I open hyperlink "e1cib/list/Document.CashStatement"
+	And I click the button named "FormCreate"
+	* Check that fields are filled in from user settings
+		Then the form attribute named "Company" became equal to "Main Company"
+		Then the form attribute named "BusinessUnit" became equal to "Shop 01"
+		Then the form attribute named "CashAccount" became equal to "Cash desk №4"
+	And I close all client application windows	
+
+Scenario:  _200035 check filling in field from custom user settings in Planned receipt reservation
+	Given I open hyperlink "e1cib/list/Document.PlannedReceiptReservation"
+	And I click the button named "FormCreate"
+	* Check that fields are filled in from user settings
+		Then the form attribute named "Company" became equal to "Main Company"
+	And I close all client application windows	
+
+Scenario:  _200036 check filling in field from custom user settings in Sales order closing
+	Given I open hyperlink "e1cib/list/Document.SalesOrderClosing"
+	And I click the button named "FormCreate"
+	* Check that fields are filled in from user settings
+		Then the form attribute named "BusinessUnit" became equal to "Front office"
+	And I close all client application windows	
 
 
+Scenario: _999999 close TestClient session
+	And I close TestClient session

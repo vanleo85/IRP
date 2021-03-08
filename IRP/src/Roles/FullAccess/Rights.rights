@@ -34,7 +34,29 @@
 		</right>
 	</object>
 	<object>
+		<name>Document.ManualRegisterEntry</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
 		<name>Catalog.FileStorageVolumes</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>InteractiveDeletePredefinedData</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>InteractiveDeleteMarkedPredefinedData</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.DataBaseStatus</name>
 		<right>
 			<name>InteractiveDelete</name>
 			<value>false</value>
@@ -412,6 +434,21 @@
 		</right>
 	</object>
 	<object>
+		<name>Catalog.CashStatementStatuses</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>InteractiveDeletePredefinedData</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>InteractiveDeleteMarkedPredefinedData</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
 		<name>Document.PhysicalInventory</name>
 		<right>
 			<name>InteractiveDelete</name>
@@ -597,6 +634,13 @@
 		</right>
 	</object>
 	<object>
+		<name>ExchangePlan.FullExchange</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
 		<name>Document.ChequeBondTransaction</name>
 		<right>
 			<name>InteractiveDelete</name>
@@ -723,6 +767,28 @@
 		</right>
 	</object>
 	<object>
+		<name>Catalog.DataMappingItems</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>InteractiveDeletePredefinedData</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>InteractiveDeleteMarkedPredefinedData</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Document.ItemStockAdjustment</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
 		<name>Catalog.DataAreas</name>
 		<right>
 			<name>InteractiveDelete</name>
@@ -739,6 +805,21 @@
 	</object>
 	<object>
 		<name>Catalog.Currencies</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>InteractiveDeletePredefinedData</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>InteractiveDeleteMarkedPredefinedData</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.LockDataModificationReasons</name>
 		<right>
 			<name>InteractiveDelete</name>
 			<value>false</value>
@@ -820,6 +901,13 @@
 	</object>
 	<object>
 		<name>Document.OutgoingPaymentOrder</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Document.SalesOrderClosing</name>
 		<right>
 			<name>InteractiveDelete</name>
 			<value>false</value>
@@ -979,6 +1067,21 @@
 	</object>
 	<object>
 		<name>Catalog.PriceTypes</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>InteractiveDeletePredefinedData</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>InteractiveDeleteMarkedPredefinedData</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.PartnersBankAccounts</name>
 		<right>
 			<name>InteractiveDelete</name>
 			<value>false</value>
@@ -1187,6 +1290,27 @@
 		</right>
 		<right>
 			<name>InteractiveDeleteMarkedPredefinedData</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Document.PlannedReceiptReservation</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.CancelReturnReasons</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Document.PurchaseOrderClosing</name>
+		<right>
+			<name>InteractiveDelete</name>
 			<value>false</value>
 		</right>
 	</object>

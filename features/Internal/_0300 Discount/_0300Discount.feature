@@ -2,7 +2,7 @@
 @tree
 @Positive
 @Discount
-@Group8
+
 
 Feature: special offers
 
@@ -14,10 +14,55 @@ Background:
 	Given I launch TestClient opening script or connect the existing one
 
 
-Scenario: _030001 add Pluginsessor SpecialMessage
+
+Scenario: _03000 preparation (Discount)
+	When set True value to the constant
+	And I close TestClient session
+	Given I open new TestClient session or connect the existing one
+	* Load info
+		When Create catalog ObjectStatuses objects
+		When Create catalog ItemKeys objects
+		When Create catalog ItemTypes objects
+		When Create catalog Units objects
+		When Create catalog Items objects
+		When Create catalog PriceTypes objects
+		When Create catalog Specifications objects
+		When Create chart of characteristic types AddAttributeAndProperty objects
+		When Create catalog AddAttributeAndPropertySets objects
+		When Create catalog AddAttributeAndPropertyValues objects
+		When Create catalog Currencies objects
+		When Create catalog Companies objects (Main company)
+		When Create catalog Stores objects
+		When Create catalog Partners objects (Ferron BP)
+		When Create catalog Partners objects (Kalipso)
+		When Create catalog Companies objects (partners company)
+		When Create information register PartnerSegments records
+		When Create catalog PartnerSegments objects
+		When Create catalog Agreements objects
+		When Create chart of characteristic types CurrencyMovementType objects
+		When Create catalog TaxRates objects
+		When Create catalog Taxes objects	
+		When Create information register TaxSettings records
+		When Create information register PricesByItemKeys records
+		When Create catalog IntegrationSettings objects
+		When Create information register CurrencyRates records
+		When update ItemKeys
+	* Add plugin for taxes calculation
+		Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
+		If "List" table does not contain lines Then
+				| "Description" |
+				| "TaxCalculateVAT_TR" |
+			When add Plugin for tax calculation
+		When Create information register Taxes records (VAT)
+		When Create catalog Partners objects
+	* Tax settings
+		When filling in Tax settings for company
+	
+
+Scenario: _030001 add Plugin SpecialMessage
 	Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
 	And I click the button named "FormCreate"
-	And I select external file "#workingDir#\DataProcessor\SpecialOffer_Message.epf"
+	And I select external file "#workingDir#/DataProcessor/SpecialOffer_Message.epf"
 	And I click the button named "FormAddExtDataProc"
 	And I input "" text in "Path to plugin for test" field
 	And I input "ExternalSpecialMessage" text in "Name" field
@@ -29,10 +74,10 @@ Scenario: _030001 add Pluginsessor SpecialMessage
 	And I wait "Plugins (create)" window closing in 10 seconds
 	Then I check for the "ExternalDataProc" catalog element with the "Description_en" "ExternalSpecialMessage"
 
-Scenario: _030002 add Pluginsessor DocumentDiscount
+Scenario: _030002 add Plugin DocumentDiscount
 	Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
 	And I click the button named "FormCreate"
-	And I select external file "#workingDir#\DataProcessor\DocumentDiscount.epf"
+	And I select external file "#workingDir#/DataProcessor/DocumentDiscount.epf"
 	And I click the button named "FormAddExtDataProc"
 	And I input "" text in "Path to plugin for test" field
 	And I input "DocumentDiscount" text in "Name" field
@@ -44,10 +89,10 @@ Scenario: _030002 add Pluginsessor DocumentDiscount
 	And I wait "Plugins (create)" window closing in 10 seconds
 	Then I check for the "ExternalDataProc" catalog element with the "Description_en" "DocumentDiscount"
 
-Scenario: _030003 add Pluginsessor SpecialRules
+Scenario: _030003 add Plugin SpecialRules
 	Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
 	And I click the button named "FormCreate"
-	And I select external file "#workingDir#\DataProcessor\SpecialOfferRules.epf"
+	And I select external file "#workingDir#/DataProcessor/SpecialOfferRules.epf"
 	And I click the button named "FormAddExtDataProc"
 	And I input "" text in "Path to plugin for test" field
 	And I input "ExternalSpecialOfferRules" text in "Name" field
@@ -59,10 +104,10 @@ Scenario: _030003 add Pluginsessor SpecialRules
 	And I wait "Plugins (create)" window closing in 10 seconds
 	Then I check for the "ExternalDataProc" catalog element with the "Description_en" "ExternalSpecialOfferRules"
 
-Scenario: _030004 add Pluginsessor RangeDiscount
+Scenario: _030004 add Plugin RangeDiscount
 	Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
 	And I click the button named "FormCreate"
-	And I select external file "#workingDir#\DataProcessor\RangeDiscount.epf"
+	And I select external file "#workingDir#/DataProcessor/RangeDiscount.epf"
 	And I click the button named "FormAddExtDataProc"
 	And I input "" text in "Path to plugin for test" field
 	And I input "ExternalRangeDiscount" text in "Name" field
@@ -75,12 +120,12 @@ Scenario: _030004 add Pluginsessor RangeDiscount
 	Then I check for the "ExternalDataProc" catalog element with the "Description_en" "ExternalRangeDiscount"
 
 
-Scenario: _030005 add Pluginsessor FivePlusOne
-	* Opening a form to add Pluginsessor
+Scenario: _030005 add Plugin FivePlusOne
+	* Opening a form to add Plugin
 		Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
 		And I click the button named "FormCreate"
-	* Add Pluginsessor FivePlusOneType
-		And I select external file "#workingDir#\DataProcessor\FivePlusOne.epf"
+	* Add Plugin FivePlusOneType
+		And I select external file "#workingDir#/DataProcessor/FivePlusOne.epf"
 		And I click the button named "FormAddExtDataProc"
 		And I input "" text in "Path to plugin for test" field
 		And I input "ExternalFivePlusOne" text in "Name" field
@@ -292,7 +337,7 @@ Scenario: _030009 create Special Offer Rule Present Discount
 		And Delay 10
 	Then I check for the "SpecialOfferRules" catalog element with the "Description_en" "All items 5+1, Discount on Basic Partner terms"
 	* Create rule Basic Partner terms TRY, Dress and Trousers 4+1, multiple
-		* Select Pluginsessor for special offer rule 4+1
+		* Select Plugin for special offer rule 4+1
 			Given I open hyperlink "e1cib/list/Catalog.SpecialOfferRules"
 			And I click the button named "FormCreate"
 			And I click Select button of "Plugins" field
@@ -342,7 +387,7 @@ Scenario: _030009 create Special Offer Rule Present Discount
 			And Delay 10
 	Then I check for the "SpecialOfferRules" catalog element with the "Description_en" "Dress and Trousers 4+1, Discount on Basic Partner terms"
 	* Create rule Basic Partner terms TRY, Dress and Trousers 3+1, not multiple
-		* Select Pluginsessor for special offer rule 3+1
+		* Select Plugin for special offer rule 3+1
 			Given I open hyperlink "e1cib/list/Catalog.SpecialOfferRules"
 			And I click the button named "FormCreate"
 			And I click Select button of "Plugins" field
@@ -655,6 +700,13 @@ Scenario: _030013 create Special Offer Rules (Partner term)
 		| 'Basic Partner terms, TRY' |
 	And I select current line in "List" table
 	And Delay 1
+	And I finish line editing in "ValueList" table
+	And I click the button named "Add"
+	And I click choice button of "Value" attribute in "ValueList" table
+	And I go to line in "List" table
+		| 'Description'             |
+		| 'Retail partner term' |
+	And I select current line in "List" table
 	And I finish line editing in "ValueList" table
 	And I click "OK" button
 	When save the special offer setting

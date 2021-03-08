@@ -107,20 +107,43 @@ EndProcedure
 
 #EndRegion
 
-#Region ItemStoreSender
+#Region StoreInfo
 
 &AtClient
 Procedure StoreSenderOnChange(Item)
 	DocInventoryTransferOrderClient.StoreSenderOnChange(Object, ThisObject, Item);
+	StoreSenderOnChangeAtServer();
 EndProcedure
 
-#EndRegion
-
-#Region ItemStoreReceiver
+&AtServer
+Procedure StoreSenderOnChangeAtServer()
+	DocInventoryTransferOrderServer.StoreSenderOnChange(Object);
+EndProcedure
 
 &AtClient
 Procedure StoreReceiverOnChange(Item)
 	DocInventoryTransferOrderClient.StoreReceiverOnChange(Object, ThisObject, Item);
+	StoreReceiverOnChangeAtServer();
+EndProcedure
+
+&AtServer
+Procedure StoreReceiverOnChangeAtServer()
+	DocInventoryTransferOrderServer.StoreReceiverOnChange(Object);
+EndProcedure
+
+&AtClient
+Procedure UseShipmentConfirmationOnChange(Item)
+	CheckAndUpdateUseGRAtServer();
+EndProcedure
+
+&AtServer
+Procedure CheckAndUpdateUseGRAtServer()
+	DocInventoryTransferOrderServer.CheckAndUpdateUseGR(Object);
+EndProcedure
+
+&AtClient
+Procedure UseGoodsReceiptOnChange(Item)
+	CheckAndUpdateUseGRAtServer();
 EndProcedure
 
 #EndRegion
@@ -183,6 +206,11 @@ EndProcedure
 
 #EndRegion
 
+&AtClient
+Procedure ShowRowKey(Command)
+	DocumentsClient.ShowRowKey(ThisObject);
+EndProcedure
+
 #Region ExternalCommands
 
 &AtClient
@@ -194,6 +222,11 @@ EndProcedure
 &AtServer
 Procedure GeneratedFormCommandActionByNameServer(CommandName) Export
 	ExternalCommandsServer.GeneratedFormCommandActionByName(Object, ThisObject, CommandName);
+EndProcedure
+
+&AtClient
+Procedure AfterWrite(WriteParameters)
+	Notify("WriteProcurementOrder", , ThisObject);
 EndProcedure
 
 #EndRegion

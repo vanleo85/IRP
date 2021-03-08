@@ -46,6 +46,17 @@
 		</right>
 	</object>
 	<object>
+		<name>Document.ManualRegisterEntry</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
 		<name>Document.ShipmentConfirmation.Attribute.Company</name>
 		<right>
 			<name>View</name>
@@ -61,6 +72,13 @@
 	</object>
 	<object>
 		<name>Document.DebitNote.Attribute.Company</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Document.RetailReturnReceipt.Attribute.Partner</name>
 		<right>
 			<name>View</name>
 			<value>true</value>
@@ -92,7 +110,21 @@
 		</right>
 	</object>
 	<object>
+		<name>Document.RetailReturnReceipt.TabularSection.ItemList.Attribute.Store</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
 		<name>Document.SalesOrder.Attribute.Partner</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Document.RetailReturnReceipt.Attribute.LegalName</name>
 		<right>
 			<name>View</name>
 			<value>true</value>
@@ -258,6 +290,13 @@
 		</right>
 	</object>
 	<object>
+		<name>Document.RetailReturnReceipt.TabularSection.ItemList</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
 		<name>Document.CreditNote.TabularSection.Transactions.Attribute.BusinessUnit</name>
 		<right>
 			<name>View</name>
@@ -318,6 +357,17 @@
 		</right>
 	</object>
 	<object>
+		<name>Document.RetailReturnReceipt</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
 		<name>Document.CashExpense</name>
 		<right>
 			<name>Read</name>
@@ -330,6 +380,13 @@
 	</object>
 	<object>
 		<name>Catalog.Partners.Attribute.ShipmentConfirmationsBeforeSalesInvoice</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Document.CashStatement.Attribute.Company</name>
 		<right>
 			<name>View</name>
 			<value>true</value>
@@ -443,6 +500,13 @@
 		</right>
 	</object>
 	<object>
+		<name>Document.RetailReturnReceipt.Attribute.Company</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
 		<name>Document.RetailSalesReceipt.TabularSection.ItemList</name>
 		<right>
 			<name>View</name>
@@ -493,6 +557,13 @@
 		</right>
 	</object>
 	<object>
+		<name>Document.RetailReturnReceipt.Attribute.Agreement</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
 		<name>Document.OutgoingPaymentOrder.Attribute.Currency</name>
 		<right>
 			<name>View</name>
@@ -522,6 +593,17 @@
 	</object>
 	<object>
 		<name>Document.InventoryTransfer.Attribute.Company</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Document.ItemStockAdjustment</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+		</right>
 		<right>
 			<name>View</name>
 			<value>true</value>
@@ -611,6 +693,17 @@
 	</object>
 	<object>
 		<name>Document.OutgoingPaymentOrder</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Document.SalesOrderClosing</name>
 		<right>
 			<name>Read</name>
 			<value>true</value>
@@ -729,6 +822,13 @@
 	</object>
 	<object>
 		<name>Document.RetailSalesReceipt.TabularSection.ItemList.Attribute.Store</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Document.CashStatement.Attribute.CashAccount</name>
 		<right>
 			<name>View</name>
 			<value>true</value>
@@ -896,6 +996,13 @@
 		</right>
 	</object>
 	<object>
+		<name>CommonAttribute.BusinessUnit</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
 		<name>Document.CashExpense.Attribute.Account</name>
 		<right>
 			<name>View</name>
@@ -997,6 +1104,17 @@
 		</right>
 	</object>
 	<object>
+		<name>Document.CashStatement</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
 		<name>Document.IncomingPaymentOrder.Attribute.Account</name>
 		<right>
 			<name>View</name>
@@ -1004,7 +1122,29 @@
 		</right>
 	</object>
 	<object>
-		<name>CommonAttribute.BusinessUnit</name>
+		<name>Document.PlannedReceiptReservation</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Document.PlannedReceiptReservation.Attribute.Company</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Document.PurchaseOrderClosing</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+		</right>
 		<right>
 			<name>View</name>
 			<value>true</value>

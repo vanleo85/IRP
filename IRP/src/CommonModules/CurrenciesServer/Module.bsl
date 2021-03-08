@@ -28,7 +28,91 @@ Procedure PreparePostingDataTables(Parameters, CurrencyTable, AddInfo = Undefine
 		|FROM
 		|	&CurrencyTable AS CurrencyTable";
 		If CurrencyTable = Undefined Then
-			Query.SetParameter("CurrencyTable", Parameters.Object.Currencies.Unload());
+			CurrencyTable = Parameters.Object.Currencies.Unload();
+			DocumentCondition = False;
+			
+			If TypeOf(Parameters.Object.Ref) = Type("DocumentRef.CashReceipt")
+				Or TypeOf(Parameters.Object.Ref) = Type("DocumentRef.BankReceipt") Then
+				DocumentCondition = True;
+				Name_LegalName = "Payer";
+				RegisterType = Type("AccumulationRegisterRecordSet.PartnerArTransactions");
+			EndIf;
+			If TypeOf(Parameters.Object.Ref) = Type("DocumentRef.CashPayment")
+				Or TypeOf(Parameters.Object.Ref) = Type("DocumentRef.BankPayment") Then
+				DocumentCondition = True;
+				Name_LegalName = "Payee";
+				RegisterType = Type("AccumulationRegisterRecordSet.PartnerApTransactions");
+			EndIf;
+			If DocumentCondition Then
+				TableOfAgreementMovementTypes = New ValueTable();
+				TableOfAgreementMovementTypes.Columns.Add("MovementType");
+				TableOfAgreementMovementTypes.Columns.Add("Partner");
+				TableOfAgreementMovementTypes.Columns.Add("LegalName");
+				TableOfAgreementMovementTypes.Columns.Add("Amount");
+				TableOfAgreementMovementTypes.Columns.Add("Key");
+				For Each ItemOfPostingInfo In ArrayOfPostingInfo Do
+					If TypeOf(ItemOfPostingInfo.Key) = RegisterType Then
+						ItemOfPostingInfo.Value.Recordset.Columns.Add("Key", New TypeDescription(Metadata.DefinedTypes.typeRowID.Type));
+						For Each RowRecordSet In ItemOfPostingInfo.Value.Recordset Do
+							NewRow = TableOfAgreementMovementTypes.Add();
+							NewRow.MovementType = RowRecordSet.Agreement.CurrencyMovementType;
+							NewRow.Partner      = RowRecordSet.Partner;
+							NewRow.LegalName    = RowRecordSet.LegalName;
+							NewRow.Amount       = RowRecordSet.Amount;
+							For Each RowPaymentList In Parameters.Object.PaymentList Do
+								PartnerAndLegalNameCondition = False;
+								AgreementCondition = False;
+								BasisDocumentCondition = False;
+								If RowPaymentList.Partner = RowRecordSet.Partner
+									And RowPaymentList[Name_LegalName] = RowRecordSet.LegalName Then
+									PartnerAndLegalNameCondition = True;
+								EndIf;
+								If Not ValueIsFilled(RowPaymentList.Agreement) Then
+									AgreementCondition = True;
+								Else
+									If RowPaymentList.Agreement.ApArPostingDetail = Enums.ApArPostingDetail.ByStandardAgreement
+										And RowPaymentList.Agreement.StandardAgreement = RowRecordSet.Agreement Then
+										AgreementCondition = True;
+									Else
+										If RowPaymentList.Agreement = RowRecordSet.Agreement Then
+											AgreementCondition = True;
+										EndIf;
+									EndIf;
+								EndIf;
+								If Not ValueIsFilled(RowPaymentList.BasisDocument) 
+									Or RowPaymentList.BasisDocument = RowRecordSet.BasisDocument Then
+									BasisDocumentCondition = True;
+								EndIf;
+								If PartnerAndLegalNameCondition And AgreementCondition And BasisDocumentCondition Then
+									RowRecordSet.Key = RowPaymentList.Key;
+								EndIf;
+							EndDo;
+						EndDo;
+					EndIf;
+				EndDo;
+				
+				TableOfAgreementMovementTypes.GroupBy("MovementType, Partner, LegalName, Amount, Key");
+				
+				For Each RowPaymentList In Parameters.Object.PaymentList Do
+					If ValueIsFilled(RowPaymentList.Agreement) Then
+						Continue;
+					EndIf;
+					For Each RowMovementTypes In TableOfAgreementMovementTypes Do
+						If RowPaymentList.Partner = RowMovementTypes.Partner
+							And RowPaymentList[Name_LegalName] = RowMovementTypes.LegalName Then
+							ArrayOfCurrencies = CurrencyTable.FindRows(
+							New Structure("Key, MovementType", RowPaymentList.Key, RowMovementTypes.MovementType));
+							If Not ArrayOfCurrencies.Count() Then
+								NewRow = AddRowToCurrencyTable(Parameters.Object.Date, CurrencyTable, RowPaymentList.Key, 
+								                      Parameters.Object.Currency, RowMovementTypes.MovementType);
+								CalculateAmountByRow(NewRow, RowMovementTypes.Amount);
+							EndIf;
+						EndIf;
+					EndDo;
+				EndDo;
+				
+			EndIf;
+			Query.SetParameter("CurrencyTable", CurrencyTable);
 		Else
 			Query.SetParameter("CurrencyTable", CurrencyTable);
 		EndIf;
@@ -50,7 +134,9 @@ Function IsUseAgreementMovementType(ItemOfPostingInfo)
 	UseAgreementMovementType = True;
 	If TypeOf(ItemOfPostingInfo.Key) = Type("AccumulationRegisterRecordSet.AdvanceFromCustomers")
 		Or TypeOf(ItemOfPostingInfo.Key) = Type("AccumulationRegisterRecordSet.AdvanceToSuppliers") 
-		Or TypeOf(ItemOfPostingInfo.Key) = Type("AccumulationRegisterRecordSet.AccountBalance") Then
+		Or TypeOf(ItemOfPostingInfo.Key) = Type("AccumulationRegisterRecordSet.AccountBalance") 
+		Or TypeOf(ItemOfPostingInfo.Key) = Type("AccumulationRegisterRecordSet.R2020B_AdvancesFromCustomers") 
+		Or TypeOf(ItemOfPostingInfo.Key) = Type("AccumulationRegisterRecordSet.R1020B_AdvancesToVendors") Then
 		UseAgreementMovementType = False;
 	EndIf;
 	Return UseAgreementMovementType;
@@ -65,6 +151,8 @@ Function IsUseCurrencyJoin(Parameters, ItemOfPostingInfo)
 	TypeOfRecordSetsArray.Add(Type("AccumulationRegisterRecordSet.PartnerApTransactions"));
 	TypeOfRecordSetsArray.Add(Type("AccumulationRegisterRecordSet.PartnerArTransactions"));
 	TypeOfRecordSetsArray.Add(Type("AccumulationRegisterRecordSet.CashAdvance"));
+	TypeOfRecordSetsArray.Add(Type("AccumulationRegisterRecordSet.R2021B_CustomersTransactions"));
+	TypeOfRecordSetsArray.Add(Type("AccumulationRegisterRecordSet.R1021B_VendorsTransactions"));
 	
 	FilterByDocument = False;
 	
@@ -121,25 +209,25 @@ Function ExpandTable(TempTableManager, RecordSet, UseAgreementMovementType, UseC
 	|		WHEN CurrencyTable.Rate = 0
 	|		OR CurrencyTable.Multiplicity = 0
 	|			THEN 0
-	|		ELSE RecordSet.Amount / (CurrencyTable.Rate * CurrencyTable.Multiplicity)
+	|		ELSE (RecordSet.Amount * CurrencyTable.Rate) / CurrencyTable.Multiplicity
 	|	END AS Amount,
 	|	CASE
 	|		WHEN CurrencyTable.Rate = 0
 	|		OR CurrencyTable.Multiplicity = 0
 	|			THEN 0
-	|		ELSE RecordSet.ManualAmount / (CurrencyTable.Rate * CurrencyTable.Multiplicity)
+	|		ELSE (RecordSet.ManualAmount * CurrencyTable.Rate) / CurrencyTable.Multiplicity
 	|	END AS ManualAmount,
 	|	CASE
 	|		WHEN CurrencyTable.Rate = 0
 	|		OR CurrencyTable.Multiplicity = 0
 	|			THEN 0
-	|		ELSE RecordSet.NetAmount / (CurrencyTable.Rate * CurrencyTable.Multiplicity)
+	|		ELSE (RecordSet.NetAmount * CurrencyTable.Rate) / CurrencyTable.Multiplicity
 	|	END AS NetAmount,
 	|	CASE
 	|		WHEN CurrencyTable.Rate = 0
 	|		OR CurrencyTable.Multiplicity = 0
 	|			THEN 0
-	|		ELSE RecordSet.OffersAmount / (CurrencyTable.Rate * CurrencyTable.Multiplicity)
+	|		ELSE (RecordSet.OffersAmount * CurrencyTable.Rate )/ CurrencyTable.Multiplicity
 	|	END AS OffersAmount,
 	|	CurrencyTable.MovementType.DeferredCalculation AS DeferredCalculation,
 	|	CurrencyTable.MovementType.Currency AS Currency
@@ -180,7 +268,7 @@ Function ExpandTable(TempTableManager, RecordSet, UseAgreementMovementType, UseC
 	|DROP RecordSet";
 	UseKey = RecordSet.Columns.Find("Key") <> Undefined;
 	If Not UseKey Then
-		RecordSet.Columns.Add("Key", New TypeDescription("UUID"));
+		RecordSet.Columns.Add("Key", New TypeDescription(Metadata.DefinedTypes.typeRowID.Type));
 	EndIf;
 	
 	Query.SetParameter("RecordSet", RecordSet);
@@ -231,7 +319,7 @@ Procedure FillCurrencyTable(Object, Date, Company, Currency, RowKey, AgreementIn
 	EndDo;
 EndProcedure
 
-Procedure AddRowToCurrencyTable(Date, CurrenciesTable, RowKey, CurrencyFrom, CurrencyMovementType) Export
+Function AddRowToCurrencyTable(Date, CurrenciesTable, RowKey, CurrencyFrom, CurrencyMovementType) Export
 	NewRow = CurrenciesTable.Add();
 	NewRow.Key = RowKey;
 	NewRow.CurrencyFrom = CurrencyFrom;
@@ -252,7 +340,8 @@ Procedure AddRowToCurrencyTable(Date, CurrenciesTable, RowKey, CurrencyFrom, Cur
 			NewRow.Multiplicity = CurrencyInfo.Multiplicity;
 		EndIf;
 	EndIf;
-EndProcedure
+	Return NewRow;
+EndFunction
 
 Procedure ClearCurrenciesTable(Object, RowKey) Export
 	If RowKey = Undefined Then
@@ -289,9 +378,9 @@ EndProcedure
 
 Procedure CalculateAmountByRow(Row, DocumentAmount) Export
 	If Row.ShowReverseRate Then
-		Row.Amount = (DocumentAmount * Row.ReverseRate) / Row.Multiplicity;
+		Row.Amount = (DocumentAmount / Row.ReverseRate) / Row.Multiplicity;
 	Else
-		Row.Amount = DocumentAmount / (Row.Rate * Row.Multiplicity);
+		Row.Amount = (DocumentAmount * Row.Rate) / Row.Multiplicity;
 	EndIf;
 EndProcedure
 
@@ -311,8 +400,8 @@ Procedure CalculateRate(Object, DocumentAmount, MovementType, RowKeyFilter, Curr
 			Row.Rate = 0;
 			Continue;
 		EndIf;
-		Row.ReverseRate = Row.Amount * Row.Multiplicity / DocumentAmount;		
-		Row.Rate = DocumentAmount / (Row.Amount * Row.Multiplicity);
+		Row.Rate = Row.Amount * Row.Multiplicity / DocumentAmount;		
+		Row.ReverseRate = DocumentAmount / (Row.Amount * Row.Multiplicity);
 	EndDo;
 EndProcedure
 

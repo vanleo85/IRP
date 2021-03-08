@@ -8,6 +8,10 @@ Var Component Export;
 Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	HTMLDate = GetCommonTemplate("HTMLClock").GetText();
 	HTMLTextTemplate = GetCommonTemplate("HTMLTextField").GetText();
+	Workstation = SessionParametersServer.GetSessionParameter("Workstation");
+	If Workstation.IsEmpty() Then
+		CommonFunctionsClientServer.ShowUsersMessage(StrTemplate(R().Error_090, "Workstation"));
+	EndIf;
 EndProcedure
 
 &AtClient
@@ -115,6 +119,18 @@ Procedure ItemListItemEditTextChange(Item, Text, StandardProcessing)
 	DocRetailSalesReceiptClient.ItemListItemEditTextChange(Object, ThisObject, Item, Text, StandardProcessing);
 EndProcedure
 
+#Region SerialLotNumbers
+&AtClient
+Procedure ItemListSerialLotNumbersPresentationStartChoice(Item, ChoiceData, StandardProcessing, AddInfo = Undefined) Export
+	DocRetailSalesReceiptClient.ItemListSerialLotNumbersPresentationStartChoice(Object, ThisObject, Item, ChoiceData, StandardProcessing);
+EndProcedure
+
+&AtClient
+Procedure ItemListSerialLotNumbersPresentationClearing(Item, StandardProcessing)
+	DocRetailSalesReceiptClient.ItemListSerialLotNumbersPresentationClearing(Object, ThisObject, Item);
+EndProcedure
+#EndRegion
+
 #EndRegion
 
 #Region ItemListPickupEvents
@@ -124,7 +140,6 @@ Procedure ItemsPickupSelection(Item, SelectedRow, Field, StandardProcessing)
 	StandardProcessing = False;
 	AddItemToItemList();
 EndProcedure
-
 
 &AtClient
 Procedure AddItemToItemList()
@@ -142,7 +157,6 @@ Procedure AddItemToItemList()
 
 	BuildDetailedInformation(?(CurrentDataItemList = Undefined, Undefined, CurrentDataItemList.ItemKey));
 EndProcedure
-
 
 &AtClient
 Procedure ItemsPickupOnActivateRow(Item)
@@ -163,7 +177,6 @@ Procedure ItemKeysPickupSelection(Item, SelectedRow, Field, StandardProcessing)
 	AddItemKeyToItemList();
 EndProcedure
 
-
 &AtClient
 Procedure AddItemKeyToItemList()
 	Var CurrentData;
@@ -178,7 +191,6 @@ Procedure AddItemKeyToItemList()
 	
 	BuildDetailedInformation(?(CurrentData = Undefined, Undefined, CurrentData.Ref));
 EndProcedure
-
 
 #EndRegion
 
@@ -213,7 +225,7 @@ EndProcedure
 &AtClient
 Procedure qPayment(Command)
 	
-	Object.Date = CurrentDate();
+	Object.Date = CommonFunctionsServer.GetCurrentSessionDate();
 	
 	If Not CheckFilling() Then
 		Cancel = True;
@@ -231,7 +243,7 @@ Procedure qPayment(Command)
 	ObjectParameters = New Structure;
 	ObjectParameters.Insert("Amount", Object.ItemList.Total("TotalAmount"));
 	ObjectParameters.Insert("BusinessUnit", Object.BusinessUnit);
-	ObjectParameters.Insert("Workstation", SessionParametersClientServer.GetSessionParameter("Workstation"));
+	ObjectParameters.Insert("Workstation", Workstation);
 	OpenFormParameters = New Structure;
 	OpenFormParameters.Insert("Parameters", ObjectParameters);
 	OpenForm("DataProcessor.PointOfSale.Form.Payment"
@@ -272,7 +284,7 @@ EndProcedure
 &AtClient
 Procedure PrintReceipt(Command)
 	Cancel = False;
-	DPPointOfSaleClient.PrintLastReciept(ThisObject, Cancel);
+	DPPointOfSaleClient.PrintLastReceipt(ThisObject, Cancel);
 EndProcedure
 
 &AtClient
@@ -290,7 +302,6 @@ Procedure SetRetailCustomer(Value, AddInfo = Undefined) Export
 		Object.RetailCustomer = Value;
 	EndIf;
 EndProcedure
-
 
 &AtClient
 Procedure ItemListDrag(Item, DragParameters, StandardProcessing, Row, Field)
@@ -342,12 +353,12 @@ EndProcedure
 
 #Region Private
 
-#Region Hardwares
+#Region Hardware
 
 &AtClient
 Procedure ConnectBarcodeScanners()
 	HardwareParameters = New Structure;
-	HardwareParameters.Insert("Workstation", SessionParametersClientServer.GetSessionParameter("Workstation"));
+	HardwareParameters.Insert("Workstation", Workstation);
 	HardwareParameters.Insert("EquipmentType", PredefinedValue("Enum.EquipmentTypes.BarcodeScanner"));
 	HardwareParameters.Insert("ConnectionNotify" , New NotifyDescription("ConnectHardware_End", ThisObject));		                                 
 	HardwareClient.BeginConnectEquipment(HardwareParameters);
@@ -430,6 +441,7 @@ EndProcedure
 Procedure NewTransactionAtServer()
 	ObjectValue = Documents.RetailSalesReceipt.CreateDocument();
 	FillingWithDefaultDataEvent.FillingWithDefaultDataFilling(ObjectValue, Undefined, Undefined, True);
+	ObjectValue.Date = CommonFunctionsServer.GetCurrentSessionDate();
 	ValueToFormAttribute(ObjectValue, "Object");
 	Cancel = False;
 	DocRetailSalesReceiptServer.OnCreateAtServer(Object, ThisObject, Cancel, True);
@@ -460,7 +472,7 @@ Function WriteTransaction(Result)
 	EndDo;
 	
 	ObjectValue = FormAttributeToValue("Object");
-	ObjectValue.Date = CurrentSessionDate();
+	ObjectValue.Date = CommonFunctionsServer.GetCurrentSessionDate();
 	ObjectValue.Payments.Load(Payments);
 	DPPointOfSaleServer.BeforePostingDocument(ObjectValue);
 	ObjectValue.Write(DocumentWriteMode.Posting);
@@ -491,7 +503,6 @@ Procedure ShowItems()
 	SetShowItems();
 EndProcedure
 
-
 &AtClient
 Procedure SetShowItems()
 	Items.GroupPickupItems.Visible = Items.ItemListShowItems.Check;
@@ -502,7 +513,6 @@ Procedure SetShowItems()
 		AfterItemChoice(PredefinedValue("Catalog.Items.EmptyRef"));
 	EndIf;
 EndProcedure
-
 
 &AtServer
 Function AfterItemChoice(Val ChoicedItem, AddToItemList = False)

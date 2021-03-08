@@ -18,10 +18,53 @@ EndProcedure
 Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	LocalizationEvents.CreateMainFormItemDescription(ThisObject, "GroupDescriptions");
 	AddAttributesAndPropertiesServer.OnCreateAtServer(ThisObject);
-	ExtensionServer.AddAtributesFromExtensions(ThisObject, Object.Ref);
+	ExtensionServer.AddAttributesFromExtensions(ThisObject, Object.Ref);
+	
+	FillExistsLangs();
+	
+	If Object.Ref.IsEmpty() Then 	
+		Object.InfobaseUserID = Undefined;
+		Object.Description = "";
+	EndIf;
+EndProcedure
+
+&AtServer
+Procedure OnReadAtServer(CurrentObject)
+	UpdateRolesInfo(CurrentObject);
 EndProcedure
 
 #EndRegion
+
+#Region Privat
+
+&AtServer
+Procedure UpdateRolesInfo(CurrentObject)
+	User = Undefined;
+	If AccessRight("DataAdministration", Metadata) Then
+		If ValueIsFilled(CurrentObject.InfobaseUserID) Then
+			User = InfoBaseUsers.FindByUUID(CurrentObject.InfobaseUserID);
+		ElsIf ValueIsFilled(CurrentObject.Description) Then
+			User = InfoBaseUsers.FindByName(CurrentObject.Description);
+		EndIf;
+	Else
+		User = Undefined;
+	EndIf;
+	If Not User = Undefined Then
+		For Each Role In User.Roles Do
+			RoleList.Add(Role.Name, Role.Synonym);
+		EndDo;
+	EndIf;
+EndProcedure
+
+&AtServer
+Procedure FillExistsLangs()
+	
+	For Each Lang In Metadata.Languages Do
+		Items.LocalizationCode.ChoiceList.Add(Lower(Lang.LanguageCode), Lang.Synonym);
+		Items.InterfaceLocalizationCode.ChoiceList.Add(Lower(Lang.LanguageCode), Lang.Synonym);
+	EndDo;
+	
+EndProcedure
 
 &AtClient
 Procedure DescriptionOpening(Item, StandardProcessing) Export
@@ -61,6 +104,7 @@ Procedure EditUserSettingsProceed(Result, AddInfo = Undefined) Export
 		OpenForm("CommonForm.EditUserSettings", New Structure("UserOrGroup", Object.Ref), ThisObject);
 	EndIf;
 EndProcedure
+#EndRegion
 
 #Region AddAttributes
 

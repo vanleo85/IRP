@@ -63,6 +63,11 @@ Procedure OpenPickupItems(Object, Form, Command) Export
 	StoreArray = New Array;
 	StoreArray.Add(Object.Store);
 	
+	If Command.AssociatedTable <> Undefined Then
+		OpenFormParameters.Insert("AssociatedTableName", Command.AssociatedTable.Name);
+		OpenFormParameters.Insert("Object", Object);
+	EndIf;
+	
 	OpenFormParameters.Insert("Stores", StoreArray);
 	OpenFormParameters.Insert("EndPeriod", CommonFunctionsServer.GetCurrentSessionDate());
 	OpenForm("CommonForm.PickUpItems", OpenFormParameters, Form, , , , NotifyDescription);
@@ -71,7 +76,8 @@ EndProcedure
 #EndRegion
 
 Procedure ItemListItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
-	DocumentsClient.ItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing);
+	OpenSettings = DocumentsClient.GetOpenSettingsForSelectItemWithNotServiceFilter();
+	DocumentsClient.ItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
 
 Procedure ItemListItemEditTextChange(Object, Form, Item, Text, StandardProcessing) Export

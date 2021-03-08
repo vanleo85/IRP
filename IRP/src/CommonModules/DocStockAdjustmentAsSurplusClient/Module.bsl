@@ -1,5 +1,11 @@
 Procedure OnOpen(Object, Form, Cancel, AddInfo = Undefined) Export
 	DocumentsClient.SetTextOfDescriptionAtForm(Object, Form);
+	SerialLotNumberClient.UpdateSerialLotNumbersPresentation(Object, AddInfo);
+	SerialLotNumberClient.UpdateSerialLotNumbersTree(Object, Form);	
+EndProcedure
+
+Procedure AfterWriteAtClient(Object, Form, WriteParameters, AddInfo = Undefined) Export
+	SerialLotNumberClient.UpdateSerialLotNumbersPresentation(Object, AddInfo);
 EndProcedure
 
 Procedure ItemListOnChange(Object, Form, Item = Undefined, CalculationSettings = Undefined) Export
@@ -10,7 +16,12 @@ Procedure ItemListOnChange(Object, Form, Item = Undefined, CalculationSettings =
 	EndDo;
 EndProcedure
 
-Procedure ItemListItemOnChange(Object, Form, Item = Undefined) Export
+Procedure ItemListAfterDeleteRow(Object, Form, Item, AddInfo = Undefined) Export
+	SerialLotNumberClient.DeleteUnusedSerialLotNumbers(Object);
+	SerialLotNumberClient.UpdateSerialLotNumbersTree(Object, Form);	
+EndProcedure
+
+Procedure ItemListItemOnChange(Object, Form, Item = Undefined, AddInfo = Undefined) Export
 	CurrentRow = Form.Items.ItemList.CurrentData;
 	If CurrentRow = Undefined Then
 		Return;
@@ -26,6 +37,8 @@ Procedure ItemListItemOnChange(Object, Form, Item = Undefined) Export
 	CalculationStringsClientServer.CalculateItemsRow(Object,
 		CurrentRow,
 		CalculationSettings);
+	
+	SerialLotNumberClient.UpdateUseSerialLotNumber(Object, Form, AddInfo);
 EndProcedure
 
 #Region PickUpItems
@@ -62,6 +75,11 @@ Procedure OpenPickupItems(Object, Form, Command) Export
 	StoreArray = New Array;
 	StoreArray.Add(Object.Store);
 	
+	If Command.AssociatedTable <> Undefined Then
+		OpenFormParameters.Insert("AssociatedTableName", Command.AssociatedTable.Name);
+		OpenFormParameters.Insert("Object", Object);
+	EndIf;
+	
 	OpenFormParameters.Insert("Stores", StoreArray);
 	OpenFormParameters.Insert("EndPeriod", CommonFunctionsServer.GetCurrentSessionDate());
 	OpenForm("CommonForm.PickUpItems", OpenFormParameters, Form, , , , NotifyDescription);
@@ -70,12 +88,44 @@ EndProcedure
 #EndRegion
 
 Procedure ItemListItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
-	DocumentsClient.ItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing);
+	OpenSettings = DocumentsClient.GetOpenSettingsForSelectItemWithNotServiceFilter();
+	DocumentsClient.ItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
 
 Procedure ItemListItemEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
 	DocumentsClient.ItemEditTextChange(Object, Form, Item, Text, StandardProcessing);
 EndProcedure
+
+Procedure ItemListItemKeyOnChange(Object, Form, Item, AddInfo = Undefined) Export
+	CurrentRow = Form.Items.ItemList.CurrentData;
+	If CurrentRow = Undefined Then
+		Return;
+	EndIf;
+	
+	CalculationSettings = New Structure();
+	CalculationSettings.Insert("UpdateUnit");
+	CalculationStringsClientServer.CalculateItemsRow(Object,
+		CurrentRow,
+		CalculationSettings);
+	SerialLotNumberClient.UpdateUseSerialLotNumber(Object, Form, AddInfo);
+EndProcedure
+
+Procedure ItemListQuantityOnChange(Object, Form, Item, AddInfo = Undefined) Export
+	SerialLotNumberClient.UpdateSerialLotNumbersTree(Object, Form);	
+EndProcedure
+
+#Region SerialLotNumbers
+
+Procedure ItemListSerialLotNumbersPresentationStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, AddInfo = Undefined) Export
+	DocumentsClient.ItemListSerialLotNumbersPutServerDataToAddInfo(Object, Form, AddInfo);
+	SerialLotNumberClient.PresentationStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, AddInfo);
+EndProcedure	
+
+Procedure ItemListSerialLotNumbersPresentationClearing(Object, Form, Item, StandardProcessing, AddInfo = Undefined) Export
+	SerialLotNumberClient.PresentationClearing(Object, Form, Item, AddInfo);
+EndProcedure
+
+#EndRegion
 
 #Region ItemCompany
 
@@ -89,9 +139,9 @@ Procedure CompanyStartChoice(Object, Form, Item, ChoiceData, StandardProcessing)
 	OpenSettings.ArrayOfFilters = New Array();
 	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", 
 																	True, DataCompositionComparisonType.NotEqual));
-	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Our", 
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("OurCompany", 
 																	True, DataCompositionComparisonType.Equal));
-	OpenSettings.FillingData = New Structure("Our", True);
+	OpenSettings.FillingData = New Structure("OurCompany", True);
 	
 	DocumentsClient.CompanyStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
@@ -99,7 +149,7 @@ EndProcedure
 Procedure CompanyEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
 	ArrayOfFilters = New Array();
 	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, ComparisonType.NotEqual));
-	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Our", True, ComparisonType.Equal));
+	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("OurCompany", True, ComparisonType.Equal));
 	DocumentsClient.CompanyEditTextChange(Object, Form, Item, Text, StandardProcessing, ArrayOfFilters);
 EndProcedure
 
@@ -113,6 +163,44 @@ Procedure DescriptionClick(Object, Form, Item, StandardProcessing) Export
 	StandardProcessing = False;
 	CommonFormActions.EditMultilineText(Item.Name, Form);
 EndProcedure
+
+#Region RevenueType
+
+Procedure ItemListRevenueTypeStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
+	OpenSettings = DocumentsClient.GetOpenSettingsStructure();
+	
+	OpenSettings.ArrayOfFilters = New Array();
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", 
+																	True, 
+																	DataCompositionComparisonType.NotEqual));
+	FilterTypesValue = New Array;
+	FilterTypesValue.Add(PredefinedValue("Enum.ExpenseAndRevenueTypes.Revenue"));
+	FilterTypesValue.Add(PredefinedValue("Enum.ExpenseAndRevenueTypes.Both"));
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Type", 
+																	FilterTypesValue, 
+																	DataCompositionComparisonType.InList));
+
+	OpenSettings.FormParameters = New Structure();
+	OpenSettings.FillingData = New Structure();
+	
+	DocumentsClient.ExpenseAndRevenueTypeStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
+EndProcedure
+
+Procedure ItemListRevenueTypeEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
+	ArrayOfFilters = New Array();
+	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, ComparisonType.NotEqual));
+	FilterTypesValue = New ValueList;
+	FilterTypesValue.Add(PredefinedValue("Enum.ExpenseAndRevenueTypes.Revenue"));
+	FilterTypesValue.Add(PredefinedValue("Enum.ExpenseAndRevenueTypes.Both"));
+	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Type", 
+																	FilterTypesValue,
+																	ComparisonType.InList));							
+	AdditionalParameters = New Structure();
+	DocumentsClient.ExpenseAndRevenueTypeEditTextChange(Object, Form, Item, Text, StandardProcessing,
+				ArrayOfFilters, AdditionalParameters);
+EndProcedure
+
+#EndRegion
 
 #Region GroupTitleDecorationsEvents
 

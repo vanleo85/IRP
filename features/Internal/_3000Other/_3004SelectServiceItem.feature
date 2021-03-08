@@ -1,7 +1,7 @@
 ﻿#language: en
 @tree
 @Positive
-@Group18
+@Other
 
 
 Feature: product / service selection filter
@@ -13,6 +13,39 @@ For the convenience of adding items to the purchase and transfer documents
 
 Background:
 	Given I launch TestClient opening script or connect the existing one
+
+
+
+Scenario: _300400 preparation (product / service selection filter)
+	When set True value to the constant
+	And I close TestClient session
+	Given I open new TestClient session or connect the existing one
+	* Load info
+		When Create catalog ObjectStatuses objects
+		When Create catalog ItemKeys objects
+		When Create catalog ItemTypes objects
+		When Create catalog Units objects
+		When Create catalog Items objects
+		When Create catalog Specifications objects
+		When Create chart of characteristic types AddAttributeAndProperty objects
+		When Create catalog AddAttributeAndPropertySets objects
+		When Create catalog AddAttributeAndPropertyValues objects
+		When Create catalog Currencies objects
+		When Create catalog Companies objects (Main company)
+		When Create catalog Stores objects
+		When Create catalog Partners objects (Ferron BP)
+		When Create catalog Partners objects (Kalipso)
+		When Create catalog Companies objects (partners company)
+		When Create information register PartnerSegments records
+		When Create catalog PartnerSegments objects
+		When Create catalog Agreements objects
+		When Create information register PricesByItemKeys records
+		When Create catalog IntegrationSettings objects
+		When Create information register CurrencyRates records
+		When update ItemKeys
+
+
+
 
 # services available
 
@@ -92,9 +125,10 @@ Scenario: _300407 check filter on the choice of services in the document Interna
 	And I click the button named "FormCreate"
 	And in the table "ItemList" I click the button named "ItemListAdd"
 	And I click choice button of "Item" attribute in "ItemList" table
-	And "List" table does not contain lines
+	And "List" table contains lines
 		| Description          |
-		| Service TR           |
+		| Dress TR             |
+		| Router               |
 	And I close all client application windows
 
 Scenario: _300408 check filter on the choice of services in the document Purchase return order
@@ -102,9 +136,11 @@ Scenario: _300408 check filter on the choice of services in the document Purchas
 	And I click the button named "FormCreate"
 	And I click the button named "Add"
 	And I click choice button of "Item" attribute in "ItemList" table
-	And "List" table does not contain lines
+	And "List" table contains lines
 		| Description          |
+		| Dress TR             |
 		| Service TR           |
+		| Router               |
 	And I close all client application windows
 
 Scenario: _300409 check filter on the choice of services in the document Purchase return
@@ -112,9 +148,11 @@ Scenario: _300409 check filter on the choice of services in the document Purchas
 	And I click the button named "FormCreate"
 	And I click the button named "Add"
 	And I click choice button of "Item" attribute in "ItemList" table
-	And "List" table does not contain lines
+	And "List" table contains lines
 		| Description          |
+		| Dress TR             |
 		| Service TR           |
+		| Router               |
 	And I close all client application windows
 
 Scenario: _300410 check filter on the choice of services in the document Sales Return
@@ -122,9 +160,11 @@ Scenario: _300410 check filter on the choice of services in the document Sales R
 	And I click the button named "FormCreate"
 	And I click the button named "Add"
 	And I click choice button of "Item" attribute in "ItemList" table
-	And "List" table does not contain lines
+	And "List" table contains lines
 		| Description          |
+		| Dress TR             |
 		| Service TR           |
+		| Router               |
 	And I close all client application windows
 
 Scenario: _300411 check filter on the choice of services in the document Sales return order
@@ -132,9 +172,11 @@ Scenario: _300411 check filter on the choice of services in the document Sales r
 	And I click the button named "FormCreate"
 	And I click "Add" button
 	And I click choice button of "Item" attribute in "ItemList" table
-	And "List" table does not contain lines
+	And "List" table contains lines
 		| Description          |
+		| Dress TR             |
 		| Service TR           |
+		| Router               |
 	And I close all client application windows
 
 Scenario: _300412 check filter on the choice of services in the document GoodsReceipt

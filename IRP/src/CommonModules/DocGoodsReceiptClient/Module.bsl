@@ -21,9 +21,9 @@ Procedure CompanyStartChoice(Object, Form, Item, ChoiceData, StandardProcessing)
 	OpenSettings.ArrayOfFilters = New Array();
 	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", 
 																		True, DataCompositionComparisonType.NotEqual));
-	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Our", 
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("OurCompany", 
 																		True, DataCompositionComparisonType.Equal));
-	OpenSettings.FillingData = New Structure("Our", True);
+	OpenSettings.FillingData = New Structure("OurCompany", True);
 	
 	DocumentsClient.CompanyStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
@@ -31,7 +31,7 @@ EndProcedure
 Procedure CompanyEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
 	ArrayOfFilters = New Array();
 	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, ComparisonType.NotEqual));
-	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Our", True, ComparisonType.Equal));
+	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("OurCompany", True, ComparisonType.Equal));
 	DocumentsClient.CompanyEditTextChange(Object, Form, Item, Text, StandardProcessing, ArrayOfFilters);
 EndProcedure
 
@@ -49,17 +49,36 @@ Procedure PartnerStartChoice(Object, Form, Item, ChoiceData, StandardProcessing)
 	
 	OpenSettings.ArrayOfFilters = New Array();
 	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, DataCompositionComparisonType.NotEqual));
-	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Vendor"		, True, DataCompositionComparisonType.Equal));
 	OpenSettings.FormParameters = New Structure();
-	OpenSettings.FormParameters.Insert("Filter", New Structure("Vendor" , True));
-	OpenSettings.FillingData = New Structure("Vendor", True);
+	
+	FilterPartnerType = "";
+	If Object.TransactionType = PredefinedValue("Enum.GoodsReceiptTransactionTypes.Purchase") Then
+		FilterPartnerType = "Vendor";
+	ElsIf Object.TransactionType = PredefinedValue("Enum.GoodsReceiptTransactionTypes.ReturnFromCustomer") Then
+		FilterPartnerType = "Customer";
+	EndIf;
+	If Not IsBlankString(FilterPartnerType) Then
+		OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem(FilterPartnerType, True, DataCompositionComparisonType.Equal));
+		OpenSettings.FormParameters.Insert("Filter", New Structure(FilterPartnerType , True));
+		OpenSettings.FillingData = New Structure(FilterPartnerType, True);
+	EndIf;
+	
 	DocumentsClient.PartnerStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
 
 Procedure PartnerTextChange(Object, Form, Item, Text, StandardProcessing) Export
 	ArrayOfFilters = New Array();
 	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, ComparisonType.NotEqual));
-	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Vendor"		, True, ComparisonType.Equal));
+	
+	FilterPartnerType = "";
+	If Object.TransactionType = PredefinedValue("Enum.GoodsReceiptTransactionTypes.Purchase") Then
+		FilterPartnerType = "Vendor";
+	ElsIf Object.TransactionType = PredefinedValue("Enum.GoodsReceiptTransactionTypes.ReturnFromCustomer") Then
+		FilterPartnerType = "Customer";
+	EndIf;
+	
+	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem(FilterPartnerType, True, ComparisonType.Equal));
+	
 	AdditionalParameters = New Structure();
 	DocumentsClient.PartnerEditTextChange(Object, Form, Item, Text, StandardProcessing,
 				ArrayOfFilters, AdditionalParameters);
@@ -99,6 +118,36 @@ Procedure LegalNameTextChange(Object, Form, Item, Text, StandardProcessing) Expo
 	DocumentsClient.CompanyEditTextChange(Object, Form, Item, Text, StandardProcessing,
 		ArrayOfFilters, AdditionalParameters);
 EndProcedure
+
+#EndRegion
+
+#Region ItemListItemsEvents
+
+#Region Unit
+
+Procedure ItemListUnitOnChange(Object, Form, Item, AddInfo = Undefined) Export
+	CurrentData = Form.Items.ItemList.CurrentData;
+	If CurrentData = Undefined Then
+		Return;
+	EndIf;
+	Actions = New Structure("CalculateQuantityInBaseUnit");
+	CalculationStringsClientServer.CalculateItemsRow(Object, CurrentData, Actions);
+EndProcedure
+
+#EndRegion
+
+#Region Quantity
+
+Procedure ItemListQuantityOnChange(Object, Form, Item, AddInfo = Undefined) Export
+	CurrentData = Form.Items.ItemList.CurrentData;
+	If CurrentData = Undefined Then
+		Return;
+	EndIf;
+	Actions = New Structure("CalculateQuantityInBaseUnit");
+	CalculationStringsClientServer.CalculateItemsRow(Object, CurrentData, Actions);
+EndProcedure
+
+#EndRegion
 
 #EndRegion
 
@@ -193,7 +242,7 @@ Procedure ItemListReceiptBasisStartChoice(Object, Form, Item, ChoiceData, Standa
 EndProcedure
 
 Procedure SerialLotNumberListOnChange(Object, Form, Item = Undefined) Export
-	For Each Row In Object.SerialLotNumberList Do
+	For Each Row In Object.SerialLotNumbers Do
 		#If MobileClient Then
 		ItemListFilterStructure = New Structure;
 		ItemListFilterStructure.Insert("Key", Row.KeyRef);
@@ -291,7 +340,8 @@ EndProcedure
 #EndRegion
 
 Procedure ItemListItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
-	DocumentsClient.ItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing);
+	OpenSettings = DocumentsClient.GetOpenSettingsForSelectItemWithNotServiceFilter();
+	DocumentsClient.ItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
 
 Procedure ItemListItemEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
@@ -329,11 +379,11 @@ Procedure PickupItemsEnd(Result, AdditionalParameters) Export
 		Row.Quantity = Row.Quantity + ResultElement.Quantity;
 		
 		FillPropertyValues(SerialLotNumberListFilterStructure, ResultElement);
-		SerialLotNumberListExistingRows = Object.SerialLotNumberList.FindRows(SerialLotNumberListFilterStructure);
+		SerialLotNumberListExistingRows = Object.SerialLotNumbers.FindRows(SerialLotNumberListFilterStructure);
 		If SerialLotNumberListExistingRows.Count() Then
 			SerialLotNumberListRow = SerialLotNumberListExistingRows[0];
 		Else
-			SerialLotNumberListRow = Object.SerialLotNumberList.Add();
+			SerialLotNumberListRow = Object.SerialLotNumbers.Add();
 			FillPropertyValues(SerialLotNumberListRow, ResultElement, SerialLotNumberListString);
 		EndIf;
 		SerialLotNumberListRow.KeyRef = Row.Key;
@@ -354,9 +404,9 @@ Procedure ItemListBeforeDeleteRow(Object, Form, Item, Cancel) Export
 	
 	SerialLotNumberListFilterStructure = New Structure;
 	SerialLotNumberListFilterStructure.Insert("KeyRef", CurrentData.Key);
-	SerialLotNumberListExistingRows = Object.SerialLotNumberList.FindRows(SerialLotNumberListFilterStructure);
+	SerialLotNumberListExistingRows = Object.SerialLotNumbers.FindRows(SerialLotNumberListFilterStructure);
 	For Each Row In SerialLotNumberListExistingRows Do
-		Object.SerialLotNumberList.Delete(Row);
+		Object.SerialLotNumbers.Delete(Row);
 	EndDo;
 	
 EndProcedure
@@ -459,11 +509,6 @@ Procedure FillReceiptBasises(Object, Form, Command) Export
 	EndDo;
 	
 	DocGoodsReceiptClient.ItemListOnChange(Object, Form, Form.Items.ItemList);
-EndProcedure
-
-Procedure CompareQuantity(Object, Form, Command) Export
-	QuantityCompareParameters = DocGoodsReceiptServer.ParametersForQuantityCompare(Object, Form.UUID);
-	OpenForm("DataProcessor.QuantityCompare.Form.Form", QuantityCompareParameters, Form, Form.UUID, , , , FormWindowOpeningMode.LockOwnerWindow);
 EndProcedure
 
 #Region PickUpItems

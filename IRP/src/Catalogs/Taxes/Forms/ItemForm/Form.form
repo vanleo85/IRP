@@ -11,8 +11,10 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:DataPath">
-        <segments>Object.Code</segments>
+      <dataPath xsi:type="form:MultiLanguageDataPath">
+        <paths xsi:type="form:DataPath">
+          <segments>Object.Code</segments>
+        </paths>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -713,6 +715,15 @@
               </presentation>
               <value xsi:type="core:StringValue">
                 <value>SalesOrder</value>
+              </value>
+            </choiceList>
+            <choiceList>
+              <presentation>
+                <key>en</key>
+                <value>Sales order closing</value>
+              </presentation>
+              <value xsi:type="core:StringValue">
+                <value>SalesOrderClosing</value>
               </value>
             </choiceList>
             <choiceList>

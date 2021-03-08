@@ -411,7 +411,7 @@ EndProcedure
 #Region SerialLotNumbers
 
 &AtClient
-Procedure ItemListSerialLotNumbersPresentationStartChoice(Item, ChoiceData, StandardProcessing)
+Procedure ItemListSerialLotNumbersPresentationStartChoice(Item, ChoiceData, StandardProcessing, AddInfo = Undefined) Export
 	SerialLotNumberClient.PresentationStartChoice(Object, ThisObject, Item, ChoiceData, StandardProcessing);
 EndProcedure
 
@@ -421,3 +421,24 @@ Procedure ItemListSerialLotNumbersPresentationClearing(Item, StandardProcessing)
 EndProcedure
 
 #EndRegion
+
+#Region GoodsReceiptsTree
+
+&AtClient
+Procedure GoodsReceiptsTreeQuantityOnChange(Item)
+	DocumentsClient.TradeDocumentsTreeQuantityOnChange(Object, ThisObject, 
+		"GoodsReceipts", "GoodsReceiptsTree", "GoodsReceipt");
+EndProcedure
+
+&AtClient
+Procedure GoodsReceiptsTreeBeforeAddRow(Item, Cancel, Clone, Parent, IsFolder, Parameter)
+	Cancel = True;	
+EndProcedure
+
+&AtClient
+Procedure GoodsReceiptsTreeBeforeDeleteRow(Item, Cancel)
+	Cancel = True;
+EndProcedure
+
+#EndRegion
+

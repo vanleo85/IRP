@@ -112,7 +112,7 @@ Function JoinDocumentsStructure(ArrayOfTables)
 	ItemList.Columns.Add("OffersAmount"		, New TypeDescription(Metadata.DefinedTypes.typeAmount.Type));
 	ItemList.Columns.Add("PriceType"		, New TypeDescription("CatalogRef.PriceTypes"));
 	ItemList.Columns.Add("Price"			, New TypeDescription(Metadata.DefinedTypes.typePrice.Type));
-	ItemList.Columns.Add("Key"				, New TypeDescription("UUID"));
+	ItemList.Columns.Add("Key"				, New TypeDescription(Metadata.DefinedTypes.typeRowID.Type));
 	ItemList.Columns.Add("DeliveryDate"	    , New TypeDescription("Date"));
 	ItemList.Columns.Add("DontCalculateRow" , New TypeDescription("Boolean"));
 	
@@ -157,6 +157,7 @@ Function JoinDocumentsStructure(ArrayOfTables)
 			FillPropertyValues(ShipmentConfirmations.Add(), Row);
 		EndDo;		
 	EndDo;
+	ItemList.Sort("Company Desc");
 	
 	KeyFields = "BasedOn, Company, Partner, LegalName, Agreement, Currency, PriceIncludeTax, ManagerSegment";
 	
@@ -259,8 +260,9 @@ Function JoinDocumentsStructure(ArrayOfTables)
 			
 			ArrayOfTaxListFilters.Add(New Structure("Ref, Key", RowItemList.SalesOrder, RowItemList.Key));
 			ArrayOfSpecialOffersFilters.Add(New Structure("Ref, Key", RowItemList.SalesOrder, RowItemList.Key));			
-			ArrayOfShipmentConfirmationsFilters.Add(New Structure("Ref, Key", RowItemList.SalesOrder, RowItemList.Key));
-			
+			SCFilter = New Structure("Ref, Key", RowItemList.SalesOrder, RowItemList.Key);
+			ArrayOfShipmentConfirmationsFilters.Add(SCFilter);
+			NewRow.Insert("UseShipmentConfirmation", ShipmentConfirmations.FindRows(SCFilter).Count() > 0);
 			Result.ItemList.Add(NewRow);
 		EndDo;
 		
@@ -307,9 +309,9 @@ EndFunction
 
 &AtServer
 Function ExtractInfoFromOrderRows(QueryTable, ShipmentConfirmationsTable = Undefined)
-	QueryTable.Columns.Add("Key", New TypeDescription("UUID"));
+	QueryTable.Columns.Add("Key", New TypeDescription(Metadata.DefinedTypes.typeRowID.Type));
 	For Each Row In QueryTable Do
-		Row.Key = New UUID(Row.RowKey);
+		Row.Key = Row.RowKey;
 	EndDo;
 	
 	Query = New Query();
@@ -595,7 +597,7 @@ Function GetDocumentTable_ShipmentConfirmation(ArrayOfBasisDocuments)
 		NewRow = ShipmentConfirmationsTable.Add();
 		NewRow.Ref = Row.Order;
 		NewRow.ShipmentConfirmation = Row.ShipmentConfirmation;
-		NewRow.Key = New UUID(Row.RowKey);
+		NewRow.Key = Row.RowKey;
 		NewRow.Quantity = Row.Quantity;
 		NewRow.QuantityInShipmentConfirmation = Row.Quantity;
 	EndDo;

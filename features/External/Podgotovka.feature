@@ -144,7 +144,7 @@ Scenario: create an order for MIO Basic Partner terms, without VAT (High shoes a
 		And I input "4,000" text in "Q" field of "ItemList" table
 		And I select "Stock" exact value from "Procurement method" drop-down list in "ItemList" table
 		And I finish line editing in "ItemList" table
-	And I click "Post" button
+	And I click the button named "FormPost"
 
 
 
@@ -194,7 +194,7 @@ Scenario: add Plugin for tax calculation
 			Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
 		* Addition of Plugin sessing for calculating Tax types for Turkey (VAT)
 			And I click the button named "FormCreate"
-			And I select external file "C:\Users\Severnity\Desktop\ExtDataProc\TaxCalculateVAT_TR.epf"
+			And I select external file "#workingDir#/DataProcessor/TaxCalculateVAT_TR.epf"
 			And I click the button named "FormAddExtDataProc"
 			And I input "" text in "Path to plugin for test" field
 			And I input "TaxCalculateVAT_TR" text in "Name" field
@@ -311,11 +311,14 @@ Scenario: create PurchaseOrder017001
 		And "ItemList" table contains lines
 			| 'Item'     | 'Q' | 'Item key'  | 'Store' | 'Unit' |
 			| 'Dress'    | '100,000'  | 'M/White'   | 'Store 01'      | 'pcs' |
+		And I input end of the current month date in "Delivery date" field
 	* Post document
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberPurchaseOrder017001$$" variable
+		And I delete "$$PurchaseOrder017001$$" variable
 		And I save the value of "Number" field as "$$NumberPurchaseOrder017001$$"
 		And I save the window as "$$PurchaseOrder017001$$"
-		And I click "Post and close" button
+		And I click the button named "FormPostAndClose"
 
 Scenario: create PurchaseOrder017003
 		* Opening a form to create Purchase Order
@@ -373,10 +376,13 @@ Scenario: create PurchaseOrder017003
 			And I input "40,00" text in "Price" field of "ItemList" table
 			And I finish line editing in "ItemList" table
 		* Post document
-			And I click "Post" button
+			And I input end of the current month date in "Delivery date" field
+			And I click the button named "FormPost"
+			And I delete "$$NumberPurchaseOrder017003$$" variable
+			And I delete "$$PurchaseOrder017003$$" variable
 			And I save the value of "Number" field as "$$NumberPurchaseOrder017003$$"
 			And I save the window as "$$PurchaseOrder017003$$"
-			And I click "Post and close" button
+			And I click the button named "FormPostAndClose"
 
 Scenario: create PurchaseInvoice018001 based on PurchaseOrder017001
 		Given I open hyperlink "e1cib/list/Document.PurchaseOrder"
@@ -411,10 +417,12 @@ Scenario: create PurchaseInvoice018001 based on PurchaseOrder017001
 			And "ItemList" table contains lines
 			| 'Item'  | 'Item key' | 'Store'    | 'Unit' | 'Q'       |
 			| 'Dress' | 'M/White'  | 'Store 01' | 'pcs'  | '100,000' |
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberPurchaseInvoice018001$$" variable
+		And I delete "$$PurchaseInvoice018001$$" variable
 		And I save the value of "Number" field as "$$NumberPurchaseInvoice018001$$"
 		And I save the window as "$$PurchaseInvoice018001$$"
-		And I click "Post and close" button
+		And I click the button named "FormPostAndClose"
 
 Scenario: create PurchaseInvoice018006 based on PurchaseOrder017003
 		Given I open hyperlink "e1cib/list/Document.PurchaseOrder"
@@ -440,10 +448,12 @@ Scenario: create PurchaseInvoice018006 based on PurchaseOrder017003
 			And "ItemList" table contains lines
 			| 'Price' | 'Item'  | 'Item key' | 'Q'       | 'Price type'               | 'Unit' | 'Tax amount' | 'Net amount' | 'Total amount' |
 			| '40,00' | 'Dress' | 'L/Green'  | '500,000' | 'en description is empty' | 'pcs'  | '3 050,85'   | '16 949,15'  | '20 000,00'    |
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberPurchaseInvoice018006$$" variable
+		And I delete "$$PurchaseInvoice018006$$" variable
 		And I save the value of "Number" field as "$$NumberPurchaseInvoice018006$$"
 		And I save the window as "$$PurchaseInvoice018006$$"
-		And I click "Post and close" button
+		And I click the button named "FormPostAndClose"
 
 
 
@@ -480,10 +490,12 @@ Scenario: create PurchaseReturnOrder022001 based on PurchaseInvoice018006 (Purch
 		And "ItemList" table contains lines
 		| 'Item'  | 'Item key' | 'Purchase invoice'    | 'Store'    | 'Unit' | 'Q'     |
 		| 'Dress' | 'L/Green'  | '$$PurchaseInvoice018006$$' | 'Store 02' | 'pcs' | '2,000' |
-	And I click "Post" button
+	And I click the button named "FormPost"
+	And I delete "$$NumberPurchaseReturnOrder022001$$" variable
+	And I delete "$$PurchaseReturnOrder022001$$" variable
 	And I save the value of "Number" field as "$$NumberPurchaseReturnOrder022001$$"
 	And I save the window as "$$PurchaseReturnOrder022001$$"
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	
 Scenario: create PurchaseReturnOrder022006 based on PurchaseInvoice018001 (PurchaseOrder017001)
 	Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
@@ -524,10 +536,12 @@ Scenario: create PurchaseReturnOrder022006 based on PurchaseInvoice018001 (Purch
 		| 'Item'     | 'Item key'  | 'Unit' |
 		| 'Dress'    | 'M/White'   | 'pcs' |
 	And I delete a line in "ItemList" table
-	And I click "Post" button
+	And I click the button named "FormPost"
+	And I delete "$$NumberPurchaseReturnOrder022006$$" variable
+	And I delete "$$PurchaseReturnOrder022006$$" variable
 	And I save the value of "Number" field as "$$NumberPurchaseReturnOrder022006$$"
 	And I save the window as "$$PurchaseReturnOrder022006$$"
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And I close current window
 
 
@@ -590,10 +604,12 @@ Scenario: create InventoryTransferOrder020001
 			And I move to the next attribute
 			And I input "10,000" text in "Quantity" field of "ItemList" table
 			And I finish line editing in "ItemList" table
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberInventoryTransferOrder020001$$" variable
+		And I delete "$$InventoryTransferOrder020001$$" variable
 		And I save the value of "Number" field as "$$NumberInventoryTransferOrder020001$$"
 		And I save the window as "$$InventoryTransferOrder020001$$"
-		And I click "Post and close" button
+		And I click the button named "FormPostAndClose"
 
 Scenario: create InventoryTransferOrder020004
 	* Opening a form to create Inventory transfer order
@@ -636,10 +652,12 @@ Scenario: create InventoryTransferOrder020004
 		And I move to the next attribute
 		And I input "20,000" text in "Quantity" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-	And I click "Post" button
+	And I click the button named "FormPost"
+	And I delete "$$NumberInventoryTransferOrder020004$$" variable
+	And I delete "$$InventoryTransferOrder020004$$" variable
 	And I save the value of "Number" field as "$$NumberInventoryTransferOrder020004$$"
 	And I save the window as "$$InventoryTransferOrder020004$$"
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 
 Scenario: create InventoryTransferOrder020007
 	* Opening a form to create Inventory transfer order
@@ -682,10 +700,12 @@ Scenario: create InventoryTransferOrder020007
 		And I move to the next attribute
 		And I input "17,000" text in "Quantity" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-	And I click "Post" button
+	And I click the button named "FormPost"
+	And I delete "$$NumberInventoryTransferOrder020007$$" variable
+	And I delete "$$InventoryTransferOrder020007$$" variable
 	And I save the value of "Number" field as "$$NumberInventoryTransferOrder020007$$"
 	And I save the window as "$$InventoryTransferOrder020007$$"
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 
 Scenario: create InventoryTransferOrder020010
 	* Opening a form to create Inventory transfer order
@@ -728,10 +748,12 @@ Scenario: create InventoryTransferOrder020010
 		And I move to the next attribute
 		And I input "10,000" text in "Quantity" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-	And I click "Post" button
+	And I click the button named "FormPost"
+	And I delete "$$NumberInventoryTransferOrder020010$$" variable
+	And I delete "$$InventoryTransferOrder020010$$" variable
 	And I save the value of "Number" field as "$$NumberInventoryTransferOrder020010$$"
 	And I save the window as "$$InventoryTransferOrder020010$$"
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 
 Scenario: create SalesOrder023001
 	Given I open hyperlink "e1cib/list/Document.SalesOrder"
@@ -791,7 +813,9 @@ Scenario: create SalesOrder023001
 		Then the form attribute named "Status" became equal to "Approved"
 	* Filling Delivery date
 		And I input current date in the field named "DeliveryDate"
-	And I click "Post" button
+	And I click the button named "FormPost"
+	And I delete "$$SalesOrder023001$$" variable
+	And I delete "$$NumberSalesOrder023001$$" variable
 	And I save the window as "$$SalesOrder023001$$"
 	And I save the value of "Number" field as "$$NumberSalesOrder023001$$"
 	And I close current window
@@ -850,7 +874,10 @@ Scenario: create SalesOrder023005
 	* Check default sales order status
 		And I move to "Other" tab
 		Then the form attribute named "Status" became equal to "Approved"
-	And I click "Post" button
+	And I input end of the current month date in "Delivery date" field
+	And I click the button named "FormPost"
+	And I delete "$$SalesOrder023005$$" variable
+	And I delete "$$NumberSalesOrder023005$$" variable
 	And I save the window as "$$SalesOrder023005$$"
 	And I save the value of "Number" field as "$$NumberSalesOrder023005$$"
 	And I close current window
@@ -870,18 +897,20 @@ Scenario: create SalesInvoice024001
 	* Check adding Store
 		And I move to "Item list" tab
 		And "ItemList" table contains lines
-			| 'Item'     | Price | 'Item key'  | 'Store'    | 'Shipment confirmation' | 'Sales order'          | 'Unit' | 'Q'     | 'Offers amount' | 'Tax amount' | 'Net amount' | 'Total amount' |
-			| 'Dress'    | '*'   | 'L/Green'   | 'Store 01' | ''                      | '$$SalesOrder023001$$' | 'pcs'  | '5,000' | '*'             | '*'          | '*'          | '*'            |
-			| 'Trousers' | '*'   | '36/Yellow' | 'Store 01' | ''                      | '$$SalesOrder023001$$' | 'pcs'  | '4,000' | '*'             | '*'          | '*'          | '*'            |
+			| 'Item'     | Price | 'Item key'  | 'Store'    | 'Sales order'          | 'Unit' | 'Q'     | 'Offers amount' | 'Tax amount' | 'Net amount' | 'Total amount' |
+			| 'Dress'    | '*'   | 'L/Green'   | 'Store 01' | '$$SalesOrder023001$$' | 'pcs'  | '5,000' | '*'             | '*'          | '*'          | '*'            |
+			| 'Trousers' | '*'   | '36/Yellow' | 'Store 01' | '$$SalesOrder023001$$' | 'pcs'  | '4,000' | '*'             | '*'          | '*'          | '*'            |
 	* Check prices and type of prices
 		And "ItemList" table contains lines
 		| 'Price'  | 'Item'     | 'Item key'  | 'Q'     | 'Price type'        |
 		| '550,00' | 'Dress'    | 'L/Green'   | '5,000' | 'Basic Price Types' |
 		| '400,00' | 'Trousers' | '36/Yellow' | '4,000' | 'Basic Price Types' |	
-	And I click "Post" button
+	And I click the button named "FormPost"
+	And I delete "$$NumberSalesInvoice024001$$" variable
+	And I delete "$$SalesInvoice024001$$" variable
 	And I save the value of "Number" field as "$$NumberSalesInvoice024001$$"
 	And I save the window as "$$SalesInvoice024001$$"
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And I close current window
 
 Scenario: create SalesInvoice024008
@@ -902,10 +931,12 @@ Scenario: create SalesInvoice024008
 		| 'Price'  | 'Item'     | 'Item key'  | 'Price type'              | 'Q'      |
 		| '466,10' | 'Dress'    | 'L/Green'   | 'Basic Price without VAT' | '10,000' |
 		| '338,98' | 'Trousers' | '36/Yellow' | 'Basic Price without VAT' | '14,000' |
-	And I click "Post" button
+	And I click the button named "FormPost"
+	And I delete "$$NumberSalesInvoice024008$$" variable
+	And I delete "$$SalesInvoice024008$$" variable
 	And I save the value of "Number" field as "$$NumberSalesInvoice024008$$"
 	And I save the window as "$$SalesInvoice024008$$"
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And I close current window
 
 
@@ -943,10 +974,12 @@ Scenario: create SalesReturnOrder028004
 		And I select current line in "ItemList" table
 		And I input "400,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberSalesReturnOrder028004$$" variable
+		And I delete "$$SalesReturnOrder028004$$" variable
 		And I save the value of "Number" field as "$$NumberSalesReturnOrder028004$$"
 		And I save the window as "$$SalesReturnOrder028004$$"
-		And I click "Post and close" button
+		And I click the button named "FormPostAndClose"
 		And I close current window
 
 	
@@ -985,10 +1018,12 @@ Scenario: create SalesReturnOrder028001
 		And "ItemList" table contains lines
 		| 'Item'     | 'Item key'  | 'Store'    |
 		| 'Dress'    |  'L/Green'  | 'Store 02' |
-	And I click "Post" button
+	And I click the button named "FormPost"
+	And I delete "$$NumberSalesReturnOrder028001$$" variable
+	And I delete "$$SalesReturnOrder028001$$" variable
 	And I save the value of "Number" field as "$$NumberSalesReturnOrder028001$$"
 	And I save the window as "$$SalesReturnOrder028001$$"
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And I close all client application windows
 
 
@@ -1002,17 +1037,13 @@ Scenario: create SalesInvoice024025
 			| 'Kalipso'     |
 		And I select current line in "List" table
 		And I click Select button of "Partner term" field
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Basic Partner terms, TRY'     |
 		And I select current line in "List" table
 		And I click Select button of "Legal name" field
 		And I activate "Description" field in "List" table
 		And I select current line in "List" table
-	// * Change of document number - 4
-	// 	And I move to "Other" tab
-	// 	And I expand "More" group
-	// 	And I input "4" text in "Number" field
-	// 	Then "1C:Enterprise" window is opened
-	// 	And I click "Yes" button
-	// 	And I input "4" text in "Number" field
 	* Change store to Store 02
 		And I click Choice button of the field named "Store"
 		And I go to line in "List" table
@@ -1022,6 +1053,9 @@ Scenario: create SalesInvoice024025
 	* Filling in items table
 		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Dress'  |
 		And I select current line in "List" table
 		And I activate "Item key" field in "ItemList" table
 		And I click choice button of "Item key" attribute in "ItemList" table
@@ -1032,10 +1066,12 @@ Scenario: create SalesInvoice024025
 		And I activate "Q" field in "ItemList" table
 		And I input "20,000" text in "Q" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-	And I click "Post" button
+	And I click the button named "FormPost"
+	And I delete "$$NumberSalesInvoice024025$$" variable
+	And I delete "$$SalesInvoice024025$$" variable
 	And I save the value of "Number" field as "$$NumberSalesInvoice024025$$"
 	And I save the window as "$$SalesInvoice024025$$"
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 
 Scenario: create PurchaseReturn022314
 	Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
@@ -1054,10 +1090,12 @@ Scenario: create PurchaseReturn022314
 		| 'Description' |
 		| 'Store 02'  |
 	And I select current line in "List" table
-	And I click "Post" button
+	And I click the button named "FormPost"
+	And I delete "$$NumberPurchaseReturn022314$$" variable
+	And I delete "$$PurchaseReturn022314$$" variable
 	And I save the value of "Number" field as "$$NumberPurchaseReturn022314$$"
 	And I save the window as "$$PurchaseReturn022314$$"
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	
 
 
@@ -1098,10 +1136,12 @@ Scenario: create InventoryTransfer021030
 	And I activate "Quantity" field in "ItemList" table
 	And I input "3,000" text in "Quantity" field of "ItemList" table
 	And I finish line editing in "ItemList" table
-	And I click "Post" button
+	And I click the button named "FormPost"
+	And I delete "$$NumberInventoryTransfer021030$$" variable
+	And I delete "$$InventoryTransfer021030$$" variable
 	And I save the value of "Number" field as "$$NumberInventoryTransfer021030$$"
 	And I save the window as "$$InventoryTransfer021030$$"
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 
 Scenario: create SalesInvoice024016 (Shipment confirmation does not used)
 		Given I open hyperlink "e1cib/list/Document.SalesInvoice"
@@ -1113,6 +1153,9 @@ Scenario: create SalesInvoice024016 (Shipment confirmation does not used)
 				| 'Kalipso'     |
 			And I select current line in "List" table
 			And I click Select button of "Partner term" field
+			And I go to line in "List" table
+			| 'Description' |
+			| 'Basic Partner terms, without VAT'     |
 			And I select current line in "List" table
 		* Select store 
 			And I click Select button of "Store" field
@@ -1123,13 +1166,6 @@ Scenario: create SalesInvoice024016 (Shipment confirmation does not used)
 			And I click Select button of "Legal name" field
 			And I activate "Description" field in "List" table
 			And I select current line in "List" table
-		// * Change of document number - 3
-		// 	And I move to "Other" tab
-		// 	And I expand "More" group
-		// 	And I input "3" text in "Number" field
-		// 	Then "1C:Enterprise" window is opened
-		// 	And I click "Yes" button
-		// 	And I input "3" text in "Number" field
 		* Filling in items table
 			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
@@ -1146,18 +1182,102 @@ Scenario: create SalesInvoice024016 (Shipment confirmation does not used)
 			And I activate "Q" field in "ItemList" table
 			And I input "1,000" text in "Q" field of "ItemList" table
 			And I finish line editing in "ItemList" table
-			And I click "Post" button
-			And in the table "ItemList" I click "% Offers" button
-			And in the table "Offers" I click the button named "FormOK"
-		And I click "Post" button
+		And I input end of the current month date in "Delivery date" field
+		And I click the button named "FormPost"
+		And I delete "$$NumberSalesInvoice024016$$" variable
+		And I delete "$$SalesInvoice024016$$" variable
+		And I delete "$$DateSalesInvoice024016$$" variable
 		And I save the value of "Number" field as "$$NumberSalesInvoice024016$$"
 		And I save the window as "$$SalesInvoice024016$$"
-		And I click "Post and close" button
+		And I save the value of the field named "Date" as "$$DateSalesInvoice024016$$"
+		And I click the button named "FormPostAndClose"
+
+Scenario: create SalesReturn30001
+	* Open form  Sales return
+		Given I open hyperlink "e1cib/list/Document.SalesReturn"
+		And I click the button named "FormCreate"
+	* Check filling in legal name if the partner has only one
+		And I click Select button of "Partner" field
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Kalipso'         |
+		And I select current line in "List" table
+		Then the form attribute named "LegalName" became equal to "Company Kalipso"
+		And I click Select button of "Partner term" field
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Basic Partner terms, TRY'         |
+		And I select current line in "List" table
+		* Filling in item and item key
+			And I click "Add" button
+			And I click choice button of the attribute named "ItemListItem" in "ItemList" table
+			And I go to line in "List" table
+				| 'Description' |
+				| 'Trousers'    |
+			And I select current line in "List" table
+			And I activate field named "ItemListItemKey" in "ItemList" table
+			And I click choice button of the attribute named "ItemListItemKey" in "ItemList" table
+			And I go to line in "List" table
+				| 'Item'     | 'Item key'  |
+				| 'Trousers' | '38/Yellow' |
+			And I select current line in "List" table
+			And I input "1,000" text in "Q" field of "ItemList" table
+			And I finish line editing in "ItemList" table
+			And I input "500,00" text in "Price" field of "ItemList" table
+		And I click the button named "FormPost"
+		And I delete "$$NumberSalesReturn30001$$" variable
+		And I delete "$$SalesReturn30001$$" variable
+		And I save the value of "Number" field as "$$NumberSalesReturn30001$$"
+		And I save the window as "$$SalesReturn30001$$"
+		And I click the button named "FormPostAndClose"
+
+
+Scenario: create PurchaseReturn300301
+	* Open form  Purchase return
+		Given I open hyperlink "e1cib/list/Document.PurchaseReturn"
+		And I click the button named "FormCreate"
+	* Check filling in legal name if the partner has only one
+		And I click Select button of "Partner" field
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Ferron BP'         |
+		And I select current line in "List" table
+		Then the form attribute named "LegalName" became equal to "Company Ferron BP"
+		And I click Select button of "Partner term" field
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Vendor Ferron, TRY'         |
+		And I select current line in "List" table
+		And I click Select button of "Store" field
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Store 01'         |
+		And I select current line in "List" table
+		* Filling in item and item key
+			And I click "Add" button
+			And I click choice button of the attribute named "ItemListItem" in "ItemList" table
+			And I go to line in "List" table
+				| 'Description' |
+				| 'Trousers'    |
+			And I select current line in "List" table
+			And I activate field named "ItemListItemKey" in "ItemList" table
+			And I click choice button of the attribute named "ItemListItemKey" in "ItemList" table
+			And I go to line in "List" table
+				| 'Item'     | 'Item key'  |
+				| 'Trousers' | '38/Yellow' |
+			And I select current line in "List" table
+			And I input "1,000" text in "Q" field of "ItemList" table
+			And I finish line editing in "ItemList" table
+			And I input "500,00" text in "Price" field of "ItemList" table
+		And I click the button named "FormPost"
+		And I delete "$$NumberPurchaseReturn300301$$" variable
+		And I delete "$$PurchaseReturn300301$$" variable
+		And I save the value of "Number" field as "$$NumberPurchaseReturn300301$$"
+		And I save the window as "$$PurchaseReturn300301$$"
+		And I click the button named "FormPostAndClose"
 
 
 Scenario: set True value to the constant
-		And I set "True" value to the constant "ShowBetaTesting"
-		And I set "True" value to the constant "ShowAlphaTestingSaas"
 		And I set "True" value to the constant "UseItemKey"
 		And I set "True" value to the constant "UseCompanies"
 
@@ -1177,4 +1297,268 @@ Scenario: add sales tax settings
 		And I click "Save and close" button
 		And I close all client application windows
 		
+
+Scenario: add test extension
+	Given I open hyperlink "e1cib/list/Catalog.Extensions"
+	And I click the button named "FormCreate"
+	And I select external file "#workingDir#/DataProcessor/IRP_TestExtension.cfe"
+	And I click "Add file" button
+	And I input "TestExtension" text in "Description" field
+	And I click the button named "FormWriteAndClose"
+	And I close TestClient session
+	And I install the "TestExtension" extension
+	Given I open new TestClient session or connect the existing one
+
+Scenario: add Additional Functionality extension
+	Given I open hyperlink "e1cib/list/Catalog.Extensions"
+	And I click the button named "FormCreate"
+	And I select external file "#workingDir#/DataProcessor/IRP_AdditionalFunctionality.cfe"
+	And I click "Add file" button
+	And Delay 2
+	And I input "AdditionalFunctionality" text in "Description" field
+	And I click the button named "FormWriteAndClose"
+	And I close TestClient session
+	And I install the "AdditionalFunctionality" extension
+	Given I open new TestClient session or connect the existing one	
+
+Scenario: create Workstation
+		Given I open hyperlink "e1cib/list/Catalog.Workstations"
+		And I click the button named "FormCreate"
+		And I input "Workstation 01" text in "Description" field
+		And I click Select button of "Cash account" field
+		And I go to line in "List" table
+			| 'Description'  |
+			| 'Cash desk №2' |
+		And I select current line in "List" table
+		And I click "Set current" button
+		And I click "Save and close" button
+		And I close TestClient session
+		Given I open new TestClient session or connect the existing one
+
+
+Scenario: auto filling Configuration metadata catalog
+		Given I open hyperlink "e1cib/list/Catalog.ConfigurationMetadata"
+		And I click "Refill metadata" button
+		And Delay 20
+		And I click "List" button
+		And "List" table contains lines
+		| 'Description'                    |
+		| 'Additional attribute sets'      |
+		| 'Additional attribute values'    |
+		| 'Addresses hierarchy'            |
+		| 'Bank payment'                   |
+		| 'Bank receipt'                   |
+		| 'Bank terms'                     |
+		| 'Bundling'                       |
+		| 'Business units'                 |
+		| 'Cash expense'                   |
+		| 'Cash payment'                   |
+		| 'Cash receipt'                   |
+		| 'Cash revenue'                   |
+		| 'Cash statement'                 |
+		| 'Cash statement statuses'        |
+		| 'Cash transfer order'            |
+		| 'Cash/Bank accounts'             |
+		| 'Catalogs'                       |
+		| 'Cheque bond transaction'        |
+		| 'Cheque bond transaction item'   |
+		| 'Cheque bonds'                   |
+		| 'Companies'                      |
+		| 'Configuration metadata'         |
+		| 'Contact info sets'              |
+		| 'Countries'                      |
+		| 'Credit note'                    |
+		| 'Currencies'                     |
+		| 'Data areas'                     |
+		| 'Data base status'               |
+		| 'Data mapping items'             |
+		| 'Data processors'                |
+		| 'Debit note'                     |
+		| 'Documents'                      |
+		| 'Equipment drivers'              |
+		| 'Expense and revenue types'      |
+		| 'Extensions'                     |
+		| 'File storage volumes'           |
+		| 'File storages info'             |
+		| 'Files'                          |
+		| 'Goods receipt'                  |
+		| 'Hardware'                       |
+		| 'Incoming payment order'         |
+		| 'Integration settings'           |
+		| 'Internal supply request'        |
+		| 'Inventory transfer'             |
+		| 'Inventory transfer order'       |
+		| 'Invoice match'                  |
+		| 'Item keys'                      |
+		| 'Item segments'                  |
+		| 'Item serial/lot numbers'        |
+		| 'Item types'                     |
+		| 'Item units'                     |
+		| 'Items'                          |
+		| 'Labeling'                       |
+		| 'Lock data modification reasons' |
+		| 'Multi currency movement sets'   |
+		| 'Objects statuses'               |
+		| 'Opening entry'                  |
+		| 'Outgoing payment order'         |
+		| 'Partner segments'               |
+		| 'Partner terms'                  |
+		| 'Partners'                       |
+		| 'Payment terminals'              |
+		| 'Payment terms'                  |
+		| 'Payment types'                  |
+		| 'Physical count by location'     |
+		| 'Physical inventory'             |
+		| 'Plugins'                        |
+		| 'Price keys'                     |
+		| 'Price list'                     |
+		| 'Price types'                    |
+		| 'Print templates'                |
+		| 'Purchase invoice'               |
+		| 'Purchase order'                 |
+		| 'Purchase return'                |
+		| 'Purchase return order'          |
+		| 'Reconciliation statement'       |
+		| 'Report options'                 |
+		| 'Reports'                        |
+		| 'Retail customers'               |
+		| 'Retail return receipt'          |
+		| 'Retail sales receipt'           |
+		| 'Sales invoice'                  |
+		| 'Sales order'                    |
+		| 'Sales return'                   |
+		| 'Sales return order'             |
+		| 'Shipment confirmation'          |
+		| 'Special offer rules'            |
+		| 'Special offer types'            |
+		| 'Special offers'                 |
+		| 'Specifications'                 |
+		| 'Stock adjustment as surplus'    |
+		| 'Stock adjustment as write-off'  |
+		| 'Stores'                         |
+		| 'Tax additional analytics'       |
+		| 'Tax rates'                      |
+		| 'Tax types'                      |
+		| 'UI groups'                      |
+		| 'Unbundling'                     |
+		| 'Units of measurement'           |
+		| 'User access groups'             |
+		| 'User access profiles'           |
+		| 'User groups'                    |
+		| 'Users'                          |
+		| 'Workstations'                   |
+	And I close all client application windows
+
+Scenario: create payment terminal
+		Given I open hyperlink "e1cib/list/Catalog.PaymentTerminals"
+		And I click the button named "FormCreate"
+		And I input "Payment terminal 01" text in the field named "Description_en"
+		And I click Select button of "Account" field
+		Then "Cash/Bank accounts" window is opened
+		And I go to line in "List" table
+			| 'Description'  |
+			| 'Transit Main' |
+		And I select current line in "List" table
+		And I input "1,00" text in "Percent" field
+		And I click "Save and close" button
+
+Scenario: create PaymentTypes
+		Given I open hyperlink "e1cib/list/Catalog.PaymentTypes"
+		And I click the button named "FormCreate"
+		And I input "Cash" text in the field named "Description_en"
+		And I select "Cash" exact value from "Type" drop-down list
+		And I click "Save and close" button
+		And I click the button named "FormCreate"
+		And I input "Card 01" text in the field named "Description_en"
+		And I select "Card" exact value from "Type" drop-down list
+		And I click "Save and close" button
+		And I click the button named "FormCreate"
+		And I input "Card 02" text in the field named "Description_en"
+		And I select "Card" exact value from "Type" drop-down list
+		And I click "Save and close" button
+
+Scenario: create Bank terms
+		Given I open hyperlink "e1cib/list/Catalog.BankTerms"
+		And I click the button named "FormCreate"
+		And I input "Bank term 01" text in "ENG" field
+		And in the table "PaymentTypes" I click the button named "PaymentTypesAdd"
+		And I click choice button of "Payment type" attribute in "PaymentTypes" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Card 01'     |
+		And I select current line in "List" table
+		And I activate "Account" field in "PaymentTypes" table
+		And I click choice button of "Account" attribute in "PaymentTypes" table
+		And I go to line in "List" table
+			| 'Description'  |
+			| 'Transit Main' |
+		And I select current line in "List" table
+		And I activate "Percent" field in "PaymentTypes" table
+		And I input "1,00" text in "Percent" field of "PaymentTypes" table
+		And I finish line editing in "PaymentTypes" table
+		And in the table "PaymentTypes" I click the button named "PaymentTypesAdd"
+		And I click choice button of "Payment type" attribute in "PaymentTypes" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Card 02'     |
+		And I select current line in "List" table
+		And I activate "Account" field in "PaymentTypes" table
+		And I click choice button of "Account" attribute in "PaymentTypes" table
+		And I go to line in "List" table
+			| 'Description'    |
+			| 'Transit Second' |
+		And I select current line in "List" table
+		And I activate "Percent" field in "PaymentTypes" table
+		And I input "2,00" text in "Percent" field of "PaymentTypes" table
+		And I finish line editing in "PaymentTypes" table
+		And I click "Save" button
+		And In this window I click command interface button "Business unit bank terms"
+		And I click the button named "FormCreate"
+		Then "Business unit bank terms (create)" window is opened
+		And I click Select button of "Business unit" field
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Shop 01'     |
+		And I select current line in "List" table
+		And I click Select button of "Bank term" field
+		Then "Bank terms" window is opened
+		And I select current line in "List" table
+		And I click "Save and close" button		
 	
+
+Scenario: update ItemKeys
+	Given I open hyperlink "e1cib/list/Catalog.ItemKeys"
+	And I click "Update item keys description" button
+	And Delay 5
+	And I close all client application windows
+
+Scenario: add Plugin for document discount
+		* Opening a form to add Plugin sessing
+			Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
+		* Addition of Plugin sessing for calculating Tax types for Turkey (VAT)
+			And I click the button named "FormCreate"
+			And I select external file "#workingDir#/DataProcessor/DocumentDiscount.epf"
+			And I click the button named "FormAddExtDataProc"
+			And I input "" text in "Path to plugin for test" field
+			And I input "DocumentDiscount" text in "Name" field
+			And I click Open button of the field named "Description_en"
+			And I input "DocumentDiscount" text in the field named "Description_en"
+			And I input "DocumentDiscount_TR" text in the field named "Description_tr"
+			And I click "Ok" button
+			And I click "Save and close" button
+			And I wait "Plugins (create)" window closing in 10 seconds
+		* Check added processing
+			Then I check for the "ExternalDataProc" catalog element with the "Description_en" "DocumentDiscount"
+			Given I open hyperlink "e1cib/list/Catalog.SpecialOffers"		
+			And I go to line in "List" table
+				| 'Description' |
+				| 'DocumentDiscount'         |
+			And I select current line in "List" table
+			And I click Open button of "Special offer type" field
+			And I click Select button of "Plugins" field
+			And I go to line in "List" table
+				| 'Description'      |
+				| 'DocumentDiscount' |
+			And I select current line in "List" table
+			And I click "Save and close" button
+		And I close all client application windows

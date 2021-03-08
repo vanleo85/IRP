@@ -4,13 +4,15 @@ Procedure OnCreateAtServer(Object, Form, Cancel, StandardProcessing) Export
 	If Not Object.Ref.Metadata().TabularSections.Find("AddAttributes") = Undefined
 		And Not Form.Items.Find("GroupOther") = Undefined Then
 		AddAttributesAndPropertiesServer.OnCreateAtServer(Form, "GroupOther");
-		ExtensionServer.AddAtributesFromExtensions(Form, Object.Ref, Form.Items.GroupOther);
+		ExtensionServer.AddAttributesFromExtensions(Form, Object.Ref, Form.Items.GroupOther);
 	EndIf;
+	
+	AddCommonAttributesToForm(Object, Form);
 
 	If Form.Items.Find("GroupTitleCollapsed") <> Undefined Then
 		DocumentsClientServer.ChangeTitleCollapse(Object, Form, Not ValueIsFilled(Object.Ref));
 	EndIf;	
-	ExternalCommandsServer.CreateCommands(Form, Object.Ref.Metadata().Name, Catalogs.ConfigurationMetadata.Documents, Enums.FormTypes.ObjectForm);	
+	ExternalCommandsServer.CreateCommands(Form, Object.Ref.Metadata().FullName(), Enums.FormTypes.ObjectForm);	
 EndProcedure
 
 Procedure OnReadAtServer(Object, Form, CurrentObject) Export
@@ -58,26 +60,6 @@ Function SplitBasisDocuments(Refs) Export
 	Return ReturnValue;
 EndFunction
 #EndRegion
-
-Function SerializeArrayOfFilters(ArrayOfFilters) Export
-	Return CommonFunctionsServer.SerializeXMLUseXDTO(ArrayOfFilters);
-EndFunction
-
-Procedure RecalculateQuantityInTable(Table,
-		UnitQuantityName = "QuantityUnit") Export
-	For Each Row In Table Do
-		RecalculateQuantityInRow(Row, UnitQuantityName);
-	EndDo;
-EndProcedure
-
-Procedure RecalculateQuantityInRow(Row,
-		UnitQuantityName = "QuantityUnit") Export
-	ItemKeyUnit = CatItemsServer.GetItemKeyUnit(Row.ItemKey);
-	UnitFactorFrom = Catalogs.Units.GetUnitFactor(Row[UnitQuantityName], ItemKeyUnit);
-	UnitFactorTo = Catalogs.Units.GetUnitFactor(Row.Unit, ItemKeyUnit);
-	Row.Quantity = ?(UnitFactorTo = 0, 0, Row.Quantity * UnitFactorFrom
-			/ UnitFactorTo);
-EndProcedure
 
 #Region Stores
 
@@ -224,8 +206,8 @@ Function CheckItemListStores(Object) Export
 		|////////////////////////////////////////////////////////////////////////////////
 		|SELECT
 		|	ItemList.LineNumber,
-		|ItemList.Store,
-		|ItemList.ItemKey
+		|	ItemList.Store,
+		|	ItemList.ItemKey
 		|FROM
 		|	ItemList AS ItemList
 		|WHERE
@@ -268,9 +250,9 @@ Procedure CheckPaymentList(Object, Cancel, CheckedAttributes) Export
 		|////////////////////////////////////////////////////////////////////////////////
 		|SELECT
 		|	PaymentList.LineNumber,
-		|PaymentList.Agreement.ApArPostingDetail,
-		|PaymentList.BasisDocument.Ref,
-		|PaymentList.BasisDocument
+		|	PaymentList.Agreement.ApArPostingDetail,
+		|	PaymentList.BasisDocument.Ref,
+		|	PaymentList.BasisDocument
 		|FROM
 		|	PaymentList AS PaymentList
 		|WHERE
@@ -386,18 +368,12 @@ EndFunction
 
 #EndRegion
 
-Procedure ShowUserMessageOnCreateAtServer(Form) Export
-    If Form.Parameters.Property("InfoMessage") Then
-        CommonFunctionsClientServer.ShowUsersMessage(Form.Parameters.InfoMessage);    
-    EndIf;
-EndProcedure
-
 #Region ListFormEvents
 
 Procedure OnCreateAtServerListForm(Form, Cancel, StandardProcessing) Export	
 	FormNamesArray = StrSplit(Form.FormName, ".");
-	DocumentName = FormNamesArray[1];
-	ExternalCommandsServer.CreateCommands(Form, DocumentName, Catalogs.ConfigurationMetadata.Documents, Enums.FormTypes.ListForm);	
+	DocumentFullName = FormNamesArray[0] + "." + FormNamesArray[1];
+	ExternalCommandsServer.CreateCommands(Form, DocumentFullName, Enums.FormTypes.ListForm);	
 EndProcedure
 
 #EndRegion
@@ -406,8 +382,8 @@ EndProcedure
 
 Procedure OnCreateAtServerChoiceForm(Form, Cancel, StandardProcessing) Export	
 	FormNamesArray = StrSplit(Form.FormName, ".");
-	DocumentName = FormNamesArray[1];
-	ExternalCommandsServer.CreateCommands(Form, DocumentName, Catalogs.ConfigurationMetadata.Documents, Enums.FormTypes.ChoiceForm);	
+	DocumentFullName = FormNamesArray[0] + "." + FormNamesArray[1];
+	ExternalCommandsServer.CreateCommands(Form, DocumentFullName, Enums.FormTypes.ChoiceForm);	
 EndProcedure
 
 #EndRegion
@@ -416,14 +392,8 @@ EndProcedure
 
 Procedure DeleteUnavailableTitleItemNames(ItemNames) Export
 	UnavailableNames = New Array;
-	ShowAlphaTestingSaas = GetFunctionalOption("ShowAlphaTestingSaas");
 	If Not CatCompaniesServer.isUseCompanies() Then
 		UnavailableNames.Add("Company");
-	EndIf;
-	If Not ShowAlphaTestingSaas Then		
-		UnavailableNames.Add("Store");
-		UnavailableNames.Add("LegalName");
-		UnavailableNames.Add("Agreement");
 	EndIf;
 	For Each Name In UnavailableNames Do
 		FoundedName = ItemNames.Find(Name);
@@ -482,23 +452,23 @@ Function PrepareServerData(Parameters) Export
 				EndIf;
 			EndDo;
 			
-			AllTaxexInCache = True;
+			AllTaxesInCache = True;
 			For Each ItemOfTaxes In ArrayOfTaxes Do
 				If ArrayOfTaxesInCache.Find(ItemOfTaxes) = Undefined Then
-					AllTaxexInCache = False;
+					AllTaxesInCache = False;
 					Break;
 				EndIf;
 			EndDo;
-			If AllTaxexInCache Then
+			If AllTaxesInCache Then
 				For Each ItemOfTaxesInCache In ArrayOfTaxesInCache Do
 					If ArrayOfTaxes.Find(ItemOfTaxesInCache) = Undefined Then
-						AllTaxexInCache = False;
+						AllTaxesInCache = False;
 						Break;
 					EndIf;
 				EndDo;
 			EndIf;
 			
-			If AllTaxexInCache Then
+			If AllTaxesInCache Then
 				RequireCallCreateTaxesFormControls = False;
 			EndIf;
 			
@@ -635,6 +605,21 @@ Function PrepareServerData(Parameters) Export
 		Result.Insert("ItemKeysWithSerialLotNumbers", ArrayOfItemKeysWithSerialLotNumbers);
 	EndIf;
 	
+	If Parameters.Property("GetPaymentTerms") Then
+		Agreement = Parameters.GetPaymentTerms.Agreement;
+		ArrayOfPaymentTerms = New Array();
+		If ValueIsFilled(Agreement) And ValueIsFilled(Agreement.PaymentTerm) Then
+			For Each Stage In Agreement.PaymentTerm.StagesOfPayment Do
+				NewRow = New Structure();
+				NewRow.Insert("CalculationType"     , Stage.CalculationType);
+				NewRow.Insert("ProportionOfPayment" , Stage.ProportionOfPayment);
+				NewRow.Insert("DuePeriod"           , Stage.DuePeriod);
+				ArrayOfPaymentTerms.Add(NewRow);
+			EndDo;
+		EndIf;
+		Result.Insert("PaymentTerms", ArrayOfPaymentTerms);
+	EndIf;
+	
 	Return Result;
 EndFunction	
 
@@ -704,7 +689,7 @@ EndFunction
 
 #Region SpecialOffersInReturns
 
-Procedure FillSpeciallOffersCache(Object, Form, BasisDocumentName, AddInfo = Undefined) Export
+Procedure FillSpecialOffersCache(Object, Form, BasisDocumentName, AddInfo = Undefined) Export
 	Form.SpecialOffersCache.Clear();
 	Query = New Query();
 	Query.Text = 
@@ -735,6 +720,124 @@ Procedure FillSpeciallOffersCache(Object, Form, BasisDocumentName, AddInfo = Und
 	Query.SetParameter("ItemList", Object.ItemList.Unload());
 	QueryResult = Query.Execute();
 	Form.SpecialOffersCache.Load(QueryResult.Unload());
+EndProcedure
+
+#EndRegion
+
+#Region CommonAttributes
+
+Procedure AddCommonAttributesToForm(Object, Form)
+	GroupOther = Form.Items.Find("GroupOther");
+	If GroupOther <> Undefined Then
+		AddCommonAttributesDimensions(Object, Form, GroupOther);
+		AddCommonAttributesWeight(Object, Form, GroupOther);
+	EndIf;
+EndProcedure
+
+Procedure AddCommonAttributesDimensions(Object, Form, ParentGroup)	
+	AddedAttributes = New Array;
+	If ServiceSystemServer.ObjectHasAttribute(Metadata.CommonAttributes.Length.Name, Object) Then
+		AddedAttributes.Add(Metadata.CommonAttributes.Length);
+	EndIf;
+	If ServiceSystemServer.ObjectHasAttribute(Metadata.CommonAttributes.Width.Name, Object) Then
+		AddedAttributes.Add(Metadata.CommonAttributes.Width);
+	EndIf;
+	If ServiceSystemServer.ObjectHasAttribute(Metadata.CommonAttributes.Height.Name, Object) Then
+		AddedAttributes.Add(Metadata.CommonAttributes.Height);
+	EndIf;
+	If ServiceSystemServer.ObjectHasAttribute(Metadata.CommonAttributes.Volume.Name, Object) Then
+		AddedAttributes.Add(Metadata.CommonAttributes.Volume);
+	EndIf;	
+	If Not AddedAttributes.Count() Then
+		Return;
+	EndIf;
+	
+	ItemsParent = Form.Items.Add("GroupDimensions", Type("FormGroup"), ParentGroup);
+	ItemsParent.Type = FormGroupType.UsualGroup;
+	ItemsParent.Group = ChildFormItemsGroup.Vertical;
+	ItemsParent.Behavior = UsualGroupBehavior.Collapsible;
+	ItemsParent.Title = R().Form_030;	
+	For Each Attribute In AddedAttributes Do		
+		NewAttribute = Form.Items.Add(Attribute.Name, Type("FormField"), ItemsParent);
+		NewAttribute.Type = FormFieldType.InputField;
+		NewAttribute.DataPath = "Object." + Attribute.Name;
+	EndDo;	
+EndProcedure
+
+Procedure AddCommonAttributesWeight(Object, Form, ParentGroup)	
+	AddedAttributes = New Array;
+	If ServiceSystemServer.ObjectHasAttribute(Metadata.CommonAttributes.Weight.Name, Object) Then
+		AddedAttributes.Add(Metadata.CommonAttributes.Weight);
+	EndIf;	
+	If Not AddedAttributes.Count() Then
+		Return;
+	EndIf;
+	
+	ItemsParent = Form.Items.Add("GroupWeights", Type("FormGroup"), ParentGroup);
+	ItemsParent.Type = FormGroupType.UsualGroup;
+	ItemsParent.Group = ChildFormItemsGroup.Vertical;
+	ItemsParent.Behavior = UsualGroupBehavior.Collapsible;
+	ItemsParent.Title = R().Form_031;	
+	For Each Attribute In AddedAttributes Do		
+		NewAttribute = Form.Items.Add(Attribute.Name, Type("FormField"), ItemsParent);
+		NewAttribute.Type = FormFieldType.InputField;
+		NewAttribute.DataPath = "Object." + Attribute.Name;
+	EndDo;	
+EndProcedure
+
+#EndRegion
+
+#Region Service
+
+Procedure ShowUserMessageOnCreateAtServer(Form) Export
+    If Form.Parameters.Property("InfoMessage") Then
+        CommonFunctionsClientServer.ShowUsersMessage(Form.Parameters.InfoMessage);    
+    EndIf;
+EndProcedure
+
+Function SerializeArrayOfFilters(ArrayOfFilters) Export
+	Return CommonFunctionsServer.SerializeXMLUseXDTO(ArrayOfFilters);
+EndFunction
+
+Procedure RecalculateQuantityInTable(Table,
+		UnitQuantityName = "QuantityUnit") Export
+	For Each Row In Table Do
+		RecalculateQuantityInRow(Row, UnitQuantityName);
+	EndDo;
+EndProcedure
+
+Procedure RecalculateQuantityInRow(Row,
+		UnitQuantityName = "QuantityUnit") Export
+	ItemKeyUnit = CatItemsServer.GetItemKeyUnit(Row.ItemKey);
+	UnitFactorFrom = Catalogs.Units.GetUnitFactor(Row[UnitQuantityName], ItemKeyUnit);
+	UnitFactorTo = Catalogs.Units.GetUnitFactor(Row.Unit, ItemKeyUnit);
+	Row.Quantity = ?(UnitFactorTo = 0, 0, Row.Quantity * UnitFactorFrom
+			/ UnitFactorTo);
+EndProcedure
+
+#EndRegion
+
+#Region Subscriptions
+
+Procedure OnCopyDocumentProcessingOnCopy(Source, CopiedObject, AddInfo = Undefined) Export
+	If Metadata.CommonAttributes.Author.Content.Contains(Source.Metadata()) Then
+		FillingStructure = New Structure;
+		FillingStructure.Insert("Author", SessionParameters.CurrentUser);
+
+		FillPropertyValues(Source, FillingStructure);
+	EndIf;
+EndProcedure
+
+#EndRegion
+
+#Region ShipmentConfirationsGoodsReceiptd
+
+Procedure RecalculateInvoiceQuantity(ArrayOfRows) Export
+	For Each Row In ArrayOfRows Do
+		Row.Unit = ?(ValueIsFilled(Row.ItemKey.Unit), 
+		Row.ItemKey.Unit, Row.ItemKey.Item.Unit);
+		RecalculateQuantityInRow(Row);
+	EndDo;
 EndProcedure
 
 #EndRegion

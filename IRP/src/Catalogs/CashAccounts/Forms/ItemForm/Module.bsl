@@ -24,7 +24,7 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	If Parameters.Property("CurrencyType") Then
 		CurrencyType = Parameters.CurrencyType;	
 	EndIf;
-	ExtensionServer.AddAtributesFromExtensions(ThisObject, Object.Ref);
+	ExtensionServer.AddAttributesFromExtensions(ThisObject, Object.Ref);
 EndProcedure
 
 &AtClient
@@ -49,6 +49,9 @@ EndProcedure
 &AtClient
 Procedure CurrencyTypeOnChange(Item)
 	CatCashAccountsClient.SetItemsBehavior(Object, ThisObject);
+	If Not ThisObject.CurrencyType = "Fixed" Then
+		Object.Currency = Undefined;
+	EndIf;
 EndProcedure
 
 &AtClient

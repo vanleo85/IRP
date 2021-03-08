@@ -14,7 +14,7 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 			Items[Row.Name].ReadOnly = True;
 		EndDo;
 	EndIf;
-	ExtensionServer.AddAtributesFromExtensions(ThisObject, Object.Ref);
+	ExtensionServer.AddAttributesFromExtensions(ThisObject, Object.Ref);
 EndProcedure
 
 &AtClient
@@ -94,4 +94,9 @@ EndProcedure
 &AtServer
 Procedure AddAttributesCreateFormControl()
 	AddAttributesAndPropertiesServer.CreateFormControls(ThisObject);
+EndProcedure
+
+&AtClient
+Procedure SizeOnChange(Item)
+	CommonFunctionsClientServer.CalculateVolume(Object);
 EndProcedure

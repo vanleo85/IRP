@@ -1,7 +1,7 @@
 ﻿#language: en
 @tree
 @Positive
-@Group18
+@Other
 
 
 Feature: add items to documents by barcode
@@ -10,6 +10,49 @@ Feature: add items to documents by barcode
 Background:
 	Given I launch TestClient opening script or connect the existing one
 
+
+Scenario: _300700 preparation (add items to documents by barcode)
+	When set True value to the constant
+	And I close TestClient session
+	Given I open new TestClient session or connect the existing one
+	* Load info
+		When Create catalog ObjectStatuses objects
+		When Create catalog ItemKeys objects
+		When Create catalog ItemTypes objects
+		When Create catalog Units objects
+		When Create catalog Items objects
+		When Create catalog PriceTypes objects
+		When Create catalog Specifications objects
+		When Create chart of characteristic types AddAttributeAndProperty objects
+		When Create catalog AddAttributeAndPropertySets objects
+		When Create catalog AddAttributeAndPropertyValues objects
+		When Create catalog Currencies objects
+		When Create catalog Companies objects (Main company)
+		When Create catalog Stores objects
+		When Create catalog Partners objects (Ferron BP)
+		When Create catalog Partners objects (Kalipso)
+		When Create catalog Companies objects (partners company)
+		When Create information register PartnerSegments records
+		When Create catalog PartnerSegments objects
+		When Create catalog Agreements objects
+		When Create chart of characteristic types CurrencyMovementType objects
+		When Create catalog TaxRates objects
+		When Create catalog Taxes objects	
+		When Create information register TaxSettings records
+		When Create information register PricesByItemKeys records
+		When Create catalog IntegrationSettings objects
+		When Create information register CurrencyRates records
+		When Create information register Barcodes records
+		When update ItemKeys
+	* Add plugin for taxes calculation
+		Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
+		If "List" table does not contain lines Then
+				| "Description" |
+				| "TaxCalculateVAT_TR" |
+			When add Plugin for tax calculation
+		When Create information register Taxes records (VAT)
+	* Tax settings
+		When filling in Tax settings for company
 
 Scenario: _300701 barcode check in Sales order + price and tax filling
 	Given I open hyperlink "e1cib/list/Document.SalesOrder"
@@ -36,8 +79,8 @@ Scenario: _300706 barcode check in Purchase invoice
 	And I click the button named "FormCreate"
 	And I click Select button of "Partner" field
 	And I go to line in "List" table
-		| Description |
-		| Partner Kalipso     |
+		| 'Description' |
+		| 'Ferron BP'     |
 	And I select current line in "List" table
 	And I click "SearchByBarcode" button
 	And I input "2202283713" text in "InputFld" field
@@ -45,7 +88,7 @@ Scenario: _300706 barcode check in Purchase invoice
 	* Check adding an items and filling in the price in the tabular part
 		And "ItemList" table contains lines
 			| 'Item'  |'Item key' |'Q'     | 'Unit' |
-			| 'Dress TR' |'S/Yellow TR'  |'1,000' | 'adet'  |
+			| 'Dress' |'S/Yellow'  |'1,000' | 'pcs'  |
 	And I close all client application windows
 
 Scenario: _300707 barcode check in Purchase return order
@@ -56,7 +99,7 @@ Scenario: _300708 barcode check in Purchase return
 	Given I open hyperlink "e1cib/list/Document.PurchaseReturn"
 	When check the barcode search in the purchase/purchase returns
 
-Scenario: _300709 barcode check in Goods reciept
+Scenario: _300709 barcode check in Goods receipt
 	Given I open hyperlink "e1cib/list/Document.GoodsReceipt"
 	When check the barcode search in storage operations documents
 
@@ -102,23 +145,86 @@ Scenario: _300721 barcode check in PhysicalCountByLocation
 	Given I open hyperlink "e1cib/list/Document.PhysicalCountByLocation"
 	When check the barcode search in storage operations documents
 
+Scenario: _300722 barcode check in Item stock adjustment
+	Given I open hyperlink "e1cib/list/Document.ItemStockAdjustment"
+	When check the barcode search in the Item stock adjustment
 
-Scenario: _300722 barcode check in Retail sales receipt + price and tax filling
-	Given I open hyperlink "e1cib/list/Document.RetailSalesReceipt"
-	When check the barcode search in the sales documents + price and tax filling in
-
-Scenario: _300722 barcode check in Retail return receipt + price and tax filling
-	Given I open hyperlink "e1cib/list/Document.RetailSalesReceipt"
-	When check the barcode search on the return documents
-
-Scenario: _300740 information message check when barcode is not found
-	* Open Retail sales receipt
-		Given I open hyperlink "e1cib/list/Document.RetailSalesReceipt"
+Scenario: _300723 barcode check in Price list
+	Given I open hyperlink "e1cib/list/Document.PriceList"
+	And I click the button named "FormCreate"
+	* By item key
+		* Add first string
+			And I change "Set price" radio button value to "By item keys"
+			And I click the button named "SearchByBarcode"
+			And I input "2202283713" text in "InputFld" field
+			And I click "OK" button
+			And "ItemKeyList" table contains lines
+				| 'Item'  | 'Item key' | 'Price' |
+				| 'Dress' | 'S/Yellow' | ''      |
+		* Add second string
+			And I click the button named "SearchByBarcode"
+			And I input "978020137962" text in "InputFld" field
+			And I click "OK" button
+			And "ItemKeyList" table contains lines
+				| 'Item'  | 'Item key' | 'Price' |
+				| 'Dress' | 'S/Yellow' | ''      |
+				| 'Boots' | '37/18SD'  | ''      |
+		* Check active string when scan the same item
+			And I go to line in "ItemKeyList" table
+				| 'Item'  | 'Item key' |
+				| 'Boots' | '37/18SD'  |			
+			And I click the button named "SearchByBarcode"
+			And I input "2202283713" text in "InputFld" field
+			And I click "OK" button
+			And the current line of "ItemKeyList" table is equal to
+				| 'Item'  | 'Item key' | 'Price' |
+				| 'Dress' | 'S/Yellow' | ''      |
+			And I close all client application windows
+	* By item
+		Given I open hyperlink "e1cib/list/Document.PriceList"
 		And I click the button named "FormCreate"
-		And I click "SearchByBarcode" button
-		And I input "0" text in "InputFld" field
-		And I click "OK" button
-	* Check info message
-		Then I wait that in user messages the "Barcode 0 not found." substring will appear in 10 seconds
+		* Add first string
+			And I change "Set price" radio button value to "By items"
+			And I click the button named "SearchByBarcodeItem"			
+			And I input "2202283713" text in "InputFld" field
+			And I click "OK" button
+			And "ItemList" table contains lines
+				| 'Item'  | 'Price' |
+				| 'Dress' | ''      |
+		* Add second string
+			And I click the button named "SearchByBarcodeItem"
+			And I input "978020137962" text in "InputFld" field
+			And I click "OK" button
+			And "ItemList" table contains lines
+				| 'Item'  | 'Price' |
+				| 'Dress' | ''      |
+				| 'Boots' | ''      |
+		* Check active string when scan the same item
+			And I go to line in "ItemList" table
+				| 'Item'  |
+				| 'Boots' |
+			And I click the button named "SearchByBarcodeItem"	
+			And I input "2202283713" text in "InputFld" field
+			And I click "OK" button
+			And the current line of "ItemList" table is equal to
+				| 'Item'  | 'Price' |
+				| 'Dress' | ''      |
 		And I close all client application windows
 		
+		
+			
+
+
+		
+
+		
+				
+		
+
+		
+			
+	
+		
+
+
+

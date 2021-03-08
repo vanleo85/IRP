@@ -192,6 +192,16 @@ Procedure ItemListQuantityOnChange(Item, AddInfo = Undefined) Export
 EndProcedure
 
 &AtClient
+Procedure ItemListSerialLotNumbersPresentationStartChoice(Item, ChoiceData, StandardProcessing, AddInfo = Undefined) Export
+	DocPurchaseReturnClient.ItemListSerialLotNumbersPresentationStartChoice(Object, ThisObject, Item, ChoiceData, StandardProcessing);
+EndProcedure
+
+&AtClient
+Procedure ItemListSerialLotNumbersPresentationClearing(Item, StandardProcessing)
+	DocPurchaseReturnClient.ItemListSerialLotNumbersPresentationClearing(Object, ThisObject, Item, StandardProcessing);
+EndProcedure
+
+&AtClient
 Procedure ItemListPriceOnChange(Item, AddInfo = Undefined) Export
 	DocPurchaseReturnClient.ItemListPriceOnChange(Object, ThisObject, Item);
 EndProcedure
@@ -406,3 +416,24 @@ Procedure GeneratedFormCommandActionByNameServer(CommandName) Export
 EndProcedure
 
 #EndRegion
+
+#Region ShipmentConfirmationsTree
+
+&AtClient
+Procedure ShipmentConfirmationsTreeQuantityOnChange(Item)
+	DocumentsClient.TradeDocumentsTreeQuantityOnChange(Object, ThisObject, 
+		"ShipmentConfirmations", "ShipmentConfirmationsTree", "ShipmentConfirmation");
+EndProcedure
+
+&AtClient
+Procedure ShipmentConfirmationsTreeBeforeAddRow(Item, Cancel, Clone, Parent, IsFolder, Parameter)
+	Cancel = True;
+EndProcedure
+
+&AtClient
+Procedure ShipmentConfirmationsTreeBeforeDeleteRow(Item, Cancel)
+	Cancel = True;
+EndProcedure
+
+#EndRegion
+

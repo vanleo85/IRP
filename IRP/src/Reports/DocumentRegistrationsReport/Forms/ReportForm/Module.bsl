@@ -2,13 +2,19 @@
 Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	If Parameters.Property("Document") Then
 		ThisObject.Document = Parameters.Document;
+		DocumentRegisterRecords = Parameters.Document.Metadata().RegisterRecords;
+		For Each RegisterRecord In DocumentRegisterRecords Do
+			Items.FilterRegister.ChoiceList.Add(RegisterRecord.FullName(), RegisterRecord.Synonym);
+		EndDo;
 	EndIf;
+	
+	Items.FilterRegister.ChoiceList.SortByPresentation();
 	
 	If Parameters.Property("PutInTable") Then
 		ThisObject.PutInTable = Parameters.PutInTable;
 	EndIf;
 	
-	If Parameters.Property("GenerateOnOpen") And Parameters.GenerateOnOpen Then
+	If Parameters.Property("GenerateOnOpen") And Not Parameters.GenerateOnOpen = Undefined And Parameters.GenerateOnOpen Then
 		GenerateReportAtServer(ThisObject.ResultTable);
 	EndIf;
 EndProcedure
@@ -87,15 +93,26 @@ Procedure GenerateReportForOneDocument(DocumentRef, Result, Template, MainTitleA
 	
 	DocumentRegisterRecords = DocumentRef.Metadata().RegisterRecords;
 	
+	ArrayOfDocumentRegisterRecords = New Array();
+	For Each RegisterRecord In DocumentRegisterRecords Do
+		If ValueIsFilled(ThisObject.FilterRegister) Then
+			If Upper(RegisterRecord.FullName()) = Upper(ThisObject.FilterRegister) Then
+				ArrayOfDocumentRegisterRecords.Add(RegisterRecord);
+			EndIf;
+		Else
+			ArrayOfDocumentRegisterRecords.Add(RegisterRecord);
+		EndIf;
+	EndDo;
+	
 	RegisterNumber = - 1;
 	
-	TableOfRegistrations = GetTableRegistrations(DocumentRef);
+	TableOfRegistrations = GetTableRegistrations(ArrayOfDocumentRegisterRecords, DocumentRef);
 	
 	For Each Row In TableOfRegistrations Do
 		Row.Name = Upper(TrimAll(Row.Name));
 	EndDo;
 	
-	For Each ObjectProperty In DocumentRegisterRecords Do
+	For Each ObjectProperty In ArrayOfDocumentRegisterRecords Do
 		
 		If TableOfRegistrations.Find(Upper(ObjectProperty.FullName()), "Name") = Undefined Then
 			Continue;
@@ -228,6 +245,10 @@ Function GetListOfFieldsByData(Data)
 	
 	If ValueIsFilled(ListOfFields) Then
 		ListOfFields = Mid(ListOfFields, 2);
+	EndIf;
+	
+	If ShowItemInItemKey Then
+		ListOfFields = StrReplace(ListOfFields, " ItemKey" , "ItemKey.Item, ItemKey");
 	EndIf;
 	Return ListOfFields;
 EndFunction
@@ -472,15 +493,14 @@ Procedure PrepareTemplateDetails(ListOfFields
 EndProcedure
 
 &AtServer
-Function GetTableRegistrations(DocumentRef)
+Function GetTableRegistrations(ArrayOfDocumentRegisterRecords, DocumentRef)
 	QueryText = "";
-	
-	DocumentMetadata = DocumentRef.Metadata();
-	If DocumentMetadata.RegisterRecords.Count() = 0 Then
+
+	If Not ArrayOfDocumentRegisterRecords.Count() Then
 		Return New ValueTable();
 	EndIf;
 	
-	For Each Row In DocumentMetadata.RegisterRecords Do
+	For Each Row In ArrayOfDocumentRegisterRecords Do
 		QueryText = QueryText + "
 			|" + ?(QueryText = "", "", "UNION ALL ") + "
 			|SELECT TOP 1 CAST(""" + Row.FullName()

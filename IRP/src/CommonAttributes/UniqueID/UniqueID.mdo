@@ -42,6 +42,10 @@
     <use>Use</use>
   </content>
   <content>
+    <metadata>Catalog.DataMappingItems</metadata>
+    <use>Use</use>
+  </content>
+  <content>
     <metadata>Catalog.ItemTypes</metadata>
     <use>Use</use>
   </content>

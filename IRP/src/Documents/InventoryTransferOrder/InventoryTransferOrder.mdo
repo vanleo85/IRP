@@ -55,8 +55,16 @@
   <defaultChoiceForm>Document.InventoryTransferOrder.Form.ChoiceForm</defaultChoiceForm>
   <realTimePosting>Deny</realTimePosting>
   <registerRecords>AccumulationRegister.TransferOrderBalance</registerRecords>
+  <registerRecords>AccumulationRegister.R4035B_IncomingStocks</registerRecords>
   <registerRecords>AccumulationRegister.StockReservation</registerRecords>
+  <registerRecords>AccumulationRegister.R4036B_IncomingStocksRequested</registerRecords>
   <registerRecords>AccumulationRegister.OrderBalance</registerRecords>
+  <registerRecords>AccumulationRegister.R4011B_FreeStocks</registerRecords>
+  <registerRecords>AccumulationRegister.R4012B_StockReservation</registerRecords>
+  <registerRecords>AccumulationRegister.R4020T_StockTransferOrders</registerRecords>
+  <registerRecords>AccumulationRegister.R4021B_StockTransferOrdersReceipt</registerRecords>
+  <registerRecords>AccumulationRegister.R4022B_StockTransferOrdersShipment</registerRecords>
+  <registerRecords>AccumulationRegister.R4016B_InternalSupplyRequestOrdering</registerRecords>
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>
@@ -129,6 +137,34 @@
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
+  <attributes uuid="9442022a-3645-474c-bcc9-810c206859e2">
+    <name>UseGoodsReceipt</name>
+    <synonym>
+      <key>en</key>
+      <value>Use goods receipt</value>
+    </synonym>
+    <type>
+      <types>Boolean</types>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+  </attributes>
+  <attributes uuid="5f0ef71c-350f-4170-a9a2-2517cf78c7fd">
+    <name>UseShipmentConfirmation</name>
+    <synonym>
+      <key>en</key>
+      <value>Use shipment confirmation</value>
+    </synonym>
+    <type>
+      <types>Boolean</types>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+  </attributes>
   <forms uuid="c88dc45e-adda-414a-8699-de3e4b37450f">
     <name>DocumentForm</name>
     <synonym>
@@ -182,7 +218,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -241,6 +277,32 @@
       <maxValue xsi:type="core:UndefinedValue"/>
       <dataHistory>Use</dataHistory>
       <fullTextSearch>Use</fullTextSearch>
+    </attributes>
+    <attributes uuid="a975fbd1-69e1-475b-aba9-ccd4cae29c3d">
+      <name>QuantityInBaseUnit</name>
+      <synonym>
+        <key>en</key>
+        <value>Quantity in base unit</value>
+      </synonym>
+      <type>
+        <types>DefinedType.typeQuantity</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+    </attributes>
+    <attributes uuid="28784251-7202-4cd4-97a9-ea3d6cc73d44">
+      <name>PurchaseOrder</name>
+      <synonym>
+        <key>en</key>
+        <value>Purchase order</value>
+      </synonym>
+      <type>
+        <types>DocumentRef.PurchaseOrder</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
     </attributes>
   </tabularSections>
   <tabularSections uuid="141a08c8-178a-4978-8af5-29466bd1a517">

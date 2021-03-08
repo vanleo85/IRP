@@ -70,6 +70,9 @@
   <defaultListForm>Document.BankPayment.Form.ListForm</defaultListForm>
   <defaultChoiceForm>Document.BankPayment.Form.ChoiceForm</defaultChoiceForm>
   <realTimePosting>Deny</realTimePosting>
+  <registerRecords>AccumulationRegister.R1021B_VendorsTransactions</registerRecords>
+  <registerRecords>AccumulationRegister.R5010B_ReconciliationStatement</registerRecords>
+  <registerRecords>AccumulationRegister.R1020B_AdvancesToVendors</registerRecords>
   <registerRecords>AccumulationRegister.ExpensesTurnovers</registerRecords>
   <registerRecords>AccumulationRegister.PlaningCashTransactions</registerRecords>
   <registerRecords>AccumulationRegister.AccountsStatement</registerRecords>
@@ -161,6 +164,26 @@
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
+  <attributes uuid="1ae82fc5-b89c-42d4-8294-2e1a53fa8e5c">
+    <name>DocNumber</name>
+    <synonym>
+      <key>en</key>
+      <value>Doc number</value>
+    </synonym>
+    <type>
+      <types>String</types>
+      <stringQualifiers>
+        <length>50</length>
+      </stringQualifiers>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fillValue xsi:type="core:StringValue">
+      <value></value>
+    </fillValue>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+  </attributes>
   <forms uuid="bf44b0ee-a0a1-4a4c-8523-3cea7817ea06">
     <name>DocumentForm</name>
     <synonym>
@@ -205,7 +228,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -369,7 +392,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>

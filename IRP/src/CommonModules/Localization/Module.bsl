@@ -8,14 +8,16 @@ Function Strings(Lang) Export
 	Strings.Insert("Eq_003", NStr("en = 'There are no errors.'", Lang));
 	Strings.Insert("Eq_004", NStr("en = 'Scanner is connected.'", Lang));
 	Strings.Insert("Eq_005", NStr("en = 'Error. Scanner not connected.'", Lang));
+	Strings.Insert("Eq_006", NStr("en = 'Installed on current PC.'", Lang));
 	
 	Strings.Insert("EqError_001", NStr("en = 'The device is connected. The device must be disabled before the operation.'", Lang));
 
 	Strings.Insert("EqError_002", NStr("en = 'The device driver could not be downloaded.
 											  |Check that the driver is correctly installed and registered in the system.'", Lang));
-
-	#EndRegion
 	
+	Strings.Insert("EqError_003", NStr("en = 'It has to be minimum one dot at Add ID.'", Lang));
+	Strings.Insert("EqError_004", NStr("en = 'Before install driver - it has to be loaded.'", Lang));
+	#EndRegion
 	
 	#Region POS
 	
@@ -68,8 +70,9 @@ Function Strings(Lang) Export
 	Strings.Insert("S_027", NStr("en = '[Not filled]'", Lang));
 	// operation is Success
 	Strings.Insert("S_028", NStr("en = 'Success'", Lang));
-	Strings.Insert("S_029", NStr("en = 'Not supoorting web client'", Lang));
+	Strings.Insert("S_029", NStr("en = 'Not supporting web client'", Lang));
 	Strings.Insert("S_030", NStr("en = 'Cashback'", Lang));
+	Strings.Insert("S_031", NStr("en = 'or'", Lang));
 	#EndRegion
 	
 	#Region Service
@@ -105,6 +108,9 @@ Function Strings(Lang) Export
 	Strings.Insert("Form_027", NStr("en = 'Item'", Lang));
 	Strings.Insert("Form_028", NStr("en = 'Item type'", Lang));
 	Strings.Insert("Form_029", NStr("en = 'External attributes'", Lang));
+	Strings.Insert("Form_030", NStr("en = 'Dimensions'", Lang));
+	Strings.Insert("Form_031", NStr("en = 'Weight information'", Lang));
+	Strings.Insert("Form_032", NStr("en = 'Period'", Lang));
 	#EndRegion
 	
 	#Region ErrorMessages
@@ -287,12 +293,38 @@ Function Strings(Lang) Export
 	
 	Strings.Insert("Error_084", NStr("en = 'Error to get picture from Google drive'", Lang));
 	
-	//%1 - 1000
-	//%2 - 300
-	//%3 - 350
-	//%4 - 50
-	//%5 - USD
+	// %1 - 1000
+	// %2 - 300
+	// %3 - 350
+	// %4 - 50
+	// %5 - USD
 	Strings.Insert("Error_085", NStr("en = 'Credit limit exceeded. Limit: %1, limit balance: %2, transaction: %3, lack: %4 %5'", Lang));
+	
+	// %1 - 10
+	// %2 - 20	
+	Strings.Insert("Error_086", NStr("en = 'Amount : %1 not match Payment term amount: %2'", Lang));
+	
+	Strings.Insert("Error_087", NStr("en = 'Parent can not be empty'", Lang));
+	Strings.Insert("Error_088", NStr("en = 'Basis unit has to be filled, if item filter used.'", Lang));
+	
+	Strings.Insert("Error_089", NStr("en = 'Description%1 ""%2"" is already in use.'", Lang));
+	Strings.Insert("Error_090", NStr("en = '%1 is undefined.'", Lang));
+	
+	// %1 - Boots
+	// %2 - Red XL
+	// %3 - ordered
+	// %4 - 11
+	// %5 - 15
+	// %6 - 4
+	// %7 - pcs
+	Strings.Insert("Error_090", NStr("en = '[%1 %2] %3 remaining: %4 %7. Required: %5 %7. Lacking: %6 %7.'", Lang));
+	
+	Strings.Insert("Error_091", NStr("en = 'Only Administrator can create users.'", Lang));
+	
+	Strings.Insert("Error_092", NStr("en = 'Can not use %1 role in SaaS mode'", Lang));
+	Strings.Insert("Error_093", NStr("en = 'Cancel reason has to be filled if string was canceled'", Lang));
+	Strings.Insert("Error_094", NStr("en = 'Сan not use confirmation of shipment without goods receipt'", Lang));
+	
 	
 	#EndRegion
 	
@@ -316,7 +348,7 @@ Function Strings(Lang) Export
 	Strings.Insert("InfoMessage_008", NStr("en = '#%1 date: %2'", Lang));
 	
 	Strings.Insert("InfoMessage_009", NStr("en = 'Total quantity doesnt match. Please count one more time. You have one more try.'", Lang));
-	Strings.Insert("InfoMessage_010", NStr("en = 'Total quantity doesnt match. Location need to be count again (current count is anulated).'", Lang));
+	Strings.Insert("InfoMessage_010", NStr("en = 'Total quantity doesnt match. Location need to be count again (current count is annulated).'", Lang));
 	Strings.Insert("InfoMessage_011", NStr("en = 'Total quantity is ok. Please scan and count next location.'", Lang));
 	
 	// %1 - 12
@@ -327,7 +359,28 @@ Function Strings(Lang) Export
 	Strings.Insert("InfoMessage_013", NStr("en = 'Current location #%1 was linked to you. Other users will not be able to scan it.'", Lang));
 	
 	// %1 - 12
-	Strings.Insert("InfoMessage_014", NStr("en = 'Current location #%1 was scaned and closed before. Please scan next location.'", Lang));
+	Strings.Insert("InfoMessage_014", NStr("en = 'Current location #%1 was scanned and closed before. Please scan next location.'", Lang));
+	
+	// %1 - 123456
+	Strings.Insert("InfoMessage_015", NStr("en = 'Serial lot %1 was not found. Create new?'", Lang));
+
+	// %1 - 123456
+	// %2 - Some item
+	Strings.Insert("InfoMessage_016", NStr("en = 'Scanned barcode %1 is using for another items %2'", Lang));
+	
+	// %1 - 123456
+	Strings.Insert("InfoMessage_017", NStr("en = 'Scanned barcode %1 is not using set for serial numbers'", Lang));
+	Strings.Insert("InfoMessage_018", NStr("en = 'Add or scan serial lot number'", Lang));
+	
+	Strings.Insert("InfoMessage_019", NStr("en = 'Data lock reasons:'", Lang));
+	
+  	Strings.Insert("InfoMessage_020", NStr("en = 'Created document: %1'", Lang));
+  
+  	// %1 - 42
+  	Strings.Insert("InfoMessage_021", NStr("en = 'Can not unlock attributes, this is element used %1 times, ex.:'", Lang));
+  	// %1 - 
+  	Strings.Insert("InfoMessage_022", NStr("en = 'This order is closed by %1'", Lang));
+	Strings.Insert("InfoMessage_023", NStr("en = 'Сan not use confirmation of shipment without goods receipt. Use goods receipt mode is enabled.'", Lang));
 	#EndRegion
 	
 	#Region QuestionToUser
@@ -339,8 +392,8 @@ Function Strings(Lang) Export
 	Strings.Insert("QuestionToUser_006", NStr("en = 'Do you want to update filled currency?'", Lang));
 	Strings.Insert("QuestionToUser_007", NStr("en = 'Transaction table will be cleared. Continue?'", Lang));
 	Strings.Insert("QuestionToUser_008", NStr("en = 'Changing the currency will clear the rows with cash transfer documents. Continue?'", Lang));
-	Strings.Insert("QuestionToUser_009", NStr("en = 'Do you want to update filled stores on %1?'", Lang));
-	Strings.Insert("QuestionToUser_011", NStr("en = 'Do you want to update filled price types on %1?'", Lang));
+	Strings.Insert("QuestionToUser_009", NStr("en = 'Do you want to replace filled stores with store %1?'", Lang));
+	Strings.Insert("QuestionToUser_011", NStr("en = 'Do you want to replace filled price types with price type %1?'", Lang));
 	Strings.Insert("QuestionToUser_012", NStr("en = 'Do you want to exit?'", Lang));
 	Strings.Insert("QuestionToUser_013", NStr("en = 'Do you want to update filled prices?'", Lang));
 	Strings.Insert("QuestionToUser_014", NStr("en = 'Transaction type is changed. Do you want to update filled data?'", Lang));
@@ -348,6 +401,9 @@ Function Strings(Lang) Export
 	Strings.Insert("QuestionToUser_016", NStr("en = 'Do you want to change or clear the icon?'", Lang));
 	Strings.Insert("QuestionToUser_017", NStr("en = 'How many documents to create?'", Lang));
 	Strings.Insert("QuestionToUser_018", NStr("en = 'Please enter total quantity'", Lang));
+	Strings.Insert("QuestionToUser_019", NStr("en = 'Do you want to update payment term?'", Lang));
+	Strings.Insert("QuestionToUser_020", NStr("en = 'Do you want to overwrite saved option?'", Lang));
+	Strings.Insert("QuestionToUser_021", NStr("en = 'Do you want to close this form? All changes will be lost.'", Lang));
 	#EndRegion
 	
 	#Region SuggestionToUser
@@ -370,7 +426,9 @@ Function Strings(Lang) Export
 	Strings.Insert("I_2", NStr("en = 'Click to enter description'", Lang));
 	
 	Strings.Insert("I_3", NStr("en = 'Fill out the document'", Lang));
-	
+	Strings.Insert("I_4", NStr("en = 'Find %1 rows in table by key %2'", Lang));
+	Strings.Insert("I_5", NStr("en = 'Not supported table'", Lang));
+	Strings.Insert("I_6", NStr("en = 'Ordered without ISR'", Lang));
 	#EndRegion
 	
 	#Region Exceptions
@@ -394,6 +452,8 @@ Function Strings(Lang) Export
 	
 	// %1 - en
 	Strings.Insert("Saas_003", NStr("en = 'Localization %1 of the company is not available.'", Lang));
+	
+	Strings.Insert("Saas_004", NStr("en = 'Area preparation completed'", Lang));
 	#EndRegion
 	
 	#Region FillingFromClassifiers
@@ -421,6 +481,9 @@ Function Strings(Lang) Export
 	Strings.Insert("CLV_1", NStr("en = 'All'", Lang));
 	#EndRegion
 	
+	#Region SalesOrderStatusReport
+	Strings.Insert("SOR_1", NStr("en = 'Not enough items in free stock'", Lang));
+	#EndRegion	
 	Return Strings;
 EndFunction
 

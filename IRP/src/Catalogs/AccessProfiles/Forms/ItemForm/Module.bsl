@@ -1,7 +1,7 @@
 &AtServer
 Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	LocalizationEvents.CreateMainFormItemDescription(ThisObject, "GroupDescriptions");
-	ExtensionServer.AddAtributesFromExtensions(ThisObject, Object.Ref);
+	ExtensionServer.AddAttributesFromExtensions(ThisObject, Object.Ref);
 EndProcedure
 
 &AtClient
@@ -17,9 +17,14 @@ EndProcedure
 &AtServer
 Procedure UpdateRolesAtServer()
 	For Each Role In Metadata.Roles Do
-		If Role.Name = "FilterForUserSettings" Then
+		If Role = Metadata.Roles.FilterForUserSettings Then
 			Continue;
 		EndIf;
+		
+		If Saas.isSaasMode() And Role = Metadata.Roles.FullAccess Then
+			Continue;
+		EndIf;
+		
 		ExtRole = Role.ConfigurationExtension();
 		NameExt = ?(ExtRole = Undefined, "IRP", ExtRole.Name);
 		

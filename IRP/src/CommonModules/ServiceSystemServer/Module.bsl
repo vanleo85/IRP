@@ -130,4 +130,15 @@ Function GetManagerByType(TypeOfValue) Export
 	Return GetManagerByMetadata(CurrentMetadata);
 EndFunction
 
+Function GetProgramTitle() Export
+	DBName = String(SessionParameters.ConnectionSettings);
+	If IsBlankString(DBName) Then
+		DBName = "IRP";
+	EndIf;
 	
+	If SessionParameters.ConnectionSettings.isProduction Then
+		Return DBName;
+	Else
+		Return DBName + " (Test app)";
+	EndIf;
+EndFunction

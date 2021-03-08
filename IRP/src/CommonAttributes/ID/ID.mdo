@@ -22,10 +22,6 @@
     <use>DontUse</use>
   </content>
   <content>
-    <metadata>Catalog.Extensions</metadata>
-    <use>DontUse</use>
-  </content>
-  <content>
     <metadata>Catalog.DataAreas</metadata>
     <use>DontUse</use>
   </content>

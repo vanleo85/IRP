@@ -31,6 +31,11 @@ Procedure OnOpen(Cancel)
 	DocStockAdjustmentAsSurplusClient.OnOpen(Object, ThisObject, Cancel);
 EndProcedure
 
+&AtClient
+Procedure AfterWrite(WriteParameters)
+	DocStockAdjustmentAsSurplusClient.AfterWriteAtClient(Object, ThisObject, WriteParameters);
+EndProcedure
+
 &AtServer
 Procedure AfterWriteAtServer(CurrentObject, WriteParameters)
 	DocStockAdjustmentAsSurplusServer.AfterWriteAtServer(Object, ThisObject, CurrentObject, WriteParameters);
@@ -56,22 +61,34 @@ Procedure ItemListOnStartEdit(Item, NewRow, Clone)
 EndProcedure
 
 &AtClient
+Procedure ItemListAfterDeleteRow(Item)
+	DocStockAdjustmentAsSurplusClient.ItemListAfterDeleteRow(Object, ThisObject, Item);
+EndProcedure
+
+&AtClient
 Procedure ItemListItemOnChange(Item)
 	DocStockAdjustmentAsSurplusClient.ItemListItemOnChange(Object, ThisObject, Item);
 EndProcedure
 
 &AtClient
 Procedure ItemListItemKeyOnChange(Item)
-	CurrentRow = Items.ItemList.CurrentData;
-	If CurrentRow = Undefined Then
-		Return;
-	EndIf;
-	
-	CalculationSettings = New Structure();
-	CalculationSettings.Insert("UpdateUnit");
-	CalculationStringsClientServer.CalculateItemsRow(Object,
-		CurrentRow,
-		CalculationSettings);
+	DocStockAdjustmentAsSurplusClient.ItemListItemKeyOnChange(Object, ThisObject, Item);
+EndProcedure
+
+&AtClient
+Procedure ItemListQuantityOnChange(Item)
+	DocStockAdjustmentAsSurplusClient.ItemListQuantityOnChange(Object, ThisObject, Item);
+EndProcedure
+
+
+&AtClient
+Procedure ItemListSerialLotNumbersPresentationStartChoice(Item, ChoiceData, StandardProcessing, AddInfo = Undefined) Export
+	DocStockAdjustmentAsSurplusClient.ItemListSerialLotNumbersPresentationStartChoice(Object, ThisObject, Item, ChoiceData, StandardProcessing);
+EndProcedure
+
+&AtClient
+Procedure ItemListSerialLotNumbersPresentationClearing(Item, StandardProcessing)
+	DocStockAdjustmentAsSurplusClient.ItemListSerialLotNumbersPresentationClearing(Object, ThisObject, Item, StandardProcessing);
 EndProcedure
 
 &AtClient
@@ -87,6 +104,16 @@ EndProcedure
 &AtClient
 Procedure ItemListItemEditTextChange(Item, Text, StandardProcessing)
 	DocStockAdjustmentAsSurplusClient.ItemListItemEditTextChange(Object, ThisObject, Item, Text, StandardProcessing);
+EndProcedure
+
+&AtClient
+Procedure ItemListRevenueTypeStartChoice(Item, ChoiceData, StandardProcessing)
+	DocStockAdjustmentAsSurplusClient.ItemListRevenueTypeStartChoice(Object, ThisObject, Item, ChoiceData, StandardProcessing);
+EndProcedure
+
+&AtClient
+Procedure ItemListRevenueTypeEditTextChange(Item, Text, StandardProcessing)
+	DocStockAdjustmentAsSurplusClient.ItemListRevenueTypeEditTextChange(Object, ThisObject, Item, Text, StandardProcessing);
 EndProcedure
 
 #Region ItemCompany

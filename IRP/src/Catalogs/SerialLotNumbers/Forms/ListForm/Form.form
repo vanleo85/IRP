@@ -59,8 +59,10 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:DataPath">
-        <segments>List.Code</segments>
+      <dataPath xsi:type="form:MultiLanguageDataPath">
+        <paths xsi:type="form:DataPath">
+          <segments>List.Code</segments>
+        </paths>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -104,6 +106,10 @@
     <items xsi:type="form:FormField">
       <name>Description</name>
       <id>19</id>
+      <title>
+        <key>en</key>
+        <value>Serial number</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -156,6 +162,10 @@
     <items xsi:type="form:FormField">
       <name>Inactive</name>
       <id>27</id>
+      <title>
+        <key>en</key>
+        <value>Inactive</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -201,6 +211,10 @@
     <items xsi:type="form:FormField">
       <name>Owner</name>
       <id>22</id>
+      <title>
+        <key>en</key>
+        <value>Owner</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -496,6 +510,10 @@
     <horizontalAlign>Left</horizontalAlign>
     <autoFill>true</autoFill>
   </autoCommandBar>
+  <handlers>
+    <event>OnCreateAtServer</event>
+    <name>OnCreateAtServer</name>
+  </handlers>
   <autoTitle>true</autoTitle>
   <autoUrl>true</autoUrl>
   <group>Vertical</group>
@@ -519,15 +537,34 @@
     <main>true</main>
     <extInfo xsi:type="form:DynamicListExtInfo">
       <queryText>SELECT
-	Table.Ref,
-	Table.DeletionMark,
-	Table.Description_en AS Description,
-	Table.Predefined,
-	Table.PredefinedDataName
+	SerialLotNumbers.Ref,
+	SerialLotNumbers.DeletionMark,
+	SerialLotNumbers.Code,
+	SerialLotNumbers.Description,
+	SerialLotNumbers.SerialLotNumberOwner,
+	SerialLotNumbers.Inactive,
+	SerialLotNumbers.Predefined,
+	SerialLotNumbers.PredefinedDataName
 FROM
-	Catalog.SerialLotNumbers AS Table</queryText>
+	Catalog.SerialLotNumbers AS SerialLotNumbers
+WHERE
+	CASE
+		WHEN &amp;isItemKey
+			THEN SerialLotNumbers.SerialLotNumberOwner = &amp;ItemKeyRef
+			OR SerialLotNumbers.SerialLotNumberOwner = &amp;ItemRef
+			OR SerialLotNumbers.SerialLotNumberOwner = &amp;ItemType
+		WHEN &amp;isItem
+			THEN SerialLotNumbers.SerialLotNumberOwner = &amp;ItemRef
+			OR SerialLotNumbers.SerialLotNumberOwner = &amp;ItemType
+		WHEN &amp;isItemType
+			THEN SerialLotNumbers.SerialLotNumberOwner = &amp;ItemType
+			
+		ELSE TRUE
+	END OR SerialLotNumbers.SerialLotNumberOwner = Undefined</queryText>
       <mainTable>Catalog.SerialLotNumbers</mainTable>
+      <dynamicDataRead>true</dynamicDataRead>
       <autoFillAvailableFields>true</autoFillAvailableFields>
+      <customQuery>true</customQuery>
       <autoSaveUserSettings>true</autoSaveUserSettings>
       <getInvisibleFieldPresentations>true</getInvisibleFieldPresentations>
     </extInfo>

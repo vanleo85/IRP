@@ -1,9 +1,7 @@
 ﻿#language: en
 @tree
 @Positive
-@Test
-@DocumentForms
-@Group1
+@BasicFormsCheck
 
 Feature: basic check documents
 As an QA
@@ -11,8 +9,6 @@ I want to check opening and closing of documents forms
 
 Background:
 	Given I launch TestClient opening script or connect the existing one
-	And I set "True" value to the constant "ShowBetaTesting"
-	And I set "True" value to the constant "ShowAlphaTestingSaas"
 	And I set "True" value to the constant "UseItemKey"
 	And I set "True" value to the constant "UseCompanies"
 
@@ -660,6 +656,9 @@ Scenario: Open object form "StockAdjustmentAsSurplus"
 
 
 
+
+	
+	
 Scenario: Open list form "PhysicalInventory" 
 	And I close all client application windows
 	Given I open "PhysicalInventory" document default form
@@ -673,6 +672,7 @@ Scenario: Open object form "PhysicalInventory"
 	If the warning is displayed then
 		Then I raise "Failed to open document form PhysicalInventory" exception
 	And I close current window
+
 
 Scenario: Open list form "RetailSalesReceipt" 
 	And I close all client application windows
@@ -714,4 +714,47 @@ Scenario: Open object form "CashStatement"
 	Given I open "CashStatement" document main form
 	If the warning is displayed then
 		Then I raise "Failed to open document form CashStatement" exception
+	And I close current window
+
+
+Scenario: Open list form "ItemStockAdjustment" 
+	And I close all client application windows
+	Given I open "ItemStockAdjustment" document default form
+	If the warning is displayed then
+		Then I raise "Failed to open document form ItemStockAdjustment" exception
+	And I close current window
+
+Scenario: Open object form "ItemStockAdjustment"
+	And I close all client application windows
+	Given I open "ItemStockAdjustment" document main form
+	If the warning is displayed then
+		Then I raise "Failed to open document form ItemStockAdjustment" exception
+	And I close current window
+
+Scenario: Open list form "PlannedReceiptReservation" 
+	And I close all client application windows
+	Given I open "PlannedReceiptReservation" document default form
+	If the warning is displayed then
+		Then I raise "Failed to open document form PlannedReceiptReservation" exception
+	And I close current window
+
+Scenario: Open object form "PlannedReceiptReservation"
+	And I close all client application windows
+	Given I open "PlannedReceiptReservation" document main form
+	If the warning is displayed then
+		Then I raise "Failed to open document form PlannedReceiptReservation" exception
+	And I close current window
+
+Scenario: Open list form "SalesOrderClosing" 
+	And I close all client application windows
+	Given I open "SalesOrderClosing" document default form
+	If the warning is displayed then
+		Then I raise "Failed to open document form SalesOrderClosing" exception
+	And I close current window
+
+Scenario: Open object form "SalesOrderClosing"
+	And I close all client application windows
+	Given I open "SalesOrderClosing" document main form
+	If the warning is displayed then
+		Then I raise "Failed to open document form SalesOrderClosing" exception
 	And I close current window

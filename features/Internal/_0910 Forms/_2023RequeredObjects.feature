@@ -2,15 +2,20 @@
 @tree
 @Positive
 @NotCritical
-@Group12
+@Forms
+
 Feature: check required fields
 
 
 
 Background:
 	Given I launch TestClient opening script or connect the existing one
+
 	
-Scenario: check of the sign of required filling at the additional attribute and check for filling
+Scenario: _0202301 check of the sign of required filling at the additional attribute and check for filling
+	When set True value to the constant
+	And I close TestClient session
+	Given I open new TestClient session or connect the existing one
 	* Opening of additional details settings
 		Given I open hyperlink "e1cib/list/Catalog.AddAttributeAndPropertySets"
 	* Check of the sign of required filling at the additional attribute for Item
@@ -18,6 +23,15 @@ Scenario: check of the sign of required filling at the additional attribute and 
 			| 'Description' |
 			| 'Items'       |
 		And I select current line in "List" table
+		If "Attributes" table does not contain lines Then
+			| "Attribute" |
+			| "Article" |
+			And in the table "Attributes" I click the button named "AttributesAdd"
+			And I click choice button of "Attribute" attribute in "Attributes" table
+			And I go to line in "List" table
+				| 'Description' |
+				| 'Article'     |
+			And I select current line in "List" table
 		And I go to line in "Attributes" table
 			| 'Attribute'  |
 			| 'Article'    |
@@ -89,7 +103,8 @@ Scenario: check of the sign of required filling at the additional attribute and 
 
 
 
-
+Scenario: _999999 close TestClient session
+	And I close TestClient session
 
 
 

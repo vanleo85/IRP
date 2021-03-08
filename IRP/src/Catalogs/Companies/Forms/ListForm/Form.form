@@ -176,8 +176,10 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:DataPath">
-        <segments>List.Code</segments>
+      <dataPath xsi:type="form:MultiLanguageDataPath">
+        <paths xsi:type="form:DataPath">
+          <segments>List.Code</segments>
+        </paths>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -221,6 +223,10 @@
     <items xsi:type="form:FormField">
       <name>Description</name>
       <id>19</id>
+      <title>
+        <key>en</key>
+        <value>Description</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -540,7 +546,7 @@
       <common>true</common>
     </edit>
     <notDefaultUseAlwaysAttributes xsi:type="form:DataPath">
-      <segments>List.Our</segments>
+      <segments>List.OurCompany</segments>
     </notDefaultUseAlwaysAttributes>
     <notDefaultUseAlwaysAttributes xsi:type="form:DataPath">
       <segments>List.Ref</segments>
@@ -556,7 +562,7 @@
 	Table.Description_en AS Description,
 	Table.Predefined,
 	Table.PredefinedDataName,
-	Table.Our,
+	Table.OurCompany,
 	Table.Code
 FROM
 	Catalog.Companies AS Table</queryText>
@@ -572,7 +578,7 @@ FROM
     <name>OurCompanyFilter</name>
     <title>
       <key>en</key>
-      <value>Our company filter</value>
+      <value>Our Company filter</value>
     </title>
     <id>3</id>
     <valueType>

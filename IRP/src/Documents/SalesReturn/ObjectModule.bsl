@@ -6,6 +6,18 @@ Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 	ThisObject.DocumentAmount = ThisObject.ItemList.Total("TotalAmount");
 EndProcedure
 
+Procedure OnWrite(Cancel)
+	If DataExchange.Load Then
+		Return;
+	EndIf;	
+EndProcedure
+
+Procedure BeforeDelete(Cancel)
+	If DataExchange.Load Then
+		Return;
+	EndIf;
+EndProcedure
+
 Procedure Posting(Cancel, PostingMode)	
 	PostingServer.Post(ThisObject, Cancel, PostingMode, ThisObject.AdditionalProperties);	
 EndProcedure
@@ -18,8 +30,12 @@ Procedure Filling(FillingData, FillingText, StandardProcessing)
 	If TypeOf(FillingData) = Type("Structure") Then
 		If FillingData.Property("BasedOn") And FillingData.BasedOn = "SalesInvoice" Then
 			Filling_BasedOnSalesInvoice(FillingData);
-		ElsIf FillingData.Property("BasedOn") And FillingData.BasedOn = "SalesReturnOrder" Then
+		EndIf;
+		If FillingData.Property("BasedOn") And FillingData.BasedOn = "SalesReturnOrder" Then
 			Filling_BasedOnSalesReturnOrder(FillingData);
+		EndIf;
+		If FillingData.Property("BasedOn") And FillingData.BasedOn = "GoodsReceipt" Then
+			Filling_BasedOnGoodsReceipt(FillingData);
 		EndIf;
 	EndIf;
 EndProcedure
@@ -64,6 +80,19 @@ Procedure Filling_BasedOnSalesReturnOrder(FillingData)
 	EndDo;
 EndProcedure
 
+Procedure Filling_BasedOnGoodsReceipt(FillingData)
+	FillPropertyValues(ThisObject, FillingData, "Company,Partner,LegalName");
+	
+	For Each Row In FillingData.ItemList Do
+		NewRow = ThisObject.ItemList.Add();
+		FillPropertyValues(NewRow, Row);
+	EndDo;
+	For Each Row In FillingData.GoodsReceipts Do
+		NewRow = ThisObject.GoodsReceipts.Add();
+		FillPropertyValues(NewRow, Row);
+	EndDo;	
+EndProcedure
+
 Procedure OnCopy(CopiedObject)
 	LinkedTables = New Array();
 	LinkedTables.Add(SpecialOffers);
@@ -81,16 +110,4 @@ Procedure FillCheckProcessing(Cancel, CheckedAttributes)
 	If Not SerialLotNumbersServer.CheckFilling(ThisObject) Then
 		Cancel = True;
 	EndIf;	
-EndProcedure
-
-Procedure OnWrite(Cancel)
-	If DataExchange.Load Then
-		Return;
-	EndIf;	
-EndProcedure
-
-Procedure BeforeDelete(Cancel)
-	If DataExchange.Load Then
-		Return;
-	EndIf;
 EndProcedure

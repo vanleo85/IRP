@@ -165,6 +165,58 @@
     <excludedCommands>Create</excludedCommands>
     <excludedCommands>Delete</excludedCommands>
     <items xsi:type="form:FormField">
+      <name>OptionsListDefaultPicture</name>
+      <id>138</id>
+      <visible>true</visible>
+      <enabled>true</enabled>
+      <userVisible>
+        <common>true</common>
+      </userVisible>
+      <dataPath xsi:type="form:MultiLanguageDataPath">
+        <paths xsi:type="form:DataPath">
+          <segments>OptionsList.DefaultPicture</segments>
+        </paths>
+      </dataPath>
+      <titleLocation>None</titleLocation>
+      <extendedTooltip>
+        <name>OptionsListDefaultPictureExtendedTooltip</name>
+        <id>140</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <type>Label</type>
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <extInfo xsi:type="form:LabelDecorationExtInfo">
+          <horizontalAlign>Left</horizontalAlign>
+        </extInfo>
+      </extendedTooltip>
+      <contextMenu>
+        <name>OptionsListDefaultPictureContextMenu</name>
+        <id>139</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <autoFill>true</autoFill>
+      </contextMenu>
+      <type>PictureField</type>
+      <editMode>Enter</editMode>
+      <showInHeader>true</showInHeader>
+      <headerHorizontalAlign>Left</headerHorizontalAlign>
+      <showInFooter>true</showInFooter>
+      <extInfo xsi:type="form:ImageFieldExtInfo">
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <horizontalStretch>true</horizontalStretch>
+        <verticalStretch>true</verticalStretch>
+        <fileDragMode>AsFileRef</fileDragMode>
+      </extInfo>
+    </items>
+    <items xsi:type="form:FormField">
       <name>OptionsListisCurrentOption</name>
       <id>108</id>
       <visible>true</visible>
@@ -413,12 +465,42 @@
     <autoCommandBar>
       <name>OptionsListCommandBar</name>
       <id>93</id>
+      <items xsi:type="form:Button">
+        <name>OptionsListShowMarkedForDeletion</name>
+        <id>145</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <extendedTooltip>
+          <name>OptionsListShowMarkedForDeletionExtendedTooltip</name>
+          <id>146</id>
+          <visible>true</visible>
+          <enabled>true</enabled>
+          <userVisible>
+            <common>true</common>
+          </userVisible>
+          <type>Label</type>
+          <autoMaxWidth>true</autoMaxWidth>
+          <autoMaxHeight>true</autoMaxHeight>
+          <extInfo xsi:type="form:LabelDecorationExtInfo">
+            <horizontalAlign>Left</horizontalAlign>
+          </extInfo>
+        </extendedTooltip>
+        <commandName>Form.Command.ShowMarkedForDeletion</commandName>
+        <representation>Auto</representation>
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <placementArea>UserCmds</placementArea>
+        <representationInContextMenu>Auto</representationInContextMenu>
+      </items>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
         <common>true</common>
       </userVisible>
-      <horizontalAlign>Left</horizontalAlign>
+      <horizontalAlign>Right</horizontalAlign>
     </autoCommandBar>
     <handlers>
       <event>Selection</event>
@@ -603,6 +685,10 @@
     <horizontalAlign>Left</horizontalAlign>
   </autoCommandBar>
   <handlers>
+    <event>OnOpen</event>
+    <name>OnOpen</name>
+  </handlers>
+  <handlers>
     <event>OnCreateAtServer</event>
     <name>OnCreateAtServer</name>
   </handlers>
@@ -633,6 +719,7 @@
     <extInfo xsi:type="form:DynamicListExtInfo">
       <queryText>SELECT ALLOWED DISTINCT
 	ReportOptions.Ref As ReportOption,
+	ReportOptions.DeletionMark As DeletionMark,
 	ReportOptions.Author As Author,
 	ReportOptions.Code As OptionKey,
 	ReportOptions.Code = &amp;CurrentSettingsKey AS isCurrentOption,
@@ -748,6 +835,23 @@ WHERE
     <action xsi:type="form:FormCommandHandlerContainer">
       <handler>
         <name>SaveAs</name>
+      </handler>
+    </action>
+    <currentRowUse>Auto</currentRowUse>
+  </formCommands>
+  <formCommands>
+    <name>ShowMarkedForDeletion</name>
+    <title>
+      <key>en</key>
+      <value>Show marked for deletion</value>
+    </title>
+    <id>4</id>
+    <use>
+      <common>true</common>
+    </use>
+    <action xsi:type="form:FormCommandHandlerContainer">
+      <handler>
+        <name>ShowMarkedForDeletion</name>
       </handler>
     </action>
     <currentRowUse>Auto</currentRowUse>

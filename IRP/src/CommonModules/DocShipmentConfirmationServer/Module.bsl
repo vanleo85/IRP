@@ -59,9 +59,9 @@ EndProcedure
 #EndRegion
 
 Function PutQueryTableToTempTable(QueryTable) Export
-	QueryTable.Columns.Add("Key", New TypeDescription("UUID"));
+	QueryTable.Columns.Add("Key", New TypeDescription(Metadata.DefinedTypes.typeRowID.Type));
 	For Each Row In QueryTable Do
-		Row.Key = New UUID(Row.RowKey);
+		Row.Key = Row.RowKey;
 	EndDo;
 	tempManager = New TempTablesManager();
 	Query = New Query();
@@ -102,13 +102,10 @@ EndProcedure
 #EndRegion
 
 Procedure FillTransactionTypeChoiceList(Form)
-	isSaasMode = Saas.isSaasMode();
 	Form.Items.TransactionType.ChoiceList.Add(Enums.ShipmentConfirmationTransactionTypes.Sales, Metadata.Enums.ShipmentConfirmationTransactionTypes.EnumValues.Sales.Synonym);
 	Form.Items.TransactionType.ChoiceList.Add(Enums.ShipmentConfirmationTransactionTypes.ReturnToVendor, Metadata.Enums.ShipmentConfirmationTransactionTypes.EnumValues.ReturnToVendor.Synonym);
-	If Not isSaasMode Then
-		Form.Items.TransactionType.ChoiceList.Add(Enums.ShipmentConfirmationTransactionTypes.InventoryTransfer, Metadata.Enums.ShipmentConfirmationTransactionTypes.EnumValues.InventoryTransfer.Synonym);
-		Form.Items.TransactionType.ChoiceList.Add(Enums.ShipmentConfirmationTransactionTypes.Bundling, Metadata.Enums.ShipmentConfirmationTransactionTypes.EnumValues.Bundling.Synonym);
-	EndIf;
+	Form.Items.TransactionType.ChoiceList.Add(Enums.ShipmentConfirmationTransactionTypes.InventoryTransfer, Metadata.Enums.ShipmentConfirmationTransactionTypes.EnumValues.InventoryTransfer.Synonym);
+	Form.Items.TransactionType.ChoiceList.Add(Enums.ShipmentConfirmationTransactionTypes.Bundling, Metadata.Enums.ShipmentConfirmationTransactionTypes.EnumValues.Bundling.Synonym);
 EndProcedure
 
 Function SalesInvoiceIsExists(ShipmentConfirmationRef)

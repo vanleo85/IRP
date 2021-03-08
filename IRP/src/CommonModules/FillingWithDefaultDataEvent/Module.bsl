@@ -16,8 +16,8 @@ Procedure FillingWithDefaultDataFilling(Source, FillingData, FillingText, Standa
 	EndDo;
 	
 	For Each KeyValue In Data Do
-		FillAtribute = ServiceSystemClientServer.ObjectHasAttribute(KeyValue.Key, Source);
-		If FillAtribute Then		
+		FillAttribute = ServiceSystemClientServer.ObjectHasAttribute(KeyValue.Key, Source);
+		If FillAttribute Then		
 			If TypeOf(Source[KeyValue.Key]) = Type("Boolean")
 				And Not Source[KeyValue.Key] Then
 				Source[KeyValue.Key] = KeyValue.Value;
@@ -49,7 +49,8 @@ Procedure FillingWithDefaultDataFilling(Source, FillingData, FillingText, Standa
 	
 	StatusAttribute = Attributes.Find("Status");
 	If StatusAttribute <> Undefined
-		And Source.Metadata().Attributes.Find("Status").Type = New TypeDescription("CatalogRef.ObjectStatuses") Then
+		And Source.Metadata().Attributes.Find("Status").Type = New TypeDescription("CatalogRef.ObjectStatuses")
+		And Not ValueIsFilled(Source.Status) Then
 		Source.Status = ObjectStatusesServer.GetStatusByDefault(Source.Ref);
 	EndIf;
 EndProcedure

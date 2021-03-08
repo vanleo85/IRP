@@ -67,10 +67,6 @@
           <key>en</key>
           <value>Item</value>
         </inputHint>
-        <inputHint>
-          <key>tr</key>
-          <value>Malzeme</value>
-        </inputHint>
       </extInfo>
     </items>
     <items xsi:type="form:FormField">
@@ -143,10 +139,6 @@
           <key>en</key>
           <value>Property</value>
         </inputHint>
-        <inputHint>
-          <key>tr</key>
-          <value>Özellik</value>
-        </inputHint>
       </extInfo>
     </items>
     <visible>true</visible>
@@ -154,14 +146,6 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <title>
-      <key></key>
-      <value>Group filter</value>
-    </title>
-    <toolTip>
-      <key></key>
-      <value>Group filter</value>
-    </toolTip>
     <extendedTooltip>
       <name>GroupFilterExtendedTooltip</name>
       <id>60</id>
@@ -224,23 +208,146 @@
     <items xsi:type="form:FormGroup">
       <name>GroupPicture</name>
       <id>66</id>
-      <items xsi:type="form:FormField">
-        <name>PictureDecoration</name>
-        <id>72</id>
+      <items xsi:type="form:FormGroup">
+        <name>GroupSlider</name>
+        <id>97</id>
+        <items xsi:type="form:FormGroup">
+          <name>PageSlider</name>
+          <id>99</id>
+          <items xsi:type="form:FormField">
+            <name>PictureDecoration</name>
+            <id>72</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <dataPath xsi:type="form:MultiLanguageDataPath">
+              <paths xsi:type="form:DataPath">
+                <segments>PictureDecoration</segments>
+              </paths>
+            </dataPath>
+            <titleLocation>None</titleLocation>
+            <extendedTooltip>
+              <name>PictureDecorationExtendedTooltip</name>
+              <id>74</id>
+              <visible>true</visible>
+              <enabled>true</enabled>
+              <userVisible>
+                <common>true</common>
+              </userVisible>
+              <type>Label</type>
+              <autoMaxWidth>true</autoMaxWidth>
+              <autoMaxHeight>true</autoMaxHeight>
+              <extInfo xsi:type="form:LabelDecorationExtInfo">
+                <horizontalAlign>Left</horizontalAlign>
+              </extInfo>
+            </extendedTooltip>
+            <contextMenu>
+              <name>PictureDecorationContextMenu</name>
+              <id>73</id>
+              <visible>true</visible>
+              <enabled>true</enabled>
+              <userVisible>
+                <common>true</common>
+              </userVisible>
+              <autoFill>true</autoFill>
+            </contextMenu>
+            <type>PictureField</type>
+            <editMode>Enter</editMode>
+            <showInHeader>true</showInHeader>
+            <headerHorizontalAlign>Left</headerHorizontalAlign>
+            <showInFooter>true</showInFooter>
+            <extInfo xsi:type="form:ImageFieldExtInfo">
+              <autoMaxWidth>true</autoMaxWidth>
+              <autoMaxHeight>true</autoMaxHeight>
+              <horizontalStretch>true</horizontalStretch>
+              <verticalStretch>true</verticalStretch>
+              <nonselectedPictureText>
+                <key>en</key>
+                <value>Picture not found</value>
+              </nonselectedPictureText>
+              <border xsi:type="core:BorderDef">
+                <width>1</width>
+              </border>
+              <fileDragMode>AsFileRef</fileDragMode>
+            </extInfo>
+          </items>
+          <visible>true</visible>
+          <enabled>true</enabled>
+          <userVisible>
+            <common>true</common>
+          </userVisible>
+          <title>
+            <key>en</key>
+            <value>Page slider</value>
+          </title>
+          <extendedTooltip>
+            <name>PageSliderExtendedTooltip</name>
+            <id>100</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <type>Label</type>
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <extInfo xsi:type="form:LabelDecorationExtInfo">
+              <horizontalAlign>Left</horizontalAlign>
+            </extInfo>
+          </extendedTooltip>
+          <type>Page</type>
+          <extInfo xsi:type="form:PageGroupExtInfo">
+            <group>Vertical</group>
+            <showTitle>true</showTitle>
+          </extInfo>
+        </items>
+        <items xsi:type="form:FormGroup">
+          <name>PageAddInfo</name>
+          <id>101</id>
+          <visible>true</visible>
+          <enabled>true</enabled>
+          <userVisible>
+            <common>true</common>
+          </userVisible>
+          <title>
+            <key>en</key>
+            <value>Page add info</value>
+          </title>
+          <extendedTooltip>
+            <name>PageAddInfoExtendedTooltip</name>
+            <id>102</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <type>Label</type>
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <extInfo xsi:type="form:LabelDecorationExtInfo">
+              <horizontalAlign>Left</horizontalAlign>
+            </extInfo>
+          </extendedTooltip>
+          <type>Page</type>
+          <extInfo xsi:type="form:PageGroupExtInfo">
+            <group>Vertical</group>
+            <showTitle>true</showTitle>
+          </extInfo>
+        </items>
         <visible>true</visible>
         <enabled>true</enabled>
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>PictureDecoration</segments>
-          </paths>
-        </dataPath>
-        <titleLocation>None</titleLocation>
+        <title>
+          <key>en</key>
+          <value>Group slider</value>
+        </title>
         <extendedTooltip>
-          <name>PictureDecorationExtendedTooltip</name>
-          <id>74</id>
+          <name>GroupSliderExtendedTooltip</name>
+          <id>98</id>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
@@ -253,38 +360,10 @@
             <horizontalAlign>Left</horizontalAlign>
           </extInfo>
         </extendedTooltip>
-        <contextMenu>
-          <name>PictureDecorationContextMenu</name>
-          <id>73</id>
-          <visible>true</visible>
-          <enabled>true</enabled>
-          <userVisible>
-            <common>true</common>
-          </userVisible>
-          <autoFill>true</autoFill>
-        </contextMenu>
-        <type>PictureField</type>
-        <editMode>Enter</editMode>
-        <showInHeader>true</showInHeader>
-        <headerHorizontalAlign>Left</headerHorizontalAlign>
-        <showInFooter>true</showInFooter>
-        <extInfo xsi:type="form:ImageFieldExtInfo">
-          <autoMaxWidth>true</autoMaxWidth>
-          <autoMaxHeight>true</autoMaxHeight>
-          <horizontalStretch>true</horizontalStretch>
-          <verticalStretch>true</verticalStretch>
-          <nonselectedPictureText>
-            <key>en</key>
-            <value>Picture not found</value>
-          </nonselectedPictureText>
-          <nonselectedPictureText>
-            <key>tr</key>
-            <value>Resim bulunamadı</value>
-          </nonselectedPictureText>
-          <border xsi:type="core:BorderDef">
-            <width>1</width>
-          </border>
-          <fileDragMode>AsFileRef</fileDragMode>
+        <type>Pages</type>
+        <extInfo xsi:type="form:PagesGroupExtInfo">
+          <pagesRepresentation>Swipe</pagesRepresentation>
+          <currentRowUse>Auto</currentRowUse>
         </extInfo>
       </items>
       <items xsi:type="form:FormField">
@@ -293,10 +372,6 @@
         <title>
           <key>en</key>
           <value>Type</value>
-        </title>
-        <title>
-          <key>tr</key>
-          <value>Tip</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -350,10 +425,6 @@
           <key>en</key>
           <value>ID</value>
         </title>
-        <title>
-          <key>tr</key>
-          <value>ID</value>
-        </title>
         <visible>true</visible>
         <enabled>true</enabled>
         <userVisible>
@@ -405,10 +476,6 @@
         <title>
           <key>en</key>
           <value>Key ID</value>
-        </title>
-        <title>
-          <key>tr</key>
-          <value>SKU</value>
         </title>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -515,19 +582,11 @@
         <common>true</common>
       </userVisible>
       <title>
-        <key></key>
-        <value>Group picture</value>
-      </title>
-      <title>
         <key>en</key>
         <value>Picture</value>
       </title>
-      <title>
-        <key>tr</key>
-        <value>Resim</value>
-      </title>
       <toolTip>
-        <key></key>
+        <key>en</key>
         <value>Group picture</value>
       </toolTip>
       <extendedTooltip>
@@ -879,17 +938,9 @@
         <key>en</key>
         <value>Items property</value>
       </title>
-      <title>
-        <key>tr</key>
-        <value>Malzeme özellikleri</value>
-      </title>
       <toolTip>
         <key>en</key>
         <value>Group items property</value>
-      </toolTip>
-      <toolTip>
-        <key>tr</key>
-        <value>Grup malzeme özellikleri</value>
       </toolTip>
       <extendedTooltip>
         <name>GroupItemsPropertyExtendedTooltip</name>
@@ -1233,17 +1284,9 @@
         <key>en</key>
         <value>Key property</value>
       </title>
-      <title>
-        <key>tr</key>
-        <value>Varyant özellikleri</value>
-      </title>
       <toolTip>
         <key>en</key>
         <value>Group key property</value>
-      </toolTip>
-      <toolTip>
-        <key>tr</key>
-        <value>Grup varyant özellikleri</value>
       </toolTip>
       <extendedTooltip>
         <name>GroupKeyPropertyExtendedTooltip</name>
@@ -1272,11 +1315,11 @@
       <common>true</common>
     </userVisible>
     <title>
-      <key></key>
+      <key>en</key>
       <value>Group pages</value>
     </title>
     <toolTip>
-      <key></key>
+      <key>en</key>
       <value>Group pages</value>
     </toolTip>
     <extendedTooltip>
@@ -1451,6 +1494,14 @@
     </userVisible>
     <horizontalAlign>Left</horizontalAlign>
   </autoCommandBar>
+  <handlers>
+    <event>NotificationProcessing</event>
+    <name>NotificationProcessing</name>
+  </handlers>
+  <handlers>
+    <event>OnCreateAtServer</event>
+    <name>OnCreateAtServer</name>
+  </handlers>
   <autoTitle>true</autoTitle>
   <autoUrl>true</autoUrl>
   <group>Vertical</group>
@@ -1479,10 +1530,6 @@
       <key>en</key>
       <value>Barcode</value>
     </title>
-    <title>
-      <key>tr</key>
-      <value>Barkod</value>
-    </title>
     <id>2</id>
     <valueType>
       <types>String</types>
@@ -1501,10 +1548,6 @@
       <key>en</key>
       <value>Item</value>
     </title>
-    <title>
-      <key>tr</key>
-      <value>Malzeme</value>
-    </title>
     <id>3</id>
     <valueType>
       <types>CatalogRef.Items</types>
@@ -1522,10 +1565,6 @@
       <key>en</key>
       <value>Item key</value>
     </title>
-    <title>
-      <key>tr</key>
-      <value>Varyant</value>
-    </title>
     <id>4</id>
     <valueType>
       <types>CatalogRef.ItemKeys</types>
@@ -1540,7 +1579,7 @@
   <attributes>
     <name>Photo</name>
     <title>
-      <key></key>
+      <key>en</key>
       <value>Photo</value>
     </title>
     <id>5</id>
@@ -1559,10 +1598,6 @@
     <title>
       <key>en</key>
       <value>Picture decoration</value>
-    </title>
-    <title>
-      <key>tr</key>
-      <value>Resim alanı</value>
     </title>
     <id>6</id>
     <valueType>
@@ -1600,17 +1635,9 @@
       <key>en</key>
       <value>OK</value>
     </title>
-    <title>
-      <key>tr</key>
-      <value>OK</value>
-    </title>
     <id>2</id>
     <toolTip>
       <key>en</key>
-      <value>OK</value>
-    </toolTip>
-    <toolTip>
-      <key>tr</key>
       <value>OK</value>
     </toolTip>
     <use>
@@ -1629,18 +1656,10 @@
       <key>en</key>
       <value>Not OK</value>
     </title>
-    <title>
-      <key>tr</key>
-      <value>OK DEĞİL</value>
-    </title>
     <id>3</id>
     <toolTip>
       <key>en</key>
       <value>Not OK</value>
-    </toolTip>
-    <toolTip>
-      <key>tr</key>
-      <value>OK DEĞİL</value>
     </toolTip>
     <use>
       <common>true</common>

@@ -28,5 +28,8 @@
     <types>DocumentRef.InventoryTransfer</types>
     <types>DocumentRef.GoodsReceipt</types>
     <types>DocumentRef.SalesInvoice</types>
+    <types>DocumentRef.PlannedReceiptReservation</types>
+    <types>DocumentRef.PurchaseOrderClosing</types>
+    <types>DocumentRef.SalesOrderClosing</types>
   </type>
 </mdclass:DefinedType>

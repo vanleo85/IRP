@@ -63,6 +63,12 @@ Procedure OnOpen(Object, Form, Cancel, AddInfo = Undefined) Export
 	Else
 		CurrenciesClient.FullRefreshTable(Object, Form, AddInfo);
 	EndIf;
+	
+	SerialLotNumberClient.UpdateSerialLotNumbersPresentation(Object, AddInfo);
+	SerialLotNumberClient.UpdateSerialLotNumbersTree(Object, Form);	
+	DocumentsClient.SetLockedRowsForItemListByTradeDocuments(Object, Form, "GoodsReceipts");
+	DocumentsClient.UpdateTradeDocumentsTree(Object, Form, 
+		"GoodsReceipts", "GoodsReceiptsTree", "QuantityInGoodsReceipt");
 EndProcedure
 
 Procedure NotificationProcessing(Object, Form, EventName, Parameter, Source, AddInfo = Undefined) Export
@@ -72,6 +78,10 @@ EndProcedure
 Procedure AfterWriteAtClient(Object, Form, WriteParameters, AddInfo = Undefined) Export
 	DocumentsClient.AfterWriteAtClientPutServerDataToAddInfo(Object, Form, AddInfo);	
 	CurrenciesClient.SetVisibleRows(Object, ThisObject, AddInfo);
+	SerialLotNumberClient.UpdateSerialLotNumbersPresentation(Object, AddInfo);
+	DocumentsClient.SetLockedRowsForItemListByTradeDocuments(Object, Form, "GoodsReceipts");
+	DocumentsClient.UpdateTradeDocumentsTree(Object, Form, 
+		"GoodsReceipts", "GoodsReceiptsTree", "QuantityInGoodsReceipt");
 EndProcedure
 
 #EndRegion
@@ -80,6 +90,11 @@ EndProcedure
 
 Procedure ItemListAfterDeleteRow(Object, Form, Item, AddInfo = Undefined) Export
 	DocumentsClient.ItemListAfterDeleteRow(Object, Form, Item);
+	SerialLotNumberClient.DeleteUnusedSerialLotNumbers(Object);
+	SerialLotNumberClient.UpdateSerialLotNumbersTree(Object, Form);	
+	DocumentsClient.ClearTradeDocumentsTable(Object, Form, "GoodsReceipts");
+	DocumentsClient.UpdateTradeDocumentsTree(Object, Form, 
+		"GoodsReceipts", "GoodsReceiptsTree", "QuantityInGoodsReceipt");
 EndProcedure
 
 Procedure ItemListOnChange(Object, Form, Item, AddInfo = Undefined) Export
@@ -137,6 +152,7 @@ EndProcedure
 
 Procedure ItemListItemOnChange(Object, Form, Item, AddInfo = Undefined) Export
 	DocumentsClient.ItemListItemOnChange(Object, Form, ThisObject, Item, Undefined, AddInfo);
+	SerialLotNumberClient.UpdateUseSerialLotNumber(Object, Form, AddInfo);
 EndProcedure
 
 Procedure ItemListItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
@@ -187,6 +203,7 @@ EndFunction
 
 Procedure ItemListItemKeyOnChange(Object, Form, Item, AddInfo = Undefined) Export
 	DocumentsClient.ItemListItemKeyOnChange(Object, Form, ThisObject, Item, Undefined, AddInfo);
+	SerialLotNumberClient.UpdateUseSerialLotNumber(Object, Form, AddInfo);
 EndProcedure
 
 Procedure ItemListItemKeyOnChangePutServerDataToAddInfo(Object, Form, CurrentRow, AddInfo = Undefined) Export
@@ -214,6 +231,19 @@ Function ItemListItemKeySettings(Object, Form, AddInfo = Undefined) Export
 	Settings.AfterActionsCalculateSettings = AfterActionsCalculateSettings;
 	Return Settings;
 EndFunction
+
+#EndRegion
+
+#Region SerialLotNumbers
+
+Procedure ItemListSerialLotNumbersPresentationStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, AddInfo = Undefined) Export
+	DocumentsClient.ItemListSerialLotNumbersPutServerDataToAddInfo(Object, Form, AddInfo);
+	SerialLotNumberClient.PresentationStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, AddInfo);
+EndProcedure	
+
+Procedure ItemListSerialLotNumbersPresentationClearing(Object, Form, Item, StandardProcessing, AddInfo = Undefined) Export
+	SerialLotNumberClient.PresentationClearing(Object, Form, Item, AddInfo);
+EndProcedure
 
 #EndRegion
 
@@ -246,6 +276,8 @@ EndFunction
 
 Procedure ItemListUnitOnChange(Object, Form, Item = Undefined, AddInfo = Undefined) Export
 	DocumentsClient.ItemListUnitOnChange(Object, Form, ThisObject, Item, Undefined, AddInfo);
+	DocumentsClient.UpdateTradeDocumentsTree(Object, Form, 
+		"GoodsReceipts", "GoodsReceiptsTree", "QuantityInGoodsReceipt");
 EndProcedure
 
 Procedure ItemListUnitOnChangePutServerDataToAddInfo(Object, Form, AddInfo = Undefined) Export
@@ -275,6 +307,9 @@ Procedure ItemListQuantityOnChange(Object, Form, Item, AddInfo = Undefined) Expo
 		Return;
 	EndIf;	
 	DocumentsClient.ItemListCalculateRowAmounts_QuantityChange(Object, Form, CurrentData, Item, ThisObject, AddInfo);
+	SerialLotNumberClient.UpdateSerialLotNumbersTree(Object, Form);
+	DocumentsClient.UpdateTradeDocumentsTree(Object, Form, 
+		"GoodsReceipts", "GoodsReceiptsTree", "QuantityInGoodsReceipt");
 EndProcedure
 
 Procedure ItemListQuantityPutServerDataToAddInfo(Object, Form, CurrentData, AddInfo = Undefined) Export
@@ -371,6 +406,44 @@ EndProcedure
 
 Procedure ItemListStoreOnChange(Object, Form, Item, AddInfo = Undefined) Export
 	DocumentsClient.ItemListStoreOnChange(Object, Form, ThisObject, Item);
+EndProcedure
+
+#EndRegion
+
+#Region ExpenseType
+
+Procedure ItemListExpenseTypeStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
+	OpenSettings = DocumentsClient.GetOpenSettingsStructure();
+	
+	OpenSettings.ArrayOfFilters = New Array();
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", 
+																	True, 
+																	DataCompositionComparisonType.NotEqual));
+	FilterTypesValue = New Array;
+	FilterTypesValue.Add(PredefinedValue("Enum.ExpenseAndRevenueTypes.Expense"));
+	FilterTypesValue.Add(PredefinedValue("Enum.ExpenseAndRevenueTypes.Both"));
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Type", 
+																	FilterTypesValue, 
+																	DataCompositionComparisonType.InList));
+
+	OpenSettings.FormParameters = New Structure();
+	OpenSettings.FillingData = New Structure();
+	
+	DocumentsClient.ExpenseAndRevenueTypeStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
+EndProcedure
+
+Procedure ItemListExpenseTypeEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
+	ArrayOfFilters = New Array();
+	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, ComparisonType.NotEqual));
+	FilterTypesValue = New ValueList;
+	FilterTypesValue.Add(PredefinedValue("Enum.ExpenseAndRevenueTypes.Expense"));
+	FilterTypesValue.Add(PredefinedValue("Enum.ExpenseAndRevenueTypes.Both"));
+	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Type", 
+																	FilterTypesValue,
+																	ComparisonType.InList));							
+	AdditionalParameters = New Structure();
+	DocumentsClient.ExpenseAndRevenueTypeEditTextChange(Object, Form, Item, Text, StandardProcessing,
+				ArrayOfFilters, AdditionalParameters);
 EndProcedure
 
 #EndRegion
@@ -598,9 +671,9 @@ Procedure CompanyStartChoice(Object, Form, Item, ChoiceData, StandardProcessing)
 	OpenSettings.ArrayOfFilters = New Array();
 	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", 
 																True, DataCompositionComparisonType.NotEqual));
-	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Our",
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("OurCompany",
 																True, DataCompositionComparisonType.Equal));
-	OpenSettings.FillingData = New Structure("Our", True);
+	OpenSettings.FillingData = New Structure("OurCompany", True);
 	
 	DocumentsClient.CompanyStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
@@ -608,7 +681,7 @@ EndProcedure
 Procedure CompanyEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
 	ArrayOfFilters = New Array();
 	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, ComparisonType.NotEqual));
-	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Our", True, ComparisonType.Equal));
+	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("OurCompany", True, ComparisonType.Equal));
 	DocumentsClient.CompanyEditTextChange(Object, Form, Item, Text, StandardProcessing, ArrayOfFilters);
 EndProcedure
 

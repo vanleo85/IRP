@@ -1,7 +1,8 @@
 ﻿#language: en
 @tree
 @Positive
-@Group11
+@Forms
+
 Feature: check the display of the header of the collapsible group in documents
 
 
@@ -10,7 +11,66 @@ Background:
 	Given I launch TestClient opening script or connect the existing one
 
 
-Scenario: check the display of the header of the collapsible group in Purchase Order
+
+
+Scenario: _020200 preparation
+	When set True value to the constant
+	And I close TestClient session
+	Given I open new TestClient session or connect the existing one
+	* Load info
+		When Create catalog Countries objects
+		When Create catalog Companies objects (second company Ferron BP)
+		When Create catalog Companies objects (own Second company)
+		When Create catalog ExpenseAndRevenueTypes objects
+		When Create catalog BusinessUnits objects
+		When Create catalog Partners objects
+		When Create catalog Partners objects (Kalipso)
+		When Create catalog InterfaceGroups objects (Purchase and production,  Main information)
+		When Create catalog ObjectStatuses objects
+		When Create catalog ItemKeys objects
+		When Create catalog ItemTypes objects
+		When Create catalog Units objects
+		When Create catalog Items objects
+		When Create catalog PriceTypes objects
+		When Create catalog Specifications objects
+		When Create chart of characteristic types AddAttributeAndProperty objects
+		When Create catalog AddAttributeAndPropertySets objects
+		When Create catalog AddAttributeAndPropertyValues objects
+		When Create catalog Currencies objects
+		When Create catalog Companies objects (Main company)
+		When Create catalog Stores objects
+		When Create catalog Partners objects (Ferron BP)
+		When Create catalog Partners objects (Kalipso)
+		When Create catalog Companies objects (partners company)
+		When Create information register PartnerSegments records
+		When Create catalog PartnerSegments objects
+		When Create catalog Agreements objects
+		When Create chart of characteristic types CurrencyMovementType objects
+		When Create catalog TaxRates objects
+		When Create catalog Taxes objects	
+		When Create information register TaxSettings records
+		When Create information register PricesByItemKeys records
+		When Create catalog IntegrationSettings objects
+		When Create information register CurrencyRates records
+		When Create catalog CashAccounts objects
+		When update ItemKeys
+	* Add plugin for taxes calculation
+		Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
+		If "List" table does not contain lines Then
+				| "Description" |
+				| "TaxCalculateVAT_TR" |
+			When add Plugin for tax calculation
+		When Create information register Taxes records (VAT)
+	* Tax settings
+		When filling in Tax settings for company	
+	* Check or create create SalesInvoice024016 (Shipment confirmation does not used)
+		Given I open hyperlink "e1cib/list/Document.SalesInvoice"
+		If "List" table does not contain lines Then
+			| "Number" |
+			| "$$NumberSalesInvoice024016$$" |
+			When create SalesInvoice024016 (Shipment confirmation does not used)
+
+Scenario: _018025 check the display of the header of the collapsible group in Purchase Order
 	Given I open hyperlink "e1cib/list/Document.PurchaseOrder"
 	When check the display of the header of the collapsible group in sales, purchase and return documents
 	Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Company: Main Company   Partner: Ferron BP   Legal name: Company Ferron BP   Status: Wait" text
@@ -136,6 +196,15 @@ Scenario: _028814 check the display of the header of the collapsible group in Sh
 	And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
 	And I close all client application windows
 
+Scenario: _028815 check the display of the header of the collapsible group in ItemStockAdjustment
+	Given I open hyperlink "e1cib/list/Document.ItemStockAdjustment"
+	When check the display of the header of the collapsible group in Shipment confirmation, Goods receipt, Bundling/Unbundling
+	Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Company: Main Company" text
+	And I click the hyperlink named "DecorationGroupTitleUncollapsedLabel"
+	When I Check the steps for Exception
+        |'And I click Select button of  "Store" field'|
+	And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
+	And I close all client application windows
 
 
 Scenario: _028908 check the display of the header of the collapsible group in Goods Receipt
@@ -195,7 +264,7 @@ Scenario: _029615 check the display of the header of the collapsible group in Un
 
 
 
-Scenario: _050012 check the display of the header of the collapsible group in Cash reciept
+Scenario: _050012 check the display of the header of the collapsible group in Cash receipt
 	Given I open hyperlink "e1cib/list/Document.CashReceipt"
 	When check the display of the header of the collapsible group in cash receipt document
 	Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Company: Main Company   Cash account: Cash desk №2   Currency: USD   Transaction type: Payment from customer   " text
@@ -245,7 +314,7 @@ Scenario: _053012 check the display of the header of the collapsible group in Ba
 Scenario: _056006 check the display of the header of the collapsible group in Invoice Match
 	Given I open hyperlink "e1cib/list/Document.InvoiceMatch"
 	When check the display of the header of the collapsible group in invoice match
-	Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Operation type: With customer   Company: Main Company   Partner: Ferron BP   Legal name: Company Ferron BP   Partner term: Basic Partner terms, TRY" text
+	Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Operation type: With customer   Company: Main Company   Partner: Kalipso   Legal name: Company Kalipso   Partner term: Basic Partner terms, without VAT   " text
 	And I click the hyperlink named "DecorationGroupTitleUncollapsedLabel"
 	When I Check the steps for Exception
         |'And I click Select button of  "Company" field'|
@@ -369,3 +438,54 @@ Scenario: _02020 check the display of the header of the collapsible group in Inc
         |'And I click Select button of  "Company" field'|
 	And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
 	And I close all client application windows
+
+
+Scenario: _023121 check the display of the header of the collapsible group in Retail sales receipt
+	* Open list form Sales order
+		Given I open hyperlink "e1cib/list/Document.RetailSalesReceipt"
+	* Check the display of the header of the collapsible group
+		When check the display of the header of the collapsible group in sales, purchase and return documents
+		Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Company: Main Company   Partner: Ferron BP   Legal name: Company Ferron BP" text
+	And I click the hyperlink named "DecorationGroupTitleUncollapsedLabel"
+	When I Check the steps for Exception
+        |'And I click Select button of  "Partner" field'|
+	And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
+	And I close all client application windows
+
+Scenario: _023122 check the display of the header of the collapsible group in Retail return receipt
+	* Open list form Sales order
+		Given I open hyperlink "e1cib/list/Document.RetailReturnReceipt"
+	* Check the display of the header of the collapsible group
+		When check the display of the header of the collapsible group in sales, purchase and return documents
+		Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Company: Main Company   Partner: Ferron BP   Legal name: Company Ferron BP" text
+	And I click the hyperlink named "DecorationGroupTitleUncollapsedLabel"
+	When I Check the steps for Exception
+        |'And I click Select button of  "Partner" field'|
+	And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
+	And I close all client application windows
+
+Scenario: _02023 check the display of the header of the collapsible group in PlannedReceiptReservation
+	Given I open hyperlink "e1cib/list/Document.PlannedReceiptReservation"
+	* Check the display of the header of the collapsible group
+		When check the display of the header of the collapsible group in OpeningEntry
+		Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Company: Main Company" text
+	And I click the hyperlink named "DecorationGroupTitleUncollapsedLabel"
+	When I Check the steps for Exception
+        |'And I click Select button of  "Company" field'|
+	And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
+	And I close all client application windows
+
+Scenario: _023124 check the display of the header of the collapsible group in Sales order closing
+	* Open list form Sales order closing
+		Given I open hyperlink "e1cib/list/Document.SalesOrderClosing"
+	* Check the display of the header of the collapsible group
+		When check the display of the header of the collapsible group in sales, purchase and return documents
+		Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Company: Main Company   Partner: Ferron BP   Legal name: Company Ferron BP" text
+	And I click the hyperlink named "DecorationGroupTitleUncollapsedLabel"
+	When I Check the steps for Exception
+        |'And I click Select button of  "Partner" field'|
+	And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
+	And I close all client application windows
+
+Scenario: _999999 close TestClient session
+	And I close TestClient session

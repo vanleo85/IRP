@@ -1,5 +1,5 @@
-Procedure WriteStatusToRegister(DocumentRef, Status, Date,
-		AddInfo = Undefined) Export
+Procedure WriteStatusToRegister(DocumentRef, Status, AddInfo = Undefined) Export
+	Date = CurrentSessionDate();
 	LastStatusInfo = GetLastStatusInfo(DocumentRef);
 	If LastStatusInfo.Status = Status Then
 		Return;
@@ -213,7 +213,6 @@ Function StatusHasPostingType(Status, PostingType) Export
 	Return Not QueryResult.IsEmpty();
 	
 EndFunction
-							
 								
 Function CreatePostingStructure()
 	Result = New Structure();
@@ -304,4 +303,3 @@ Function GetObjectStatusesChoiceDataTable(SearchString, ArrayOfFilters,
 	TableOfResult = Catalogs.ObjectStatuses.GetChoiceDataTable(Parameters);
 	Return TableOfResult.UnloadColumn("Ref");
 EndFunction
-

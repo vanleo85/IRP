@@ -75,6 +75,7 @@ EndProcedure
 &AtServer
 Procedure OnReadAtServer(CurrentObject)
 	DocSalesOrderServer.OnReadAtServer(Object, ThisObject, CurrentObject);
+	ThisObject.ClosingOrder = DocSalesOrderServer.GetLastSalesOrderClosingBySalesOrder(Object.Ref);
 	SetVisibilityAvailability(CurrentObject, ThisObject);
 EndProcedure
 
@@ -86,6 +87,10 @@ EndProcedure
 &AtClientAtServerNoContext
 Procedure SetVisibilityAvailability(Object, Form) Export
 	Form.Items.LegalName.Enabled = ValueIsFilled(Object.Partner);
+	If Not Form.ClosingOrder.IsEmpty() Then
+		Form.ReadOnly = True;
+	EndIf;
+	Form.Items.GroupHead.Visible = Not Form.ClosingOrder.IsEmpty();
 EndProcedure
 
 &AtServer
@@ -117,12 +122,8 @@ Procedure UpdateTotalAmounts()
 	ThisObject.TotalTotalAmount = 0;
 	ThisObject.TotalTaxAmount = 0;
 	ThisObject.TotalOffersAmount = 0;
-	ProcurementMethods_Repeal = PredefinedValue("Enum.ProcurementMethods.Repeal");
-	ProcurementMethods_EmptyRef = PredefinedValue("Enum.ProcurementMethods.EmptyRef");
-	IsService = PredefinedValue("Enum.ItemTypes.Service");
 	For Each Row In Object.ItemList Do
-		If Row.ProcurementMethod = ProcurementMethods_Repeal 
-		Or (Row.ProcurementMethod = ProcurementMethods_EmptyRef And Row.ItemType <> IsService) Then
+		If Row.Cancel Then
 			Continue;
 		EndIf;
 		ThisObject.TotalNetAmount = ThisObject.TotalNetAmount + Row.NetAmount;
@@ -304,11 +305,26 @@ EndProcedure
 
 &AtClient
 Procedure ItemListProcurementMethodOnChange(Item)
-	UpdateTotalAmounts();
+	Return;
 EndProcedure
 
 &AtClient
 Procedure ItemListNetAmountOnChange(Item)
+	UpdateTotalAmounts();
+EndProcedure
+
+&AtClient
+Procedure ItemListRevenueTypeStartChoice(Item, ChoiceData, StandardProcessing)
+	DocSalesOrderClient.ItemListRevenueTypeStartChoice(Object, ThisObject, Item, ChoiceData, StandardProcessing);
+EndProcedure
+
+&AtClient
+Procedure ItemListRevenueTypeEditTextChange(Item, Text, StandardProcessing)
+	DocSalesOrderClient.ItemListRevenueTypeEditTextChange(Object, ThisObject, Item, Text, StandardProcessing);
+EndProcedure
+
+&AtClient
+Procedure ItemListCancelOnChange(Item)
 	UpdateTotalAmounts();
 EndProcedure
 

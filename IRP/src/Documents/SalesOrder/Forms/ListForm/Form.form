@@ -54,6 +54,10 @@
     <items xsi:type="form:FormField">
       <name>Number</name>
       <id>16</id>
+      <title>
+        <key>en</key>
+        <value>Number</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -103,6 +107,10 @@
     <items xsi:type="form:FormField">
       <name>Date</name>
       <id>19</id>
+      <title>
+        <key>en</key>
+        <value>Date</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -149,8 +157,55 @@
       </extInfo>
     </items>
     <items xsi:type="form:FormField">
+      <name>Closed</name>
+      <id>43</id>
+      <visible>true</visible>
+      <enabled>true</enabled>
+      <userVisible>
+        <common>true</common>
+      </userVisible>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Closed</segments>
+      </dataPath>
+      <extendedTooltip>
+        <name>ClosedExtendedTooltip</name>
+        <id>45</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <type>Label</type>
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <extInfo xsi:type="form:LabelDecorationExtInfo">
+          <horizontalAlign>Left</horizontalAlign>
+        </extInfo>
+      </extendedTooltip>
+      <contextMenu>
+        <name>ClosedContextMenu</name>
+        <id>44</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <autoFill>true</autoFill>
+      </contextMenu>
+      <type>CheckBoxField</type>
+      <editMode>Enter</editMode>
+      <showInHeader>true</showInHeader>
+      <headerHorizontalAlign>Left</headerHorizontalAlign>
+      <showInFooter>true</showInFooter>
+      <extInfo xsi:type="form:CheckBoxFieldExtInfo"/>
+    </items>
+    <items xsi:type="form:FormField">
       <name>Partner</name>
       <id>22</id>
+      <title>
+        <key>en</key>
+        <value>Partner</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -199,6 +254,10 @@
     <items xsi:type="form:FormField">
       <name>Status</name>
       <id>34</id>
+      <title>
+        <key>en</key>
+        <value>Status</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -308,6 +367,10 @@
     <items xsi:type="form:FormField">
       <name>Currency</name>
       <id>31</id>
+      <title>
+        <key>en</key>
+        <value>Currency</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -360,6 +423,10 @@
     <items xsi:type="form:FormField">
       <name>Company</name>
       <id>37</id>
+      <title>
+        <key>en</key>
+        <value>Company</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -410,8 +477,62 @@
       </extInfo>
     </items>
     <items xsi:type="form:FormField">
+      <name>Store</name>
+      <id>49</id>
+      <visible>true</visible>
+      <enabled>true</enabled>
+      <userVisible>
+        <common>true</common>
+      </userVisible>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Store</segments>
+      </dataPath>
+      <extendedTooltip>
+        <name>StoreExtendedTooltip</name>
+        <id>51</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <type>Label</type>
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <extInfo xsi:type="form:LabelDecorationExtInfo">
+          <horizontalAlign>Left</horizontalAlign>
+        </extInfo>
+      </extendedTooltip>
+      <contextMenu>
+        <name>StoreContextMenu</name>
+        <id>50</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <autoFill>true</autoFill>
+      </contextMenu>
+      <type>InputField</type>
+      <editMode>Enter</editMode>
+      <showInHeader>true</showInHeader>
+      <headerHorizontalAlign>Left</headerHorizontalAlign>
+      <showInFooter>true</showInFooter>
+      <extInfo xsi:type="form:InputFieldExtInfo">
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <wrap>true</wrap>
+        <chooseType>true</chooseType>
+        <typeDomainEnabled>true</typeDomainEnabled>
+        <textEdit>true</textEdit>
+      </extInfo>
+    </items>
+    <items xsi:type="form:FormField">
       <name>Author</name>
       <id>40</id>
+      <title>
+        <key>en</key>
+        <value>Author</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -492,6 +613,56 @@
       <contextMenu>
         <name>RefContextMenu</name>
         <id>29</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <autoFill>true</autoFill>
+      </contextMenu>
+      <type>InputField</type>
+      <editMode>Enter</editMode>
+      <showInHeader>true</showInHeader>
+      <headerHorizontalAlign>Left</headerHorizontalAlign>
+      <showInFooter>true</showInFooter>
+      <extInfo xsi:type="form:InputFieldExtInfo">
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <wrap>true</wrap>
+        <chooseType>true</chooseType>
+        <typeDomainEnabled>true</typeDomainEnabled>
+        <textEdit>true</textEdit>
+      </extInfo>
+    </items>
+    <items xsi:type="form:FormField">
+      <name>ClosingOrder</name>
+      <id>46</id>
+      <visible>true</visible>
+      <enabled>true</enabled>
+      <userVisible>
+        <common>true</common>
+      </userVisible>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.ClosingOrder</segments>
+      </dataPath>
+      <extendedTooltip>
+        <name>ClosingOrderExtendedTooltip</name>
+        <id>48</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <type>Label</type>
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <extInfo xsi:type="form:LabelDecorationExtInfo">
+          <horizontalAlign>Left</horizontalAlign>
+        </extInfo>
+      </extendedTooltip>
+      <contextMenu>
+        <name>ClosingOrderContextMenu</name>
+        <id>47</id>
         <visible>true</visible>
         <enabled>true</enabled>
         <userVisible>
@@ -735,26 +906,53 @@
     </edit>
     <main>true</main>
     <extInfo xsi:type="form:DynamicListExtInfo">
-      <queryText>SELECT 
-       SalesOrder.Ref, 
-       SalesOrder.DeletionMark, 
-       SalesOrder.Number, 
-       SalesOrder.Date, 
-       SalesOrder.Posted, 
-       SalesOrder.Partner, 
-       SalesOrder.Company, 
-       SalesOrder.Currency, 
-       SalesOrder.DateOfShipment,  
-       SalesOrder.ManagerSegment, 
-       SalesOrder.Status, 
-       SalesOrder.Agreement, 
-       SalesOrder.PriceIncludeTax, 
-       SalesOrder.DocumentAmount,
-       SalesOrder.Author
- FROM 
-       Document.SalesOrder
- AS 
-       SalesOrder</queryText>
+      <queryText>SELECT
+	SalesOrderList.Ref,
+	SalesOrderList.DeletionMark,
+	SalesOrderList.Number,
+	SalesOrderList.Date,
+	SalesOrderList.Posted,
+	SalesOrderList.Partner,
+	SalesOrderList.Company,
+	SalesOrderList.Currency,
+	SalesOrderList.DateOfShipment,
+	SalesOrderList.ManagerSegment,
+	SalesOrderList.Status,
+	SalesOrderList.Agreement,
+	SalesOrderList.PriceIncludeTax,
+	SalesOrderList.DocumentAmount,
+	SalesOrderList.Author,
+	Not SalesOrderClosing.Ref IS NULL AS Closed,
+	SalesOrderClosing.Ref AS ClosingOrder,
+	CASE WHEN COUNT(DISTINCT SalesOrderItemList.Store) = 1 THEN
+		MAX(SalesOrderItemList.Store)
+	ELSE UNDEFINED END AS Store
+FROM
+	Document.SalesOrder AS SalesOrderList
+		LEFT JOIN Document.SalesOrderClosing AS SalesOrderClosing
+		ON SalesOrderClosing.SalesOrder = SalesOrderList.Ref
+		AND SalesOrderClosing.Posted
+		AND SalesOrderClosing.CloseOrder
+		LEFT JOIN Document.SalesOrder.ItemList AS SalesOrderItemList
+		ON SalesOrderItemList.Ref = SalesOrderList.Ref
+GROUP BY
+	SalesOrderList.Ref,
+	SalesOrderList.DeletionMark,
+	SalesOrderList.Number,
+	SalesOrderList.Date,
+	SalesOrderList.Posted,
+	SalesOrderList.Partner,
+	SalesOrderList.Company,
+	SalesOrderList.Currency,
+	SalesOrderList.DateOfShipment,
+	SalesOrderList.ManagerSegment,
+	SalesOrderList.Status,
+	SalesOrderList.Agreement,
+	SalesOrderList.PriceIncludeTax,
+	SalesOrderList.DocumentAmount,
+	SalesOrderList.Author,
+	NOT SalesOrderClosing.Ref IS NULL,
+	SalesOrderClosing.Ref</queryText>
       <mainTable>Document.SalesOrder</mainTable>
       <dynamicDataRead>true</dynamicDataRead>
       <autoFillAvailableFields>true</autoFillAvailableFields>

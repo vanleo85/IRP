@@ -59,8 +59,10 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:DataPath">
-        <segments>List.Code</segments>
+      <dataPath xsi:type="form:MultiLanguageDataPath">
+        <paths xsi:type="form:DataPath">
+          <segments>List.Code</segments>
+        </paths>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -104,6 +106,10 @@
     <items xsi:type="form:FormField">
       <name>Description</name>
       <id>16</id>
+      <title>
+        <key>en</key>
+        <value>Description</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -443,6 +449,13 @@ WHERE
 			THEN Table.Item = &amp;Item
 			OR Table.Ref = &amp;Unit
 		ELSE Table.Item.Ref IS NULL
+	END
+	AND 
+	CASE
+		WHEN &amp;FilterForItemsAndKeys
+			THEN Table.BasisUnit = VALUE(Catalog.Units.EmptyRef)
+				AND Table.Quantity = 1
+		ELSE True
 	END</queryText>
       <mainTable>Catalog.Units</mainTable>
       <dynamicDataRead>true</dynamicDataRead>

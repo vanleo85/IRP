@@ -66,13 +66,22 @@
   <defaultListForm>Document.SalesOrder.Form.ListForm</defaultListForm>
   <defaultChoiceForm>Document.SalesOrder.Form.ChoiceForm</defaultChoiceForm>
   <realTimePosting>Deny</realTimePosting>
+  <registerRecords>AccumulationRegister.R2010T_SalesOrders</registerRecords>
+  <registerRecords>AccumulationRegister.R2014T_CanceledSalesOrders</registerRecords>
   <registerRecords>AccumulationRegister.InventoryBalance</registerRecords>
   <registerRecords>AccumulationRegister.ItemsInStores</registerRecords>
+  <registerRecords>AccumulationRegister.R4013B_StockReservationPlanning</registerRecords>
   <registerRecords>AccumulationRegister.GoodsInTransitOutgoing</registerRecords>
+  <registerRecords>AccumulationRegister.R2011B_SalesOrdersShipment</registerRecords>
   <registerRecords>AccumulationRegister.OrderReservation</registerRecords>
   <registerRecords>AccumulationRegister.OrderProcurement</registerRecords>
+  <registerRecords>AccumulationRegister.R4011B_FreeStocks</registerRecords>
+  <registerRecords>AccumulationRegister.R4012B_StockReservation</registerRecords>
   <registerRecords>AccumulationRegister.StockReservation</registerRecords>
+  <registerRecords>AccumulationRegister.R2013T_SalesOrdersProcurement</registerRecords>
   <registerRecords>AccumulationRegister.ShipmentOrders</registerRecords>
+  <registerRecords>AccumulationRegister.R4034B_GoodsShipmentSchedule</registerRecords>
+  <registerRecords>AccumulationRegister.R2012B_SalesOrdersInvoiceClosing</registerRecords>
   <registerRecords>AccumulationRegister.SalesOrderTurnovers</registerRecords>
   <registerRecords>AccumulationRegister.OrderBalance</registerRecords>
   <registerRecords>AccumulationRegister.StockBalance</registerRecords>
@@ -174,7 +183,6 @@
     </type>
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>
-    <fillChecking>ShowError</fillChecking>
     <choiceParameters>
       <name>Filter.Managers</name>
       <value xsi:type="core:BooleanValue">
@@ -211,7 +219,7 @@
     <name>PriceIncludeTax</name>
     <synonym>
       <key>en</key>
-      <value>Price include tax</value>
+      <value>Price includes tax</value>
     </synonym>
     <type>
       <types>Boolean</types>
@@ -259,6 +267,21 @@
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
+  <attributes uuid="dfff36bf-633a-4024-993c-19a27e4d6fd1">
+    <name>UseItemsShipmentScheduling</name>
+    <synonym>
+      <key>en</key>
+      <value>Use items shipment scheduling</value>
+    </synonym>
+    <type>
+      <types>Boolean</types>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fillValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+  </attributes>
   <forms uuid="da0b4929-44ad-4c0f-a6f4-ef6de3bf7bf4">
     <name>DocumentForm</name>
     <synonym>
@@ -286,15 +309,6 @@
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
-  <forms uuid="f71fba22-5753-43d4-9e09-52b3ed061064">
-    <name>ReadForm</name>
-    <synonym>
-      <key>en</key>
-      <value>Read form</value>
-    </synonym>
-    <usePurposes>PersonalComputer</usePurposes>
-    <usePurposes>MobileDevice</usePurposes>
-  </forms>
   <tabularSections uuid="0e15a78f-7f06-4645-94b0-f87294cd6fea">
     <producedTypes>
       <objectType typeId="32f9a8d5-bc00-4370-9c05-2229eeeae8b9" valueTypeId="1a9129b0-97b0-42f1-85d1-0de73f76dc0d"/>
@@ -312,7 +326,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -552,6 +566,33 @@
       <dataHistory>Use</dataHistory>
       <fullTextSearch>Use</fullTextSearch>
     </attributes>
+    <attributes uuid="b4e1d9e1-b8c2-4af2-8632-70d35e778a70">
+      <name>QuantityInBaseUnit</name>
+      <synonym>
+        <key>en</key>
+        <value>Quantity in base unit</value>
+      </synonym>
+      <type>
+        <types>DefinedType.typeQuantity</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+    </attributes>
+    <attributes uuid="cbd4d052-b0d4-4c37-8bb4-922394bcc74f">
+      <name>CancelReason</name>
+      <synonym>
+        <key>en</key>
+        <value>Cancel reason</value>
+      </synonym>
+      <type>
+        <types>CatalogRef.CancelReturnReasons</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
   </tabularSections>
   <tabularSections uuid="46bdc8b0-f18a-4783-ad94-9d5dfcc5f136">
     <producedTypes>
@@ -570,7 +611,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -633,7 +674,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -776,7 +817,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -885,12 +926,4 @@
       <fullTextSearch>Use</fullTextSearch>
     </attributes>
   </tabularSections>
-  <templates uuid="49bcfb75-edcc-4bcc-aa5b-3e8fd79d8def">
-    <name>ReadDCS</name>
-    <synonym>
-      <key>en</key>
-      <value>Read DCS</value>
-    </synonym>
-    <templateType>DataCompositionSchema</templateType>
-  </templates>
 </mdclass:Document>

@@ -14,6 +14,7 @@
     <types>ChartOfCharacteristicTypesObject.CustomUserSettings</types>
     <types>CatalogObject.ObjectStatuses</types>
     <types>CatalogObject.IntegrationSettings</types>
+    <types>CatalogObject.DataMappingItems</types>
     <types>CatalogObject.ItemTypes</types>
     <types>CatalogObject.AddAttributeAndPropertyValues</types>
     <types>CatalogObject.Extensions</types>

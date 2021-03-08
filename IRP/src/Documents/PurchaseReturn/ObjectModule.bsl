@@ -6,6 +6,18 @@ Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 	ThisObject.DocumentAmount = ThisObject.ItemList.Total("TotalAmount");
 EndProcedure
 
+Procedure OnWrite(Cancel)
+	If DataExchange.Load Then
+		Return;
+	EndIf;	
+EndProcedure
+
+Procedure BeforeDelete(Cancel)
+	If DataExchange.Load Then
+		Return;
+	EndIf;
+EndProcedure
+
 Procedure Posting(Cancel, PostingMode)
 	PostingServer.Post(ThisObject, Cancel, PostingMode, ThisObject.AdditionalProperties);
 EndProcedure
@@ -18,8 +30,12 @@ Procedure Filling(FillingData, FillingText, StandardProcessing)
 	If TypeOf(FillingData) = Type("Structure") Then
 		If FillingData.Property("BasedOn") And FillingData.BasedOn = "PurchaseInvoice" Then
 			Filling_BasedOnPurchaseInvoice(FillingData);
-		ElsIf FillingData.Property("BasedOn") And FillingData.BasedOn = "PurchaseReturnOrder" Then
+		EndIf;
+		If FillingData.Property("BasedOn") And FillingData.BasedOn = "PurchaseReturnOrder" Then
 			Filling_BasedOnPurchaseReturnOrder(FillingData);
+		EndIf;
+		If FillingData.Property("BasedOn") And FillingData.BasedOn = "ShipmentConfirmation" Then
+			Filling_BasedOnShipmentConfirmation(FillingData);
 		EndIf;
 	EndIf;
 EndProcedure
@@ -38,6 +54,10 @@ Procedure Filling_BasedOnPurchaseInvoice(FillingData)
 	EndDo;
 	For Each Row In FillingData.SpecialOffers Do
 		NewRow = ThisObject.SpecialOffers.Add();
+		FillPropertyValues(NewRow, Row);
+	EndDo;
+	For Each Row In FillingData.SerialLotNumbers Do
+		NewRow = ThisObject.SerialLotNumbers.Add();
 		FillPropertyValues(NewRow, Row);
 	EndDo;
 EndProcedure
@@ -60,6 +80,19 @@ Procedure Filling_BasedOnPurchaseReturnOrder(FillingData)
 	EndDo;
 EndProcedure
 
+Procedure Filling_BasedOnShipmentConfirmation(FillingData)
+	FillPropertyValues(ThisObject, FillingData, "Company,Partner,LegalName");
+	
+	For Each Row In FillingData.ItemList Do
+		NewRow = ThisObject.ItemList.Add();
+		FillPropertyValues(NewRow, Row);
+	EndDo;
+	For Each Row In FillingData.ShipmentConfirmations Do
+		NewRow = ThisObject.ShipmentConfirmations.Add();
+		FillPropertyValues(NewRow, Row);
+	EndDo;	
+EndProcedure
+
 Procedure OnCopy(CopiedObject)
 	
 	LinkedTables = New Array();
@@ -74,16 +107,7 @@ Procedure FillCheckProcessing(Cancel, CheckedAttributes)
 	If DocumentsServer.CheckItemListStores(ThisObject) Then
 		Cancel = True;	
 	EndIf;
-EndProcedure
-
-Procedure OnWrite(Cancel)
-	If DataExchange.Load Then
-		Return;
+	If Not SerialLotNumbersServer.CheckFilling(ThisObject) Then
+		Cancel = True;
 	EndIf;	
-EndProcedure
-
-Procedure BeforeDelete(Cancel)
-	If DataExchange.Load Then
-		Return;
-	EndIf;
 EndProcedure

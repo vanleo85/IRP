@@ -69,7 +69,7 @@ Scenario: open a special offer window
 
 Scenario: enter the discount period this month
 	And I input begin of the current month date in "Start of" field
-	And I input end of the current month date in "End of" field
+	And I input begin of the next month date in "End of" field
 
 Scenario: add a special offer rule
 	And in the table "Rules" I click the button named "RulesAdd"
@@ -845,7 +845,7 @@ Scenario: create an order for Lomaniti Basic Partner terms, TRY (Dress and Boots
 		And I input "1,000" text in "Q" field of "ItemList" table
 		And I select "Stock" exact value from "Procurement method" drop-down list in "ItemList" table
 		And I finish line editing in "ItemList" table
-	And I click "Post" button
+	And I click the button named "FormPost"
 
 
 

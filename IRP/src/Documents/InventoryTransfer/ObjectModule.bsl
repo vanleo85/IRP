@@ -1,7 +1,24 @@
 Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 	If DataExchange.Load Then
 		Return;
+	EndIf;
+		
+	If UseShipmentConfirmation And Not UseGoodsReceipt Then
+		CommonFunctionsClientServer.ShowUsersMessage(R().Error_094, "UseGoodsReceipt");
+		Cancel = True;
+	EndIf;
+EndProcedure
+
+Procedure OnWrite(Cancel)
+	If DataExchange.Load Then
+		Return;
 	EndIf;	
+EndProcedure
+
+Procedure BeforeDelete(Cancel)
+	If DataExchange.Load Then
+		Return;
+	EndIf;
 EndProcedure
 
 Procedure Posting(Cancel, PostingMode)
@@ -33,16 +50,4 @@ Procedure Filling_BasedOnInventoryTransferOrder(FillingData)
 		NewRow = ThisObject.ItemList.Add();
 		FillPropertyValues(NewRow, Row);
 	EndDo;
-EndProcedure
-
-Procedure OnWrite(Cancel)
-	If DataExchange.Load Then
-		Return;
-	EndIf;	
-EndProcedure
-
-Procedure BeforeDelete(Cancel)
-	If DataExchange.Load Then
-		Return;
-	EndIf;
 EndProcedure

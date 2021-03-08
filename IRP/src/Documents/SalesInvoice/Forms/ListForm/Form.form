@@ -54,6 +54,10 @@
     <items xsi:type="form:FormField">
       <name>Number</name>
       <id>16</id>
+      <title>
+        <key>en</key>
+        <value>Number</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -103,6 +107,10 @@
     <items xsi:type="form:FormField">
       <name>Date</name>
       <id>19</id>
+      <title>
+        <key>en</key>
+        <value>Date</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -151,6 +159,10 @@
     <items xsi:type="form:FormField">
       <name>Partner</name>
       <id>22</id>
+      <title>
+        <key>en</key>
+        <value>Partner</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -199,6 +211,10 @@
     <items xsi:type="form:FormField">
       <name>LegalName</name>
       <id>37</id>
+      <title>
+        <key>en</key>
+        <value>Legal name</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -303,6 +319,10 @@
     <items xsi:type="form:FormField">
       <name>Currency</name>
       <id>31</id>
+      <title>
+        <key>en</key>
+        <value>Currency</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -355,6 +375,10 @@
     <items xsi:type="form:FormField">
       <name>Company</name>
       <id>34</id>
+      <title>
+        <key>en</key>
+        <value>Company</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -405,8 +429,62 @@
       </extInfo>
     </items>
     <items xsi:type="form:FormField">
+      <name>Store</name>
+      <id>43</id>
+      <visible>true</visible>
+      <enabled>true</enabled>
+      <userVisible>
+        <common>true</common>
+      </userVisible>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Store</segments>
+      </dataPath>
+      <extendedTooltip>
+        <name>StoreExtendedTooltip</name>
+        <id>45</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <type>Label</type>
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <extInfo xsi:type="form:LabelDecorationExtInfo">
+          <horizontalAlign>Left</horizontalAlign>
+        </extInfo>
+      </extendedTooltip>
+      <contextMenu>
+        <name>StoreContextMenu</name>
+        <id>44</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <autoFill>true</autoFill>
+      </contextMenu>
+      <type>InputField</type>
+      <editMode>Enter</editMode>
+      <showInHeader>true</showInHeader>
+      <headerHorizontalAlign>Left</headerHorizontalAlign>
+      <showInFooter>true</showInFooter>
+      <extInfo xsi:type="form:InputFieldExtInfo">
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <wrap>true</wrap>
+        <chooseType>true</chooseType>
+        <typeDomainEnabled>true</typeDomainEnabled>
+        <textEdit>true</textEdit>
+      </extInfo>
+    </items>
+    <items xsi:type="form:FormField">
       <name>Author</name>
       <id>40</id>
+      <title>
+        <key>en</key>
+        <value>Author</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -730,25 +808,41 @@
     </edit>
     <main>true</main>
     <extInfo xsi:type="form:DynamicListExtInfo">
-      <queryText>SELECT 
-       SalesInvoice.Ref, 
-       SalesInvoice.DeletionMark, 
-       SalesInvoice.Number, 
-       SalesInvoice.Date, 
-       SalesInvoice.Posted, 
-       SalesInvoice.Partner, 
-       SalesInvoice.LegalName,
-       SalesInvoice.Company, 
-       SalesInvoice.Currency,   
-       SalesInvoice.Manager, 
-       SalesInvoice.BasisDocument, 
-       SalesInvoice.DocumentAmount,
-       SalesInvoice.Author
-      
- FROM 
-       Document.SalesInvoice
- AS 
-       SalesInvoice</queryText>
+      <queryText>SELECT
+	SalesInvoice.Ref,
+	SalesInvoice.DeletionMark,
+	SalesInvoice.Number,
+	SalesInvoice.Date,
+	SalesInvoice.Posted,
+	SalesInvoice.Partner,
+	SalesInvoice.LegalName,
+	SalesInvoice.Company,
+	SalesInvoice.Currency,
+	SalesInvoice.Manager,
+	SalesInvoice.BasisDocument,
+	SalesInvoice.DocumentAmount,
+	SalesInvoice.Author,
+	CASE WHEN COUNT(DISTINCT SalesInvoiceItemList.Store) = 1 THEN
+		MAX(SalesInvoiceItemList.Store)
+	ELSE UNDEFINED END AS Store
+FROM
+	Document.SalesInvoice AS SalesInvoice
+		LEFT JOIN Document.SalesInvoice.ItemList AS SalesInvoiceItemList
+		ON SalesInvoiceItemList.Ref = SalesInvoice.Ref
+GROUP BY
+	SalesInvoice.Ref,
+	SalesInvoice.DeletionMark,
+	SalesInvoice.Number,
+	SalesInvoice.Date,
+	SalesInvoice.Posted,
+	SalesInvoice.Partner,
+	SalesInvoice.LegalName,
+	SalesInvoice.Company,
+	SalesInvoice.Currency,
+	SalesInvoice.Manager,
+	SalesInvoice.BasisDocument,
+	SalesInvoice.DocumentAmount,
+	SalesInvoice.Author</queryText>
       <mainTable>Document.SalesInvoice</mainTable>
       <dynamicDataRead>true</dynamicDataRead>
       <autoFillAvailableFields>true</autoFillAvailableFields>

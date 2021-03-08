@@ -1,348 +1,64 @@
 #Region Posting
 
 Function PostingGetDocumentDataTables(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
-	Query = New Query();
-	Query.Text =
-		"SELECT
-		|	SalesReturnItemList.Ref.Company AS Company,
-		|	SalesReturnItemList.Store AS Store,
-		|	SalesReturnItemList.Store.UseGoodsReceipt AS UseGoodsReceipt,
-		|	SalesReturnItemList.ItemKey AS ItemKey,
-		|	SalesReturnItemList.SalesReturnOrder AS SalesReturnOrder,
-		|	SalesReturnItemList.Ref AS SalesReturn,
-		|	CASE
-		|		WHEN SalesReturnItemList.Ref.Agreement.ApArPostingDetail = VALUE(Enum.ApArPostingDetail.ByDocuments)
-		|			THEN SalesReturnItemList.Ref
-		|		ELSE UNDEFINED
-		|	END AS BasisDocument,
-		|	SUM(SalesReturnItemList.Quantity) AS Quantity,
-		|	SUM(SalesReturnItemList.TotalAmount) AS TotalAmount,
-		|	SalesReturnItemList.Ref.Partner AS Partner,
-		|	SalesReturnItemList.Ref.LegalName AS LegalName,
-		|	CASE
-		|		WHEN SalesReturnItemList.Ref.Agreement.Kind = VALUE(Enum.AgreementKinds.Regular)
-		|		AND SalesReturnItemList.Ref.Agreement.ApArPostingDetail = VALUE(Enum.ApArPostingDetail.ByStandardAgreement)
-		|			THEN SalesReturnItemList.Ref.Agreement.StandardAgreement
-		|		ELSE SalesReturnItemList.Ref.Agreement
-		|	END AS Agreement,
-		|	ISNULL(SalesReturnItemList.Ref.Currency, VALUE(Catalog.Currencies.EmptyRef)) AS Currency,
-		|	0 AS BasisQuantity,
-		|	SalesReturnItemList.Unit,
-		|	SalesReturnItemList.ItemKey.Item.Unit AS ItemUnit,
-		|	SalesReturnItemList.ItemKey.Unit AS ItemKeyUnit,
-		|	VALUE(Catalog.Units.EmptyRef) AS BasisUnit,
-		|	SalesReturnItemList.ItemKey.Item AS Item,
-		|	SalesReturnItemList.Ref.Date AS Period,
-		|	CASE
-		|		WHEN SalesReturnItemList.SalesInvoice = VALUE(Document.SalesInvoice.EmptyRef)
-		|			THEN SalesReturnItemList.Ref
-		|		ELSE SalesReturnItemList.SalesInvoice
-		|	END AS SalesInvoice,
-		|	SalesReturnItemList.Key AS RowKey,
-		|	SalesReturnItemList.Ref.IsOpeningEntry AS IsOpeningEntry
-		|FROM
-		|	Document.SalesReturn.ItemList AS SalesReturnItemList
-		|WHERE
-		|	SalesReturnItemList.Ref = &Ref
-		|GROUP BY
-		|	SalesReturnItemList.Ref.Company,
-		|	SalesReturnItemList.Ref.Partner,
-		|	SalesReturnItemList.Ref.LegalName,
-		|	CASE
-		|		WHEN SalesReturnItemList.Ref.Agreement.Kind = VALUE(Enum.AgreementKinds.Regular)
-		|		AND SalesReturnItemList.Ref.Agreement.ApArPostingDetail = VALUE(Enum.ApArPostingDetail.ByStandardAgreement)
-		|			THEN SalesReturnItemList.Ref.Agreement.StandardAgreement
-		|		ELSE SalesReturnItemList.Ref.Agreement
-		|	END,
-		|	ISNULL(SalesReturnItemList.Ref.Currency, VALUE(Catalog.Currencies.EmptyRef)),
-		|	SalesReturnItemList.Store,
-		|	SalesReturnItemList.Store.UseGoodsReceipt,
-		|	SalesReturnItemList.ItemKey,
-		|	SalesReturnItemList.SalesReturnOrder,
-		|	SalesReturnItemList.Ref,
-		|	CASE
-		|		WHEN SalesReturnItemList.Ref.Agreement.ApArPostingDetail = VALUE(Enum.ApArPostingDetail.ByDocuments)
-		|			THEN SalesReturnItemList.Ref
-		|		ELSE UNDEFINED
-		|	END,
-		|	SalesReturnItemList.Unit,
-		|	SalesReturnItemList.ItemKey.Item.Unit,
-		|	SalesReturnItemList.ItemKey.Unit,
-		|	SalesReturnItemList.ItemKey.Item,
-		|	SalesReturnItemList.Ref.Date,
-		|	VALUE(Catalog.Units.EmptyRef),
-		|	CASE
-		|		WHEN SalesReturnItemList.SalesInvoice = VALUE(Document.SalesInvoice.EmptyRef)
-		|			THEN SalesReturnItemList.Ref
-		|		ELSE SalesReturnItemList.SalesInvoice
-		|	END,
-		|	SalesReturnItemList.Key,
-		|	SalesReturnItemList.Ref.IsOpeningEntry";
 	
-	Query.SetParameter("Ref", Ref);
-	QueryResults = Query.Execute();
-	
-	QueryTable = QueryResults.Unload();
-	
-	PostingServer.CalculateQuantityByUnit(QueryTable);
-	
-	Query = New Query();
-	Query.Text =
-		"SELECT
-		|	QueryTable.Company AS Company,
-		|	QueryTable.Partner AS Partner,
-		|	QueryTable.LegalName AS LegalName,
-		|	QueryTable.Agreement AS Agreement,
-		|	QueryTable.Currency AS Currency,
-		|	QueryTable.TotalAmount AS Amount,
-		|	QueryTable.Store AS Store,
-		|	QueryTable.UseGoodsReceipt AS UseGoodsReceipt,
-		|	QueryTable.ItemKey AS ItemKey,
-		|	QueryTable.SalesReturnOrder AS Order,
-		|	QueryTable.SalesReturn AS ReceiptBasis,
-		|	QueryTable.BasisDocument AS BasisDocument,
-		|	QueryTable.BasisQuantity AS Quantity,
-		|	QueryTable.BasisUnit AS Unit,
-		|	QueryTable.Period AS Period,
-		|	QueryTable.SalesInvoice AS SalesInvoice,
-		|	QueryTable.RowKey AS RowKey,
-		|	QueryTable.IsOpeningEntry AS IsOpeningEntry
-		|INTO tmp
-		|FROM
-		|	&QueryTable AS QueryTable
-		|;
-		|
-		|// 1//////////////////////////////////////////////////////////////////////////////
-		|SELECT
-		|	tmp.Company,
-		|	tmp.Store,
-		|	tmp.ItemKey,
-		|	tmp.Order AS Order,
-		|	SUM(tmp.Quantity) AS Quantity,
-		|	tmp.Unit AS Unit,
-		|	tmp.Period,
-		|	tmp.RowKey
-		|FROM
-		|	tmp AS tmp
-		|WHERE
-		|	tmp.Order <> VALUE(Document.SalesReturnOrder.EmptyRef)
-		|	AND
-		|	NOT tmp.IsOpeningEntry
-		|GROUP BY
-		|	tmp.Company,
-		|	tmp.Store,
-		|	tmp.ItemKey,
-		|	tmp.Order,
-		|	tmp.Unit,
-		|	tmp.Period,
-		|	tmp.RowKey
-		|;
-		|
-		|// 2//////////////////////////////////////////////////////////////////////////////
-		|SELECT
-		|	tmp.Company,
-		|	tmp.Store,
-		|	tmp.ItemKey,
-		|	SUM(tmp.Quantity) AS Quantity,
-		|	tmp.Unit AS Unit,
-		|	tmp.Period
-		|FROM
-		|	tmp AS tmp
-		|WHERE
-		|	NOT tmp.IsOpeningEntry
-		|GROUP BY
-		|	tmp.Company,
-		|	tmp.Store,
-		|	tmp.ItemKey,
-		|	tmp.Unit,
-		|	tmp.Period
-		|;
-		|
-		|// 3//////////////////////////////////////////////////////////////////////////////
-		|SELECT
-		|	tmp.Company,
-		|	tmp.Store,
-		|	tmp.ItemKey,
-		|	tmp.ReceiptBasis,
-		|	SUM(tmp.Quantity) AS Quantity,
-		|	tmp.Unit AS Unit,
-		|	tmp.Period,
-		|	tmp.RowKey
-		|FROM
-		|	tmp AS tmp
-		|WHERE
-		|	tmp.UseGoodsReceipt
-		|GROUP BY
-		|	tmp.Company,
-		|	tmp.Store,
-		|	tmp.ItemKey,
-		|	tmp.ReceiptBasis,
-		|	tmp.Unit,
-		|	tmp.Period,
-		|	tmp.RowKey
-		|;
-		|
-		|// 4//////////////////////////////////////////////////////////////////////////////
-		|SELECT
-		|	tmp.Company,
-		|	tmp.Store,
-		|	tmp.ItemKey,
-		|	SUM(tmp.Quantity) AS Quantity,
-		|	tmp.Unit AS Unit,
-		|	tmp.Period
-		|FROM
-		|	tmp AS tmp
-		|WHERE
-		|	NOT tmp.UseGoodsReceipt
-		|	AND
-		|	NOT tmp.IsOpeningEntry
-		|GROUP BY
-		|	tmp.Company,
-		|	tmp.Store,
-		|	tmp.ItemKey,
-		|	tmp.Unit,
-		|	tmp.Period
-		|;
-		|
-		|// 5//////////////////////////////////////////////////////////////////////////////
-		|SELECT
-		|	tmp.Company,
-		|	tmp.Store,
-		|	tmp.ItemKey,
-		|	SUM(tmp.Quantity) AS Quantity,
-		|	tmp.Unit AS Unit,
-		|	tmp.Period
-		|FROM
-		|	tmp AS tmp
-		|WHERE
-		|	NOT tmp.UseGoodsReceipt
-		|	AND
-		|	NOT tmp.IsOpeningEntry
-		|GROUP BY
-		|	tmp.Company,
-		|	tmp.Store,
-		|	tmp.ItemKey,
-		|	tmp.Unit,
-		|	tmp.Period
-		|;
-		|
-		|// 6//////////////////////////////////////////////////////////////////////////////
-		|SELECT
-		|	tmp.Company AS Company,
-		|	tmp.BasisDocument AS BasisDocument,
-		|
-		|	tmp.Partner AS Partner,
-		|	tmp.LegalName AS LegalName,
-		|	tmp.Agreement AS Agreement,
-		|	tmp.Currency AS Currency,
-		|	SUM(Amount) AS Amount,
-		|	Period
-		|FROM
-		|	tmp AS tmp
-		|WHERE
-		|	NOT tmp.IsOpeningEntry
-		|GROUP BY
-		|	tmp.Company,
-		|	tmp.BasisDocument,
-		|
-		|	tmp.Partner,
-		|	tmp.LegalName,
-		|	tmp.Agreement,
-		|	tmp.Currency,
-		|	tmp.Period,
-		|	Period
-		|;
-		|
-		|// 7//////////////////////////////////////////////////////////////////////////////
-		|SELECT
-		|	tmp.Company AS Company,
-		|	tmp.BasisDocument AS BasisDocument,
-		|
-		|	tmp.Partner AS Partner,
-		|	tmp.LegalName AS LegalName,
-		|	tmp.Agreement AS Agreement,
-		|	tmp.Currency AS Currency,
-		|	SUM(tmp.Amount) AS DocumentAmount,
-		|	tmp.Period
-		|FROM
-		|	tmp AS tmp
-		|WHERE
-		|	NOT tmp.IsOpeningEntry
-		|GROUP BY
-		|	tmp.Company,
-		|	tmp.BasisDocument,
-		|
-		|	tmp.Partner,
-		|	tmp.LegalName,
-		|	tmp.Agreement,
-		|	tmp.Currency,
-		|	tmp.Period
-		|;
-		|
-		|// 8//////////////////////////////////////////////////////////////////////////////
-		|SELECT
-		|	tmp.Company AS Company,
-		|	tmp.LegalName AS LegalName,
-		|	tmp.Currency AS Currency,
-		|	SUM(Amount) AS Amount,
-		|	Period
-		|FROM
-		|	tmp AS tmp
-		|GROUP BY
-		|	tmp.Company,
-		|	tmp.LegalName,
-		|	tmp.Currency,
-		|	tmp.Period,
-		|	Period
-		|;
-		|// 9//////////////////////////////////////////////////////////////////////////////
-		|SELECT
-		|	tmp.Company,
-		|	tmp.Currency,
-		|	tmp.ItemKey,
-		|	-SUM(tmp.Quantity) AS Quantity,
-		|	-SUM(tmp.Amount) AS Amount,
-		|	tmp.Period,
-		|	tmp.SalesInvoice,
-		|	tmp.RowKey
-		|FROM
-		|	tmp AS tmp
-		|GROUP BY
-		|	tmp.Company,
-		|	tmp.Currency,
-		|	tmp.ItemKey,
-		|	tmp.Period,
-		|	tmp.SalesInvoice,
-		|	tmp.RowKey
-		|";
-	
-	Query.SetParameter("QueryTable", QueryTable);
-	QueryResults = Query.ExecuteBatch();
-	
+	AccReg = Metadata.AccumulationRegisters;
 	Tables = New Structure();
+	Tables.Insert("OrderBalance"                          , PostingServer.CreateTable(AccReg.OrderBalance));
+	Tables.Insert("InventoryBalance"                      , PostingServer.CreateTable(AccReg.InventoryBalance));
+	Tables.Insert("GoodsInTransitIncoming"                , PostingServer.CreateTable(AccReg.GoodsInTransitIncoming));
+	Tables.Insert("StockBalance"                          , PostingServer.CreateTable(AccReg.StockBalance));
+	Tables.Insert("StockReservation"                      , PostingServer.CreateTable(AccReg.StockReservation));
+	Tables.Insert("PartnerApTransactions"                 , PostingServer.CreateTable(AccReg.PartnerApTransactions));
+	Tables.Insert("AdvanceToSuppliers_Lock"               , PostingServer.CreateTable(AccReg.AdvanceToSuppliers));
+	Tables.Insert("PartnerApTransactions_OffsetOfAdvance" , PostingServer.CreateTable(AccReg.AdvanceToSuppliers));
+	Tables.Insert("ReconciliationStatement"               , PostingServer.CreateTable(AccReg.ReconciliationStatement));
+	Tables.Insert("SalesReturnTurnovers"                  , PostingServer.CreateTable(AccReg.SalesReturnTurnovers));
+	Tables.Insert("SalesTurnovers"                        , PostingServer.CreateTable(AccReg.SalesTurnovers));
+	Tables.Insert("Aging_Expense"                         , PostingServer.CreateTable(AccReg.Aging));
+	Tables.Insert("PartnerArTransactions"                 , PostingServer.CreateTable(AccReg.PartnerArTransactions));
+	Tables.Insert("ExpensesTurnovers"                     , PostingServer.CreateTable(AccReg.ExpensesTurnovers));
 	
-	Tables.Insert("OrderBalance", QueryResults[1].Unload());
+	Tables.Insert("StockReservation_Exists" , PostingServer.CreateTable(AccReg.StockReservation));
+	Tables.Insert("StockBalance_Exists"     , PostingServer.CreateTable(AccReg.StockBalance));
 	
-	Tables.Insert("InventoryBalance", QueryResults[2].Unload());
-	Tables.Insert("GoodsInTransitIncoming", QueryResults[3].Unload());
-	Tables.Insert("StockBalance", QueryResults[4].Unload());
-	Tables.Insert("StockReservation", QueryResults[5].Unload());
-	Tables.Insert("PartnerApTransactions", QueryResults[6].Unload());
-	// For lock
-	Tables.Insert("AdvanceToSuppliers_Lock", QueryResults[7].Unload());
-	// For Registrations
-	Tables.Insert("AdvanceToSuppliers_Registrations", New ValueTable());
-	Tables.Insert("ReconciliationStatement", QueryResults[8].Unload());
-	Tables.Insert("SalesReturnTurnovers", QueryResults[9].Unload());
+	Tables.StockReservation_Exists = 
+	AccumulationRegisters.StockReservation.GetExistsRecords(Ref, AccumulationRecordType.Receipt, AddInfo);
+	
+	Tables.StockBalance_Exists = 
+	AccumulationRegisters.StockBalance.GetExistsRecords(Ref, AccumulationRecordType.Receipt, AddInfo);
+	
+	Query = New Query();
+	Query.SetParameter("Ref", Ref);
+	Query.Text = GetQueryTextQueryTable();
+	QueryResults = Query.ExecuteBatch();
 	
 	QuerySalesTurnovers = New Query();
 	QuerySalesTurnovers.Text = GetQueryTextSalesReturnSalesTurnovers();
 	QuerySalesTurnovers.SetParameter("Ref", Ref);
 	QueryResultSalesTurnovers = QuerySalesTurnovers.Execute();
 	QueryTableSalesTurnovers = QueryResultSalesTurnovers.Unload();
-	Tables.Insert("SalesTurnovers", QueryTableSalesTurnovers);
+	
+	Tables.OrderBalance                     = QueryResults[2].Unload();
+	Tables.InventoryBalance                 = QueryResults[3].Unload();
+	Tables.GoodsInTransitIncoming           = QueryResults[4].Unload();
+	Tables.StockBalance                     = QueryResults[5].Unload();
+	Tables.StockReservation                 = QueryResults[6].Unload();
+	Tables.PartnerApTransactions            = QueryResults[7].Unload();
+	Tables.AdvanceToSuppliers_Lock          = QueryResults[8].Unload();
+	Tables.ReconciliationStatement          = QueryResults[9].Unload();
+	Tables.SalesReturnTurnovers             = QueryResults[10].Unload();
+	Tables.PartnerArTransactions            = QueryResults[11].Unload();
+	Tables.ExpensesTurnovers	            = QueryResults[12].Unload();
+	
+	Tables.SalesTurnovers = QueryTableSalesTurnovers;
 	
 	Parameters.IsReposting = False;
+	
+#Region NewRegistersPosting		
+	QueryArray = GetQueryTextsSecondaryTables();
+	PostingServer.ExecuteQuery(Ref, QueryArray, Parameters);
+#EndRegion	
 	
 	Return Tables;
 EndFunction
@@ -352,17 +68,18 @@ Function GetQueryTextSalesReturnSalesTurnovers()
 	|	SalesReturnItemList.Ref.Company AS Company,
 	|	SalesReturnItemList.Ref.Currency AS Currency,
 	|	SalesReturnItemList.ItemKey AS ItemKey,
-	|	SUM(SalesReturnItemList.Quantity) AS Quantity,
-	|	SUM(ISNULL(SalesReturnSerialLotNumbers.Quantity, 0)) AS QuantityBySerialLtNumbers,
+	|	SalesReturnItemList.Quantity AS Quantity,
+	|	ISNULL(SalesReturnSerialLotNumbers.Quantity, 0) AS QuantityBySerialLtNumbers,
 	|	SalesReturnItemList.Ref.Date AS Period,
 	|	CASE
-	|		WHEN SalesReturnItemList.SalesInvoice = VALUE(Document.SalesInvoice.EmptyRef)
+	|		WHEN SalesReturnItemList.SalesInvoice.Date IS NULL
+	|		OR VALUETYPE(SalesReturnItemList.SalesInvoice) <> TYPE(Document.SalesInvoice)
 	|			THEN SalesReturnItemList.Ref
 	|		ELSE SalesReturnItemList.SalesInvoice
 	|	END AS SalesInvoice,
-	|	SUM(SalesReturnItemList.TotalAmount) AS Amount,
-	|	SUM(SalesReturnItemList.NetAmount) AS NetAmount,
-	|	SUM(SalesReturnItemList.OffersAmount) AS OffersAmount,
+	|	SalesReturnItemList.TotalAmount AS Amount,
+	|	SalesReturnItemList.NetAmount AS NetAmount,
+	|	SalesReturnItemList.OffersAmount AS OffersAmount,
 	|	SalesReturnItemList.Key AS RowKey,
 	|	SalesReturnSerialLotNumbers.SerialLotNumber AS SerialLotNumber
 	|INTO tmp
@@ -375,19 +92,6 @@ Function GetQueryTextSalesReturnSalesTurnovers()
 	|		AND SalesReturnSerialLotNumbers.Ref = &Ref
 	|WHERE
 	|	SalesReturnItemList.Ref = &Ref
-	|GROUP BY
-	|	SalesReturnItemList.Ref.Company,
-	|	SalesReturnItemList.Ref.Currency,
-	|	SalesReturnItemList.ItemKey,
-	|	SalesReturnItemList.Ref.Date,
-	|	SalesReturnItemList.Ref,
-	|	SalesReturnItemList.Key,
-	|	SalesReturnSerialLotNumbers.SerialLotNumber,
-	|	CASE
-	|		WHEN SalesReturnItemList.SalesInvoice = VALUE(Document.SalesInvoice.EmptyRef)
-	|			THEN SalesReturnItemList.Ref
-	|		ELSE SalesReturnItemList.SalesInvoice
-	|	END
 	|;
 	|
 	|////////////////////////////////////////////////////////////////////////////////
@@ -435,111 +139,317 @@ Function GetQueryTextSalesReturnSalesTurnovers()
 	|	tmp AS tmp";
 EndFunction	
 
+Function GetQueryTextQueryTable()
+	Return 	"SELECT
+	|	SalesReturnGoodsReceipts.Key
+	|INTO GoodsReceipts
+	|FROM
+	|	Document.SalesReturn.GoodsReceipts AS SalesReturnGoodsReceipts
+	|WHERE
+	|	SalesReturnGoodsReceipts.Ref = &Ref
+	|GROUP BY
+	|	SalesReturnGoodsReceipts.Key
+	|;
+	|
+	|////////////////////////////////////////////////////////////////////////////////
+	|SELECT
+	|	SalesReturnItemList.Ref.Company AS Company,
+	|	SalesReturnItemList.Store AS Store,
+	|	SalesReturnItemList.Store.UseGoodsReceipt AS UseGoodsReceipt,
+	|	SalesReturnItemList.ItemKey AS ItemKey,
+	|	SalesReturnItemList.SalesReturnOrder AS Order,
+	|	SalesReturnItemList.Ref AS SalesReturn,
+	|	SalesReturnItemList.Ref AS ReceiptBasis,
+	|	CASE
+	|		WHEN SalesReturnItemList.Ref.Agreement.ApArPostingDetail = VALUE(Enum.ApArPostingDetail.ByDocuments)
+	|			THEN SalesReturnItemList.Ref
+	|		ELSE UNDEFINED
+	|	END AS BasisDocument,
+	|	SalesReturnItemList.TotalAmount AS Amount,
+	|	SalesReturnItemList.Ref.Partner AS Partner,
+	|	SalesReturnItemList.Ref.LegalName AS LegalName,
+	|	CASE
+	|		WHEN SalesReturnItemList.Ref.Agreement.Kind = VALUE(Enum.AgreementKinds.Regular)
+	|		AND SalesReturnItemList.Ref.Agreement.ApArPostingDetail = VALUE(Enum.ApArPostingDetail.ByStandardAgreement)
+	|			THEN SalesReturnItemList.Ref.Agreement.StandardAgreement
+	|		ELSE SalesReturnItemList.Ref.Agreement
+	|	END AS Agreement,
+	|	ISNULL(SalesReturnItemList.Ref.Currency, VALUE(Catalog.Currencies.EmptyRef)) AS Currency,
+	|	0 AS BasisQuantity,
+	|	SalesReturnItemList.Unit,
+	|	SalesReturnItemList.ItemKey.Item.Unit AS ItemUnit,
+	|	SalesReturnItemList.ItemKey.Unit AS ItemKeyUnit,
+	|	VALUE(Catalog.Units.EmptyRef) AS BasisUnit,
+	|	SalesReturnItemList.ItemKey.Item AS Item,
+	|	SalesReturnItemList.Ref.Date AS Period,
+	|	CASE
+	|		WHEN SalesReturnItemList.SalesInvoice.Date IS NULL
+	|		OR VALUETYPE(SalesReturnItemList.SalesInvoice) <> TYPE(Document.SalesInvoice)
+	|			THEN SalesReturnItemList.Ref
+	|		ELSE SalesReturnItemList.SalesInvoice
+	|	END AS SalesInvoice,
+	|	SalesReturnItemList.SalesInvoice AS AgingSalesInvoice,
+	|	SalesReturnItemList.Key AS RowKey,
+	|	CASE
+	|		WHEN SalesReturnItemList.ItemKey.Item.ItemType.Type = VALUE(Enum.ItemTypes.Service)
+	|			THEN TRUE
+	|		ELSE FALSE
+	|	END AS IsService,
+	|	NOT GoodsReceipts.Key IS NULL AS GoodsReceiptExists,
+	|	SalesReturnItemList.BusinessUnit,
+	|	SalesReturnItemList.ExpenseType,
+	|	SalesReturnItemList.AdditionalAnalytic,
+	|	SalesReturnItemList.QuantityInBaseUnit AS Quantity
+	|INTO tmp
+	|FROM
+	|	Document.SalesReturn.ItemList AS SalesReturnItemList
+	|		LEFT JOIN GoodsReceipts AS GoodsReceipts
+	|		ON SalesReturnItemList.Key = GoodsReceipts.Key
+	|WHERE
+	|	SalesReturnItemList.Ref = &Ref
+	|;
+	|// 2. OrderBalance //////////////////////////////////////////////////////////////////////////////
+	|SELECT
+	|	tmp.Company,
+	|	tmp.Store,
+	|	tmp.ItemKey,
+	|	tmp.Order AS Order,
+	|	tmp.Quantity AS Quantity,
+	|	tmp.Unit AS Unit,
+	|	tmp.Period,
+	|	tmp.RowKey
+	|FROM
+	|	tmp AS tmp
+	|WHERE
+	|	tmp.Order <> VALUE(Document.SalesReturnOrder.EmptyRef)
+	|;
+	|// 3. InventoryBalance //////////////////////////////////////////////////////////////////////////////
+	|SELECT
+	|	tmp.Company,
+	|	tmp.Store,
+	|	tmp.ItemKey,
+	|	SUM(tmp.Quantity) AS Quantity,
+	|	tmp.Unit AS Unit,
+	|	tmp.Period
+	|FROM
+	|	tmp AS tmp
+	|WHERE
+	|	Not tmp.IsService
+	|GROUP BY
+	|	tmp.Company,
+	|	tmp.Store,
+	|	tmp.ItemKey,
+	|	tmp.Unit,
+	|	tmp.Period
+	|;
+	|// 4. GoodsInTransitIncoming //////////////////////////////////////////////////////////////////////////////
+	|SELECT
+	|	tmp.Company,
+	|	tmp.Store,
+	|	tmp.ItemKey,
+	|	tmp.ReceiptBasis,
+	|	tmp.Quantity AS Quantity,
+	|	tmp.Unit AS Unit,
+	|	tmp.Period,
+	|	tmp.RowKey
+	|FROM
+	|	tmp AS tmp
+	|WHERE
+	|	tmp.UseGoodsReceipt
+	|	AND Not tmp.IsService
+	|	AND NOT tmp.GoodsReceiptExists
+	|;
+	|// 5. StockBalance //////////////////////////////////////////////////////////////////////////////
+	|SELECT
+	|	tmp.Company,
+	|	tmp.Store,
+	|	tmp.ItemKey,
+	|	SUM(tmp.Quantity) AS Quantity,
+	|	tmp.Unit AS Unit,
+	|	tmp.Period
+	|FROM
+	|	tmp AS tmp
+	|WHERE
+	|	NOT tmp.UseGoodsReceipt
+	|	AND Not tmp.IsService
+	|	AND NOT tmp.GoodsReceiptExists
+	|GROUP BY
+	|	tmp.Company,
+	|	tmp.Store,
+	|	tmp.ItemKey,
+	|	tmp.Unit,
+	|	tmp.Period
+	|;
+	|// 6. StockReservation //////////////////////////////////////////////////////////////////////////////
+	|SELECT
+	|	tmp.Company,
+	|	tmp.Store,
+	|	tmp.ItemKey,
+	|	SUM(tmp.Quantity) AS Quantity,
+	|	tmp.Unit AS Unit,
+	|	tmp.Period
+	|FROM
+	|	tmp AS tmp
+	|WHERE
+	|	NOT tmp.UseGoodsReceipt
+	|	AND Not tmp.IsService
+	|	AND Not tmp.GoodsReceiptExists
+	|GROUP BY
+	|	tmp.Company,
+	|	tmp.Store,
+	|	tmp.ItemKey,
+	|	tmp.Unit,
+	|	tmp.Period
+	|;
+	|// 7. PartnerApTransactions //////////////////////////////////////////////////////////////////////////////
+	|SELECT
+	|	tmp.Company AS Company,
+	|	tmp.BasisDocument AS BasisDocument,
+	|	tmp.Partner AS Partner,
+	|	tmp.LegalName AS LegalName,
+	|	tmp.Agreement AS Agreement,
+	|	tmp.Currency AS Currency,
+	|	SUM(Amount) AS Amount,
+	|	tmp.Period
+	|FROM
+	|	tmp AS tmp
+	|GROUP BY
+	|	tmp.Company,
+	|	tmp.BasisDocument,
+	|	tmp.Partner,
+	|	tmp.LegalName,
+	|	tmp.Agreement,
+	|	tmp.Currency,
+	|	tmp.Period
+	|;
+	|// 8. AdvanceToSuppliers_Lock //////////////////////////////////////////////////////////////////////////////
+	|SELECT
+	|	tmp.Company AS Company,
+	|	tmp.BasisDocument AS BasisDocument,
+	|	tmp.Partner AS Partner,
+	|	tmp.LegalName AS LegalName,
+	|	tmp.Agreement AS Agreement,
+	|	tmp.Currency AS Currency,
+	|	SUM(tmp.Amount) AS DocumentAmount,
+	|	tmp.Period
+	|FROM
+	|	tmp AS tmp
+	|GROUP BY
+	|	tmp.Company,
+	|	tmp.BasisDocument,
+	|	tmp.Partner,
+	|	tmp.LegalName,
+	|	tmp.Agreement,
+	|	tmp.Currency,
+	|	tmp.Period
+	|;
+	|// 9. ReconciliationStatement //////////////////////////////////////////////////////////////////////////////
+	|SELECT
+	|	tmp.Company AS Company,
+	|	tmp.LegalName AS LegalName,
+	|	tmp.Currency AS Currency,
+	|	SUM(Amount) AS Amount,
+	|	tmp.Period
+	|FROM
+	|	tmp AS tmp
+	|GROUP BY
+	|	tmp.Company,
+	|	tmp.LegalName,
+	|	tmp.Currency,
+	|	tmp.Period
+	|;
+	|// 10. SalesReturnTurnovers //////////////////////////////////////////////////////////////////////////////
+	|SELECT
+	|	tmp.Company,
+	|	tmp.Currency,
+	|	tmp.ItemKey,
+	|	-SUM(tmp.Quantity) AS Quantity,
+	|	-SUM(tmp.Amount) AS Amount,
+	|	tmp.Period,
+	|	tmp.SalesInvoice,
+	|	tmp.RowKey
+	|FROM
+	|	tmp AS tmp
+	|GROUP BY
+	|	tmp.Company,
+	|	tmp.Currency,
+	|	tmp.ItemKey,
+	|	tmp.Period,
+	|	tmp.SalesInvoice,
+	|	tmp.RowKey
+	|;
+	|// 11. PartnerArTransactions //////////////////////////////////////////////////////////////////////////////
+	|SELECT
+	|	tmp.Company AS Company,
+	|	tmp.AgingSalesInvoice AS BasisDocument,
+	|	tmp.Partner AS Partner,
+	|	tmp.LegalName AS LegalName,
+	|	tmp.Agreement AS Agreement,
+	|	tmp.Currency AS Currency,
+	|	SUM(Amount) AS Amount,
+	|	tmp.Period
+	|FROM
+	|	tmp AS tmp
+	|WHERE
+	|	NOT tmp.SalesInvoice.Date IS NULL
+	|GROUP BY
+	|	tmp.Company,
+	|	tmp.AgingSalesInvoice,
+	|	tmp.Partner,
+	|	tmp.LegalName,
+	|	tmp.Agreement,
+	|	tmp.Currency,
+	|	tmp.Period
+	|;
+	|// 12. ExpensesTurnovers //////////////////////////////////////////////////////////////////////////////
+	|SELECT
+	|	tmp.Company AS Company,
+	|	tmp.BusinessUnit AS BusinessUnit,
+	|	tmp.ExpenseType AS ExpenseType,
+	|	tmp.ItemKey AS ItemKey,
+	|	tmp.Currency AS Currency,
+	|	tmp.AdditionalAnalytic AS AdditionalAnalytic,
+	|	tmp.Period AS Period,
+	|	SUM(tmp.Amount) AS Amount
+	|FROM
+	|	tmp AS tmp
+	|GROUP BY
+	|	tmp.Company,
+	|	tmp.BusinessUnit,
+	|	tmp.ExpenseType,
+	|	tmp.ItemKey,
+	|	tmp.Currency,
+	|	tmp.AdditionalAnalytic,
+	|	tmp.Period";
+EndFunction
+
 Function PostingGetLockDataSource(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
-	DocumentDataTables = Parameters.DocumentDataTables;
 	DataMapWithLockFields = New Map();
-	
-	// OrderBalance
-	Fields = New Map();
-	Fields.Insert("Store", "Store");
-	Fields.Insert("Order", "Order");
-	Fields.Insert("ItemKey", "ItemKey");
-	
-	DataMapWithLockFields.Insert("AccumulationRegister.OrderBalance",
-		New Structure("Fields, Data", Fields, DocumentDataTables.OrderBalance));
-	
-	// SalesTurnovers
-	Fields = New Map();
-	Fields.Insert("Company", "Company");
-	Fields.Insert("SalesInvoice", "SalesInvoice");
-	Fields.Insert("Currency", "Currency");
-	Fields.Insert("ItemKey", "ItemKey");
-	
-	DataMapWithLockFields.Insert("AccumulationRegister.SalesTurnovers",
-		New Structure("Fields, Data", Fields, DocumentDataTables.SalesTurnovers));
-	
-	// SalesReturnTurnovers
-	Fields = New Map();
-	Fields.Insert("Company", "Company");
-	Fields.Insert("SalesInvoice", "SalesInvoice");
-	Fields.Insert("Currency", "Currency");
-	Fields.Insert("ItemKey", "ItemKey");
-	
-	DataMapWithLockFields.Insert("AccumulationRegister.SalesReturnTurnovers",
-		New Structure("Fields, Data", Fields, DocumentDataTables.SalesReturnTurnovers));
-	
-	// InventoryBalance
-	Fields = New Map();
-	Fields.Insert("Company", "Company");
-	Fields.Insert("ItemKey", "ItemKey");
-	
-	DataMapWithLockFields.Insert("AccumulationRegister.InventoryBalance",
-		New Structure("Fields, Data", Fields, DocumentDataTables.InventoryBalance));
-	
-	// GoodsInTransitIncoming	
-	Fields = New Map();
-	Fields.Insert("Store", "Store");
-	Fields.Insert("ReceiptBasis", "ReceiptBasis");
-	Fields.Insert("ItemKey", "ItemKey");
-	
-	DataMapWithLockFields.Insert("AccumulationRegister.GoodsInTransitIncoming",
-		New Structure("Fields, Data", Fields, DocumentDataTables.GoodsInTransitIncoming));
-	
-	// StockBalance	
-	Fields = New Map();
-	Fields.Insert("Store", "Store");
-	Fields.Insert("ItemKey", "ItemKey");
-	
-	DataMapWithLockFields.Insert("AccumulationRegister.StockBalance",
-		New Structure("Fields, Data", Fields, DocumentDataTables.StockBalance));
-	
-	// StockReservation	
-	Fields = New Map();
-	Fields.Insert("Store", "Store");
-	Fields.Insert("ItemKey", "ItemKey");
-	
-	DataMapWithLockFields.Insert("AccumulationRegister.StockReservation",
-		New Structure("Fields, Data", Fields, DocumentDataTables.StockReservation));
-	
-	// PartnerApTransactions
-	Fields = New Map();
-	Fields.Insert("Company", "Company");
-	Fields.Insert("BasisDocument", "BasisDocument");
-	Fields.Insert("Partner", "Partner");
-	Fields.Insert("LegalName", "LegalName");
-	Fields.Insert("Agreement", "Agreement");
-	Fields.Insert("Currency", "Currency");
-	DataMapWithLockFields.Insert("AccumulationRegister.PartnerApTransactions",
-		New Structure("Fields, Data", Fields, DocumentDataTables.PartnerApTransactions));
-	
-	// AdvanceToSuppliers (Lock use In PostingCheckBeforeWrite)
-	Fields = New Map();
-	Fields.Insert("Company", "Company");
-	Fields.Insert("Partner", "Partner");
-	Fields.Insert("LegalName", "LegalName");
-	Fields.Insert("Currency", "Currency");
-	DataMapWithLockFields.Insert("AccumulationRegister.AdvanceToSuppliers",
-		New Structure("Fields, Data", Fields, DocumentDataTables.AdvanceToSuppliers_Lock));
-	
-	// ReconciliationStatement
-	Fields = New Map();
-	Fields.Insert("Company", "Company");
-	Fields.Insert("LegalName", "LegalName");
-	Fields.Insert("Currency", "Currency");
-	DataMapWithLockFields.Insert("AccumulationRegister.ReconciliationStatement",
-		New Structure("Fields, Data", Fields, DocumentDataTables.ReconciliationStatement));
-	
 	Return DataMapWithLockFields;
 EndFunction
 
 Procedure PostingCheckBeforeWrite(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
+#Region NewRegisterPosting
+	Tables = Parameters.DocumentDataTables;	
+	QueryArray = GetQueryTextsMasterTables();
+	PostingServer.SetRegisters(Tables, Ref);
+	PostingServer.FillPostingTables(Tables, Ref, QueryArray, Parameters);
+#EndRegion
+
 	// Advance to suppliers
-	Parameters.DocumentDataTables.AdvanceToSuppliers_Registrations =
-		AccumulationRegisters.AdvanceToSuppliers.GetTableExpenceAdvance(Parameters.Object.RegisterRecords
-			, Parameters.PointInTime
-			, Parameters.DocumentDataTables.AdvanceToSuppliers_Lock);
-			
-	If Parameters.DocumentDataTables.AdvanceToSuppliers_Registrations.Count() Then
+	Parameters.DocumentDataTables.PartnerApTransactions_OffsetOfAdvance =
+		AccumulationRegisters.AdvanceToSuppliers.GetTableAdvanceToSuppliers_OffsetOfAdvance(
+		Parameters.Object.RegisterRecords,
+		Parameters.PointInTime,
+		Parameters.DocumentDataTables.AdvanceToSuppliers_Lock);
+	
+	// Aging expense
+	Parameters.DocumentDataTables.Aging_Expense = 
+		AccumulationRegisters.Aging.GetTableAging_Expense_OnMoneyReceipt(
+		Parameters.PointInTime,
+		Parameters.DocumentDataTables.PartnerArTransactions, Undefined);
+	
+	If Parameters.DocumentDataTables.PartnerApTransactions_OffsetOfAdvance.Count() Then
     	Query = New Query();
     	Query.Text = 
     	"SELECT
@@ -576,10 +486,10 @@ Procedure PostingCheckBeforeWrite(Ref, Cancel, PostingMode, Parameters, AddInfo 
     	|		AND AccountsStatementBalance.Partner = tmp.Partner
     	|		AND AccountsStatementBalance.LegalName = tmp.LegalName
     	|		AND AccountsStatementBalance.Currency = tmp.Currency";
-    	Query.SetParameter("QueryTable", Parameters.DocumentDataTables.AdvanceToSuppliers_Registrations);
+    	Query.SetParameter("QueryTable", Parameters.DocumentDataTables.PartnerApTransactions_OffsetOfAdvance);
     	Query.SetParameter("PointInTime", Parameters.PointInTime);
     	Query.SetParameter("Period", Parameters.Object.Date);
-    	Parameters.DocumentDataTables.Insert("AdvanceToSuppliers_Registrations_AccountStatement",
+    	Parameters.DocumentDataTables.Insert("PartnerApTransactions_OffsetOfAdvance_AccountStatement",
     	Query.Execute().Unload());
     EndIf;
 EndProcedure
@@ -625,14 +535,14 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 		New Structure("RecordType, RecordSet, WriteInTransaction",
 			AccumulationRecordType.Receipt,
 			Parameters.DocumentDataTables.StockBalance,
-			Parameters.IsReposting));
+			True));
 	
 	// StockReservation	
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.StockReservation,
 		New Structure("RecordType, RecordSet, WriteInTransaction",
 			AccumulationRecordType.Receipt,
 			Parameters.DocumentDataTables.StockReservation,
-			Parameters.IsReposting));
+			True));
 	
 	// AccountsStatement
 	ArrayOfTables = New Array();
@@ -645,7 +555,7 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 	EndDo;
 	ArrayOfTables.Add(Table1);
 	
-	Table2 = Parameters.DocumentDataTables.AdvanceToSuppliers_Registrations.Copy();
+	Table2 = Parameters.DocumentDataTables.PartnerApTransactions_OffsetOfAdvance.Copy();
 	Table2.Columns.Amount.Name = "TransactionAR";
 	PostingServer.AddColumnsToAccountsStatementTable(Table2);
 	Table2.FillValues(AccumulationRecordType.Expense, "RecordType");
@@ -654,7 +564,7 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 	EndDo;
 	ArrayOfTables.Add(Table2);
 	
-	Table3 = Parameters.DocumentDataTables.AdvanceToSuppliers_Registrations.Copy();
+	Table3 = Parameters.DocumentDataTables.PartnerApTransactions_OffsetOfAdvance.Copy();
 	Table3.Columns.Amount.Name = "AdvanceFromCustomers";
 	PostingServer.AddColumnsToAccountsStatementTable(Table3);
 	Table3.FillValues(AccumulationRecordType.Expense, "RecordType");
@@ -663,8 +573,8 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 	EndDo;
 	ArrayOfTables.Add(Table3);
 	
-	If Parameters.DocumentDataTables.Property("AdvanceToSuppliers_Registrations_AccountStatement") Then
-		Table4 = Parameters.DocumentDataTables.AdvanceToSuppliers_Registrations_AccountStatement.Copy();
+	If Parameters.DocumentDataTables.Property("PartnerApTransactions_OffsetOfAdvance_AccountStatement") Then
+		Table4 = Parameters.DocumentDataTables.PartnerApTransactions_OffsetOfAdvance_AccountStatement.Copy();
 		PostingServer.AddColumnsToAccountsStatementTable(Table4);
 		Table4.FillValues(AccumulationRecordType.Expense, "RecordType");
 		ArrayOfTables.Add(Table4);
@@ -680,14 +590,14 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 	
 	// PartnerApTransactions
 	// PartnerApTransactions [Receipt]  
-	// AdvanceToSuppliers_Registrations [Expense]
+	// PartnerApTransactions_OffsetOfAdvance [Expense]
 	ArrayOfTables = New Array();
 	Table1 = Parameters.DocumentDataTables.PartnerApTransactions.Copy();
 	Table1.Columns.Add("RecordType", New TypeDescription("AccumulationRecordType"));
 	Table1.FillValues(AccumulationRecordType.Receipt, "RecordType");
 	ArrayOfTables.Add(Table1);
 	
-	Table2 = Parameters.DocumentDataTables.AdvanceToSuppliers_Registrations.Copy();
+	Table2 = Parameters.DocumentDataTables.PartnerApTransactions_OffsetOfAdvance.Copy();
 	Table2.Columns.Add("RecordType", New TypeDescription("AccumulationRecordType"));
 	Table2.FillValues(AccumulationRecordType.Expense, "RecordType");
 	ArrayOfTables.Add(Table2);
@@ -703,7 +613,7 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.AdvanceToSuppliers,
 		New Structure("RecordType, RecordSet",
 			AccumulationRecordType.Expense,
-			Parameters.DocumentDataTables.AdvanceToSuppliers_Registrations));
+			Parameters.DocumentDataTables.PartnerApTransactions_OffsetOfAdvance));
 	
 	// ReconciliationStatement
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.ReconciliationStatement,
@@ -711,11 +621,27 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 			AccumulationRecordType.Expense,
 			Parameters.DocumentDataTables.ReconciliationStatement));
 	
+	// Aging
+	PostingDataTables.Insert(Parameters.Object.RegisterRecords.Aging,
+		New Structure("RecordType, RecordSet",
+			AccumulationRecordType.Expense,
+			Parameters.DocumentDataTables.Aging_Expense));
+
+	// ExpensesTurnovers
+	PostingDataTables.Insert(Parameters.Object.RegisterRecords.ExpensesTurnovers,
+		New Structure("RecordSet, WriteInTransaction",
+			Parameters.DocumentDataTables.ExpensesTurnovers,
+			Parameters.IsReposting));
+			
+#Region NewRegistersPosting
+	PostingServer.SetPostingDataTables(PostingDataTables, Parameters);
+#EndRegion	
+
 	Return PostingDataTables;
 EndFunction
 
 Procedure PostingCheckAfterWrite(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
-	Return;
+	CheckAfterWrite(Ref, Cancel, Parameters, AddInfo);
 EndProcedure
 
 #EndRegion
@@ -723,11 +649,12 @@ EndProcedure
 #Region Undoposting
 
 Function UndopostingGetDocumentDataTables(Ref, Cancel, Parameters, AddInfo = Undefined) Export
-	Return Undefined;
+	Return PostingGetDocumentDataTables(Ref, Cancel, Undefined, Parameters, AddInfo);
 EndFunction
 
 Function UndopostingGetLockDataSource(Ref, Cancel, Parameters, AddInfo = Undefined) Export
-	Return Undefined;
+	DataMapWithLockFields = New Map();
+	Return DataMapWithLockFields;
 EndFunction
 
 Procedure UndopostingCheckBeforeWrite(Ref, Cancel, Parameters, AddInfo = Undefined) Export
@@ -735,8 +662,156 @@ Procedure UndopostingCheckBeforeWrite(Ref, Cancel, Parameters, AddInfo = Undefin
 EndProcedure
 
 Procedure UndopostingCheckAfterWrite(Ref, Cancel, Parameters, AddInfo = Undefined) Export
-	Return;
+	Parameters.Insert("Unposting", True);
+	CheckAfterWrite(Ref, Cancel, Parameters, AddInfo);
 EndProcedure
 
 #EndRegion
 
+#Region CheckAfterWrite
+
+Procedure CheckAfterWrite(Ref, Cancel, Parameters, AddInfo = Undefined)
+	PostingServer.CheckBalance_AfterWrite(Ref, Cancel, Parameters, "Document.SalesReturn.ItemList", AddInfo);
+EndProcedure
+
+#EndRegion
+
+#Region NewRegistersPosting
+
+Function GetInformationAboutMovements(Ref) Export
+	Str = New Structure;
+	Str.Insert("QueryParamenters", GetAdditionalQueryParamenters(Ref));
+	Str.Insert("QueryTextsMasterTables", GetQueryTextsMasterTables());
+	Str.Insert("QueryTextsSecondaryTables", GetQueryTextsSecondaryTables());
+	Return Str;
+EndFunction
+
+Function GetAdditionalQueryParamenters(Ref)
+	StrParams = New Structure();
+	StrParams.Insert("Ref", Ref);
+	Return StrParams;
+EndFunction
+
+Function GetQueryTextsSecondaryTables()
+	QueryArray = New Array;
+	QueryArray.Add(ItemList());
+	QueryArray.Add(SerialLotNumbers());
+	Return QueryArray;
+EndFunction
+
+Function GetQueryTextsMasterTables()
+	QueryArray = New Array;
+	QueryArray.Add(R4014B_SerialLotNumber());
+	QueryArray.Add(R2031B_ShipmentInvoicing());	
+	Return QueryArray;
+EndFunction
+
+Function ItemList()
+	Return	
+		"SELECT
+		|	GoodsReceipts.Key,
+		|	GoodsReceipts.GoodsReceipt,
+		|	SUM(GoodsReceipts.Quantity) AS Quantity
+		|INTO GoodsReceipts
+		|FROM
+		|	Document.SalesReturn.GoodsReceipts AS GoodsReceipts
+		|WHERE
+		|	GoodsReceipts.Ref = &Ref
+		|GROUP BY
+		|	GoodsReceipts.Key,
+		|	GoodsReceipts.GoodsReceipt
+		|;
+		|
+		|////////////////////////////////////////////////////////////////////////////////
+		|SELECT
+		|	SalesReturnItemList.Ref.Company AS Company,
+		|	SalesReturnItemList.Store AS Store,
+		|	SalesReturnItemList.Store.UseGoodsReceipt AS UseGoodsReceipt,
+		|	SalesReturnItemList.ItemKey AS ItemKey,
+		|	SalesReturnItemList.SalesReturnOrder AS SalesReturnOrder,
+		|	SalesReturnItemList.Ref AS SalesReturn,
+		|	CASE
+		|		WHEN SalesReturnItemList.Ref.Agreement.ApArPostingDetail = VALUE(Enum.ApArPostingDetail.ByDocuments)
+		|			THEN SalesReturnItemList.Ref
+		|		ELSE UNDEFINED
+		|	END AS BasisDocument,
+		|	SalesReturnItemList.QuantityInBaseUnit AS Quantity,
+		|	SalesReturnItemList.TotalAmount AS TotalAmount,
+		|	SalesReturnItemList.Ref.Partner AS Partner,
+		|	SalesReturnItemList.Ref.LegalName AS LegalName,
+		|	CASE
+		|		WHEN SalesReturnItemList.Ref.Agreement.Kind = VALUE(Enum.AgreementKinds.Regular)
+		|		AND SalesReturnItemList.Ref.Agreement.ApArPostingDetail = VALUE(Enum.ApArPostingDetail.ByStandardAgreement)
+		|			THEN SalesReturnItemList.Ref.Agreement.StandardAgreement
+		|		ELSE SalesReturnItemList.Ref.Agreement
+		|	END AS Agreement,
+		|	ISNULL(SalesReturnItemList.Ref.Currency, VALUE(Catalog.Currencies.EmptyRef)) AS Currency,
+		|	SalesReturnItemList.Ref.Date AS Period,
+		|	CASE
+		|		WHEN SalesReturnItemList.SalesInvoice.Ref IS NULL
+		|		OR VALUETYPE(SalesReturnItemList.SalesInvoice) <> TYPE(Document.SalesInvoice)
+		|			THEN SalesReturnItemList.Ref
+		|		ELSE SalesReturnItemList.SalesInvoice
+		|	END AS SalesInvoice,
+		|	SalesReturnItemList.SalesInvoice AS AgingSalesInvoice,
+		|	SalesReturnItemList.Key,
+		|	SalesReturnItemList.ItemKey.Item.ItemType.Type = VALUE(Enum.ItemTypes.Service) AS IsService
+		|INTO ItemList
+		|FROM
+		|	Document.SalesReturn.ItemList AS SalesReturnItemList
+		|WHERE
+		|	SalesReturnItemList.Ref = &Ref";
+EndFunction
+
+Function SerialLotNumbers()
+	Return
+		"SELECT
+		|	SerialLotNumbers.Ref.Date AS Period,
+		|	SerialLotNumbers.Ref.Company AS Company,
+		|	SerialLotNumbers.Key,
+		|	SerialLotNumbers.SerialLotNumber,
+		|	SerialLotNumbers.Quantity,
+		|	ItemList.ItemKey AS ItemKey
+		|INTO SerialLotNumbers
+		|FROM
+		|	Document.SalesReturn.SerialLotNumbers AS SerialLotNumbers
+		|		LEFT JOIN Document.SalesReturn.ItemList AS ItemList
+		|		ON SerialLotNumbers.Key = ItemList.Key
+		|		AND ItemList.Ref = &Ref
+		|WHERE
+		|	SerialLotNumbers.Ref = &Ref";	
+EndFunction	
+
+Function R4014B_SerialLotNumber()
+	Return
+		"SELECT 
+		|	VALUE(AccumulationRecordType.Receipt) AS RecordType,
+		|	*
+		|INTO R4014B_SerialLotNumber
+		|FROM
+		|	SerialLotNumbers AS QueryTable
+		|WHERE 
+		|	TRUE";
+
+EndFunction
+
+Function R2031B_ShipmentInvoicing()
+	Return
+		"SELECT
+		|	VALUE(AccumulationRecordType.Expense) AS RecordType,
+		|	GoodsReceipts.GoodsReceipt AS Basis,
+		|	GoodsReceipts.Quantity,
+		|	ItemList.Company,
+		|	ItemList.Period,
+		|	ItemList.ItemKey,
+		|	ItemList.Store
+		|INTO R2031B_ShipmentInvoicing
+		|FROM
+		|	ItemList AS ItemList
+		|		INNER JOIN GoodsReceipts AS GoodsReceipts
+		|		ON ItemList.Key = GoodsReceipts.Key
+		|WHERE
+		|	TRUE";
+EndFunction
+
+#EndRegion

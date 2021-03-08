@@ -151,10 +151,6 @@
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>
     <fillChecking>ShowError</fillChecking>
-    <choiceParameters>
-      <name>Filter.Predefined</name>
-      <value xsi:type="core:BooleanValue"/>
-    </choiceParameters>
     <createOnInput>DontUse</createOnInput>
     <fillFromFillingValue>true</fillFromFillingValue>
     <fillValue xsi:type="core:UndefinedValue"/>
@@ -234,7 +230,7 @@
     <name>PriceIncludeTax</name>
     <synonym>
       <key>en</key>
-      <value>Price include tax</value>
+      <value>Price includes tax</value>
     </synonym>
     <type>
       <types>Boolean</types>
@@ -246,10 +242,10 @@
     <dataHistory>Use</dataHistory>
   </attributes>
   <attributes uuid="4dd11c6c-a33b-434f-96f7-a5992f3e1e5e">
-    <name>NumberDaysBeforeDelivery</name>
+    <name>DaysBeforeDelivery</name>
     <synonym>
       <key>en</key>
-      <value>Number days before delivery</value>
+      <value>Days before delivery</value>
     </synonym>
     <type>
       <types>Number</types>
@@ -381,6 +377,9 @@
     <type>
       <types>Boolean</types>
     </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fillValue xsi:type="core:UndefinedValue"/>
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
@@ -393,6 +392,24 @@
     <type>
       <types>DefinedType.typeAmount</types>
     </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fillValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <dataHistory>Use</dataHistory>
+  </attributes>
+  <attributes uuid="40ef6a50-8ba6-4552-9253-697cbd68cc71">
+    <name>PaymentTerm</name>
+    <synonym>
+      <key>en</key>
+      <value>Payment term</value>
+    </synonym>
+    <type>
+      <types>CatalogRef.PaymentSchedules</types>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fillValue xsi:type="core:UndefinedValue"/>
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>

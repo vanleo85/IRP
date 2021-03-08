@@ -59,7 +59,7 @@ Procedure OnOpen(Object, Form, Cancel, AddInfo = Undefined) Export
 	EndIf;
 	
 	SerialLotNumberClient.UpdateSerialLotNumbersPresentation(Object);
-	SerialLotNumberClient.UpdateSerialLotNubersTree(Object, Form);	
+	SerialLotNumberClient.UpdateSerialLotNumbersTree(Object, Form);	
 EndProcedure
 
 Procedure NotificationProcessing(Object, Form, EventName, Parameter, Source) Export
@@ -80,7 +80,7 @@ EndProcedure
 Procedure ItemListAfterDeleteRow(Object, Form, Item) Export
 	DocumentsClient.ItemListAfterDeleteRow(Object, Form, Item);
 	SerialLotNumberClient.DeleteUnusedSerialLotNumbers(Object);
-	SerialLotNumberClient.UpdateSerialLotNubersTree(Object, Form);	
+	SerialLotNumberClient.UpdateSerialLotNumbersTree(Object, Form);	
 EndProcedure
 
 Procedure ItemListOnChange(Object, Form, Item = Undefined, CalculationSettings = Undefined) Export
@@ -240,7 +240,7 @@ Procedure ItemListQuantityOnChange(Object, Form, Item, AddInfo = Undefined) Expo
 	EndIf;
 	DocumentsClient.RecalculateSpecialOffersOnChangeQuantity(Object, Form, CurrentData, AddInfo);
 	DocumentsClient.ItemListCalculateRowAmounts_QuantityChange(Object, Form, CurrentData, Item, ThisObject, AddInfo);
-	SerialLotNumberClient.UpdateSerialLotNubersTree(Object, Form);	
+	SerialLotNumberClient.UpdateSerialLotNumbersTree(Object, Form);	
 EndProcedure
 
 Procedure ItemListQuantityPutServerDataToAddInfo(Object, Form, CurrentData, AddInfo = Undefined) Export
@@ -561,9 +561,9 @@ Procedure CompanyStartChoice(Object, Form, Item, ChoiceData, StandardProcessing)
 	OpenSettings.ArrayOfFilters = New Array();
 	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", 
 																True, DataCompositionComparisonType.NotEqual));
-	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Our",
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("OurCompany",
 																True, DataCompositionComparisonType.Equal));
-	OpenSettings.FillingData = New Structure("Our", True);
+	OpenSettings.FillingData = New Structure("OurCompany", True);
 	
 	DocumentsClient.CompanyStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
@@ -571,7 +571,7 @@ EndProcedure
 Procedure CompanyEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
 	ArrayOfFilters = New Array();
 	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, ComparisonType.NotEqual));
-	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Our", True, ComparisonType.Equal));
+	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("OurCompany", True, ComparisonType.Equal));
 	DocumentsClient.CompanyEditTextChange(Object, Form, Item, Text, StandardProcessing, ArrayOfFilters);
 EndProcedure
 

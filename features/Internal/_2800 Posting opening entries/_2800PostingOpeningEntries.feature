@@ -1,7 +1,7 @@
 ﻿#language: en
 @tree
 @Positive
-@Group15
+@OpeningEntries
 
 Feature: check opening entry
 
@@ -13,82 +13,57 @@ Background:
 	Given I launch TestClient opening script or connect the existing one
 
 
+
 # it's necessary to add tests to start the remainder of the documents
-Scenario: _400000 preparation
-	* Create SI for opening entry by documents
-		Given I open hyperlink "e1cib/list/Document.SalesInvoice"
-		And I click the button named "FormCreate"
-		And I select from "Partner" drop-down list by "DFC" string
-		And I click Select button of "Company" field
-		And I go to line in "List" table
-			| 'Description'  |
-			| 'Main Company' |
-		And I select current line in "List" table
-		And I click Select button of "Partner term" field
-		And I go to line in "List" table
-			| 'Description'  |
-			| 'Partner term DFC' |
-		And I select current line in "List" table
-		And in the table "ItemList" I click the button named "ItemListAdd"
-		And I click choice button of "Item" attribute in "ItemList" table
-		And I go to line in "List" table
-			| 'Description' |
-			| 'Boots'       |
-		And I select current line in "List" table
-		And I activate "Item key" field in "ItemList" table
-		And I click choice button of "Item key" attribute in "ItemList" table
-		And I go to line in "List" table
-			| 'Item'  | 'Item key' |
-			| 'Boots' | '37/18SD'  |
-		And I select current line in "List" table
-		And I activate "Q" field in "ItemList" table
-		And I input "15,000" text in "Q" field of "ItemList" table
-		And I finish line editing in "ItemList" table
-		And I move to "Other" tab
-		And I input "5 900" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "5 900" text in "Number" field
-		And I set checkbox "Is opening entry"
-		And Delay 1
-		And I click "Post and close" button
-	* Create PI for opening entry by documents
-		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
-		And I click the button named "FormCreate"
-		And I select from "Partner" drop-down list by "DFC" string
-		And I click Select button of "Company" field
-		And I go to line in "List" table
-			| 'Description'  |
-			| 'Main Company' |
-		And I select current line in "List" table
-		And I click Select button of "Partner term" field
-		And I go to line in "List" table
-			| 'Description'  |
-			| 'Partner term vendor DFC' |
-		And I select current line in "List" table
-		And I click "Add" button
-		And I click choice button of "Item" attribute in "ItemList" table
-		And I go to line in "List" table
-			| 'Description' |
-			| 'Boots'       |
-		And I select current line in "List" table
-		And I activate "Item key" field in "ItemList" table
-		And I click choice button of "Item key" attribute in "ItemList" table
-		And I go to line in "List" table
-			| 'Item'  | 'Item key' |
-			| 'Boots' | '37/18SD'  |
-		And I select current line in "List" table
-		And I activate "Q" field in "ItemList" table
-		And I input "15,000" text in "Q" field of "ItemList" table
-		And I finish line editing in "ItemList" table
-		And I move to "Other" tab
-		And I input "5 900" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "5 900" text in "Number" field
-		And I set checkbox "Is opening entry"
-		And Delay 1
-		And I click "Post and close" button
+Scenario: _400000 preparation (Opening entries)
+	When set True value to the constant
+	And I close TestClient session
+	Given I open new TestClient session or connect the existing one
+	* Load info
+		When Create information register Barcodes records
+		When Create catalog Companies objects (own Second company)
+		When Create catalog CashAccounts objects
+		When Create catalog Agreements objects
+		When Create catalog ObjectStatuses objects
+		When Create catalog ItemKeys objects
+		When Create catalog ItemTypes objects
+		When Create catalog Units objects
+		When Create catalog Items objects
+		When Create catalog PriceTypes objects
+		When Create catalog Specifications objects
+		When Create chart of characteristic types AddAttributeAndProperty objects
+		When Create catalog AddAttributeAndPropertySets objects
+		When Create catalog AddAttributeAndPropertyValues objects
+		When Create catalog Currencies objects
+		When Create catalog Companies objects (Main company)
+		When Create catalog Stores objects
+		When Create catalog Partners objects
+		When Create catalog Companies objects (partners company)
+		When Create information register PartnerSegments records
+		When Create catalog PartnerSegments objects
+		When Create chart of characteristic types CurrencyMovementType objects
+		When Create catalog TaxRates objects
+		When Create catalog Taxes objects	
+		When Create information register TaxSettings records
+		When Create information register PricesByItemKeys records
+		When Create catalog IntegrationSettings objects
+		When Create information register CurrencyRates records
+		When update ItemKeys
+	* Add plugin for taxes calculation
+		Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
+		If "List" table does not contain lines Then
+				| "Description" |
+				| "TaxCalculateVAT_TR" |
+			When add Plugin for tax calculation
+		When Create information register Taxes records (VAT)
+	* Tax settings
+		When filling in Tax settings for company
+	* Add sales tax
+		When Create catalog Taxes objects (Sales tax)
+		When Create information register TaxSettings (Sales tax)
+		When Create information register Taxes records (Sales tax)
+		When add sales tax settings 
+	
 
 
 Scenario: _400001 opening entry account balance
@@ -101,11 +76,6 @@ Scenario: _400001 opening entry account balance
 			| Description  |
 			| Main Company |
 		And I select current line in "List" table
-	* Change the document number
-		And I input "1" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "1" text in "Number" field
 	* Filling in the tabular part account balance
 		And in the table "AccountBalance" I click the button named "AccountBalanceAdd"
 		And I click choice button of "Account" attribute in "AccountBalance" table
@@ -185,7 +155,7 @@ Scenario: _400001 opening entry account balance
 			And I go to line in "CurrenciesAccountBalance" table
 				| 'From' | 'Movement type'  | 'To'  | 'Type'  |
 				| 'USD'  | 'Local currency' | 'TRY' | 'Legal' |
-			And I input "0,1756" text in the field named "CurrenciesAccountBalanceRatePresentation" of "CurrenciesAccountBalance" table
+			And I input "5,6275" text in the field named "CurrenciesAccountBalanceRatePresentation" of "CurrenciesAccountBalance" table
 			And I input "1" text in the field named "CurrenciesAccountBalanceMultiplicity" of "CurrenciesAccountBalance" table
 			And I activate "Amount" field in "CurrenciesAccountBalance" table
 			And I finish line editing in "CurrenciesAccountBalance" table
@@ -198,7 +168,7 @@ Scenario: _400001 opening entry account balance
 				| 'From' | 'Movement type'  | 'To'  | 'Type'  |
 				| 'EUR'  | 'Local currency' | 'TRY' | 'Legal' |
 			And I select current line in "CurrenciesAccountBalance" table
-			And I input "0,1758" text in the field named "CurrenciesAccountBalanceRatePresentation" of "CurrenciesAccountBalance" table
+			And I input "5,6883" text in the field named "CurrenciesAccountBalanceRatePresentation" of "CurrenciesAccountBalance" table
 			And I finish line editing in "CurrenciesAccountBalance" table
 			And I go to line in "CurrenciesAccountBalance" table
 				| 'From' | 'Movement type'      | 'To'  | 'Type'      |
@@ -226,7 +196,7 @@ Scenario: _400001 opening entry account balance
 			And I go to line in "CurrenciesAccountBalance" table
 				| 'From' | 'Movement type'  | 'To'  | 'Type'  |
 				| 'USD'  | 'Local currency' | 'TRY' | 'Legal' |
-			And I input "0,1758" text in the field named "CurrenciesAccountBalanceRatePresentation" of "CurrenciesAccountBalance" table
+			And I input "5,6883" text in the field named "CurrenciesAccountBalanceRatePresentation" of "CurrenciesAccountBalance" table
 			And I input "1" text in the field named "CurrenciesAccountBalanceMultiplicity" of "CurrenciesAccountBalance" table
 			And I activate "Amount" field in "CurrenciesAccountBalance" table
 			And I finish line editing in "CurrenciesAccountBalance" table
@@ -238,7 +208,7 @@ Scenario: _400001 opening entry account balance
 				| 'From' | 'Movement type'  | 'To'  | 'Type'  |
 				| 'EUR'  | 'Local currency' | 'TRY' | 'Legal' |
 			And I select current line in "CurrenciesAccountBalance" table
-			And I input "0,1758" text in the field named "CurrenciesAccountBalanceRatePresentation" of "CurrenciesAccountBalance" table
+			And I input "5,6883" text in the field named "CurrenciesAccountBalanceRatePresentation" of "CurrenciesAccountBalance" table
 			And I finish line editing in "CurrenciesAccountBalance" table
 			And I go to line in "CurrenciesAccountBalance" table
 				| 'From' | 'Movement type'      | 'To'  | 'Type'      |
@@ -259,90 +229,95 @@ Scenario: _400001 opening entry account balance
 			And I input "1" text in the field named "CurrenciesAccountBalanceMultiplicity" of "CurrenciesAccountBalance" table
 			And I finish line editing in "CurrenciesAccountBalance" table
 	* Post document
-		And I click "Post and close" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberOpeningEntry400001$$" variable
+		And I delete "$$OpeningEntry400001$$" variable
+		And I save the value of "Number" field as "$$NumberOpeningEntry400001$$"
+		And I save the window as "$$OpeningEntry400001$$"
+		And I click the button named "FormPostAndClose"
 		And Delay 5
 		* Check movements
 			Given I open hyperlink "e1cib/list/AccumulationRegister.AccountBalance"
 			And "List" table contains lines
-			| 'Currency' | 'Recorder'         | 'Company'      | 'Account'           | 'Multi currency movement type' | 'Amount'    |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №1'      | 'Local currency'         | '1 000,00'  |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №1'      | 'Reporting currency'     | '171,23'    |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №2'      | 'Local currency'         | '5 694,76'  |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №2'      | 'Reporting currency'     | '1 000,00'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №3'      | 'Local currency'         | '5 688,28'  |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №3'      | 'Reporting currency'     | '909,09'    |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, TRY' | 'Local currency'         | '10 000,00' |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, TRY' | 'Reporting currency'     | '1 712,33'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, USD' | 'Local currency'         | '28 441,41' |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, USD' | 'Reporting currency'     | '5 000,00'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, EUR' | 'Local currency'         | '45 506,26' |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, EUR' | 'Reporting currency'     | '7 272,73'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №1'      | '*'                      | '1 000,00'  |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №2'      | '*'                      | '1 000,00'  |
-			| 'EUR'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №3'      | '*'                      | '1 000,00'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, TRY' | '*'                      | '10 000,00' |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, USD' | '*'                      | '5 000,00'  |
-			| 'EUR'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, EUR' | '*'                      | '8 000,00'  |
+			| 'Currency' | 'Recorder'               | 'Company'      | 'Account'           | 'Multi currency movement type' | 'Amount'    |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №1'      | 'Local currency'               | '1 000,00'  |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №1'      | 'Reporting currency'           | '171,20'    |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №2'      | 'Local currency'               | '5 627,50'  |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №2'      | 'Reporting currency'           | '1 000,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №3'      | 'Local currency'               | '5 688,30'  |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №3'      | 'Reporting currency'           | '1 100,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, TRY' | 'Local currency'               | '10 000,00' |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, TRY' | 'Reporting currency'           | '1 712,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, USD' | 'Local currency'               | '28 441,50' |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, USD' | 'Reporting currency'           | '5 000,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, EUR' | 'Local currency'               | '45 506,40' |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, EUR' | 'Reporting currency'           | '8 800,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №1'      | '*'                            | '1 000,00'  |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №2'      | '*'                            | '1 000,00'  |
+			| 'EUR'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №3'      | '*'                            | '1 000,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, TRY' | '*'                            | '10 000,00' |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, USD' | '*'                            | '5 000,00'  |
+			| 'EUR'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, EUR' | '*'                            | '8 000,00'  |
 			And I close all client application windows
 	* Clear movements and  check movement reversal
 		* Clear movements
 			Given I open hyperlink "e1cib/list/Document.OpeningEntry"
 			And I go to line in "List" table
 			| 'Number' |
-			| '1'      |
+			| '$$NumberOpeningEntry400001$$'      |
 			And in the table "List" I click the button named "ListContextMenuUndoPosting"
 		* Check clearing movements
 			Given I open hyperlink "e1cib/list/AccumulationRegister.AccountBalance"
 			And "List" table does not contain lines
-			| 'Currency' | 'Recorder'         | 'Company'      | 'Account'           | 'Multi currency movement type' | 'Amount'    |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №1'      | 'Local currency'         | '1 000,00'  |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №1'      | 'Reporting currency'     | '171,23'    |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №2'      | 'Local currency'         | '5 694,76'  |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №2'      | 'Reporting currency'     | '1 000,00'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №3'      | 'Local currency'         | '5 688,28'  |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №3'      | 'Reporting currency'     | '909,09'    |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, TRY' | 'Local currency'         | '10 000,00' |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, TRY' | 'Reporting currency'     | '1 712,33'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, USD' | 'Local currency'         | '28 441,41' |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, USD' | 'Reporting currency'     | '5 000,00'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, EUR' | 'Local currency'         | '45 506,26' |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, EUR' | 'Reporting currency'     | '7 272,73'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №1'      | '*'                      | '1 000,00'  |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №2'      | '*'                      | '1 000,00'  |
-			| 'EUR'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №3'      | '*'                      | '1 000,00'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, TRY' | '*'                      | '10 000,00' |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, USD' | '*'                      | '5 000,00'  |
-			| 'EUR'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, EUR' | '*'                      | '8 000,00'  |
+			| 'Currency' | 'Recorder'               | 'Company'      | 'Account'           | 'Multi currency movement type' | 'Amount'    |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №1'      | 'Local currency'               | '1 000,00'  |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №1'      | 'Reporting currency'           | '171,20'    |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №2'      | 'Local currency'               | '5 627,50'  |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №2'      | 'Reporting currency'           | '1 000,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №3'      | 'Local currency'               | '5 688,30'  |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №3'      | 'Reporting currency'           | '1 100,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, TRY' | 'Local currency'               | '10 000,00' |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, TRY' | 'Reporting currency'           | '1 712,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, USD' | 'Local currency'               | '28 441,50' |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, USD' | 'Reporting currency'           | '5 000,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, EUR' | 'Local currency'               | '45 506,40' |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, EUR' | 'Reporting currency'           | '8 800,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №1'      | '*'                            | '1 000,00'  |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №2'      | '*'                            | '1 000,00'  |
+			| 'EUR'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №3'      | '*'                            | '1 000,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, TRY' | '*'                            | '10 000,00' |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, USD' | '*'                            | '5 000,00'  |
+			| 'EUR'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, EUR' | '*'                            | '8 000,00'  |
 			And I close all client application windows
 	* Posting the document back and check movements
 		* Post document
 			Given I open hyperlink "e1cib/list/Document.OpeningEntry"
 			And I go to line in "List" table
 			| 'Number' |
-			| '1'      |
+			| '$$NumberOpeningEntry400001$$'      |
 			And in the table "List" I click the button named "ListContextMenuPost"
 		* Check movements
 			Given I open hyperlink "e1cib/list/AccumulationRegister.AccountBalance"
 			And "List" table contains lines
-			| 'Currency' | 'Recorder'         | 'Company'      | 'Account'           | 'Multi currency movement type' | 'Amount'    |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №1'      | 'Local currency'         | '1 000,00'  |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №1'      | 'Reporting currency'     | '171,23'    |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №2'      | 'Local currency'         | '5 694,76'  |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №2'      | 'Reporting currency'     | '1 000,00'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №3'      | 'Local currency'         | '5 688,28'  |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №3'      | 'Reporting currency'     | '909,09'    |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, TRY' | 'Local currency'         | '10 000,00' |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, TRY' | 'Reporting currency'     | '1 712,33'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, USD' | 'Local currency'         | '28 441,41' |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, USD' | 'Reporting currency'     | '5 000,00'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, EUR' | 'Local currency'         | '45 506,26' |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, EUR' | 'Reporting currency'     | '7 272,73'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №1'      | '*'                      | '1 000,00'  |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №2'      | '*'                      | '1 000,00'  |
-			| 'EUR'      | 'Opening entry 1*' | 'Main Company' | 'Cash desk №3'      | '*'                      | '1 000,00'  |
-			| 'TRY'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, TRY' | '*'                      | '10 000,00' |
-			| 'USD'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, USD' | '*'                      | '5 000,00'  |
-			| 'EUR'      | 'Opening entry 1*' | 'Main Company' | 'Bank account, EUR' | '*'                      | '8 000,00'  |
+			| 'Currency' | 'Recorder'               | 'Company'      | 'Account'           | 'Multi currency movement type' | 'Amount'    |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №1'      | 'Local currency'               | '1 000,00'  |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №1'      | 'Reporting currency'           | '171,20'    |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №2'      | 'Local currency'               | '5 627,50'  |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №2'      | 'Reporting currency'           | '1 000,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №3'      | 'Local currency'               | '5 688,30'  |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №3'      | 'Reporting currency'           | '1 100,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, TRY' | 'Local currency'               | '10 000,00' |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, TRY' | 'Reporting currency'           | '1 712,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, USD' | 'Local currency'               | '28 441,50' |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, USD' | 'Reporting currency'           | '5 000,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, EUR' | 'Local currency'               | '45 506,40' |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, EUR' | 'Reporting currency'           | '8 800,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №1'      | '*'                            | '1 000,00'  |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №2'      | '*'                            | '1 000,00'  |
+			| 'EUR'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Cash desk №3'      | '*'                            | '1 000,00'  |
+			| 'TRY'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, TRY' | '*'                            | '10 000,00' |
+			| 'USD'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, USD' | '*'                            | '5 000,00'  |
+			| 'EUR'      | '$$OpeningEntry400001$$' | 'Main Company' | 'Bank account, EUR' | '*'                            | '8 000,00'  |
 			And I close all client application windows
 
 
@@ -358,12 +333,6 @@ Scenario: _400002 opening entry inventory balance
 			| Description  |
 			| Main Company |
 		And I select current line in "List" table
-	* Change the document number
-		And I move to "Other" tab
-		And I input "2" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "2" text in "Number" field
 	* Filling in the tabular part Inventory
 		And I move to "Inventory" tab
 		And in the table "Inventory" I click the button named "InventoryAdd"
@@ -589,52 +558,56 @@ Scenario: _400002 opening entry inventory balance
 		And I input "100,000" text in "Quantity" field of "Inventory" table
 		And I finish line editing in "Inventory" table
 	* Post document
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberOpeningEntry400002$$" variable
+		And I delete "$$OpeningEntry400002$$" variable
+		And I save the value of "Number" field as "$$NumberOpeningEntry400002$$"
+		And I save the window as "$$OpeningEntry400002$$"
 	* Check movements
 		Given I open hyperlink "e1cib/list/AccumulationRegister.InventoryBalance"
 		And "List" table contains lines
 		| 'Quantity' | 'Recorder'         | 'Company'      | 'Item key'  |
-		| '500,000'  | 'Opening entry 2*' | 'Main Company' | 'XS/Blue'   |
-		| '400,000'  | 'Opening entry 2*' | 'Main Company' | 'S/Yellow'  |
-		| '400,000'  | 'Opening entry 2*' | 'Main Company' | 'XS/Blue'   |
-		| '100,000'  | 'Opening entry 2*' | 'Main Company' | '38/Yellow' |
-		| '100,000'  | 'Opening entry 2*' | 'Main Company' | '38/Yellow' |
-		| '100,000'  | 'Opening entry 2*' | 'Main Company' | '36/Red'    |
-		| '100,000'  | 'Opening entry 2*' | 'Main Company' | '36/Red'    |
-		| '200,000'  | 'Opening entry 2*' | 'Main Company' | '36/18SD'   |
-		| '300,000'  | 'Opening entry 2*' | 'Main Company' | '36/18SD'   |
-		| '500,000'  | 'Opening entry 2*' | 'Main Company' | 'L/Green'   |
-		| '100,000'  | 'Opening entry 2*' | 'Main Company' | 'L/Green'   |
+		| '500,000'  | '$$OpeningEntry400002$$' | 'Main Company' | 'XS/Blue'   |
+		| '400,000'  | '$$OpeningEntry400002$$' | 'Main Company' | 'S/Yellow'  |
+		| '400,000'  | '$$OpeningEntry400002$$' | 'Main Company' | 'XS/Blue'   |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Main Company' | '38/Yellow' |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Main Company' | '38/Yellow' |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Main Company' | '36/Red'    |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Main Company' | '36/Red'    |
+		| '200,000'  | '$$OpeningEntry400002$$' | 'Main Company' | '36/18SD'   |
+		| '300,000'  | '$$OpeningEntry400002$$' | 'Main Company' | '36/18SD'   |
+		| '500,000'  | '$$OpeningEntry400002$$' | 'Main Company' | 'L/Green'   |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Main Company' | 'L/Green'   |
 		And I close all client application windows
 		Given I open hyperlink "e1cib/list/AccumulationRegister.StockReservation"
 		And "List" table contains lines
 		| 'Quantity' | 'Recorder'         | 'Store'    | 'Item key'  |
-		| '500,000'  | 'Opening entry 2*' | 'Store 01' | 'XS/Blue'   |
-		| '400,000'  | 'Opening entry 2*' | 'Store 02' | 'S/Yellow'  |
-		| '400,000'  | 'Opening entry 2*' | 'Store 01' | 'XS/Blue'   |
-		| '100,000'  | 'Opening entry 2*' | 'Store 02' | '38/Yellow' |
-		| '100,000'  | 'Opening entry 2*' | 'Store 01' | '38/Yellow' |
-		| '100,000'  | 'Opening entry 2*' | 'Store 02' | '36/Red'    |
-		| '100,000'  | 'Opening entry 2*' | 'Store 01' | '36/Red'    |
-		| '200,000'  | 'Opening entry 2*' | 'Store 02' | '36/18SD'   |
-		| '300,000'  | 'Opening entry 2*' | 'Store 01' | '36/18SD'   |
-		| '500,000'  | 'Opening entry 2*' | 'Store 01' | 'L/Green'   |
-		| '100,000'  | 'Opening entry 2*' | 'Store 02' | 'L/Green'   |
+		| '500,000'  | '$$OpeningEntry400002$$' | 'Store 01' | 'XS/Blue'   |
+		| '400,000'  | '$$OpeningEntry400002$$' | 'Store 02' | 'S/Yellow'  |
+		| '400,000'  | '$$OpeningEntry400002$$' | 'Store 01' | 'XS/Blue'   |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Store 02' | '38/Yellow' |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Store 01' | '38/Yellow' |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Store 02' | '36/Red'    |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Store 01' | '36/Red'    |
+		| '200,000'  | '$$OpeningEntry400002$$' | 'Store 02' | '36/18SD'   |
+		| '300,000'  | '$$OpeningEntry400002$$' | 'Store 01' | '36/18SD'   |
+		| '500,000'  | '$$OpeningEntry400002$$' | 'Store 01' | 'L/Green'   |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Store 02' | 'L/Green'   |
 		And I close all client application windows
 		Given I open hyperlink "e1cib/list/AccumulationRegister.StockBalance"
 		And "List" table contains lines
 		| 'Quantity' | 'Recorder'         | 'Store'    | 'Item key'  |
-		| '500,000'  | 'Opening entry 2*' | 'Store 01' | 'XS/Blue'   |
-		| '400,000'  | 'Opening entry 2*' | 'Store 02' | 'S/Yellow'  |
-		| '400,000'  | 'Opening entry 2*' | 'Store 01' | 'XS/Blue'   |
-		| '100,000'  | 'Opening entry 2*' | 'Store 02' | '38/Yellow' |
-		| '100,000'  | 'Opening entry 2*' | 'Store 01' | '38/Yellow' |
-		| '100,000'  | 'Opening entry 2*' | 'Store 02' | '36/Red'    |
-		| '100,000'  | 'Opening entry 2*' | 'Store 01' | '36/Red'    |
-		| '200,000'  | 'Opening entry 2*' | 'Store 02' | '36/18SD'   |
-		| '300,000'  | 'Opening entry 2*' | 'Store 01' | '36/18SD'   |
-		| '500,000'  | 'Opening entry 2*' | 'Store 01' | 'L/Green'   |
-		| '100,000'  | 'Opening entry 2*' | 'Store 02' | 'L/Green'   |
+		| '500,000'  | '$$OpeningEntry400002$$' | 'Store 01' | 'XS/Blue'   |
+		| '400,000'  | '$$OpeningEntry400002$$' | 'Store 02' | 'S/Yellow'  |
+		| '400,000'  | '$$OpeningEntry400002$$' | 'Store 01' | 'XS/Blue'   |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Store 02' | '38/Yellow' |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Store 01' | '38/Yellow' |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Store 02' | '36/Red'    |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Store 01' | '36/Red'    |
+		| '200,000'  | '$$OpeningEntry400002$$' | 'Store 02' | '36/18SD'   |
+		| '300,000'  | '$$OpeningEntry400002$$' | 'Store 01' | '36/18SD'   |
+		| '500,000'  | '$$OpeningEntry400002$$' | 'Store 01' | 'L/Green'   |
+		| '100,000'  | '$$OpeningEntry400002$$' | 'Store 02' | 'L/Green'   |
 		And I close all client application windows
 
 Scenario: _400003 opening entry advance balance
@@ -647,11 +620,11 @@ Scenario: _400003 opening entry advance balance
 			| Description  |
 			| Main Company |
 		And I select current line in "List" table
-	* Change the document number
-		And I input "3" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "3" text in "Number" field
+		And I click the button named "FormPost"
+		And I delete "$$NumberOpeningEntry400003$$" variable
+		And I delete "$$OpeningEntry400003$$" variable
+		And I save the value of "Number" field as "$$NumberOpeningEntry400003$$"
+		And I save the window as "$$OpeningEntry400003$$"
 	* Filling in AdvanceFromCustomers
 		And in the table "AdvanceFromCustomers" I click the button named "AdvanceFromCustomersAdd"
 		And I click choice button of the attribute named "AdvanceFromCustomersPartner" in "AdvanceFromCustomers" table
@@ -695,37 +668,49 @@ Scenario: _400003 opening entry advance balance
 		And I input "100,00" text in the field named "AdvanceToSuppliersAmount" of "AdvanceToSuppliers" table
 		And I finish line editing in "AdvanceToSuppliers" table
 	* Post document
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberOpeningEntry400003$$" variable
+		And I delete "$$OpeningEntry400003$$" variable
+		And I save the value of "Number" field as "$$NumberOpeningEntry400003$$"
+		And I save the window as "$$OpeningEntry400003$$"
 	* Check movements
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Opening entry 3*'                     | ''            | ''       | ''                    | ''               | ''                       | ''                  | ''             | ''                 | ''                         | ''                     | ''         |
-		| 'Document registrations records'       | ''            | ''       | ''                    | ''               | ''                       | ''                  | ''             | ''                 | ''                         | ''                     | ''         |
-		| 'Register  "Accounts statement"'       | ''            | ''       | ''                    | ''               | ''                       | ''                  | ''             | ''                 | ''                         | ''                     | ''         |
-		| ''                                     | 'Record type' | 'Period' | 'Resources'           | ''               | ''                       | ''                  | 'Dimensions'   | ''                 | ''                         | ''                     | ''         |
-		| ''                                     | ''            | ''       | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR'    | 'Company'      | 'Partner'          | 'Legal name'               | 'Basis document'       | 'Currency' |
-		| ''                                     | 'Receipt'     | '*'      | ''                    | ''               | '100'                    | ''                  | 'Main Company' | 'Kalipso'          | 'Company Kalipso'          | ''                     | 'TRY'      |
-		| ''                                     | 'Receipt'     | '*'      | '100'                 | ''               | ''                       | ''                  | 'Main Company' | 'Ferron BP'        | 'Company Ferron BP'        | ''                     | 'TRY'      |
-		| ''                                     | ''            | ''       | ''                    | ''               | ''                       | ''                  | ''             | ''                 | ''                         | ''                     | ''         |
-		| 'Register  "Reconciliation statement"' | ''            | ''       | ''                    | ''               | ''                       | ''                  | ''             | ''                 | ''                         | ''                     | ''         |
-		| ''                                     | 'Record type' | 'Period' | 'Resources'           | 'Dimensions'     | ''                       | ''                  | ''             | ''                 | ''                         | ''                     | ''         |
-		| ''                                     | ''            | ''       | 'Amount'              | 'Company'        | 'Legal name'             | 'Currency'          | ''             | ''                 | ''                         | ''                     | ''         |
-		| ''                                     | 'Receipt'     | '*'      | '100'                 | 'Main Company'   | 'Company Ferron BP'      | 'TRY'               | ''             | ''                 | ''                         | ''                     | ''         |
-		| ''                                     | 'Expense'     | '*'      | '100'                 | 'Main Company'   | 'Company Kalipso'        | 'TRY'               | ''             | ''                 | ''                         | ''                     | ''         |
-		| ''                                     | ''            | ''       | ''                    | ''               | ''                       | ''                  | ''             | ''                 | ''                         | ''                     | ''         |
-		| 'Register  "Advance from customers"'   | ''            | ''       | ''                    | ''               | ''                       | ''                  | ''             | ''                 | ''                         | ''                     | ''         |
-		| ''                                     | 'Record type' | 'Period' | 'Resources'           | 'Dimensions'     | ''                       | ''                  | ''             | ''                 | ''                         | 'Attributes'           | ''         |
-		| ''                                     | ''            | ''       | 'Amount'              | 'Company'        | 'Partner'                | 'Legal name'        | 'Currency'     | 'Receipt document' | 'Multi currency movement type'   | 'Deferred calculation' | ''         |
-		| ''                                     | 'Receipt'     | '*'      | '17,12'               | 'Main Company'   | 'Kalipso'                | 'Company Kalipso'   | 'USD'          | 'Opening entry 3*' | 'Reporting currency'       | 'No'                   | ''         |
-		| ''                                     | 'Receipt'     | '*'      | '100'                 | 'Main Company'   | 'Kalipso'                | 'Company Kalipso'   | 'TRY'          | 'Opening entry 3*' | 'en description is empty' | 'No'                   | ''         |
-		| ''                                     | 'Receipt'     | '*'      | '100'                 | 'Main Company'   | 'Kalipso'                | 'Company Kalipso'   | 'TRY'          | 'Opening entry 3*' | 'Local currency'           | 'No'                   | ''         |
-		| ''                                     | ''            | ''       | ''                    | ''               | ''                       | ''                  | ''             | ''                 | ''                         | ''                     | ''         |
-		| 'Register  "Advance to suppliers"'     | ''            | ''       | ''                    | ''               | ''                       | ''                  | ''             | ''                 | ''                         | ''                     | ''         |
-		| ''                                     | 'Record type' | 'Period' | 'Resources'           | 'Dimensions'     | ''                       | ''                  | ''             | ''                 | ''                         | 'Attributes'           | ''         |
-		| ''                                     | ''            | ''       | 'Amount'              | 'Company'        | 'Partner'                | 'Legal name'        | 'Currency'     | 'Payment document' | 'Multi currency movement type'   | 'Deferred calculation' | ''         |
-		| ''                                     | 'Receipt'     | '*'      | '17,12'               | 'Main Company'   | 'Ferron BP'              | 'Company Ferron BP' | 'USD'          | 'Opening entry 3*' | 'Reporting currency'       | 'No'                   | ''         |
-		| ''                                     | 'Receipt'     | '*'      | '100'                 | 'Main Company'   | 'Ferron BP'              | 'Company Ferron BP' | 'TRY'          | 'Opening entry 3*' | 'en description is empty' | 'No'                   | ''         |
-		| ''                                     | 'Receipt'     | '*'      | '100'                 | 'Main Company'   | 'Ferron BP'              | 'Company Ferron BP' | 'TRY'          | 'Opening entry 3*' | 'Local currency'           | 'No'                   | ''         |
+		And I select "Accounts statement" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$OpeningEntry400003$$'         | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''          | ''                  | ''               | ''         |
+		| 'Document registrations records' | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''          | ''                  | ''               | ''         |
+		| 'Register  "Accounts statement"' | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''          | ''                  | ''               | ''         |
+		| ''                               | 'Record type' | 'Period' | 'Resources'            | ''               | ''                       | ''               | 'Dimensions'   | ''          | ''                  | ''               | ''         |
+		| ''                               | ''            | ''       | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner'   | 'Legal name'        | 'Basis document' | 'Currency' |
+		| ''                               | 'Receipt'     | '*'      | ''                     | ''               | '100'                    | ''               | 'Main Company' | 'Kalipso'   | 'Company Kalipso'   | ''               | 'TRY'      |
+		| ''                               | 'Receipt'     | '*'      | '100'                  | ''               | ''                       | ''               | 'Main Company' | 'Ferron BP' | 'Company Ferron BP' | ''               | 'TRY'      |
+		And I select "Reconciliation statement" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Reconciliation statement"' | ''            | ''       | ''          | ''             | ''                  | ''         | '' | '' | '' | '' | '' |
+		| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''                  | ''         | '' | '' | '' | '' | '' |
+		| ''                                     | ''            | ''       | 'Amount'    | 'Company'      | 'Legal name'        | 'Currency' | '' | '' | '' | '' | '' |
+		| ''                                     | 'Receipt'     | '*'      | '100'       | 'Main Company' | 'Company Ferron BP' | 'TRY'      | '' | '' | '' | '' | '' |
+		| ''                                     | 'Expense'     | '*'      | '100'       | 'Main Company' | 'Company Kalipso'   | 'TRY'      | '' | '' | '' | '' | '' |
+		And I select "Advance from customers" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Advance from customers"' | ''            | ''       | ''          | ''             | ''        | ''                | ''         | ''                       | ''                             | ''                     | '' |
+		| ''                                   | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''        | ''                | ''         | ''                       | ''                             | 'Attributes'           | '' |
+		| ''                                   | ''            | ''       | 'Amount'    | 'Company'      | 'Partner' | 'Legal name'      | 'Currency' | 'Receipt document'       | 'Multi currency movement type' | 'Deferred calculation' | '' |
+		| ''                                   | 'Receipt'     | '*'      | '17,12'     | 'Main Company' | 'Kalipso' | 'Company Kalipso' | 'USD'      | '$$OpeningEntry400003$$' | 'Reporting currency'           | 'No'                   | '' |
+		| ''                                   | 'Receipt'     | '*'      | '100'       | 'Main Company' | 'Kalipso' | 'Company Kalipso' | 'TRY'      | '$$OpeningEntry400003$$' | 'en description is empty'      | 'No'                   | '' |
+		| ''                                   | 'Receipt'     | '*'      | '100'       | 'Main Company' | 'Kalipso' | 'Company Kalipso' | 'TRY'      | '$$OpeningEntry400003$$' | 'Local currency'               | 'No'                   | '' |
+		And I select "Advance to suppliers" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Advance to suppliers"'     | ''            | ''       | ''                     | ''               | ''                       | ''                  | ''             | ''                       | ''                             | ''                     | ''         |
+		| ''                                     | 'Record type' | 'Period' | 'Resources'            | 'Dimensions'     | ''                       | ''                  | ''             | ''                       | ''                             | 'Attributes'           | ''         |
+		| ''                                     | ''            | ''       | 'Amount'               | 'Company'        | 'Partner'                | 'Legal name'        | 'Currency'     | 'Payment document'       | 'Multi currency movement type' | 'Deferred calculation' | ''         |
+		| ''                                     | 'Receipt'     | '*'      | '17,12'                | 'Main Company'   | 'Ferron BP'              | 'Company Ferron BP' | 'USD'          | '$$OpeningEntry400003$$' | 'Reporting currency'           | 'No'                   | ''         |
+		| ''                                     | 'Receipt'     | '*'      | '100'                  | 'Main Company'   | 'Ferron BP'              | 'Company Ferron BP' | 'TRY'          | '$$OpeningEntry400003$$' | 'en description is empty'      | 'No'                   | ''         |
+		| ''                                     | 'Receipt'     | '*'      | '100'                  | 'Main Company'   | 'Ferron BP'              | 'Company Ferron BP' | 'TRY'          | '$$OpeningEntry400003$$' | 'Local currency'               | 'No'                   | ''         |
 		And I close all client application windows
 
 
@@ -739,11 +724,6 @@ Scenario: _400004 opening entry AP balance by partner terms (vendors)
 			| Description  |
 			| Main Company |
 		And I select current line in "List" table
-	* Change the document number
-		And I input "4" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "4" text in "Number" field
 	* Filling in Account payable
 		* Filling in partner and Legal name
 			And I move to "Account payable" tab
@@ -798,37 +778,48 @@ Scenario: _400004 opening entry AP balance by partner terms (vendors)
 			| 'Movement type'      | 'Type'      |
 			| 'Reporting currency' | 'Reporting' |
 			And I select current line in "CurrenciesAccountPayableByAgreements" table
-			And I input "5,8400" text in the field named "CurrenciesAccountPayableByAgreementsRatePresentation" of "CurrenciesAccountPayableByAgreements" table
+			And I input "0,1712" text in the field named "CurrenciesAccountPayableByAgreementsRatePresentation" of "CurrenciesAccountPayableByAgreements" table
 			And I input "1" text in the field named "CurrenciesAccountPayableByAgreementsMultiplicity" of "CurrenciesAccountPayableByAgreements" table
 			And I finish line editing in "CurrenciesAccountPayableByAgreements" table
 			And "CurrenciesAccountPayableByDocuments" table contains lines
 			| 'Movement type'      | 'Type'      | 'Currency from' | 'Currency' | 'Rate'   | 'Amount' | 'Multiplicity' |
-			| 'Reporting currency' | 'Reporting' | 'TRY'           | 'USD'      | '5,8400' | '17,12'  | '1'            |
+			| 'Reporting currency' | 'Reporting' | 'TRY'           | 'USD'      | '0,1712' | '17,12'  | '1'            |
 	* Post document
-		And I click "Post and close" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberOpeningEntry400004$$" variable
+		And I delete "$$OpeningEntry400004$$" variable
+		And I save the value of "Number" field as "$$NumberOpeningEntry400004$$"
+		And I save the window as "$$OpeningEntry400004$$"
+		And I click the button named "FormPostAndClose"
 		And Delay 5
 		* Check movements
 			And I click "Registrations report" button
-			Then "ResultTable" spreadsheet document is equal by template
-			| 'Opening entry 4*'                     | ''            | ''       | ''          | ''             | ''               | ''         | ''           | ''                         | ''         | ''                         | ''                     |
-			| 'Document registrations records'       | ''            | ''       | ''          | ''             | ''               | ''         | ''           | ''                         | ''         | ''                         | ''                     |
-			| 'Register  "Accounts statement"'           | ''            | ''                   | ''                    | ''               | ''                       | ''               | ''             | ''                         | ''           | ''                         | ''                     |
-			| ''                                         | 'Record type' | 'Period'             | 'Resources'           | ''               | ''                       | ''               | 'Dimensions'   | ''                         | ''           | ''                         | ''                     |
-			| ''                                         | ''            | ''                   | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner'                  | 'Legal name' | 'Basis document'           | 'Currency'             |
-			| ''                                         | 'Receipt'     | '*'                  | ''                    | '100'            | ''                       | ''               | 'Main Company' | 'DFC'                      | 'DFC'        | ''                         | 'TRY'                  |
-			| ''                                         | ''            | ''                   | ''                    | ''               | ''                       | ''               | ''             | ''                         | ''           | ''                         | ''                     |
-			| 'Register  "Reconciliation statement"' | ''            | ''       | ''          | ''             | ''               | ''         | ''           | ''                         | ''         | ''                         | ''                     |
-			| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''               | ''         | ''           | ''                         | ''         | ''                         | ''                     |
-			| ''                                     | ''            | ''       | 'Amount'    | 'Company'      | 'Legal name'     | 'Currency' | ''           | ''                         | ''         | ''                         | ''                     |
-			| ''                                     | 'Expense'     | '*'      | '100'       | 'Main Company' | 'DFC'            | 'TRY'      | ''           | ''                         | ''         | ''                         | ''                     |
-			| ''                                     | ''            | ''       | ''          | ''             | ''               | ''         | ''           | ''                         | ''         | ''                         | ''                     |
-			| 'Register  "Partner AP transactions"'  | ''            | ''       | ''          | ''             | ''               | ''         | ''           | ''                         | ''         | ''                         | ''                     |
-			| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''               | ''         | ''           | ''                         | ''         | ''                         | 'Attributes'           |
-			| ''                                     | ''            | ''       | 'Amount'    | 'Company'      | 'Basis document' | 'Partner'  | 'Legal name' | 'Partner term'                | 'Currency' | 'Multi currency movement type'   | 'Deferred calculation' |
-			| ''                                     | 'Receipt'     | '*'      | '17,12'     | 'Main Company' | ''               | 'DFC'      | 'DFC'        | 'DFC Vendor by Partner terms' | 'USD'      | 'Reporting currency'       | 'No'                   |
-			| ''                                     | 'Receipt'     | '*'      | '100'       | 'Main Company' | ''               | 'DFC'      | 'DFC'        | 'DFC Vendor by Partner terms' | 'TRY'      | 'en description is empty' | 'No'                   |
-			| ''                                     | 'Receipt'     | '*'      | '100'       | 'Main Company' | ''               | 'DFC'      | 'DFC'        | 'DFC Vendor by Partner terms' | 'TRY'      | 'Local currency'           | 'No'                   |
-			| ''                                     | 'Receipt'     | '*'      | '100'       | 'Main Company' | ''               | 'DFC'      | 'DFC'        | 'DFC Vendor by Partner terms' | 'TRY'      | 'TRY'                      | 'No'                   |
+			And I select "Accounts statement" exact value from "Register" drop-down list
+			And I click "Generate report" button
+			And "ResultTable" spreadsheet document contains lines:
+			| '$$OpeningEntry400004$$'         | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''        | ''           | ''               | ''         |
+			| 'Document registrations records' | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''        | ''           | ''               | ''         |
+			| 'Register  "Accounts statement"' | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''        | ''           | ''               | ''         |
+			| ''                               | 'Record type' | 'Period' | 'Resources'            | ''               | ''                       | ''               | 'Dimensions'   | ''        | ''           | ''               | ''         |
+			| ''                               | ''            | ''       | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner' | 'Legal name' | 'Basis document' | 'Currency' |
+			| ''                               | 'Receipt'     | '*'      | ''                     | '100'            | ''                       | ''               | 'Main Company' | 'DFC'     | 'DFC'        | ''               | 'TRY'      |
+			And I select "Reconciliation statement" exact value from "Register" drop-down list
+			And I click "Generate report" button
+			And "ResultTable" spreadsheet document contains lines:
+			| 'Register  "Reconciliation statement"' | ''            | ''       | ''          | ''             | ''           | ''         | '' | '' | '' | '' | '' |
+			| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''           | ''         | '' | '' | '' | '' | '' |
+			| ''                                     | ''            | ''       | 'Amount'    | 'Company'      | 'Legal name' | 'Currency' | '' | '' | '' | '' | '' |
+			| ''                                     | 'Expense'     | '*'      | '100'       | 'Main Company' | 'DFC'        | 'TRY'      | '' | '' | '' | '' | '' |
+			And I select "Partner AP transactions" exact value from "Register" drop-down list
+			And I click "Generate report" button
+			And "ResultTable" spreadsheet document contains lines:
+			| 'Register  "Partner AP transactions"'  | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''                            | ''           | ''                             | ''                     |
+			| ''                                     | 'Record type' | 'Period' | 'Resources'            | 'Dimensions'     | ''                       | ''               | ''             | ''                            | ''           | ''                             | 'Attributes'           |
+			| ''                                     | ''            | ''       | 'Amount'               | 'Company'        | 'Basis document'         | 'Partner'        | 'Legal name'   | 'Partner term'                | 'Currency'   | 'Multi currency movement type' | 'Deferred calculation' |
+			| ''                                     | 'Receipt'     | '*'      | '17,12'                | 'Main Company'   | ''                       | 'DFC'            | 'DFC'          | 'DFC Vendor by Partner terms' | 'USD'        | 'Reporting currency'           | 'No'                   |
+			| ''                                     | 'Receipt'     | '*'      | '100'                  | 'Main Company'   | ''                       | 'DFC'            | 'DFC'          | 'DFC Vendor by Partner terms' | 'TRY'        | 'en description is empty'      | 'No'                   |
+			| ''                                     | 'Receipt'     | '*'      | '100'                  | 'Main Company'   | ''                       | 'DFC'            | 'DFC'          | 'DFC Vendor by Partner terms' | 'TRY'        | 'Local currency'               | 'No'                   |
+			| ''                                     | 'Receipt'     | '*'      | '100'                  | 'Main Company'   | ''                       | 'DFC'            | 'DFC'          | 'DFC Vendor by Partner terms' | 'TRY'        | 'TRY'                          | 'No'                   |
 
 
 	
@@ -842,11 +833,6 @@ Scenario: _400005 opening entry AR balance by partner terms (customers)
 			| Description  |
 			| Main Company |
 		And I select current line in "List" table
-	* Change the document number
-		And I input "5" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "5" text in "Number" field
 	* Filling in Account receivable
 		* Filling in partner and Legal name
 			And I move to "Account receivable" tab
@@ -901,37 +887,48 @@ Scenario: _400005 opening entry AR balance by partner terms (customers)
 				| 'Movement type'      | 'Type'      |
 				| 'Reporting currency' | 'Reporting' |
 			And I select current line in "CurrenciesAccountReceivableByAgreements" table
-			And I input "5,8400" text in the field named "CurrenciesAccountReceivableByAgreementsRatePresentation" of "CurrenciesAccountReceivableByAgreements" table
+			And I input "0,1712" text in the field named "CurrenciesAccountReceivableByAgreementsRatePresentation" of "CurrenciesAccountReceivableByAgreements" table
 			And I input "1" text in the field named "CurrenciesAccountReceivableByAgreementsMultiplicity" of "CurrenciesAccountReceivableByAgreements" table
 			And I finish line editing in "CurrenciesAccountReceivableByAgreements" table
 			And "CurrenciesAccountReceivableByDocuments" table contains lines
 				| 'Movement type'      | 'Type'      | 'Currency from' | 'Currency' | 'Rate'   | 'Amount' | 'Multiplicity' |
-				| 'Reporting currency' | 'Reporting' | 'TRY'           | 'USD'      | '5,8400' | '17,12'  | '1'            |
+				| 'Reporting currency' | 'Reporting' | 'TRY'           | 'USD'      | '0,1712' | '17,12'  | '1'            |
 	* Post document
-		And I click "Post and close" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberOpeningEntry400005$$" variable
+		And I delete "$$OpeningEntry400005$$" variable
+		And I save the value of "Number" field as "$$NumberOpeningEntry400005$$"
+		And I save the window as "$$OpeningEntry400005$$"
+		And I click the button named "FormPostAndClose"
 		And Delay 5
 	* Check movements
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-			| 'Opening entry 5*'                     | ''            | ''       | ''          | ''             | ''               | ''         | ''           | ''                           | ''         | ''                         | ''                     |
-			| 'Document registrations records'       | ''            | ''       | ''          | ''             | ''               | ''         | ''           | ''                           | ''         | ''                         | ''                     |
-			| 'Register  "Partner AR transactions"'  | ''            | ''       | ''          | ''             | ''               | ''         | ''           | ''                           | ''         | ''                         | ''                     |
-			| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''               | ''         | ''           | ''                           | ''         | ''                         | 'Attributes'           |
-			| ''                                     | ''            | ''       | 'Amount'    | 'Company'      | 'Basis document' | 'Partner'  | 'Legal name' | 'Partner term'                  | 'Currency' | 'Multi currency movement type'   | 'Deferred calculation' |
-			| ''                                     | 'Receipt'     | '*'      | '17,12'     | 'Main Company' | ''               | 'DFC'      | 'DFC'        | 'DFC Customer by Partner terms' | 'USD'      | 'Reporting currency'       | 'No'                   |
-			| ''                                     | 'Receipt'     | '*'      | '100'       | 'Main Company' | ''               | 'DFC'      | 'DFC'        | 'DFC Customer by Partner terms' | 'TRY'      | 'en description is empty' | 'No'                   |
-			| ''                                     | 'Receipt'     | '*'      | '100'       | 'Main Company' | ''               | 'DFC'      | 'DFC'        | 'DFC Customer by Partner terms' | 'TRY'      | 'Local currency'           | 'No'                   |
-			| ''                                     | 'Receipt'     | '*'      | '100'       | 'Main Company' | ''               | 'DFC'      | 'DFC'        | 'DFC Customer by Partner terms' | 'TRY'      | 'TRY'                      | 'No'                   |
-			| ''                                     | ''            | ''       | ''          | ''             | ''               | ''         | ''           | ''                           | ''         | ''                         | ''                     |
-			| 'Register  "Accounts statement"'           | ''            | ''                   | ''                    | ''               | ''                       | ''               | ''             | ''                           | ''           | ''                         | ''                     |
-			| ''                                         | 'Record type' | 'Period'             | 'Resources'           | ''               | ''                       | ''               | 'Dimensions'   | ''                           | ''           | ''                         | ''                     |
-			| ''                                         | ''            | ''                   | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner'                    | 'Legal name' | 'Basis document'           | 'Currency'             |
-			| ''                                         | 'Receipt'     | '*'                  | ''                    | ''               | ''                       | '100'            | 'Main Company' | 'DFC'                        | 'DFC'        | ''                         | 'TRY'                  |
-			| ''                                         | ''            | ''                   | ''                    | ''               | ''                       | ''               | ''             | ''                           | ''           | ''                         | ''                     |
-			| 'Register  "Reconciliation statement"' | ''            | ''       | ''          | ''             | ''               | ''         | ''           | ''                           | ''         | ''                         | ''                     |
-			| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''               | ''         | ''           | ''                           | ''         | ''                         | ''                     |
-			| ''                                     | ''            | ''       | 'Amount'    | 'Company'      | 'Legal name'     | 'Currency' | ''           | ''                           | ''         | ''                         | ''                     |
-			| ''                                     | 'Receipt'     | '*'      | '100'       | 'Main Company' | 'DFC'            | 'TRY'      | ''           | ''                           | ''         | ''                         | ''                     |
+		And I select "Partner AR transactions" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+			| '$$OpeningEntry400005$$'              | ''            | ''       | ''          | ''             | ''               | ''        | ''           | ''                              | ''         | ''                             | ''                     |
+			| 'Document registrations records'      | ''            | ''       | ''          | ''             | ''               | ''        | ''           | ''                              | ''         | ''                             | ''                     |
+			| 'Register  "Partner AR transactions"' | ''            | ''       | ''          | ''             | ''               | ''        | ''           | ''                              | ''         | ''                             | ''                     |
+			| ''                                    | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''               | ''        | ''           | ''                              | ''         | ''                             | 'Attributes'           |
+			| ''                                    | ''            | ''       | 'Amount'    | 'Company'      | 'Basis document' | 'Partner' | 'Legal name' | 'Partner term'                  | 'Currency' | 'Multi currency movement type' | 'Deferred calculation' |
+			| ''                                    | 'Receipt'     | '*'      | '17,12'     | 'Main Company' | ''               | 'DFC'     | 'DFC'        | 'DFC Customer by Partner terms' | 'USD'      | 'Reporting currency'           | 'No'                   |
+			| ''                                    | 'Receipt'     | '*'      | '100'       | 'Main Company' | ''               | 'DFC'     | 'DFC'        | 'DFC Customer by Partner terms' | 'TRY'      | 'en description is empty'      | 'No'                   |
+			| ''                                    | 'Receipt'     | '*'      | '100'       | 'Main Company' | ''               | 'DFC'     | 'DFC'        | 'DFC Customer by Partner terms' | 'TRY'      | 'Local currency'               | 'No'                   |
+			| ''                                    | 'Receipt'     | '*'      | '100'       | 'Main Company' | ''               | 'DFC'     | 'DFC'        | 'DFC Customer by Partner terms' | 'TRY'      | 'TRY'                          | 'No'                   |
+		And I select "Accounts statement" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+			| 'Register  "Accounts statement"' | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''        | ''           | ''               | ''         |
+			| ''                               | 'Record type' | 'Period' | 'Resources'            | ''               | ''                       | ''               | 'Dimensions'   | ''        | ''           | ''               | ''         |
+			| ''                               | ''            | ''       | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner' | 'Legal name' | 'Basis document' | 'Currency' |
+			| ''                               | 'Receipt'     | '*'      | ''                     | ''               | ''                       | '100'            | 'Main Company' | 'DFC'     | 'DFC'        | ''               | 'TRY'      |
+		And I select "Reconciliation statement" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+			| 'Register  "Reconciliation statement"' | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''                              | ''           | ''                             | ''                     |
+			| ''                                     | 'Record type' | 'Period' | 'Resources'            | 'Dimensions'     | ''                       | ''               | ''             | ''                              | ''           | ''                             | ''                     |
+			| ''                                     | ''            | ''       | 'Amount'               | 'Company'        | 'Legal name'             | 'Currency'       | ''             | ''                              | ''           | ''                             | ''                     |
+			| ''                                     | 'Receipt'     | '*'      | '100'                  | 'Main Company'   | 'DFC'                    | 'TRY'            | ''             | ''                              | ''           | ''                             | ''                     |
 
 
 
@@ -945,11 +942,6 @@ Scenario: _400008 check the entry of the account balance, inventory balance, Ap/
 			| Description  |
 			| Main Company |
 		And I select current line in "List" table
-	* Change the document number
-		And I input "8" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "8" text in "Number" field
 	* Filling in the tabular part Account Balance
 		And in the table "AccountBalance" I click the button named "AccountBalanceAdd"
 		And I click choice button of "Account" attribute in "AccountBalance" table
@@ -1119,6 +1111,11 @@ Scenario: _400008 check the entry of the account balance, inventory balance, Ap/
 			And I input "5,8400" text in the field named "CurrenciesAccountReceivableByAgreementsRatePresentation" of "CurrenciesAccountReceivableByAgreements" table
 			And I input "1" text in the field named "CurrenciesAccountReceivableByAgreementsMultiplicity" of "CurrenciesAccountReceivableByAgreements" table
 			And I finish line editing in "CurrenciesAccountReceivableByAgreements" table
+			And I click the button named "FormPost"
+			And I delete "$$NumberOpeningEntry400008$$" variable
+			And I delete "$$OpeningEntry400008$$" variable
+			And I save the value of "Number" field as "$$NumberOpeningEntry400008$$"
+			And I save the window as "$$OpeningEntry400008$$"
 
 
 Scenario: _400009 check the entry of the Ap/Ar balance by documents
@@ -1131,11 +1128,6 @@ Scenario: _400009 check the entry of the Ap/Ar balance by documents
 			| Description  |
 			| Main Company |
 		And I select current line in "List" table
-	* Change the document number
-		And I input "9" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "9" text in "Number" field
 	* Filling in AP by documents
 		And I move to "Account payable" tab
 		And I move to the tab named "GroupAccountPayableByDocuments"
@@ -1160,18 +1152,6 @@ Scenario: _400009 check the entry of the Ap/Ar balance by documents
 			| 'Code' | 'Description'  |
 			| 'TRY'  | 'Turkish lira' |
 		And I select current line in "List" table
-		And I activate field named "AccountPayableByDocumentsBasisDocument" in "AccountPayableByDocuments" table
-		And I click choice button of the attribute named "AccountPayableByDocumentsBasisDocument" in "AccountPayableByDocuments" table
-		And I go to line in "" table
-			| ''                 |
-			| 'Purchase invoice' |
-		And I select current line in "" table
-		Then the number of "List" table lines is "меньше или равно" 1
-		And I go to line in "List" table
-			| 'Legal name' | 'Number' |
-			| 'DFC'        | '5 900'  |
-		And I select current line in "List" table
-		And I activate field named "AccountPayableByDocumentsAmount" in "AccountPayableByDocuments" table
 		And I input "100,00" text in the field named "AccountPayableByDocumentsAmount" of "AccountPayableByDocuments" table
 		And I finish line editing in "AccountPayableByDocuments" table
 	* Filling in AR by documents
@@ -1196,28 +1176,57 @@ Scenario: _400009 check the entry of the Ap/Ar balance by documents
 			| 'Code' | 'Description'  |
 			| 'TRY'  | 'Turkish lira' |
 		And I select current line in "List" table
-		And I click choice button of the attribute named "AccountReceivableByDocumentsBasisDocument" in "AccountReceivableByDocuments" table
-		And I go to line in "" table
-			| ''              |
-			| 'Sales invoice' |
-		And I select current line in "" table
-		And I go to line in "List" table
-			| 'Number' |
-			| '5 900'  |
-		And I select current line in "List" table
-		And I finish line editing in "AccountReceivableByDocuments" table
-		And I activate field named "AccountReceivableByDocumentsAmount" in "AccountReceivableByDocuments" table
-		And I select current line in "AccountReceivableByDocuments" table
 		And I input "200,00" text in the field named "AccountReceivableByDocumentsAmount" of "AccountReceivableByDocuments" table
 		And I finish line editing in "AccountReceivableByDocuments" table
 	* Post and check movements
-		And I click "Post" button
-	# AccountByDocumentsMainTablePartnerOnChange
-	# AccountPayableByDocumentsPartnerOnChange
-	# AccountReceivableByDocumentsPartnerOnChange
-	# MainTableLegalNameEditTextChange
-	# AccountReceivableByDocumentsPartner termStartChoice
-	# AccountPayableByDocumentsPartner termStartChoice
-	# AccountReceivableByAgreementsPartner termEditTextChange
-	# AccountReceivableByDocumentsPartner termEditTextChange
-	# Partner termEditTextChange
+		And I click the button named "FormPost"
+		And I delete "$$NumberOpeningEntry400009$$" variable
+		And I delete "$$OpeningEntry400009$$" variable
+		And I delete "$$DateOpeningEntry400009$$" variable
+		And I save the value of "Number" field as "$$NumberOpeningEntry400009$$"
+		And I save the value of the field named "Date" as "$$DateOpeningEntry400009$$"
+		And I save the window as "$$OpeningEntry400009$$"
+		And I click "Registrations report" button
+		And I select "Partner AR transactions" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+			| '$$OpeningEntry400009$$'              | ''            | ''                           | ''          | ''             | ''                       | ''        | ''           | ''                 | ''         | ''                             | ''                     |
+			| 'Document registrations records'      | ''            | ''                           | ''          | ''             | ''                       | ''        | ''           | ''                 | ''         | ''                             | ''                     |
+			| 'Register  "Partner AR transactions"' | ''            | ''                           | ''          | ''             | ''                       | ''        | ''           | ''                 | ''         | ''                             | ''                     |
+			| ''                                    | 'Record type' | 'Period'                     | 'Resources' | 'Dimensions'   | ''                       | ''        | ''           | ''                 | ''         | ''                             | 'Attributes'           |
+			| ''                                    | ''            | ''                           | 'Amount'    | 'Company'      | 'Basis document'         | 'Partner' | 'Legal name' | 'Partner term'     | 'Currency' | 'Multi currency movement type' | 'Deferred calculation' |
+			| ''                                    | 'Receipt'     | '$$DateOpeningEntry400009$$' | '34,24'     | 'Main Company' | '$$OpeningEntry400009$$' | 'DFC'     | 'DFC'        | 'Partner term DFC' | 'USD'      | 'Reporting currency'           | 'No'                   |
+			| ''                                    | 'Receipt'     | '$$DateOpeningEntry400009$$' | '200'       | 'Main Company' | '$$OpeningEntry400009$$' | 'DFC'     | 'DFC'        | 'Partner term DFC' | 'TRY'      | 'Local currency'               | 'No'                   |
+			| ''                                    | 'Receipt'     | '$$DateOpeningEntry400009$$' | '200'       | 'Main Company' | '$$OpeningEntry400009$$' | 'DFC'     | 'DFC'        | 'Partner term DFC' | 'TRY'      | 'TRY'                          | 'No'                   |
+			| ''                                    | 'Receipt'     | '$$DateOpeningEntry400009$$' | '200'       | 'Main Company' | '$$OpeningEntry400009$$' | 'DFC'     | 'DFC'        | 'Partner term DFC' | 'TRY'      | 'en description is empty'      | 'No'                   |
+		And I select "Accounts statement" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+			| 'Register  "Accounts statement"' | ''            | ''                           | ''                     | ''               | ''                       | ''               | ''             | ''        | ''           | ''                       | ''         |
+			| ''                               | 'Record type' | 'Period'                     | 'Resources'            | ''               | ''                       | ''               | 'Dimensions'   | ''        | ''           | ''                       | ''         |
+			| ''                               | ''            | ''                           | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner' | 'Legal name' | 'Basis document'         | 'Currency' |
+			| ''                               | 'Receipt'     | '$$DateOpeningEntry400009$$' | ''                     | ''               | ''                       | '200'            | 'Main Company' | 'DFC'     | 'DFC'        | '$$OpeningEntry400009$$' | 'TRY'      |
+			| ''                               | 'Receipt'     | '$$DateOpeningEntry400009$$' | ''                     | '100'            | ''                       | ''               | 'Main Company' | 'DFC'     | 'DFC'        | '$$OpeningEntry400009$$' | 'TRY'      |
+		And I select "Reconciliation statement" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+			| 'Register  "Reconciliation statement"' | ''            | ''                           | ''          | ''             | ''           | ''         | '' | '' | '' | '' | '' |
+			| ''                                     | 'Record type' | 'Period'                     | 'Resources' | 'Dimensions'   | ''           | ''         | '' | '' | '' | '' | '' |
+			| ''                                     | ''            | ''                           | 'Amount'    | 'Company'      | 'Legal name' | 'Currency' | '' | '' | '' | '' | '' |
+			| ''                                     | 'Receipt'     | '$$DateOpeningEntry400009$$' | '200'       | 'Main Company' | 'DFC'        | 'TRY'      | '' | '' | '' | '' | '' |
+			| ''                                     | 'Expense'     | '$$DateOpeningEntry400009$$' | '100'       | 'Main Company' | 'DFC'        | 'TRY'      | '' | '' | '' | '' | '' |
+		And I select "Partner AP transactions" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+			| 'Register  "Partner AP transactions"'       | ''            | ''                    | ''                     | ''               | ''                                          | ''               | ''             | ''                        | ''           | ''                                          | ''                     |
+			| ''                                          | 'Record type' | 'Period'              | 'Resources'            | 'Dimensions'     | ''                                          | ''               | ''             | ''                        | ''           | ''                                          | 'Attributes'           |
+			| ''                                          | ''            | ''                    | 'Amount'               | 'Company'        | 'Basis document'                            | 'Partner'        | 'Legal name'   | 'Partner term'            | 'Currency'   | 'Multi currency movement type'              | 'Deferred calculation' |
+			| ''                                          | 'Receipt'     | '$$DateOpeningEntry400009$$' | '17,12'                | 'Main Company'   | '$$OpeningEntry400009$$' | 'DFC'            | 'DFC'          | 'Partner term vendor DFC' | 'USD'        | 'Reporting currency'                        | 'No'                   |
+			| ''                                          | 'Receipt'     | '$$DateOpeningEntry400009$$' | '100'                  | 'Main Company'   | '$$OpeningEntry400009$$' | 'DFC'            | 'DFC'          | 'Partner term vendor DFC' | 'TRY'        | 'Local currency'                            | 'No'                   |
+			| ''                                          | 'Receipt'     | '$$DateOpeningEntry400009$$' | '100'                  | 'Main Company'   | '$$OpeningEntry400009$$' | 'DFC'            | 'DFC'          | 'Partner term vendor DFC' | 'TRY'        | 'TRY'                                       | 'No'                   |
+			| ''                                          | 'Receipt'     | '$$DateOpeningEntry400009$$' | '100'                  | 'Main Company'   | '$$OpeningEntry400009$$' | 'DFC'            | 'DFC'          | 'Partner term vendor DFC' | 'TRY'        | 'en description is empty'                   | 'No'                   |
+		And I close all client application windows
+		
+	
+Scenario: _999999 close TestClient session
+	And I close TestClient session

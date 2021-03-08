@@ -3,11 +3,20 @@
 Function PostingGetDocumentDataTables(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
 	AccReg = Metadata.AccumulationRegisters;
 	Tables = New Structure();
-	Tables.Insert("InventoryBalance", PostingServer.CreateTable(AccReg.InventoryBalance));
-	Tables.Insert("StockReservation", PostingServer.CreateTable(AccReg.StockReservation));
-	Tables.Insert("StockBalance", PostingServer.CreateTable(AccReg.StockBalance));
-	Tables.Insert("RevenuesTurnovers", PostingServer.CreateTable(AccReg.RevenuesTurnovers));
-	Tables.Insert("StockAdjustmentAsSurplus", PostingServer.CreateTable(AccReg.StockAdjustmentAsSurplus));
+	Tables.Insert("InventoryBalance"         , PostingServer.CreateTable(AccReg.InventoryBalance));
+	Tables.Insert("StockReservation"         , PostingServer.CreateTable(AccReg.StockReservation));
+	Tables.Insert("StockBalance"             , PostingServer.CreateTable(AccReg.StockBalance));
+	Tables.Insert("RevenuesTurnovers"        , PostingServer.CreateTable(AccReg.RevenuesTurnovers));
+	Tables.Insert("StockAdjustmentAsSurplus" , PostingServer.CreateTable(AccReg.StockAdjustmentAsSurplus));
+	
+	Tables.Insert("StockReservation_Exists" , PostingServer.CreateTable(AccReg.StockReservation));
+	Tables.Insert("StockBalance_Exists"     , PostingServer.CreateTable(AccReg.StockBalance));
+	
+	Tables.StockReservation_Exists = 
+	AccumulationRegisters.StockReservation.GetExistsRecords(Ref, AccumulationRecordType.Receipt, AddInfo);
+	
+	Tables.StockBalance_Exists = 
+	AccumulationRegisters.StockBalance.GetExistsRecords(Ref, AccumulationRecordType.Receipt, AddInfo);
 	
 	QueryItemList = New Query();
 	QueryItemList.Text = GetQueryTextStockAdjustmentAsSurplusItemList();
@@ -22,12 +31,17 @@ Function PostingGetDocumentDataTables(Ref, Cancel, PostingMode, Parameters, AddI
 	Query.SetParameter("QueryTable", QueryTableItemList);
 	QueryResults = Query.ExecuteBatch();
 		
-	Tables.InventoryBalance = QueryResults[1].Unload();
-	Tables.StockReservation = QueryResults[2].Unload();
-	Tables.StockBalance = QueryResults[3].Unload();
-	Tables.RevenuesTurnovers = QueryResults[4].Unload();
+	Tables.InventoryBalance         = QueryResults[1].Unload();
+	Tables.StockReservation         = QueryResults[2].Unload();
+	Tables.StockBalance             = QueryResults[3].Unload();
+	Tables.RevenuesTurnovers        = QueryResults[4].Unload();
 	Tables.StockAdjustmentAsSurplus = QueryResults[5].Unload();
 	
+#Region NewRegistersPosting		
+	QueryArray = GetQueryTextsSecondaryTables();
+	PostingServer.ExecuteQuery(Ref, QueryArray, Parameters);
+#EndRegion	
+
 	Parameters.IsReposting = False;
 	
 	Return Tables;
@@ -183,7 +197,12 @@ Function PostingGetLockDataSource(Ref, Cancel, PostingMode, Parameters, AddInfo 
 EndFunction
 
 Procedure PostingCheckBeforeWrite(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
-	Return;
+#Region NewRegisterPosting
+	Tables = Parameters.DocumentDataTables;	
+	QueryArray = GetQueryTextsMasterTables();
+	PostingServer.SetRegisters(Tables, Ref);
+	PostingServer.FillPostingTables(Tables, Ref, QueryArray, Parameters);
+#EndRegion
 EndProcedure
 
 Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
@@ -197,15 +216,17 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 	
 	// StockReservation
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.StockReservation,
-		New Structure("RecordType, RecordSet",
+		New Structure("RecordType, RecordSet, WriteInTransaction",
 			AccumulationRecordType.Receipt,
-			Parameters.DocumentDataTables.StockReservation));
+			Parameters.DocumentDataTables.StockReservation,
+			True));
 	
 	// StockBalance
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.StockBalance,
-		New Structure("RecordType, RecordSet",
+		New Structure("RecordType, RecordSet, WriteInTransaction",
 			AccumulationRecordType.Receipt,
-			Parameters.DocumentDataTables.StockBalance));
+			Parameters.DocumentDataTables.StockBalance,
+			True));
 	
 	// RevenuesTurnovers
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.RevenuesTurnovers,
@@ -216,12 +237,15 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 		New Structure("RecordType, RecordSet",
 			AccumulationRecordType.Expense,
 			Parameters.DocumentDataTables.StockAdjustmentAsSurplus));
+#Region NewRegistersPosting
+	PostingServer.SetPostingDataTables(PostingDataTables, Parameters);
+#EndRegion	
 	
 	Return PostingDataTables;
 EndFunction
 
 Procedure PostingCheckAfterWrite(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
-	Return;
+	CheckAfterWrite(Ref, Cancel, Parameters, AddInfo);
 EndProcedure
 
 #EndRegion
@@ -229,11 +253,22 @@ EndProcedure
 #Region Undoposting
 
 Function UndopostingGetDocumentDataTables(Ref, Cancel, Parameters, AddInfo = Undefined) Export
-	Return Undefined;
+	Return PostingGetDocumentDataTables(Ref, Cancel, Undefined, Parameters, AddInfo);
 EndFunction
 
 Function UndopostingGetLockDataSource(Ref, Cancel, Parameters, AddInfo = Undefined) Export
-	Return Undefined;
+	DocumentDataTables = Parameters.DocumentDataTables;
+	DataMapWithLockFields = New Map();
+	
+	// StockReservation
+	StockReservation = AccumulationRegisters.StockReservation.GetLockFields(DocumentDataTables.StockReservation_Exists);
+	DataMapWithLockFields.Insert(StockReservation.RegisterName, StockReservation.LockInfo);
+	
+	// StockBalance
+	StockBalance = AccumulationRegisters.StockBalance.GetLockFields(DocumentDataTables.StockBalance_Exists);
+	DataMapWithLockFields.Insert(StockBalance.RegisterName, StockBalance.LockInfo);
+	
+	Return DataMapWithLockFields;
 EndFunction
 
 Procedure UndopostingCheckBeforeWrite(Ref, Cancel, Parameters, AddInfo = Undefined) Export
@@ -241,8 +276,79 @@ Procedure UndopostingCheckBeforeWrite(Ref, Cancel, Parameters, AddInfo = Undefin
 EndProcedure
 
 Procedure UndopostingCheckAfterWrite(Ref, Cancel, Parameters, AddInfo = Undefined) Export
-	Return;
+	Parameters.Insert("Unposting", True);
+	CheckAfterWrite(Ref, Cancel, Parameters, AddInfo);
 EndProcedure
 
 #EndRegion
 
+#Region CheckAfterWrite
+
+Procedure CheckAfterWrite(Ref, Cancel, Parameters, AddInfo = Undefined)
+	PostingServer.CheckBalance_AfterWrite(Ref, Cancel, Parameters, "Document.StockAdjustmentAsSurplus.ItemList", AddInfo);
+EndProcedure
+
+#EndRegion
+
+
+#Region NewRegistersPosting
+
+Function GetInformationAboutMovements(Ref) Export
+	Str = New Structure;
+	Str.Insert("QueryParamenters", GetAdditionalQueryParamenters(Ref));
+	Str.Insert("QueryTextsMasterTables", GetQueryTextsMasterTables());
+	Str.Insert("QueryTextsSecondaryTables", GetQueryTextsSecondaryTables());
+	Return Str;
+EndFunction
+
+Function GetAdditionalQueryParamenters(Ref)
+	StrParams = New Structure();
+	StrParams.Insert("Ref", Ref);
+	Return StrParams;
+EndFunction
+
+Function GetQueryTextsSecondaryTables()
+	QueryArray = New Array;
+	QueryArray.Add(SerialLotNumbers());
+	Return QueryArray;
+EndFunction
+
+Function GetQueryTextsMasterTables()
+	QueryArray = New Array;
+	QueryArray.Add(R4014B_SerialLotNumber());	
+	Return QueryArray;
+EndFunction
+
+Function SerialLotNumbers()
+	Return
+		"SELECT
+		|	SerialLotNumbers.Ref.Date AS Period,
+		|	SerialLotNumbers.Ref.Company AS Company,
+		|	SerialLotNumbers.Key,
+		|	SerialLotNumbers.SerialLotNumber,
+		|	SerialLotNumbers.Quantity,
+		|	ItemList.ItemKey AS ItemKey
+		|INTO SerialLotNumbers
+		|FROM
+		|	Document.StockAdjustmentAsSurplus.SerialLotNumbers AS SerialLotNumbers
+		|		LEFT JOIN Document.StockAdjustmentAsSurplus.ItemList AS ItemList
+		|		ON SerialLotNumbers.Key = ItemList.Key
+		|		AND ItemList.Ref = &Ref
+		|WHERE
+		|	SerialLotNumbers.Ref = &Ref";	
+EndFunction	
+
+Function R4014B_SerialLotNumber()
+	Return
+		"SELECT 
+		|	VALUE(AccumulationRecordType.Receipt) AS RecordType,
+		|	*
+		|INTO R4014B_SerialLotNumber
+		|FROM
+		|	SerialLotNumbers AS QueryTable
+		|WHERE 
+		|	TRUE";
+
+EndFunction
+
+#EndRegion

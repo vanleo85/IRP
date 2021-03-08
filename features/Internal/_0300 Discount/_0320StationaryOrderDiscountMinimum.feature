@@ -2,7 +2,7 @@
 @Positive
 @Discount
 @SpecialOffersMinimum
-@Group8
+
 
 Feature: calculation of discounts in a group Minimum (type joings Minimum, Special Offers MaxInRow)
 
@@ -13,6 +13,7 @@ So that discounts in the Minimal group are calculated by choosing the lowest dis
 
 Background:
 	Given I launch TestClient opening script or connect the existing one
+
 
 # Checking the discount calculation in the group Minimum created inside the group Minimum, which is in the group Maximum
 # With Type joins Minimum, discounts in this group will work out the discounts that are least beneficial to the client. 
@@ -45,6 +46,7 @@ Scenario: _032001 discount calculation Discount 2 without Vat in the group Sum i
 	Given I open hyperlink "e1cib/list/Document.SalesOrder"
 	And I click the button named "FormCreate"
 	And I click Select button of "Partner" field
+	And I click "List" button	
 	And I go to line in "List" table
 		| 'Description'             |
 		| 'MIO' |
@@ -112,7 +114,7 @@ Scenario: _032001 discount calculation Discount 2 without Vat in the group Sum i
 		| 'Item'     | 'Price'  | 'Item key'  | 'Store'    | 'Q'     | 'Offers amount' |
 		| 'Shirt'    | '296,61' | '38/Black'  | 'Store 02' | '8,000' | '474,56'        |
 		| 'Trousers' | '338,98' | '36/Yellow' | 'Store 02' | '4,000' | '271,20'        |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'        |
@@ -211,7 +213,7 @@ Scenario: _032002 discount calculation Discount 2 without Vat in the group Sum i
 		| 'Item'     | 'Price'  | 'Item key'  | 'Store'    | 'Q'     | 'Offers amount' |
 		| 'Shirt'    | '296,61' | '38/Black'  | 'Store 02' | '8,000' | '474,56'        |
 		| 'Trousers' | '338,98' | '36/Yellow' | 'Store 02' | '4,000' | '271,20'        |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'        |
@@ -306,7 +308,7 @@ Scenario: _032003 discount calculation Discount 2 without Vat in the main group 
 		| 'Item'     | 'Price'  | 'Item key'  | 'Store'    | 'Q'     | 'Offers amount' | 'Unit' |
 		| 'Shirt'    | '296,61' | '38/Black'  | 'Store 02' | '8,000' | '716,88'        | 'pcs' |
 		| 'Trousers' | '338,98' | '36/Yellow' | 'Store 02' | '4,000' | '395,92'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'        |
@@ -400,7 +402,7 @@ Scenario: _032004 discount calculation Discount 1 without Vat in the main group 
 		| 'Item'     | 'Price'  | 'Item key'  | 'Store'    | 'Q'     | 'Offers amount' |
 		| 'Shirt'    | '296,61' | '38/Black'  | 'Store 02' | '8,000' | '716,88'        |
 		| 'Trousers' | '338,98' | '36/Yellow' | 'Store 02' | '4,000' | '395,92'        |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'        |
@@ -445,7 +447,7 @@ Scenario: _032006 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -463,7 +465,7 @@ Scenario: _032007 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -487,7 +489,7 @@ Scenario: _032008 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit' |
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -514,7 +516,7 @@ Scenario: _032009 check the discount order (same application rule), Discount Pri
 			| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit' |
 			| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 			| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-		And I click "Post and close" button
+		And I click the button named "FormPostAndClose"
 		And Delay 2
 		And "List" table contains lines
 			| 'Partner'   | 'Σ'     |
@@ -538,7 +540,7 @@ Scenario: _032010 check the discount order (same application rule), Discount Pri
 			| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit' |
 			| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 			| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-		And I click "Post and close" button
+		And I click the button named "FormPostAndClose"
 		And Delay 2
 		And "List" table contains lines
 			| 'Partner'   | 'Σ'     |
@@ -560,7 +562,7 @@ Scenario: _032011 check the discount order (same application rule), Discount Pri
 			| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit' |
 			| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 			| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-		And I click "Post and close" button
+		And I click the button named "FormPostAndClose"
 		And Delay 2
 		And "List" table contains lines
 			| 'Partner'   | 'Σ'     |
@@ -588,7 +590,7 @@ Scenario: _032012 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit' |
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -618,7 +620,7 @@ Scenario: _032013 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -655,7 +657,7 @@ Scenario: _032014 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -690,7 +692,7 @@ Scenario: _032015 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -721,7 +723,7 @@ Scenario: _032016 check the discount order (same application rule), Discount Pri
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
 	And Delay 2
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
 		| 'Lomaniti'  |  '3 070,00'|
@@ -747,7 +749,7 @@ Scenario: _032017 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -780,7 +782,7 @@ Scenario: _032018 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -820,7 +822,7 @@ Scenario: _032019 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -852,7 +854,7 @@ Scenario: _032020 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -884,7 +886,7 @@ Scenario: _032021 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -921,7 +923,7 @@ Scenario: _032022 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -960,7 +962,7 @@ Scenario: _032023 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -1005,7 +1007,7 @@ Scenario: _032024 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |
@@ -1050,7 +1052,7 @@ Scenario: _032025 check the discount order (same application rule), Discount Pri
 		| 'Item'  | 'Price'  | 'Item key' | 'Store'    | 'Q'     | 'Offers amount' | 'Unit'|
 		| 'Dress' | '520,00' | 'XS/Blue'  | 'Store 01' | '5,000' | '130,00'        | 'pcs' |
 		| 'Boots' | '700,00' | '36/18SD'  | 'Store 01' | '1,000' | '100,00'        | 'pcs' |
-	And I click "Post and close" button
+	And I click the button named "FormPostAndClose"
 	And Delay 2
 	And "List" table contains lines
 		| 'Partner'   | 'Σ'     |

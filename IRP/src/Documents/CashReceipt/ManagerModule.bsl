@@ -3,13 +3,18 @@
 Function PostingGetDocumentDataTables(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
 	AccReg = Metadata.AccumulationRegisters;
 	Tables = New Structure();
-	Tables.Insert("PartnerArTransactions", PostingServer.CreateTable(AccReg.PartnerArTransactions));
-	Tables.Insert("AccountBalance", PostingServer.CreateTable(AccReg.AccountBalance));
-	Tables.Insert("PlaningCashTransactions", PostingServer.CreateTable(AccReg.PlaningCashTransactions));
-	Tables.Insert("CashInTransit", PostingServer.CreateTable(AccReg.CashInTransit));
-	Tables.Insert("AdvanceFromCustomers", PostingServer.CreateTable(AccReg.AdvanceFromCustomers));
-	Tables.Insert("ReconciliationStatement", PostingServer.CreateTable(AccReg.ReconciliationStatement));
-	Tables.Insert("CashAdvance", PostingServer.CreateTable(AccReg.CashAdvance));
+	Tables.Insert("PartnerArTransactions"                 , PostingServer.CreateTable(AccReg.PartnerArTransactions));
+	Tables.Insert("AccountBalance"                        , PostingServer.CreateTable(AccReg.AccountBalance));
+	Tables.Insert("PlaningCashTransactions"               , PostingServer.CreateTable(AccReg.PlaningCashTransactions));
+	Tables.Insert("CashInTransit"                         , PostingServer.CreateTable(AccReg.CashInTransit));
+	Tables.Insert("AdvanceFromCustomers"                  , PostingServer.CreateTable(AccReg.AdvanceFromCustomers));
+	Tables.Insert("ReconciliationStatement"               , PostingServer.CreateTable(AccReg.ReconciliationStatement));
+	Tables.Insert("CashAdvance"                           , PostingServer.CreateTable(AccReg.CashAdvance));
+	Tables.Insert("PartnerArTransactions_OffsetOfAdvance" , PostingServer.CreateTable(AccReg.PartnerArTransactions));
+	Tables.Insert("Aging_Expense"                         , PostingServer.CreateTable(AccReg.Aging));
+	
+	Tables.AdvanceFromCustomers.Columns.Add("Key", New TypeDescription(Metadata.DefinedTypes.typeRowID.Type));
+	Tables.PartnerArTransactions.Columns.Add("Key", New TypeDescription(Metadata.DefinedTypes.typeRowID.Type));
 	
 	QueryPaymentList = New Query();
 	QueryPaymentList.Text = GetQueryTextCashReceiptPaymentList();
@@ -361,7 +366,20 @@ Function PostingGetLockDataSource(Ref, Cancel, PostingMode, Parameters, AddInfo 
 EndFunction
 
 Procedure PostingCheckBeforeWrite(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
-	Return;
+	// Advance from customers
+	Parameters.DocumentDataTables.PartnerArTransactions_OffsetOfAdvance =
+	AccumulationRegisters.PartnerArTransactions.GetTablePartnerArTransactions_OffsetOfAdvance(
+		Parameters.Object.RegisterRecords,
+		Parameters.PointInTime,
+		Parameters.DocumentDataTables.AdvanceFromCustomers,
+		Parameters.DocumentDataTables.PartnerArTransactions);
+			
+	// Aging expense
+	Parameters.DocumentDataTables.Aging_Expense = 
+		AccumulationRegisters.Aging.GetTableAging_Expense_OnMoneyReceipt(
+		Parameters.PointInTime,
+		Parameters.DocumentDataTables.PartnerArTransactions,
+		Parameters.DocumentDataTables.PartnerArTransactions_OffsetOfAdvance);
 EndProcedure
 
 Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
@@ -373,7 +391,7 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 	Table1.Columns.Amount.Name = "TransactionAP";
 	PostingServer.AddColumnsToAccountsStatementTable(Table1);
 	For Each Row In Parameters.DocumentDataTables.PartnerArTransactions Do
-		If Row.Agreement.Type = Enums.AgreementTypes.Vendor Then
+		If Row.Agreement.Type = Enums.AgreementTypes.Vendor  Then
 			NewRow = Table1.Add(); 
 			FillPropertyValues(NewRow, Row);
 			NewRow.TransactionAP = - Row.Amount;
@@ -386,7 +404,9 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 	Table2.Columns.Amount.Name = "AdvanceToSuppliers";
 	PostingServer.AddColumnsToAccountsStatementTable(Table2);
 	For Each Row In Parameters.DocumentDataTables.AdvanceFromCustomers Do
-		If Row.Partner.Vendor Then
+		If Row.Partner.Vendor 
+			And PostingServer.OffsetOfAdvanceByVendorAgreement(
+				Parameters.DocumentDataTables.PartnerArTransactions_OffsetOfAdvance) Then
 			NewRow = Table2.Add();
 			FillPropertyValues(NewRow, Row);
 			NewRow.AdvanceToSuppliers = - Row.Amount;
@@ -420,7 +440,33 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 	EndDo;
 	Table4.FillValues(AccumulationRecordType.Expense, "RecordType");
 	ArrayOfTables.Add(Table4);
-		
+	
+	Table5 = Parameters.DocumentDataTables.PartnerArTransactions_OffsetOfAdvance.CopyColumns();
+	Table5.Columns.Amount.Name = "AdvanceFromCustomers";
+	PostingServer.AddColumnsToAccountsStatementTable(Table5);
+	For Each Row In Parameters.DocumentDataTables.PartnerArTransactions_OffsetOfAdvance Do
+		If Row.Partner.Customer Then
+			NewRow = Table5.Add();
+			FillPropertyValues(NewRow, Row);
+			NewRow.AdvanceFromCustomers = Row.Amount;
+		EndIf;
+	EndDo;
+	Table5.FillValues(AccumulationRecordType.Expense, "RecordType");
+	ArrayOfTables.Add(Table5);
+	
+	Table6 = Parameters.DocumentDataTables.PartnerArTransactions_OffsetOfAdvance.CopyColumns();
+	Table6.Columns.Amount.Name = "TransactionAR";
+	PostingServer.AddColumnsToAccountsStatementTable(Table6);
+	For Each Row In Parameters.DocumentDataTables.PartnerArTransactions_OffsetOfAdvance Do
+		If Row.Agreement.Type = Enums.AgreementTypes.Customer Then
+			NewRow = Table6.Add(); 
+			FillPropertyValues(NewRow, Row);
+			NewRow.TransactionAR = Row.Amount;
+		EndIf;
+	EndDo;
+	Table6.FillValues(AccumulationRecordType.Expense, "RecordType");
+	ArrayOfTables.Add(Table6);
+	
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.AccountsStatement,
 		New Structure("RecordSet, WriteInTransaction",
 			PostingServer.JoinTables(ArrayOfTables,
@@ -430,10 +476,22 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 			Parameters.IsReposting));
 			
 	// PartnerArTransactions
+	ArrayOfTables = New Array();
+	Table1 = Parameters.DocumentDataTables.PartnerArTransactions.Copy();
+	Table1.Columns.Add("RecordType", New TypeDescription("AccumulationRecordType"));
+	Table1.FillValues(AccumulationRecordType.Expense, "RecordType");
+	ArrayOfTables.Add(Table1);
+	
+	Table2 = Parameters.DocumentDataTables.PartnerArTransactions_OffsetOfAdvance.Copy();
+	Table2.Columns.Add("RecordType", New TypeDescription("AccumulationRecordType"));
+	Table2.FillValues(AccumulationRecordType.Expense, "RecordType");
+	ArrayOfTables.Add(Table2);
+	
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.PartnerArTransactions,
-		New Structure("RecordType, RecordSet",
-			AccumulationRecordType.Expense,
-			Parameters.DocumentDataTables.PartnerArTransactions));
+		New Structure("RecordSet, WriteInTransaction",
+			PostingServer.JoinTables(ArrayOfTables,
+			"RecordType, Period, Company, BasisDocument, Partner, LegalName, Agreement, Currency, Amount"),
+			Parameters.IsReposting));
 	
 	// AccountBalance
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.AccountBalance,
@@ -452,10 +510,22 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 			Parameters.DocumentDataTables.CashInTransit));
 	
 	// AdvanceFromCustomers
+	ArrayOfTables = New Array();
+	Table1 = Parameters.DocumentDataTables.AdvanceFromCustomers.Copy();
+	Table1.Columns.Add("RecordType", New TypeDescription("AccumulationRecordType"));
+	Table1.FillValues(AccumulationRecordType.Receipt, "RecordType");
+	ArrayOfTables.Add(Table1);
+	
+	Table2 = Parameters.DocumentDataTables.PartnerArTransactions_OffsetOfAdvance.Copy();
+	Table2.Columns.Add("RecordType", New TypeDescription("AccumulationRecordType"));
+	Table2.FillValues(AccumulationRecordType.Expense, "RecordType");
+	ArrayOfTables.Add(Table2);
+	
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.AdvanceFromCustomers,
-		New Structure("RecordType, RecordSet",
-			AccumulationRecordType.Receipt,
-			Parameters.DocumentDataTables.AdvanceFromCustomers));
+		New Structure("RecordSet, WriteInTransaction",
+			PostingServer.JoinTables(ArrayOfTables,
+			"RecordType, Period, Company, Partner, LegalName, Currency, ReceiptDocument, Amount, Key"),
+			Parameters.IsReposting));
 	
 	// ReconciliationStatement
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.ReconciliationStatement,
@@ -468,6 +538,12 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 		New Structure("RecordType, RecordSet",
 			AccumulationRecordType.Expense,
 			Parameters.DocumentDataTables.CashAdvance));
+	
+	// Aging
+	PostingDataTables.Insert(Parameters.Object.RegisterRecords.Aging,
+		New Structure("RecordType, RecordSet",
+			AccumulationRecordType.Expense,
+			Parameters.DocumentDataTables.Aging_Expense));
 	
 	Return PostingDataTables;
 EndFunction
@@ -574,3 +650,31 @@ Procedure FillAttributesByType(TransactionType, ArrayAll, ArrayByType) Export
 	EndIf;
 	
 EndProcedure
+#Region NewRegistersPosting
+Function GetInformationAboutMovements(Ref) Export
+	Str = New Structure;
+	Str.Insert("QueryParamenters", GetAdditionalQueryParamenters(Ref));
+	Str.Insert("QueryTextsMasterTables", GetQueryTextsMasterTables());
+	Str.Insert("QueryTextsSecondaryTables", GetQueryTextsSecondaryTables());
+	Return Str;
+EndFunction
+
+Function GetAdditionalQueryParamenters(Ref)
+	StrParams = New Structure();
+	StrParams.Insert("Ref", Ref);
+	Return StrParams;
+EndFunction
+
+Function GetQueryTextsSecondaryTables()
+	QueryArray = New Array;
+
+	Return QueryArray;
+EndFunction
+
+Function GetQueryTextsMasterTables()
+	QueryArray = New Array;
+
+	Return QueryArray;
+EndFunction
+
+#EndRegion

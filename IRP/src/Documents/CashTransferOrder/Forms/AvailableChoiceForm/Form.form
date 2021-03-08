@@ -58,6 +58,10 @@
     <items xsi:type="form:FormField">
       <name>Selected</name>
       <id>67</id>
+      <title>
+        <key>en</key>
+        <value>Selected</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -103,6 +107,10 @@
     <items xsi:type="form:FormField">
       <name>Number</name>
       <id>49</id>
+      <title>
+        <key>en</key>
+        <value>Number</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -155,6 +163,10 @@
     <items xsi:type="form:FormField">
       <name>Date</name>
       <id>52</id>
+      <title>
+        <key>en</key>
+        <value>Date</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -207,6 +219,10 @@
     <items xsi:type="form:FormField">
       <name>Company</name>
       <id>61</id>
+      <title>
+        <key>en</key>
+        <value>Company</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -259,6 +275,10 @@
     <items xsi:type="form:FormField">
       <name>Sender</name>
       <id>55</id>
+      <title>
+        <key>en</key>
+        <value>Sender</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -311,6 +331,10 @@
     <items xsi:type="form:FormField">
       <name>SendCurrency</name>
       <id>58</id>
+      <title>
+        <key>en</key>
+        <value>Send currency</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -363,6 +387,10 @@
     <items xsi:type="form:FormField">
       <name>IsCurrencyExchange</name>
       <id>64</id>
+      <title>
+        <key>en</key>
+        <value>Is currency exchange</value>
+      </title>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
@@ -404,6 +432,56 @@
       <headerHorizontalAlign>Left</headerHorizontalAlign>
       <showInFooter>true</showInFooter>
       <extInfo xsi:type="form:CheckBoxFieldExtInfo"/>
+    </items>
+    <items xsi:type="form:FormField">
+      <name>Ref</name>
+      <id>70</id>
+      <visible>true</visible>
+      <enabled>true</enabled>
+      <userVisible>
+        <common>true</common>
+      </userVisible>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Ref</segments>
+      </dataPath>
+      <extendedTooltip>
+        <name>RefExtendedTooltip</name>
+        <id>72</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <type>Label</type>
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <extInfo xsi:type="form:LabelDecorationExtInfo">
+          <horizontalAlign>Left</horizontalAlign>
+        </extInfo>
+      </extendedTooltip>
+      <contextMenu>
+        <name>RefContextMenu</name>
+        <id>71</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <autoFill>true</autoFill>
+      </contextMenu>
+      <type>InputField</type>
+      <editMode>Enter</editMode>
+      <showInHeader>true</showInHeader>
+      <headerHorizontalAlign>Left</headerHorizontalAlign>
+      <showInFooter>true</showInFooter>
+      <extInfo xsi:type="form:InputFieldExtInfo">
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <wrap>true</wrap>
+        <chooseType>true</chooseType>
+        <typeDomainEnabled>true</typeDomainEnabled>
+        <textEdit>true</textEdit>
+      </extInfo>
     </items>
     <commandBarLocation>None</commandBarLocation>
     <autoCommandBar>

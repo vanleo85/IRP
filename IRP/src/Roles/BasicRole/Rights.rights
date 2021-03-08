@@ -4,6 +4,112 @@
 	<setForAttributesByDefault>true</setForAttributesByDefault>
 	<independentRightsOfChildObjects>false</independentRightsOfChildObjects>
 	<object>
+		<name>Catalog.DataBaseStatus</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.DataBaseStatus.StandardAttribute.PredefinedDataName</name>
+		<right>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.DataBaseStatus.StandardAttribute.Predefined</name>
+		<right>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.DataBaseStatus.StandardAttribute.Ref</name>
+		<right>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.DataBaseStatus.StandardAttribute.DeletionMark</name>
+		<right>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.DataBaseStatus.StandardAttribute.IsFolder</name>
+		<right>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.DataBaseStatus.StandardAttribute.Owner</name>
+		<right>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.DataBaseStatus.StandardAttribute.Parent</name>
+		<right>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.DataBaseStatus.StandardAttribute.Description</name>
+		<right>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.DataBaseStatus.StandardAttribute.Code</name>
+		<right>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
 		<name>CommonAttribute.Description</name>
 		<right>
 			<name>View</name>
@@ -83,6 +189,28 @@
 		</right>
 	</object>
 	<object>
+		<name>Catalog.DataBaseStatus.TabularSection.ConnectionSettings.Attribute.Computer</name>
+		<right>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>SessionParameter.Workstation</name>
+		<right>
+			<name>Get</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>Set</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
 		<name>CommonForm.HTMLField</name>
 		<right>
 			<name>View</name>
@@ -106,15 +234,11 @@
 			<name>Get</name>
 			<value>true</value>
 		</right>
-		<right>
-			<name>Set</name>
-			<value>true</value>
-		</right>
 	</object>
 	<object>
-		<name>CommonForm.DataClassifier</name>
+		<name>Catalog.Workstations</name>
 		<right>
-			<name>View</name>
+			<name>Read</name>
 			<value>true</value>
 		</right>
 	</object>
@@ -130,16 +254,31 @@
 		</right>
 	</object>
 	<object>
-		<name>CommonForm.EditUserSettings</name>
+		<name>SessionParameter.ConnectionSettings</name>
 		<right>
-			<name>View</name>
+			<name>Get</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>Set</name>
 			<value>true</value>
 		</right>
 	</object>
 	<object>
-		<name>Constant.ShowBetaTesting</name>
+		<name>Catalog.DataBaseStatus.Attribute.isProduction</name>
 		<right>
-			<name>Read</name>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>CommonForm.EditUserSettings</name>
+		<right>
+			<name>View</name>
 			<value>true</value>
 		</right>
 	</object>
@@ -158,6 +297,13 @@
 		</right>
 	</object>
 	<object>
+		<name>ExchangePlan.FullExchange</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
 		<name>CommonForm.PickupSpecialOffers</name>
 		<right>
 			<name>View</name>
@@ -165,9 +311,45 @@
 		</right>
 	</object>
 	<object>
+		<name>Catalog.DataBaseStatus.Attribute.SelectedStyle</name>
+		<right>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>InformationRegister.LockDataModificationRules</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.DataBaseStatus.TabularSection.ConnectionSettings.Attribute.ConnectionString</name>
+		<right>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
 		<name>CommonForm.EditAddProperties</name>
 		<right>
 			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.Hardware</name>
+		<right>
+			<name>Read</name>
 			<value>true</value>
 		</right>
 	</object>
@@ -190,6 +372,17 @@
 		</right>
 	</object>
 	<object>
+		<name>Catalog.DataBaseStatus.TabularSection.ConnectionSettings</name>
+		<right>
+			<name>View</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>Edit</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
 		<name>CommonAttribute.Author</name>
 		<right>
 			<name>View</name>
@@ -201,6 +394,30 @@
 		</right>
 	</object>
 	<object>
+		<name>Catalog.DataAreas</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+			<restrictionByCondition>
+				<condition>where Code = &amp;IDValue</condition>
+			</restrictionByCondition>
+		</right>
+	</object>
+	<object>
+		<name>CommonForm.PrintForm</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.LockDataModificationReasons</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
 		<name>CommonAttribute.Description_tr</name>
 		<right>
 			<name>View</name>
@@ -208,6 +425,13 @@
 		</right>
 		<right>
 			<name>Edit</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Constant.UseLockDataModification</name>
+		<right>
+			<name>Read</name>
 			<value>true</value>
 		</right>
 	</object>
@@ -226,10 +450,6 @@
 		<name>SessionParameter.IDValue</name>
 		<right>
 			<name>Get</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>Set</name>
 			<value>true</value>
 		</right>
 	</object>
@@ -370,13 +590,6 @@
 		</right>
 	</object>
 	<object>
-		<name>Constant.ShowAlphaTestingSaas</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
 		<name>CommonForm.EditDescriptions</name>
 		<right>
 			<name>View</name>
@@ -391,31 +604,6 @@
 		</right>
 		<right>
 			<name>Set</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>Catalog.Workstations</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>Catalog.Hardware</name>
-		<right>
-			<name>Read</name>
-			<value>true</value>
-		</right>
-	</object>
-	<object>
-		<name>SessionParameter.Workstation</name>
-		<right>
-			<name>Set</name>
-			<value>true</value>
-		</right>
-		<right>
-			<name>Get</name>
 			<value>true</value>
 		</right>
 	</object>

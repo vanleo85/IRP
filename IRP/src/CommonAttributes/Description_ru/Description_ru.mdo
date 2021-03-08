@@ -21,6 +21,10 @@
     <use>Use</use>
   </content>
   <content>
+    <metadata>Catalog.DataBaseStatus</metadata>
+    <use>Use</use>
+  </content>
+  <content>
     <metadata>Catalog.Items</metadata>
     <use>Use</use>
   </content>
@@ -86,7 +90,7 @@
   </content>
   <content>
     <metadata>Catalog.ItemKeys</metadata>
-    <use>DontUse</use>
+    <use>Use</use>
   </content>
   <content>
     <metadata>Catalog.CashStatementStatuses</metadata>
@@ -137,11 +141,19 @@
     <use>Use</use>
   </content>
   <content>
+    <metadata>Catalog.CancelReturnReasons</metadata>
+    <use>Use</use>
+  </content>
+  <content>
     <metadata>Catalog.ReportOptions</metadata>
     <use>DontUse</use>
   </content>
   <content>
     <metadata>Catalog.Currencies</metadata>
+    <use>Use</use>
+  </content>
+  <content>
+    <metadata>Catalog.LockDataModificationReasons</metadata>
     <use>Use</use>
   </content>
   <content>
@@ -170,6 +182,10 @@
   </content>
   <content>
     <metadata>Catalog.PriceTypes</metadata>
+    <use>Use</use>
+  </content>
+  <content>
+    <metadata>Catalog.PartnersBankAccounts</metadata>
     <use>Use</use>
   </content>
   <content>

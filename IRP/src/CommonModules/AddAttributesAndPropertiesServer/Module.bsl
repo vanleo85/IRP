@@ -15,6 +15,7 @@ Procedure BeforeWriteAtServer(Form, Cancel, CurrentObject, WriteParameters, AddI
 	If Not FormInfo.Property("Form") Then
 		FormInfo.Insert("Form", Form);
 	EndIf;
+	
 	AddAttributeAndPropertySetName = AddAttributeAndPropertySetName(FormInfo, AddInfo);
 	ObjectAttributes = ObjectAttributes(FormInfo, AddAttributeAndPropertySetName, AddInfo);
 	RequiredFiler = New Structure("Required", True);
@@ -203,7 +204,11 @@ Function CreateFormGroups(Form, FormGroupsInfo, AddInfo = Undefined) Export
 		EndIf;
 		NewFormGroup = Form.Items.Add(GroupInfo.Name, Type("FormGroup"), GroupParent);
 		NewFormGroup.Type = FormGroupType.UsualGroup;
-		NewFormGroup.Group = ChildFormItemsGroup.Vertical;
+		NewFormGroup.Group = GroupInfo.ChildFormItemsGroup;
+		NewFormGroup.Behavior = GroupInfo.Behavior;
+		If NewFormGroup.Behavior = UsualGroupBehavior.Collapsible Then
+			NewFormGroup.Hide();
+		EndIf;
 		NewFormGroup.Title = GroupInfo.Title;
 		NewFormGroup.ThroughAlign = ThroughAlign.Use;
 		ArrayOfFormGroups.Add(NewFormGroup);
@@ -265,6 +270,42 @@ Function GetFormInfo(Form)
 		FormInfo.Insert("Item", Form.Object.Item);
 		FormInfo.Insert("ItemType", ?(Form.Object.Item = Undefined, Undefined, Form.Object.Item.ItemType));
 	EndIf;
+	
+	ExternalDataSet = New ValueTable();
+	If TypeOf(Form.Object.Ref) = Type("CatalogRef.Items") Then		
+		ExternalDataSet.Columns.Add("ItemType", New TypeDescription("CatalogRef.ItemTypes"));
+		ExternalDataSet.Columns.Add("Ref", New TypeDescription("CatalogRef.Items"));		
+		NewRow = ExternalDataSet.Add();
+		NewRow.ItemType = Form.Object.ItemType;
+		NewRow.Ref = Form.Object.Ref;
+	EndIf;
+	FormInfo.Insert("ExternalDataSet", ExternalDataSet);
+	
+	Return FormInfo;
+EndFunction
+
+Function GetObjectInfo(Object)
+	FormInfo = New Structure();
+	FormInfo.Insert("Ref", Object.Ref);
+	
+	FormInfo.Insert("AddAttributes", Object.AddAttributes);
+	
+	If TypeOf(Object.Ref) = Type("CatalogRef.ItemKeys")
+		Or TypeOf(Object.Ref) = Type("CatalogRef.PriceKeys") Then
+		FormInfo.Insert("Item", Object.Item);
+		FormInfo.Insert("ItemType", ?(Object.Item = Undefined, Undefined, Object.Item.ItemType));
+	EndIf;
+	
+	ExternalDataSet = New ValueTable();
+	If TypeOf(Object.Ref) = Type("CatalogRef.Items") Then		
+		ExternalDataSet.Columns.Add("ItemType", New TypeDescription("CatalogRef.ItemTypes"));
+		ExternalDataSet.Columns.Add("Ref", New TypeDescription("CatalogRef.Items"));		
+		NewRow = ExternalDataSet.Add();
+		NewRow.ItemType = Object.ItemType;
+		NewRow.Ref = Object.Ref;
+	EndIf;
+	FormInfo.Insert("ExternalDataSet", ExternalDataSet);
+	
 	Return FormInfo;
 EndFunction
 
@@ -371,6 +412,7 @@ Procedure FillTableOfAvailableAttributesBy_AllItems(TableOfAvailableAttributes
 		, AllItems
 		, AddInfo = Undefined)
 	Template = GetDCSTemplate(AddAttributeAndPropertySetName, AddInfo);
+	ExternalDataSet = FormInfo.ExternalDataSet;
 	For Each Row In AllItems Do
 		If Row.IsConditionSet Then
 			Settings = Row.Condition.Get();
@@ -379,18 +421,7 @@ Procedure FillTableOfAvailableAttributesBy_AllItems(TableOfAvailableAttributes
 			NewFilter.LeftValue = LeftValue;
 			NewFilter.Use = True;
 			NewFilter.ComparisonType = DataCompositionComparisonType.Equal;
-			NewFilter.RightValue = FormInfo.Ref;
-			
-			ExternalDataSet = New ValueTable();
-			If TypeOf(FormInfo.Form.Object.Ref) = Type("CatalogRef.Items") Then
-				
-				ExternalDataSet.Columns.Add("ItemType", New TypeDescription("CatalogRef.ItemTypes"));
-				ExternalDataSet.Columns.Add("Ref", New TypeDescription("CatalogRef.Items"));
-				
-				NewRow = ExternalDataSet.Add();
-				NewRow.ItemType = FormInfo.Form.Object.ItemType;
-				NewRow.Ref = FormInfo.Form.Object.Ref;
-			EndIf;	
+			NewFilter.RightValue = FormInfo.Ref;				
 
 			RefsByConditions = GetRefsByCondition(Template, Settings, ExternalDataSet, AddInfo);
 			
@@ -454,6 +485,9 @@ Function GroupInfo(Group, AddInfo = Undefined) Export
 	Result.Insert("Name", Name);
 	Result.Insert("ParentName", "Group" + Group.FormPosition);
 	Result.Insert("Title", String(Group));
+	Result.Insert("Behavior", UsualGroupBehavior[MetadataInfo.EnumNameByRef(Group.Behavior)]);
+	Result.Insert("ChildFormItemsGroup", ChildFormItemsGroup[MetadataInfo.EnumNameByRef(Group.ChildFormItemsGroup)]);
+	Result.Insert("Collapsed", Group.Collapsed);
 	Return Result;
 EndFunction
 
@@ -640,17 +674,26 @@ EndFunction
 
 Function AllAttributesArrayByFilter(CurrentObject, Filter = Undefined)	Export
 	ReturnValue = New Array;
+	
+	FormInfo = GetObjectInfo(CurrentObject);
+	Form = New Structure("Object", CurrentObject);
+	FormInfo.Insert("Form", Form);
+	
 	ObjectPredefinedName = StrReplace(CurrentObject.Metadata().FullName(), ".", "_");
 	If ObjectPredefinedName = "Catalog_ItemKeys" Then
 		If ValueIsFilled(CurrentObject.Item) Then
-			AddAttributeAndPropertySetsAttributes = CurrentObject.Item.ItemType.AvailableAttributes;
+			AddAttributeAndPropertySetsAttributes = CurrentObject.Item.ItemType.AvailableAttributes;			
 			AddAttributeAndPropertySetsAttributesByFilter = AddAttributeAndPropertySetsAttributes.Unload(Filter, "Attribute");
 			ReturnValue = AddAttributeAndPropertySetsAttributesByFilter.UnloadColumn("Attribute");
 		EndIf;
 	Else 	
 		AddAttributeAndPropertySetsAttributes = Catalogs.AddAttributeAndPropertySets[ObjectPredefinedName].Attributes;
-		AddAttributeAndPropertySetsAttributesByFilter = AddAttributeAndPropertySetsAttributes.Unload(Filter, "Attribute");
-		ReturnValue = AddAttributeAndPropertySetsAttributesByFilter.UnloadColumn("Attribute");
+		AddAttributeAndPropertySetsAttributesByFilter = AddAttributeAndPropertySetsAttributes.Unload(Filter);
+		ReducedObjectAttributes = ReduceObjectAttributes(FormInfo, AddAttributeAndPropertySetsAttributesByFilter, ObjectPredefinedName);
+		ReturnValue = New Array;
+		For Each ReducedObjectAttribute In ReducedObjectAttributes Do
+			ReturnValue.Add(ReducedObjectAttribute.Attribute);
+		EndDo;
 	EndIf;
 		
 	Return ReturnValue;
@@ -737,7 +780,7 @@ Function AdditionAttributeValueByRef(Ref, ArrayAttributes) Export
 		|	ItemsAddAttributes.Property
 		|INTO ObjAttributes
 		|FROM
-		|	Catalog.Items.AddAttributes AS ItemsAddAttributes
+		|	%1.AddAttributes AS ItemsAddAttributes
 		|WHERE
 		|	ItemsAddAttributes.Ref = &Ref
 		|;
@@ -753,6 +796,8 @@ Function AdditionAttributeValueByRef(Ref, ArrayAttributes) Export
 		|		LEFT JOIN ObjAttributes AS ObjAttributes
 		|		ON VT_Attributes.Attribute = ObjAttributes.Property";
 	
+	MetadataName = Ref.Metadata().FullName();
+	Query.Text = StrTemplate(Query.Text, MetadataName);
 	Query.SetParameter("Ref", Ref);
 	Query.SetParameter("VT_Attributes", VT_Attribute);
 	Query.SetParameter("ValueIsEmpty", R().S_027);
@@ -872,6 +917,5 @@ Procedure EventSubscriptionOnCopy(Source, CopiedObject) Export
 		Source.AddAttributes.Load(CopiedObject.AddAttributes.Unload());
 	EndIf;
 EndProcedure
-
 
 #EndRegion

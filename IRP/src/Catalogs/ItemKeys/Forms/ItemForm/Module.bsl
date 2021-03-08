@@ -18,7 +18,7 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	ThisObject.UnitMode = ?(ValueIsFilled(Object.Unit), "Own", "Inherit");
 	ThisObject.SpecificationMode = ValueIsFilled(Object.Specification);
 	SetVisible();
-	ExtensionServer.AddAtributesFromExtensions(ThisObject, Object.Ref);
+	ExtensionServer.AddAttributesFromExtensions(ThisObject, Object.Ref);
 EndProcedure
 
 &AtClient
@@ -144,4 +144,9 @@ Procedure SetVisible()
 	
 	ThisObject.InheritUnit = ?(ValueIsFilled(Object.Item), Object.Item.Unit, Undefined);
 	ThisObject.ItemType = ?(ValueIsFilled(Object.Item), Object.Item.ItemType, Undefined);
+EndProcedure
+
+&AtClient
+Procedure SizeOnChange(Item)
+	CommonFunctionsClientServer.CalculateVolume(Object);
 EndProcedure

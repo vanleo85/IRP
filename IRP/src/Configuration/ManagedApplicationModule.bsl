@@ -20,7 +20,6 @@ Procedure OnStart()
 	ClientType = PredefinedValue("Enum.SystemClientType.WebClient");
 	#EndIf
 	
-	
 	ServiceSystemClient.SetSessionParameter("isMobile", isMobile);
 	ServiceSystemClient.SetSessionParameter("ClientType", ClientType);
 	ServiceSystemClient.SetSessionParameter("Workstation", WorkstationClient.GetCurrentWorkstation());
@@ -30,12 +29,12 @@ Procedure OnStart()
 
 		If Not ServiceSystemServer.GetConstantValue("NotFirstStart") Then
 			FillingFromClassifiers.FillDescriptionOfPredefinedCatalogs();
-			LocalizationClient.OpenFirstStartSettingsForm();
 			ServiceSystemServer.SetConstantValue("NotFirstStart", True);
 		EndIf;
 
 	EndIf;
-
+	
+	ClientApplication.SetCaption(ServiceSystemClient.GetProgramTitle());
 EndProcedure
 
 Procedure BeforeStart(Cancel)
@@ -50,4 +49,3 @@ Procedure BeforeStart(Cancel)
 	globalEquipments.Insert("ConnectionSettings" , New Array);
 	
 EndProcedure
-

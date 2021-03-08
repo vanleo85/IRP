@@ -64,12 +64,13 @@ Scenario: check the filter for bank accounts (cash account selection is not avai
 	* Check the filter by bank account
 		And I click Select button of "Account" field
 		And I save number of "List" table lines as "QS"
-		Then "QS" variable is equal to 3
+		Then "QS" variable is equal to 4
 		And "List" table contains lines
 			| Description         |
 			| Bank account, TRY |
 			| Bank account, USD |
 			| Bank account, EUR |
+			| Bank account 2, EUR |
 		And I select current line in "List" table
 		Then the form attribute named "Account" became equal to "Bank account, TRY"
 	* Check the filling in currency
@@ -106,14 +107,13 @@ Scenario: check the filter by cash account (bank account selection is not availa
 		And I click the button named "FormChoose"
 		And I click Select button of "Cash account" field
 		And I save number of "List" table lines as "QS"
-		Then "QS" variable is equal to 3
-		// change 3 to 4
+		Then "QS" variable is equal to 4
 		And "List" table contains lines
 			| Description         |
 			| Cash desk №1 |
 			| Cash desk №2 |
 			| Cash desk №3 |
-			// | Cash desk №4 |
+			| Cash desk №4 |
 		And I select current line in "List" table
 		Then the form attribute named "CashAccount" became equal to "Cash desk №1"
 	* Check the filter by string input
@@ -369,7 +369,7 @@ Scenario: check the choice of the type of document-basis in the documents of rec
 
 	
 Scenario: check the choice of currency in the bank payment document if the currency is indicated in the account
-# in this case you cannot change the currency (documents: Bank payment, Bank reciept)
+# in this case you cannot change the currency (documents: Bank payment, Bank receipt)
 	And I click Select button of "Company" field
 	And I select current line in "List" table
 	And I click Select button of "Account" field
@@ -390,7 +390,7 @@ Scenario: check the choice of currency in the bank payment document if the curre
 	And I close all client application windows
 
 Scenario: check the choice of currency in the cash payment document if the currency is indicated in the account
-# in this case you cannot change the currency (documents: Cash payment, Cash reciept)
+# in this case you cannot change the currency (documents: Cash payment, Cash receipt)
 	And I click Select button of "Company" field
 	And I select current line in "List" table
 	And I click Select button of "Cash account" field

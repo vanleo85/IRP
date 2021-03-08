@@ -5,7 +5,17 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	EndIf;
 	PutSettingsToTempStorage();
 	SetVisible();
-	ExtensionServer.AddAtributesFromExtensions(ThisObject, Object.Ref);
+	ExtensionServer.AddAttributesFromExtensions(ThisObject, Object.Ref);
+EndProcedure
+
+&AtClient
+Procedure CopyFromProd(Command)
+	CopyFromProdAtServer();
+EndProcedure
+
+&AtServer
+Procedure CopyFromProdAtServer()
+	Object.ConnectionSettingTest.Load(Object.ConnectionSetting.Unload());
 EndProcedure
 
 &AtClient

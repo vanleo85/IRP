@@ -895,8 +895,10 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:DataPath">
-            <segments>Object.ItemList.Key</segments>
+          <dataPath xsi:type="form:MultiLanguageDataPath">
+            <paths xsi:type="form:DataPath">
+              <segments>Object.ItemList.Key</segments>
+            </paths>
           </dataPath>
           <extendedTooltip>
             <name>ItemListKeyExtendedTooltip</name>
@@ -1965,6 +1967,14 @@
           <headerHorizontalAlign>Left</headerHorizontalAlign>
           <showInFooter>true</showInFooter>
           <extInfo xsi:type="form:InputFieldExtInfo">
+            <handlers>
+              <event>EditTextChange</event>
+              <name>ItemListRevenueTypeEditTextChange</name>
+            </handlers>
+            <handlers>
+              <event>StartChoice</event>
+              <name>ItemListRevenueTypeStartChoice</name>
+            </handlers>
             <autoMaxWidth>true</autoMaxWidth>
             <autoMaxHeight>true</autoMaxHeight>
             <wrap>true</wrap>
@@ -3083,8 +3093,10 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:DataPath">
-            <segments>Object.SpecialOffers.Key</segments>
+          <dataPath xsi:type="form:MultiLanguageDataPath">
+            <paths xsi:type="form:DataPath">
+              <segments>Object.SpecialOffers.Key</segments>
+            </paths>
           </dataPath>
           <extendedTooltip>
             <name>SpecialOffersKeyExtendedTooltip</name>
@@ -3475,7 +3487,7 @@
       </extInfo>
     </items>
     <items xsi:type="form:FormGroup">
-      <name>GroupCurrency</name>
+      <name>GroupCurrencies</name>
       <id>656</id>
       <items xsi:type="form:Table">
         <name>ObjectCurrencies</name>
@@ -4110,10 +4122,10 @@
       </userVisible>
       <title>
         <key>en</key>
-        <value>Currency</value>
+        <value>Currencies</value>
       </title>
       <extendedTooltip>
-        <name>GroupCurrencyExtendedTooltip</name>
+        <name>GroupCurrenciesExtendedTooltip</name>
         <id>657</id>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -4338,58 +4350,6 @@
           </extInfo>
         </items>
         <items xsi:type="form:FormField">
-          <name>SerialLotNumbersTreeItemKeyQuantity</name>
-          <id>875</id>
-          <visible>true</visible>
-          <enabled>true</enabled>
-          <userVisible>
-            <common>true</common>
-          </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>SerialLotNumbersTree.ItemKeyQuantity</segments>
-            </paths>
-          </dataPath>
-          <extendedTooltip>
-            <name>SerialLotNumbersTreeItemKeyQuantityExtendedTooltip</name>
-            <id>877</id>
-            <visible>true</visible>
-            <enabled>true</enabled>
-            <userVisible>
-              <common>true</common>
-            </userVisible>
-            <type>Label</type>
-            <autoMaxWidth>true</autoMaxWidth>
-            <autoMaxHeight>true</autoMaxHeight>
-            <extInfo xsi:type="form:LabelDecorationExtInfo">
-              <horizontalAlign>Left</horizontalAlign>
-            </extInfo>
-          </extendedTooltip>
-          <contextMenu>
-            <name>SerialLotNumbersTreeItemKeyQuantityContextMenu</name>
-            <id>876</id>
-            <visible>true</visible>
-            <enabled>true</enabled>
-            <userVisible>
-              <common>true</common>
-            </userVisible>
-            <autoFill>true</autoFill>
-          </contextMenu>
-          <type>InputField</type>
-          <editMode>Enter</editMode>
-          <showInHeader>true</showInHeader>
-          <headerHorizontalAlign>Left</headerHorizontalAlign>
-          <showInFooter>true</showInFooter>
-          <extInfo xsi:type="form:InputFieldExtInfo">
-            <autoMaxWidth>true</autoMaxWidth>
-            <autoMaxHeight>true</autoMaxHeight>
-            <wrap>true</wrap>
-            <chooseType>true</chooseType>
-            <typeDomainEnabled>true</typeDomainEnabled>
-            <textEdit>true</textEdit>
-          </extInfo>
-        </items>
-        <items xsi:type="form:FormField">
           <name>SerialLotNumbersTreeQuantity</name>
           <id>872</id>
           <visible>true</visible>
@@ -4420,6 +4380,58 @@
           <contextMenu>
             <name>SerialLotNumbersTreeQuantityContextMenu</name>
             <id>873</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <autoFill>true</autoFill>
+          </contextMenu>
+          <type>InputField</type>
+          <editMode>Enter</editMode>
+          <showInHeader>true</showInHeader>
+          <headerHorizontalAlign>Left</headerHorizontalAlign>
+          <showInFooter>true</showInFooter>
+          <extInfo xsi:type="form:InputFieldExtInfo">
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <wrap>true</wrap>
+            <chooseType>true</chooseType>
+            <typeDomainEnabled>true</typeDomainEnabled>
+            <textEdit>true</textEdit>
+          </extInfo>
+        </items>
+        <items xsi:type="form:FormField">
+          <name>SerialLotNumbersTreeItemKeyQuantity</name>
+          <id>875</id>
+          <visible>true</visible>
+          <enabled>true</enabled>
+          <userVisible>
+            <common>true</common>
+          </userVisible>
+          <dataPath xsi:type="form:MultiLanguageDataPath">
+            <paths xsi:type="form:DataPath">
+              <segments>SerialLotNumbersTree.ItemKeyQuantity</segments>
+            </paths>
+          </dataPath>
+          <extendedTooltip>
+            <name>SerialLotNumbersTreeItemKeyQuantityExtendedTooltip</name>
+            <id>877</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <type>Label</type>
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <extInfo xsi:type="form:LabelDecorationExtInfo">
+              <horizontalAlign>Left</horizontalAlign>
+            </extInfo>
+          </extendedTooltip>
+          <contextMenu>
+            <name>SerialLotNumbersTreeItemKeyQuantityContextMenu</name>
+            <id>876</id>
             <visible>true</visible>
             <enabled>true</enabled>
             <userVisible>
@@ -4915,51 +4927,6 @@
             <textEdit>true</textEdit>
           </extInfo>
         </items>
-        <items xsi:type="form:FormField">
-          <name>IsOpeningEntry</name>
-          <id>348</id>
-          <visible>true</visible>
-          <enabled>true</enabled>
-          <userVisible>
-            <common>true</common>
-          </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.IsOpeningEntry</segments>
-            </paths>
-          </dataPath>
-          <extendedTooltip>
-            <name>IsOpeningEntryExtendedTooltip</name>
-            <id>350</id>
-            <visible>true</visible>
-            <enabled>true</enabled>
-            <userVisible>
-              <common>true</common>
-            </userVisible>
-            <type>Label</type>
-            <autoMaxWidth>true</autoMaxWidth>
-            <autoMaxHeight>true</autoMaxHeight>
-            <extInfo xsi:type="form:LabelDecorationExtInfo">
-              <horizontalAlign>Left</horizontalAlign>
-            </extInfo>
-          </extendedTooltip>
-          <contextMenu>
-            <name>IsOpeningEntryContextMenu</name>
-            <id>349</id>
-            <visible>true</visible>
-            <enabled>true</enabled>
-            <userVisible>
-              <common>true</common>
-            </userVisible>
-            <autoFill>true</autoFill>
-          </contextMenu>
-          <type>CheckBoxField</type>
-          <editMode>Enter</editMode>
-          <showInHeader>true</showInHeader>
-          <headerHorizontalAlign>Left</headerHorizontalAlign>
-          <showInFooter>true</showInFooter>
-          <extInfo xsi:type="form:CheckBoxFieldExtInfo"/>
-        </items>
         <visible>true</visible>
         <enabled>true</enabled>
         <userVisible>
@@ -5056,8 +5023,10 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:DataPath">
-          <segments>Object.BusinessUnit</segments>
+        <dataPath xsi:type="form:MultiLanguageDataPath">
+          <paths xsi:type="form:DataPath">
+            <segments>Object.BusinessUnit</segments>
+          </paths>
         </dataPath>
         <extendedTooltip>
           <name>BusinessUnitExtendedTooltip</name>
@@ -6151,7 +6120,7 @@
       </title>
       <id>157</id>
       <valueType>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </valueType>
       <view>
         <common>true</common>
@@ -6281,7 +6250,6 @@
         <name>SetSpecialOffersAtRow</name>
       </handler>
     </action>
-    <functionalOptions>FunctionalOption.ShowAlphaTestingSaas</functionalOptions>
     <currentRowUse>Auto</currentRowUse>
   </formCommands>
   <formCommands>
@@ -6299,7 +6267,6 @@
         <name>SetSpecialOffers</name>
       </handler>
     </action>
-    <functionalOptions>FunctionalOption.ShowAlphaTestingSaas</functionalOptions>
     <currentRowUse>Auto</currentRowUse>
   </formCommands>
   <formCommands>
@@ -6318,6 +6285,9 @@
       </handler>
     </action>
     <currentRowUse>Auto</currentRowUse>
+    <associatedTableElementId xsi:type="core:StringValue">
+      <value>ItemList</value>
+    </associatedTableElementId>
   </formCommands>
   <formCommands>
     <name>SearchByBarcode</name>
@@ -6333,7 +6303,6 @@
         <name>SearchByBarcode</name>
       </handler>
     </action>
-    <functionalOptions>FunctionalOption.ShowAlphaTestingSaas</functionalOptions>
     <representation>Picture</representation>
     <currentRowUse>Auto</currentRowUse>
   </formCommands>

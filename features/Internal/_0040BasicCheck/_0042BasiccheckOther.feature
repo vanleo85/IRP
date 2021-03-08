@@ -2,8 +2,7 @@
 @tree
 @Positive
 @Test
-@OtherForms
-@Group1
+@BasicFormsCheck
 
 Feature: basic check registers, reports, constants
 As an QA
@@ -11,8 +10,6 @@ I want to check opening registers, reports and data processor forms
 
 Background:
 	Given I launch TestClient opening script or connect the existing one
-	And I set "True" value to the constant "ShowBetaTesting"
-	And I set "True" value to the constant "ShowAlphaTestingSaas"
 	And I set "True" value to the constant "UseItemKey"
 	And I set "True" value to the constant "UseCompanies"
 	And I set "True" value to the constant "NotFirstStart"
@@ -755,12 +752,7 @@ Scenario: Open object form "PrintLabels"
 	And I close current window
 
 
-Scenario: Open object form "QuantityCompare"
 
-	Given I open "QuantityCompare" data processor default form 
-	If the warning is displayed then
-		Then I raise "Failed to open data processor form QuantityCompare" exception
-	And I close current window
 
 
 
@@ -772,3 +764,476 @@ Scenario: Open object form "PointOfSale"
 		Then I raise "Failed to open data processor form PointOfSale" exception
 	And I close current window
 
+Scenario: Open object form "DataHistory"
+
+	Given I open "DataHistory" data processor default form 
+	If the warning is displayed then
+		Then I raise "Failed to open data processor form Data history" exception
+	And "MetadataTree" table became equal
+		| 'Use' | 'Name'                        |
+		| 'No'  | 'Catalogs'                    |
+		| 'No'  | 'ChartsOfCharacteristicTypes' |
+		| 'No'  | 'Constants'                   |
+		| 'No'  | 'Documents'                   |
+		| 'No'  | 'ExchangePlans'               |
+		| 'No'  | 'InformationRegisters'        |
+	And I close current window
+
+
+Scenario: Open object form "Mobile invent"
+
+	Given I open "MobileInvent" data processor default form 
+	If the warning is displayed then
+		Then I raise "Failed to open data processor form MobileInvent" exception
+	And I close current window
+
+Scenario: Open information register form "BarcodeScanInfoCheck" 
+
+	Given I open "BarcodeScanInfoCheck" information register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form  BarcodeScanInfoCheck" exception
+	And I close current window
+
+Scenario: Open information register form "BarcodeScanInfoCheck" 
+
+	Given I open "BarcodeScanInfoCheck" information register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form  BarcodeScanInfoCheck" exception
+	And I close current window
+
+Scenario: Open information register form "DataMappingTable" 
+
+	Given I open "DataMappingTable" information register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form  DataMappingTable" exception
+	And I close current window
+
+Scenario: Open object form "Procurement"
+
+	Given I open "Procurement" data processor default form
+	If the warning is displayed then
+		Then I raise "Failed to open data processor form Procurement" exception
+	And I close current window
+
+Scenario: Open object form "R1001 Purchases"
+
+	Given I open "R1001T_Purchases" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R1001T_Purchases" exception
+	And I close current window
+
+
+
+Scenario: Open object form "R1002T_PurchaseReturns"
+
+	Given I open "R1001T_Purchases" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R1002T_PurchaseReturns" exception
+	And I close current window
+
+
+
+Scenario: Open object form "R1005T_PurchaseSpecialOffers"
+
+	Given I open "R1005T_PurchaseSpecialOffers" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R1005T_PurchaseSpecialOffers" exception
+	And I close current window
+
+Scenario: Open object form "R1010T_PurchaseOrders"
+
+	Given I open "R1010T_PurchaseOrders" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R1010T_PurchaseOrders" exception
+	And I close current window
+
+
+Scenario: Open object form "R1011B_PurchaseOrdersReceipt"
+
+	Given I open "R1011B_PurchaseOrdersReceipt" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R1011B_PurchaseOrdersReceipt" exception
+	And I close current window
+
+Scenario: Open object form "R1012B_PurchaseOrdersInvoiceClosing"
+
+	Given I open "R1012B_PurchaseOrdersInvoiceClosing" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R1012B_PurchaseOrdersInvoiceClosing" exception
+	And I close current window
+
+Scenario: Open object form "R1014T_CanceledPurchaseOrders"
+
+	Given I open "R1014T_CanceledPurchaseOrders" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R1014T_CanceledPurchaseOrders" exception
+	And I close current window
+
+Scenario: Open object form "R1020B_AdvancesToVendors"
+
+	Given I open "R1020B_AdvancesToVendors" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R1020B_AdvancesToVendors" exception
+	And I close current window
+	
+
+Scenario: Open object form "R1021B_VendorsTransactions"
+
+	Given I open "R1021B_VendorsTransactions" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R1021B_VendorsTransactions" exception
+	And I close current window
+
+Scenario: Open object form "R1031B_ReceiptInvoicing"
+
+	Given I open "R1031B_ReceiptInvoicing" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R1031B_ReceiptInvoicing" exception
+	And I close current window
+	
+
+Scenario: Open object form "R1040B_TaxesOutgoing"
+
+	Given I open "R1040B_TaxesOutgoing" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R1040B_TaxesOutgoing" exception
+	And I close current window
+
+Scenario: Open object form "R2001T_Sales"
+
+	Given I open "R2001T_Sales" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R2001T_Sales" exception
+	And I close current window
+
+Scenario: Open object form "R2002T_SalesReturns"
+
+	Given I open "R2002T_SalesReturns" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R2002T_SalesReturns" exception
+	And I close current window
+
+Scenario: Open object form "R2005T_SalesSpecialOffers"
+
+	Given I open "R2005T_SalesSpecialOffers" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R2005T_SalesSpecialOffers" exception
+	And I close current window
+
+
+
+Scenario: Open object form "R2010T_SalesOrders"
+
+	Given I open "R2010T_SalesOrders" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R2010T_SalesOrders" exception
+	And I close current window
+
+Scenario: Open object form "R2011B_SalesOrdersShipment"
+
+	Given I open "R2011B_SalesOrdersShipment" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R2011B_SalesOrdersShipment" exception
+	And I close current window
+
+
+Scenario: Open object form "R2012B_SalesOrdersInvoiceClosing"
+
+	Given I open "R2012B_SalesOrdersInvoiceClosing" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R2012B_SalesOrdersInvoiceClosing" exception
+	And I close current window
+
+
+Scenario: Open object form "R2013T_SalesOrdersProcurement"
+
+	Given I open "R2013T_SalesOrdersProcurement" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R2013T_SalesOrdersProcurement" exception
+	And I close current window
+
+Scenario: Open object form "R2014T_CanceledSalesOrders"
+
+	Given I open "R2014T_CanceledSalesOrders" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R2014T_CanceledSalesOrders" exception
+	And I close current window
+
+Scenario: Open object form "R2020B_AdvancesFromCustomers"
+
+	Given I open "R2020B_AdvancesFromCustomers" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R2020B_AdvancesFromCustomers" exception
+	And I close current window
+
+
+Scenario: Open object form "R2021B_CustomersTransactions"
+
+	Given I open "R2021B_CustomersTransactions" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R2021B_CustomersTransactions" exception
+	And I close current window
+
+Scenario: Open object form "R2031B_ShipmentInvoicing"
+
+	Given I open "R2031B_ShipmentInvoicing" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R2031B_ShipmentInvoicing" exception
+	And I close current window
+
+
+Scenario: Open object form "R2040B_TaxesIncoming"
+
+	Given I open "R2040B_TaxesIncoming" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R2040B_TaxesIncoming" exception
+	And I close current window
+
+Scenario: Open object form "R3010B_CashOnHand"
+
+	Given I open "R3010B_CashOnHand" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R3010B_CashOnHand" exception
+	And I close current window
+
+
+Scenario: Open object form "R3011T_CashMovements"
+
+	Given I open "R3011T_CashMovements" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R3011T_CashMovements" exception
+	And I close current window
+
+Scenario: Open object form "R3015B_CashAdvance"
+
+	Given I open "R3015B_CashAdvance" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R3015B_CashAdvance" exception
+	And I close current window
+
+Scenario: Open object form "R3016B_ChequeAndBonds"
+
+	Given I open "R3016B_ChequeAndBonds" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R3016B_ChequeAndBonds" exception
+	And I close current window
+
+Scenario: Open object form "R3021B_CashInTransitIncoming"
+
+	Given I open "R3021B_CashInTransitIncoming" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R3021B_CashInTransitIncoming" exception
+	And I close current window
+
+Scenario: Open object form "R3022B_CashInTransitOutgoing"
+
+	Given I open "R3022B_CashInTransitOutgoing" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R3022B_CashInTransitOutgoing" exception
+	And I close current window
+
+Scenario: Open object form "R3033B_CashPlanningIncoming"
+
+	Given I open "R3033B_CashPlanningIncoming" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R3033B_CashPlanningIncoming" exception
+	And I close current window
+
+Scenario: Open object form "R3034B_CashPlanningOutgoing"
+
+	Given I open "R3034B_CashPlanningOutgoing" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R3034B_CashPlanningOutgoing" exception
+	And I close current window
+
+Scenario: Open object form "R4010B_ActualStocks"
+
+	Given I open "R4010B_ActualStocks" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4010B_ActualStocks" exception
+	And I close current window
+
+Scenario: Open object form "R4011B_FreeStocks"
+
+	Given I open "R4011B_FreeStocks" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4011B_FreeStocks" exception
+	And I close current window
+
+Scenario: Open object form "R4012B_StockReservation"
+
+	Given I open "R4012B_StockReservation" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4012B_StockReservation" exception
+	And I close current window
+
+Scenario: Open object form "R4013B_StockReservationPlanning"
+
+	Given I open "R4013B_StockReservationPlanning" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4013B_StockReservationPlanning" exception
+	And I close current window
+
+Scenario: Open object form "R4015T_InternalSupplyRequests"
+
+	Given I open "R4015T_InternalSupplyRequests" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4015T_InternalSupplyRequests" exception
+	And I close current window
+
+Scenario: Open object form "R4016B_InternalSupplyRequestOrdering"
+
+	Given I open "R4016B_InternalSupplyRequestOrdering" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4016B_InternalSupplyRequestOrdering" exception
+	And I close current window
+
+Scenario: Open object form "R4017B_InternalSupplyRequestProcurement"
+
+	Given I open "R4017B_InternalSupplyRequestProcurement" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4017B_InternalSupplyRequestProcurement" exception
+	And I close current window
+
+Scenario: Open object form "R4020T_StockTransferOrders"
+
+	Given I open "R4020T_StockTransferOrders" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4020T_StockTransferOrders" exception
+	And I close current window
+
+Scenario: Open object form "R4021B_StockTransferOrdersReceipt"
+
+	Given I open "R4021B_StockTransferOrdersReceipt" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4021B_StockTransferOrdersReceipt" exception
+	And I close current window
+
+Scenario: Open object form "R4022B_StockTransferOrdersShipment"
+
+	Given I open "R4022B_StockTransferOrdersShipment" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4022B_StockTransferOrdersShipment" exception
+	And I close current window
+
+Scenario: Open object form "R4031B_GoodsInTransitIncoming"
+
+	Given I open "R4031B_GoodsInTransitIncoming" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4031B_GoodsInTransitIncoming" exception
+	And I close current window
+
+Scenario: Open object form "R4032B_GoodsInTransitOutgoing"
+
+	Given I open "R4032B_GoodsInTransitOutgoing" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4032B_GoodsInTransitOutgoing" exception
+	And I close current window
+
+Scenario: Open object form "R4033B_GoodsReceiptSchedule"
+
+	Given I open "R4033B_GoodsReceiptSchedule" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4033B_GoodsReceiptSchedule" exception
+	And I close current window
+
+Scenario: Open object form "R4034B_GoodsShipmentSchedule"
+
+	Given I open "R4034B_GoodsShipmentSchedule" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4034B_GoodsShipmentSchedule" exception
+	And I close current window
+
+Scenario: Open object form "R4035B_IncommingStocks"
+
+	Given I open "R4035B_IncomingStocks" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4035B_IncommingStocks" exception
+	And I close current window
+
+Scenario: Open object form "R4036B_IncommingStocksRequested"
+
+	Given I open "R4036B_IncomingStocksRequested" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4036B_IncommingStocksRequested" exception
+	And I close current window
+
+Scenario: Open object form "R4050B_StockInventory"
+
+	Given I open "R4050B_StockInventory" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4050B_StockInventory" exception
+	And I close current window
+
+Scenario: Open object form "R4051T_StockAdjustmentAsWriteOff"
+
+	Given I open "R4051T_StockAdjustmentAsWriteOff" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4051T_StockAdjustmentAsWriteOff" exception
+	And I close current window
+
+Scenario: Open object form "R4052T_StockAdjustmentAsSurplus"
+
+	Given I open "R4052T_StockAdjustmentAsSurplus" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R4052T_StockAdjustmentAsSurplus" exception
+	And I close current window
+
+Scenario: Open object form "R5010B_ReconciliationStatement"
+
+	Given I open "R5010B_ReconciliationStatement" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R5010B_ReconciliationStatement" exception
+	And I close current window
+
+Scenario: Open object form "R5011B_PartnersAging"
+
+	Given I open "R5011B_PartnersAging" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R5011B_PartnersAging" exception
+	And I close current window
+
+Scenario: Open object form "R5021T_Revenues"
+
+	Given I open "R5021T_Revenues" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R5021T_Revenues" exception
+	And I close current window
+
+Scenario: Open object form "R5022T_Expenses"
+
+	Given I open "R5022T_Expenses" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R5022T_Expenses" exception
+	And I close current window
+
+Scenario: Open object form "R5041B_TaxesPayable"
+
+	Given I open "R5041B_TaxesPayable" accumulation register default form
+	If the warning is displayed then
+		Then I raise "Failed to open information register form R5041B_TaxesPayable" exception
+	And I close current window
+
+Scenario: Open object form "Analise document movements"
+
+	Given I open "AnaliseDocumentMovements" data processor default form 
+	If the warning is displayed then
+		Then I raise "Failed to open data processor form PointOfSale" exception
+	And in the table "Info" I click "Fill movements" button
+	Then system warning window does not appear
+	And "Info" table contains lines
+		| 'Document'    | 'Register'                       | 'Recorder' | 'Conditions'                                                       | 'Query'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | 'Parameters'        | 'Receipt' | 'Expense' |
+		| 'BankPayment' | 'R1021B_VendorsTransactions'     | 'Yes'      | 'Query Expense:\nQuery Expense:'                                   | 'SELECT\n    VALUE(AccumulationRecordType.Expense) AS RecordType,\n    VendorsTransactions.Period AS Period,\n    VendorsTransactions.Company AS Company,\n    VendorsTransactions.Partner AS Partner,\n    VendorsTransactions.LegalName AS LegalName,\n    VendorsTransactions.Currency AS Currency,\n    VendorsTransactions.Agreement AS Agreement,\n    VendorsTransactions.TransactionDocument AS Basis,\n    VendorsTransactions.Key AS Key,\n    VendorsTransactions.Amount AS Amount\nINTO R1021B_VendorsTransactions\nFROM\n    VendorsTransactions AS VendorsTransactions\n\nUNION ALL\n\nSELECT\n    VALUE(AccumulationRecordType.Expense),\n    OffsetOfAdvance.Period,\n    OffsetOfAdvance.Company,\n    OffsetOfAdvance.Partner,\n    OffsetOfAdvance.LegalName,\n    OffsetOfAdvance.Currency,\n    OffsetOfAdvance.Agreement,\n    OffsetOfAdvance.TransactionDocument,\n    OffsetOfAdvance.Key,\n    SUM(OffsetOfAdvance.Amount)\nFROM\n    OffsetOfAdvance AS OffsetOfAdvance\n\nGROUP BY\n    OffsetOfAdvance.Period,\n    OffsetOfAdvance.Company,\n    OffsetOfAdvance.Partner,\n    OffsetOfAdvance.LegalName,\n    OffsetOfAdvance.Currency,\n    OffsetOfAdvance.Agreement,\n    OffsetOfAdvance.TransactionDocument,\n    OffsetOfAdvance.Key' | 'Ref: Bank payment' | 'No'      | 'Yes'     |
+		| 'BankPayment' | 'R5010B_ReconciliationStatement' | 'Yes'      | 'NOT PaymentList.IsMoneyTransfer\nNOT PaymentList.IsMoneyExchange' | 'SELECT\n    VALUE(AccumulationRecordType.Receipt) AS RecordType,\n    PaymentList.Company AS Company,\n    PaymentList.Payee AS LegalName,\n    PaymentList.Currency AS Currency,\n    SUM(PaymentList.Amount) AS Amount,\n    PaymentList.Period AS Period\nINTO R5010B_ReconciliationStatement\nFROM\n    PaymentList AS PaymentList\nWHERE\n    NOT PaymentList.IsMoneyTransfer\n    AND NOT PaymentList.IsMoneyExchange\n\nGROUP BY\n    PaymentList.Company,\n    PaymentList.Payee,\n    PaymentList.Currency,\n    PaymentList.Period'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | 'Ref: Bank payment' | 'Yes'     | 'No'      |
+		| 'BankPayment' | 'R1020B_AdvancesToVendors'       | 'Yes'      | 'Query Receipt:\nQuery Expense:'                                   | 'SELECT\n    VALUE(AccumulationRecordType.Receipt) AS RecordType,\n    AdvancesToVendors.Period AS Period,\n    AdvancesToVendors.Company AS Company,\n    AdvancesToVendors.Partner AS Partner,\n    AdvancesToVendors.LegalName AS LegalName,\n    AdvancesToVendors.Currency AS Currency,\n    AdvancesToVendors.AdvancesDocument AS Basis,\n    AdvancesToVendors.DocumentAmount AS Amount,\n    AdvancesToVendors.Key AS Key\nINTO R1020B_AdvancesToVendors\nFROM\n    AdvancesToVendors AS AdvancesToVendors\n\nUNION ALL\n\nSELECT\n    VALUE(AccumulationRecordType.Expense),\n    OffsetOfAdvance.Period,\n    OffsetOfAdvance.Company,\n    OffsetOfAdvance.Partner,\n    OffsetOfAdvance.LegalName,\n    OffsetOfAdvance.Currency,\n    OffsetOfAdvance.AdvancesDocument,\n    SUM(OffsetOfAdvance.Amount),\n    OffsetOfAdvance.Key\nFROM\n    OffsetOfAdvance AS OffsetOfAdvance\n\nGROUP BY\n    OffsetOfAdvance.Period,\n    OffsetOfAdvance.Company,\n    OffsetOfAdvance.Partner,\n    OffsetOfAdvance.LegalName,\n    OffsetOfAdvance.Currency,\n    OffsetOfAdvance.AdvancesDocument,\n    OffsetOfAdvance.Key'                                                                                                                                         | 'Ref: Bank payment' | 'Yes'     | 'Yes'     |		
+	And I close all client application windows
+
+Scenario: Open object form "All registers movement"
+
+	Given I open "AllRegistersMovement" report default form
+	If the warning is displayed then
+		Then I raise "Failed to open report form AllRegistersMovemen" exception
+	And I click "Run report" button		
+	Then system warning window does not appear
+	And I close all client application windows
+	

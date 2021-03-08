@@ -232,9 +232,9 @@ Procedure CalculateAmount(Object, Form, AddInfo = Undefined) Export
 		DocumentAmount = Object.ItemList.Total("TotalAmount");
 		
 		If Row.ShowReverseRate Then
-			Row.Amount = (DocumentAmount * Row.ReverseRate) / Row.Multiplicity;
+			Row.Amount = (DocumentAmount / Row.ReverseRate) / Row.Multiplicity;
 		Else
-			Row.Amount = DocumentAmount / (Row.Rate * Row.Multiplicity);
+			Row.Amount = (DocumentAmount * Row.Rate) / Row.Multiplicity;
 		EndIf;
 	EndDo;
 EndProcedure
@@ -255,8 +255,8 @@ Procedure CalculateRate(Object, Form, DocumentAmount, MovementType, RowKeyFilter
 			Row.Rate = 0;
 			Continue;
 		EndIf;
-		Row.ReverseRate = Row.Amount * Row.Multiplicity / DocumentAmount;		
-		Row.Rate = DocumentAmount / (Row.Amount * Row.Multiplicity);
+		Row.Rate = Row.Amount * Row.Multiplicity / DocumentAmount;		
+		Row.ReverseRate = DocumentAmount / (Row.Amount * Row.Multiplicity);
 	EndDo;
 EndProcedure
 
@@ -389,10 +389,10 @@ Procedure FillCurrencyTable_CurrencyInRow(Object, CurrentData = Undefined)
 		For Each Row In Object.Transactions Do
 			RowParameters = New Structure();
 			RowParameters.Insert("Agreement", Row.Agreement);
-			RowParameters.Insert("Date",Object.Date); 
-			RowParameters.Insert("Company",Object.Company);
-			RowParameters.Insert("Currency",Row.Currency);
-			RowParameters.Insert("UUID",Row.Key);
+			RowParameters.Insert("Date", Object.Date); 
+			RowParameters.Insert("Company", Object.Company);
+			RowParameters.Insert("Currency", Row.Currency);
+			RowParameters.Insert("UUID", Row.Key);
 			
 			ParametersToServer.GetArrayOfCurrenciesRowsForAllTable.Add(RowParameters);
 		EndDo;
@@ -404,10 +404,10 @@ Procedure FillCurrencyTable_CurrencyInRow(Object, CurrentData = Undefined)
 	Else
 		ParametersToServer = New Structure("GetArrayOfCurrenciesRows", New Structure());
 		ParametersToServer.GetArrayOfCurrenciesRows.Insert("Agreement", CurrentData.Agreement);
-		ParametersToServer.GetArrayOfCurrenciesRows.Insert("Date",Object.Date); 
-		ParametersToServer.GetArrayOfCurrenciesRows.Insert("Company",Object.Company);
-		ParametersToServer.GetArrayOfCurrenciesRows.Insert("Currency",CurrentData.Currency);
-		ParametersToServer.GetArrayOfCurrenciesRows.Insert("UUID",CurrentData.Key);
+		ParametersToServer.GetArrayOfCurrenciesRows.Insert("Date", Object.Date); 
+		ParametersToServer.GetArrayOfCurrenciesRows.Insert("Company", Object.Company);
+		ParametersToServer.GetArrayOfCurrenciesRows.Insert("Currency", CurrentData.Currency);
+		ParametersToServer.GetArrayOfCurrenciesRows.Insert("UUID", CurrentData.Key);
 		
 		ServerData = DocumentsServer.PrepareServerData(ParametersToServer);
 		For Each Row In ServerData.ArrayOfCurrenciesRows Do
@@ -433,14 +433,4 @@ Procedure CalculateAmount_CurrencyInRow(Object, Amount, RowKey)
 	EndDo;
 EndProcedure
 
-//Procedure UpdateRatePresentation_CurrencyInRow(Object)
-//	For Each Row In Object.Currencies Do
-//		Row.RatePresentation = ?(Row.ShowReverseRate, Row.ReverseRate, Row.Rate);
-//	EndDo;
-//EndProcedure
-
 #EndRegion
-
-
-
-

@@ -14,9 +14,9 @@ Procedure CompanyStartChoice(Object, Form, Item, ChoiceData, StandardProcessing)
 	OpenSettings.ArrayOfFilters = New Array();
 	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", 
 																		True, DataCompositionComparisonType.NotEqual));
-	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Our", 
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("OurCompany", 
 																		True, DataCompositionComparisonType.Equal));
-	OpenSettings.FillingData = New Structure("Our", True);
+	OpenSettings.FillingData = New Structure("OurCompany", True);
 	
 	DocumentsClient.CompanyStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
@@ -24,7 +24,7 @@ EndProcedure
 Procedure CompanyEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
 	ArrayOfFilters = New Array();
 	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, ComparisonType.NotEqual));
-	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Our", True, ComparisonType.Equal));
+	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("OurCompany", True, ComparisonType.Equal));
 	DocumentsClient.CompanyEditTextChange(Object, Form, Item, Text, StandardProcessing, ArrayOfFilters);
 EndProcedure
 
@@ -43,11 +43,18 @@ Procedure PartnerStartChoice(Object, Form, Item, ChoiceData, StandardProcessing)
 	OpenSettings.ArrayOfFilters = New Array();
 	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", 
 																	True, DataCompositionComparisonType.NotEqual));
-	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Customer"	, 
-																	True, DataCompositionComparisonType.Equal));
 	OpenSettings.FormParameters = New Structure();
-	OpenSettings.FormParameters.Insert("Filter", New Structure("Customer" , True));
-	OpenSettings.FillingData = New Structure("Customer", True);
+	FilterPartnerType = "";
+	If Object.TransactionType = PredefinedValue("Enum.ShipmentConfirmationTransactionTypes.ReturnToVendor") Then
+		FilterPartnerType = "Vendor";
+	ElsIf Object.TransactionType = PredefinedValue("Enum.ShipmentConfirmationTransactionTypes.Sales") Then
+		FilterPartnerType = "Customer";
+	EndIf;
+	If Not IsBlankString(FilterPartnerType) Then
+		OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem(FilterPartnerType, True, DataCompositionComparisonType.Equal));
+		OpenSettings.FormParameters.Insert("Filter", New Structure(FilterPartnerType , True));
+		OpenSettings.FillingData = New Structure(FilterPartnerType, True);
+	EndIf;
 	
 	DocumentsClient.PartnerStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
@@ -55,7 +62,14 @@ EndProcedure
 Procedure PartnerTextChange(Object, Form, Item, Text, StandardProcessing) Export
 	ArrayOfFilters = New Array();
 	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, ComparisonType.NotEqual));
-	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Customer"	, True, ComparisonType.Equal));
+	
+	FilterPartnerType = "";
+	If Object.TransactionType = PredefinedValue("Enum.ShipmentConfirmationTransactionTypes.ReturnToVendor") Then
+		FilterPartnerType = "Vendor";
+	ElsIf Object.TransactionType = PredefinedValue("Enum.ShipmentConfirmationTransactionTypes.Sales") Then
+		FilterPartnerType = "Customer";
+	EndIf;
+	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem(FilterPartnerType, True, ComparisonType.Equal));
 	AdditionalParameters = New Structure();
 	DocumentsClient.PartnerEditTextChange(Object, Form, Item, Text, StandardProcessing,
 		ArrayOfFilters, AdditionalParameters);
@@ -266,7 +280,8 @@ EndProcedure
 
 #Region Item
 Procedure ItemListItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
-	DocumentsClient.ItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing);
+	OpenSettings = DocumentsClient.GetOpenSettingsForSelectItemWithNotServiceFilter();
+	DocumentsClient.ItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
 
 Procedure ItemListItemEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
@@ -325,3 +340,32 @@ Procedure SearchByBarcode(Barcode, Object, Form) Export
 	DocumentsClient.SearchByBarcode(Barcode, Object, Form);
 EndProcedure
 
+#Region ItemListItemsEvents
+
+#Region Unit
+
+Procedure ItemListUnitOnChange(Object, Form, Item, AddInfo = Undefined) Export
+	CurrentData = Form.Items.ItemList.CurrentData;
+	If CurrentData = Undefined Then
+		Return;
+	EndIf;
+	Actions = New Structure("CalculateQuantityInBaseUnit");
+	CalculationStringsClientServer.CalculateItemsRow(Object, CurrentData, Actions);
+EndProcedure
+
+#EndRegion
+
+#Region Quantity
+
+Procedure ItemListQuantityOnChange(Object, Form, Item, AddInfo = Undefined) Export
+	CurrentData = Form.Items.ItemList.CurrentData;
+	If CurrentData = Undefined Then
+		Return;
+	EndIf;
+	Actions = New Structure("CalculateQuantityInBaseUnit");
+	CalculationStringsClientServer.CalculateItemsRow(Object, CurrentData, Actions);
+EndProcedure
+
+#EndRegion
+
+#EndRegion

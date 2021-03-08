@@ -4,6 +4,27 @@ Procedure SearchByBarcode(Command, Barcode = "")
 	DocumentsClient.SearchByBarcode(Barcode, DocumentObject, ThisObject, ThisObject, , AddInfo);
 EndProcedure
 
+&AtClient
+Procedure NotificationProcessing(EventName, Parameter, Source)
+	If EventName = "NewBarcode" And IsInputAvailable() Then
+		SearchByBarcode(Undefined, Parameter);
+	EndIf;
+EndProcedure
+
+&AtClient
+Procedure InputBarcode(Command)
+	Barcode = 0;
+	ShowInputNumber(New NotifyDescription("AddBarcodeAfterEnd", ThisForm), Barcode, R().SuggestionToUser_2);
+EndProcedure
+
+&AtClient
+Procedure AddBarcodeAfterEnd(Number, AdditionalParameters) Export
+	If Not ValueIsFilled(Number) Then
+		Return;
+	EndIf;
+	SearchByBarcode(Undefined, Format(Number, "NG="));
+EndProcedure
+
 
 &AtClient
 Procedure SearchByBarcodeEnd(Result, AdditionalParameters) Export
@@ -52,7 +73,6 @@ Procedure ItemListSelection(Item, RowSelected, Field, StandardProcessing)
 	StartEditQuantity(RowSelected);
 EndProcedure
 
-
 &AtClient
 Procedure StartEditQuantity(Val RowSelected, AutoMode = False)
 	Structure = New Structure;
@@ -65,7 +85,6 @@ Procedure StartEditQuantity(Val RowSelected, AutoMode = False)
 	NotifyOnClosing = New NotifyDescription("OnEditQuantityEnd", ThisObject);
 	OpenForm("DataProcessor.MobileInvent.Form.RowForm", Structure, ThisObject, , , , NotifyOnClosing);
 EndProcedure
-
 
 &AtClient
 Procedure OnEditQuantityEnd(Result, AddInfo) Export
@@ -113,7 +132,6 @@ Procedure SaveAndUpdateDocument()
 	Write();
 	FillDocumentObject(Documents.PhysicalCountByLocation.EmptyRef());
 EndProcedure
-
 
 &AtServer
 Function FindAndSetDocument(Number, Result, AddInfo = Undefined) 

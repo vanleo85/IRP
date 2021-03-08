@@ -1,9 +1,7 @@
 ﻿#language: en
 @tree
 @Positive
-@Test
-@CatalogForms
-@Group1
+@BasicFormsCheck
 
 Feature: basic check catalogs
 
@@ -12,8 +10,6 @@ I want to check opening and closing of catalogs forms
 
 Background:
 	Given I launch TestClient opening script or connect the existing one
-	And I set "True" value to the constant "ShowBetaTesting"
-	And I set "True" value to the constant "ShowAlphaTestingSaas"
 	And I set "True" value to the constant "UseItemKey"
 	And I set "True" value to the constant "UseCompanies"
 
@@ -830,9 +826,6 @@ Scenario: Open object form "CurrencyMovementSets"
 	And I close current window
 
 
-
-
-	
 	
 Scenario: Open list form "Extensions" 
 	And I close all client application windows
@@ -863,6 +856,7 @@ Scenario: Open object form "CashStatementStatuses"
 		Then I raise "Failed to open catalog form Cash Statement Statuses" exception
 	And I close current window
 
+
 Scenario: Open list form "EquipmentDrivers" 
 	And I close all client application windows
 	Given I open "EquipmentDrivers" catalog default form
@@ -890,4 +884,62 @@ Scenario: Open object form "Hardware"
 	Given I open "Hardware" reference main form
 	If the warning is displayed then
 		Then I raise "Failed to open catalog form Hardware" exception
+	And I close current window
+
+Scenario: Open list form "Data base status" 
+	And I close all client application windows
+	Given I open "DataBaseStatus" catalog default form
+	If the warning is displayed then
+		Then I raise "Failed to open catalog form DataBaseStatus" exception
+	And I close current window
+
+Scenario: Open object form "DataBaseStatus"
+	And I close all client application windows
+	Given I open "DataBaseStatus" reference main form
+	If the warning is displayed then
+		Then I raise "Failed to open catalog form DataBaseStatus" exception
+	And I close current window
+
+Scenario: Open list form "Data mapping items" 
+	And I close all client application windows
+	Given I open "DataMappingItems" catalog default form
+	If the warning is displayed then
+		Then I raise "Failed to open catalog form DataMappingItems" exception
+	And I close current window
+
+Scenario: Open object form "DataMappingItems"
+	And I close all client application windows
+	Given I open "DataMappingItems" reference main form
+	If the warning is displayed then
+		Then I raise "Failed to open catalog form DataMappingItems" exception
+	And I close current window
+
+	
+Scenario: Open list form "PartnersBankAccounts" 
+	And I close all client application windows
+	Given I open "PartnersBankAccounts" catalog default form
+	If the warning is displayed then
+		Then I raise "Failed to open catalog form PartnersBankAccounts" exception
+	And I close current window
+
+Scenario: Open object form "PartnersBankAccounts"
+	And I close all client application windows
+	Given I open "PartnersBankAccounts" reference main form
+	If the warning is displayed then
+		Then I raise "Failed to open catalog form PartnersBankAccounts" exception
+	And I close current window
+
+
+Scenario: Open list form "CancelReturnReasons (Catalogs)" 
+
+	Given I open "CancelReturnReasons" catalog default form
+	If the warning is displayed then
+		Then I raise "Failed to open catalog form CancelReturnReasons" exception
+	And I close current window
+
+Scenario: Open object form "CancelReturnReasons"
+	And I close all client application windows
+	Given I open "CancelReturnReasons" reference main form
+	If the warning is displayed then
+		Then I raise "Failed to open catalog form CancelReturnReasons" exception
 	And I close current window

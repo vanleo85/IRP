@@ -1,7 +1,8 @@
 ﻿#language: en
 @tree
 @Positive
-@Group1
+@TaxSettings
+@CompanyCatalogs
 
 Feature: filling in tax rates
 
@@ -13,12 +14,16 @@ For tax accounting
 Background:
 	Given I open new TestClient session or connect the existing one
 
+
 Scenario: _017901 connection of tax calculation Plugin sessing TaxCalculateVAT_TR
+	When set True value to the constant
+	And I close TestClient session
+	Given I open new TestClient session or connect the existing one
 	* Opening a form to add Plugin sessing
 		Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
 	* Addition of Plugin sessing for calculating Tax types for Turkey (VAT)
 		And I click the button named "FormCreate"
-		And I select external file "#workingDir#\DataProcessor\TaxCalculateVAT_TR.epf"
+		And I select external file "#workingDir#/DataProcessor/TaxCalculateVAT_TR.epf"
 		And I click the button named "FormAddExtDataProc"
 		And I input "" text in "Path to plugin for test" field
 		And I input "TaxCalculateVAT_TR" text in "Name" field
@@ -33,6 +38,9 @@ Scenario: _017901 connection of tax calculation Plugin sessing TaxCalculateVAT_T
 
 
 Scenario: _017902 filling in catalog 'Tax types'
+	* Preparation
+		When Create catalog TaxRates objects
+		When Create catalog Companies objects (Main company)
 	* Opening a tax creation form
 		Given I open hyperlink "e1cib/list/Catalog.Taxes"
 		And I click the button named "FormCreate"

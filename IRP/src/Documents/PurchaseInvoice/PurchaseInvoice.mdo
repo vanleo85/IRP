@@ -66,21 +66,40 @@
   <defaultListForm>Document.PurchaseInvoice.Form.ListForm</defaultListForm>
   <defaultChoiceForm>Document.PurchaseInvoice.Form.ChoiceForm</defaultChoiceForm>
   <realTimePosting>Deny</realTimePosting>
+  <registerRecords>AccumulationRegister.R1021B_VendorsTransactions</registerRecords>
+  <registerRecords>AccumulationRegister.R1001T_Purchases</registerRecords>
+  <registerRecords>AccumulationRegister.R1005T_PurchaseSpecialOffers</registerRecords>
+  <registerRecords>AccumulationRegister.R5010B_ReconciliationStatement</registerRecords>
   <registerRecords>AccumulationRegister.InventoryBalance</registerRecords>
+  <registerRecords>AccumulationRegister.R4010B_ActualStocks</registerRecords>
+  <registerRecords>AccumulationRegister.R4017B_InternalSupplyRequestProcurement</registerRecords>
+  <registerRecords>AccumulationRegister.R1020B_AdvancesToVendors</registerRecords>
+  <registerRecords>AccumulationRegister.R4050B_StockInventory</registerRecords>
   <registerRecords>AccumulationRegister.PurchaseTurnovers</registerRecords>
   <registerRecords>AccumulationRegister.ExpensesTurnovers</registerRecords>
   <registerRecords>AccumulationRegister.OrderProcurement</registerRecords>
+  <registerRecords>AccumulationRegister.R4011B_FreeStocks</registerRecords>
+  <registerRecords>AccumulationRegister.R1031B_ReceiptInvoicing</registerRecords>
+  <registerRecords>AccumulationRegister.R1040B_TaxesOutgoing</registerRecords>
   <registerRecords>AccumulationRegister.TaxesTurnovers</registerRecords>
   <registerRecords>AccumulationRegister.GoodsInTransitIncoming</registerRecords>
+  <registerRecords>AccumulationRegister.R1012B_PurchaseOrdersInvoiceClosing</registerRecords>
   <registerRecords>AccumulationRegister.AccountsStatement</registerRecords>
+  <registerRecords>AccumulationRegister.R4035B_IncomingStocks</registerRecords>
+  <registerRecords>AccumulationRegister.R4012B_StockReservation</registerRecords>
   <registerRecords>AccumulationRegister.StockReservation</registerRecords>
+  <registerRecords>AccumulationRegister.R2013T_SalesOrdersProcurement</registerRecords>
   <registerRecords>AccumulationRegister.ReconciliationStatement</registerRecords>
   <registerRecords>AccumulationRegister.ReceiptOrders</registerRecords>
   <registerRecords>AccumulationRegister.AdvanceToSuppliers</registerRecords>
   <registerRecords>AccumulationRegister.GoodsReceiptSchedule</registerRecords>
+  <registerRecords>AccumulationRegister.R4036B_IncomingStocksRequested</registerRecords>
   <registerRecords>AccumulationRegister.PartnerApTransactions</registerRecords>
+  <registerRecords>AccumulationRegister.R4014B_SerialLotNumber</registerRecords>
+  <registerRecords>AccumulationRegister.R1011B_PurchaseOrdersReceipt</registerRecords>
   <registerRecords>AccumulationRegister.OrderBalance</registerRecords>
   <registerRecords>AccumulationRegister.StockBalance</registerRecords>
+  <registerRecords>AccumulationRegister.R4031B_GoodsInTransitIncoming</registerRecords>
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>
@@ -169,21 +188,6 @@
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
-  <attributes uuid="ed7f4c20-922b-4b54-82d2-42d5d1203bfd">
-    <name>IsOpeningEntry</name>
-    <synonym>
-      <key>en</key>
-      <value>Is opening entry</value>
-    </synonym>
-    <type>
-      <types>Boolean</types>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-    <fillValue xsi:type="core:UndefinedValue"/>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
   <attributes uuid="0c3654eb-87f8-47db-84ba-cf2d2b2155b0">
     <name>LegalName</name>
     <synonym>
@@ -220,7 +224,7 @@
     <name>PriceIncludeTax</name>
     <synonym>
       <key>en</key>
-      <value>Price include tax</value>
+      <value>Price includes tax</value>
     </synonym>
     <type>
       <types>Boolean</types>
@@ -302,20 +306,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
-      </type>
-      <minValue xsi:type="core:UndefinedValue"/>
-      <maxValue xsi:type="core:UndefinedValue"/>
-      <dataHistory>Use</dataHistory>
-    </attributes>
-    <attributes uuid="bc5c0cac-a723-42f8-badb-e75c5d996fbe">
-      <name>PurchaseOrder</name>
-      <synonym>
-        <key>en</key>
-        <value>Purchase order</value>
-      </synonym>
-      <type>
-        <types>DocumentRef.PurchaseOrder</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -348,6 +339,19 @@
       <maxValue xsi:type="core:UndefinedValue"/>
       <dataHistory>Use</dataHistory>
       <fullTextSearch>Use</fullTextSearch>
+    </attributes>
+    <attributes uuid="bc5c0cac-a723-42f8-badb-e75c5d996fbe">
+      <name>PurchaseOrder</name>
+      <synonym>
+        <key>en</key>
+        <value>Purchase order</value>
+      </synonym>
+      <type>
+        <types>DocumentRef.PurchaseOrder</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
     </attributes>
     <attributes uuid="90f94165-993c-4afe-9744-4e61eaf01712">
       <name>Unit</name>
@@ -459,20 +463,6 @@
       <dataHistory>Use</dataHistory>
       <fullTextSearch>Use</fullTextSearch>
     </attributes>
-    <attributes uuid="ab19fb9b-33dc-4630-8eca-e67f5b7318e0">
-      <name>GoodsReceipt</name>
-      <synonym>
-        <key>en</key>
-        <value>Goods receipt</value>
-      </synonym>
-      <type>
-        <types>DocumentRef.GoodsReceipt</types>
-      </type>
-      <minValue xsi:type="core:UndefinedValue"/>
-      <maxValue xsi:type="core:UndefinedValue"/>
-      <dataHistory>Use</dataHistory>
-      <fullTextSearch>Use</fullTextSearch>
-    </attributes>
     <attributes uuid="adc4ba4a-eb72-467d-8e93-1ceb43d0c4d5">
       <name>BusinessUnit</name>
       <synonym>
@@ -574,6 +564,47 @@
       <dataHistory>Use</dataHistory>
       <fullTextSearch>Use</fullTextSearch>
     </attributes>
+    <attributes uuid="d5bf9364-82c9-4ca8-b864-40ea9729cb83">
+      <name>QuantityInBaseUnit</name>
+      <synonym>
+        <key>en</key>
+        <value>Quantity in base unit</value>
+      </synonym>
+      <type>
+        <types>DefinedType.typeQuantity</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+    </attributes>
+    <attributes uuid="6193e9d2-55f6-42d2-af8d-da571f9814b4">
+      <name>UseGoodsReceipt</name>
+      <synonym>
+        <key>en</key>
+        <value>Use goods receipt</value>
+      </synonym>
+      <type>
+        <types>Boolean</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
+    <attributes uuid="52f08c40-0541-44bc-bc0f-65f957557a57">
+      <name>InternalSupplyRequest</name>
+      <synonym>
+        <key>en</key>
+        <value>Internal supply request</value>
+      </synonym>
+      <type>
+        <types>DocumentRef.InternalSupplyRequest</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
   </tabularSections>
   <tabularSections uuid="ac00141f-4b12-42db-89ae-027748ad95d2">
     <producedTypes>
@@ -592,7 +623,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -659,7 +690,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -768,7 +799,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -877,43 +908,6 @@
       <fullTextSearch>Use</fullTextSearch>
     </attributes>
   </tabularSections>
-  <tabularSections uuid="6f720701-e07f-423f-b80c-afee627b9c1d">
-    <producedTypes>
-      <objectType typeId="8fcf1197-27f0-4745-a7d1-1f4dd0db1699" valueTypeId="7e6b0bd3-7916-4b8a-a941-99e06d972580"/>
-      <rowType typeId="6f91c682-19b3-4299-9568-2c3106d0e05f" valueTypeId="b910df3f-7f33-4768-b2bf-f6cb0885e511"/>
-    </producedTypes>
-    <name>AddAttributes</name>
-    <synonym>
-      <key>en</key>
-      <value>Additional attributes</value>
-    </synonym>
-    <attributes uuid="fb0089b5-c9ba-40e7-a877-ee0fd05b598a">
-      <name>Property</name>
-      <synonym>
-        <key>en</key>
-        <value>Property</value>
-      </synonym>
-      <type>
-        <types>ChartOfCharacteristicTypesRef.AddAttributeAndProperty</types>
-      </type>
-      <minValue xsi:type="core:UndefinedValue"/>
-      <maxValue xsi:type="core:UndefinedValue"/>
-      <dataHistory>Use</dataHistory>
-    </attributes>
-    <attributes uuid="2bc34fed-0127-4e1c-85a8-5a3ff9dd5997">
-      <name>Value</name>
-      <synonym>
-        <key>en</key>
-        <value>Value</value>
-      </synonym>
-      <type>
-        <types>Characteristic.AddAttributeAndProperty</types>
-      </type>
-      <minValue xsi:type="core:UndefinedValue"/>
-      <maxValue xsi:type="core:UndefinedValue"/>
-      <dataHistory>Use</dataHistory>
-    </attributes>
-  </tabularSections>
   <tabularSections uuid="06524232-deb6-45e9-baa1-1a1b69c126ff">
     <producedTypes>
       <objectType typeId="6104b954-7d0d-4c7f-82d7-3a067c616282" valueTypeId="0ee58200-56ac-446f-9c88-166f9eba76bf"/>
@@ -931,7 +925,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -970,6 +964,96 @@
       <synonym>
         <key>en</key>
         <value>Quantity in goods receipt</value>
+      </synonym>
+      <type>
+        <types>DefinedType.typeQuantity</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
+  </tabularSections>
+  <tabularSections uuid="6f720701-e07f-423f-b80c-afee627b9c1d">
+    <producedTypes>
+      <objectType typeId="8fcf1197-27f0-4745-a7d1-1f4dd0db1699" valueTypeId="7e6b0bd3-7916-4b8a-a941-99e06d972580"/>
+      <rowType typeId="6f91c682-19b3-4299-9568-2c3106d0e05f" valueTypeId="b910df3f-7f33-4768-b2bf-f6cb0885e511"/>
+    </producedTypes>
+    <name>AddAttributes</name>
+    <synonym>
+      <key>en</key>
+      <value>Additional attributes</value>
+    </synonym>
+    <attributes uuid="fb0089b5-c9ba-40e7-a877-ee0fd05b598a">
+      <name>Property</name>
+      <synonym>
+        <key>en</key>
+        <value>Property</value>
+      </synonym>
+      <type>
+        <types>ChartOfCharacteristicTypesRef.AddAttributeAndProperty</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+    </attributes>
+    <attributes uuid="2bc34fed-0127-4e1c-85a8-5a3ff9dd5997">
+      <name>Value</name>
+      <synonym>
+        <key>en</key>
+        <value>Value</value>
+      </synonym>
+      <type>
+        <types>Characteristic.AddAttributeAndProperty</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+    </attributes>
+  </tabularSections>
+  <tabularSections uuid="ebf24b52-ad5f-4fc8-b63e-dfb4cd34fe2f">
+    <producedTypes>
+      <objectType typeId="6601c923-4ac7-4e36-833c-ba2e244fe201" valueTypeId="f12a9d3c-3c07-49da-a4a9-5962d3bc837c"/>
+      <rowType typeId="5553d9ce-1692-4e82-a846-762e23b647e3" valueTypeId="83c13c51-2af8-4f99-a220-f25577058740"/>
+    </producedTypes>
+    <name>SerialLotNumbers</name>
+    <synonym>
+      <key>en</key>
+      <value>Serial lot numbers</value>
+    </synonym>
+    <attributes uuid="77ffa396-e1c0-49fe-90fa-2519446b2832">
+      <name>Key</name>
+      <synonym>
+        <key>en</key>
+        <value>Key</value>
+      </synonym>
+      <type>
+        <types>DefinedType.typeRowID</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
+    <attributes uuid="ca9c5511-91bb-4ed5-9e06-4dada8e17f7c">
+      <name>SerialLotNumber</name>
+      <synonym>
+        <key>en</key>
+        <value>Serial lot number</value>
+      </synonym>
+      <type>
+        <types>CatalogRef.SerialLotNumbers</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
+    <attributes uuid="9f37a6e8-05ca-41e3-8a3b-ea356ca15922">
+      <name>Quantity</name>
+      <synonym>
+        <key>en</key>
+        <value>Quantity</value>
       </synonym>
       <type>
         <types>DefinedType.typeQuantity</types>

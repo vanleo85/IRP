@@ -7,9 +7,7 @@ Function ItemsInfo(Parameters, AddInfo = Undefined) Export
 EndFunction
 
 Function ItemInfo_Query(Parameters, AddInfo)
-	// TODO: Добавить отборы как плавающие и добавить отборы по виду товара
-	
-	// TODO: IRP-72 Исправить запрос, убрать максимум цен
+
 	Var Query;
 	Query = New Query;
 	Query.Text =
@@ -82,7 +80,6 @@ Function ItemInfo_Query(Parameters, AddInfo)
 		|ORDER BY
 		|	ItemPresentation
 		|AUTOORDER";
-	
 	
 	QueryScheme = New QuerySchema();
 	QueryScheme.SetQueryText(Query.Text);
@@ -172,14 +169,16 @@ Function ItemPriceInfoByTable(TableItemKeys, Period, AddInfo = Undefined) Export
 	TableOfResults.Columns.Add("ItemKey", New TypeDescription("CatalogRef.ItemKeys"));
 	TableOfResults.Columns.Add("PriceType", New TypeDescription("CatalogRef.PriceTypes"));
 	TableOfResults.Columns.Add("Unit", New TypeDescription("CatalogRef.Units"));
+	TableOfResults.Columns.Add("ItemKeyUnit", New TypeDescription("CatalogRef.Units"));
+	TableOfResults.Columns.Add("ItemUnit", New TypeDescription("CatalogRef.Units"));
 	TableOfResults.Columns.Add("Price", Metadata.DefinedTypes.typePrice.Type);
-	
+	TableOfResults.Columns.Add("hasSpecification", New TypeDescription("Boolean"));
 	TableWithSpecification = TableOfResults.CopyColumns();
 	
 	TableWithOutSpecification = TableOfResults.CopyColumns();
 	
 	For Each Row In TableItemKeys Do
-		If ValueIsFilled(Row.ItemKey.Specification) Then
+		If Row.hasSpecification Then
 			NewRow = TableWithSpecification.Add();
 		Else
 			NewRow = TableWithOutSpecification.Add();
@@ -188,9 +187,11 @@ Function ItemPriceInfoByTable(TableItemKeys, Period, AddInfo = Undefined) Export
 		NewRow.ItemKey = Row.ItemKey;
 		NewRow.PriceType = Row.PriceType;
 		NewRow.Unit = Row.Unit;
+		NewRow.ItemUnit = Row.ItemUnit;
+		NewRow.ItemKeyUnit = Row.ItemKeyUnit;
 	EndDo;
 	
-	TableWithSpecification.GroupBy("ItemKey, PriceType, Unit");
+	TableWithSpecification.GroupBy("ItemKey, PriceType, Unit, ItemUnit, ItemKeyUnit");
 	
 	TableWithSpecificationCopy = TableWithSpecification.Copy();
 	TableWithSpecificationCopy.GroupBy("ItemKey, PriceType");
@@ -199,7 +200,7 @@ Function ItemPriceInfoByTable(TableItemKeys, Period, AddInfo = Undefined) Export
 	
 	FillTableOfResults(QuerySelection, TableWithSpecification, TableOfResults);
 	
-	TableWithOutSpecification.GroupBy("ItemKey, PriceType, Unit");
+	TableWithOutSpecification.GroupBy("ItemKey, PriceType, Unit, ItemUnit, ItemKeyUnit");
 	
 	TableWithOutSpecificationCopy = TableWithOutSpecification.Copy();
 	TableWithOutSpecificationCopy.GroupBy("ItemKey, PriceType");
@@ -213,6 +214,7 @@ EndFunction
 
 Procedure FillTableOfResults(QuerySelection, Table, TableOfResults)
 	QuerySelection.Reset();
+	TempMap = New Map;
 	For Each Row In Table Do
 		If Not QuerySelection.FindNext(New Structure("ItemKey, PriceType", Row.ItemKey, Row.PriceType)) Then
 			Continue;
@@ -222,11 +224,19 @@ Procedure FillTableOfResults(QuerySelection, Table, TableOfResults)
 		FillPropertyValues(NewRow, Row);
 		Price = ?(ValueIsFilled(QuerySelection.Price), QuerySelection.Price, 0);
 		If ValueIsFilled(Row.Unit) Then
-			ItemKeyUnit = Row.ItemKey.Unit;
-			ItemUnit = Row.ItemKey.Item.Unit;
-			ToUnit = ?(ValueIsFilled(ItemKeyUnit), ItemKeyUnit, ItemUnit);
+			ToUnit = ?(ValueIsFilled(Row.ItemKeyUnit), Row.ItemKeyUnit, Row.ItemUnit);
 			If ValueIsFilled(ToUnit) Then
-				UnitFactor = Catalogs.Units.GetUnitFactor(Row.Unit, ToUnit);
+				If TempMap.Get(Row.Unit) = Undefined Then
+					UnitFactor = Catalogs.Units.GetUnitFactor(Row.Unit, ToUnit);
+					Tmp = New Map;
+					Tmp.Insert(ToUnit, UnitFactor);
+					TempMap.Insert(Row.Unit, Tmp);
+				ElsIf TempMap.Get(Row.Unit).Get(ToUnit) = Undefined Then
+					UnitFactor = Catalogs.Units.GetUnitFactor(Row.Unit, ToUnit);
+					TempMap.Get(Row.Unit).Insert(ToUnit, UnitFactor);
+				Else
+					UnitFactor = TempMap.Get(Row.Unit).Get(ToUnit);
+				EndIf;
 			Else
 				UnitFactor = 1;
 			EndIf;
@@ -555,12 +565,7 @@ Function QueryByItemPriceInfo(ItemList, Period, AddInfo = Undefined) Export
 		|INTO t_PricesByItemKeys
 		|FROM
 		|	t_ItemKeys AS ItemKeys
-		|		LEFT JOIN InformationRegister.PricesByItemKeys.SliceLast(&Period, (PriceType, ItemKey) IN
-		|			(SELECT
-		|				tmp.PriceType,
-		|				tmp.ItemKey
-		|			FROM
-		|				tmp AS tmp)) AS PricesByItemKeysSliceLast
+		|		LEFT JOIN InformationRegister.PricesByItemKeys.SliceLast(&Period) AS PricesByItemKeysSliceLast
 		|		ON ItemKeys.ItemKey = PricesByItemKeysSliceLast.ItemKey
 		|		AND ItemKeys.PriceType = PricesByItemKeysSliceLast.PriceType
 		|;
@@ -601,12 +606,7 @@ Function QueryByItemPriceInfo(ItemList, Period, AddInfo = Undefined) Export
 		|INTO t_PricesByProperties
 		|FROM
 		|	t_PriceKeys AS PriceKeys
-		|		LEFT JOIN InformationRegister.PricesByProperties.SliceLast(&Period, (PriceType, PriceKey) IN
-		|			(SELECT
-		|				tmp.PriceType,
-		|				tmp.PriceKey
-		|			FROM
-		|				t_PriceKeys AS tmp)) AS PricesByPropertiesSliceLast
+		|		LEFT JOIN InformationRegister.PricesByProperties.SliceLast(&Period) AS PricesByPropertiesSliceLast
 		|		ON PriceKeys.PriceKey = PricesByPropertiesSliceLast.PriceKey
 		|		AND PriceKeys.PriceType = PricesByPropertiesSliceLast.PriceType
 		|;
@@ -686,4 +686,8 @@ Function ItemUnitInfo(ItemKey) Export
 		EndIf;
 	EndIf;
 	Return New Structure("Unit", Undefined);
+EndFunction
+
+Function GetUnitFactor(ItemKey, Unit) Export
+	Return Catalogs.Units.GetUnitFactor(Unit, ItemKey.Item.Unit);
 EndFunction

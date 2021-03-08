@@ -1,9 +1,22 @@
+
 Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 	If DataExchange.Load Then
 		Return;
 	EndIf;	
 
 	ThisObject.DocumentAmount = ThisObject.ItemList.Total("TotalAmount");
+EndProcedure
+
+Procedure OnWrite(Cancel)
+	If DataExchange.Load Then
+		Return;
+	EndIf;	
+EndProcedure
+
+Procedure BeforeDelete(Cancel)
+	If DataExchange.Load Then
+		Return;
+	EndIf;
 EndProcedure
 
 Procedure Posting(Cancel, PostingMode)
@@ -21,6 +34,9 @@ Procedure Filling(FillingData, FillingText, StandardProcessing)
 		EndIf;
 		If FillingData.Property("BasedOn") And FillingData.BasedOn = "SalesOrder" Then
 			Filling_BasedOnPurchaseOrder(FillingData);
+		EndIf;
+		If FillingData.Property("BasedOn") And FillingData.BasedOn = "GoodsReceipt" Then
+			Filling_BasedOnGoodsReceipt(FillingData);
 		EndIf;
 	EndIf;
 EndProcedure
@@ -47,6 +63,19 @@ Procedure Filling_BasedOnPurchaseOrder(FillingData)
 	EndDo;	
 EndProcedure
 
+Procedure Filling_BasedOnGoodsReceipt(FillingData)
+	FillPropertyValues(ThisObject, FillingData, "Company,Partner,LegalName");
+	
+	For Each Row In FillingData.ItemList Do
+		NewRow = ThisObject.ItemList.Add();
+		FillPropertyValues(NewRow, Row);
+	EndDo;
+	For Each Row In FillingData.GoodsReceipts Do
+		NewRow = ThisObject.GoodsReceipts.Add();
+		FillPropertyValues(NewRow, Row);
+	EndDo;	
+EndProcedure
+
 Procedure OnCopy(CopiedObject)
 	LinkedTables = New Array();
 	LinkedTables.Add(SpecialOffers);
@@ -60,6 +89,9 @@ Procedure FillCheckProcessing(Cancel, CheckedAttributes)
 		Cancel = True;	
 	EndIf;
 	
+	If Not SerialLotNumbersServer.CheckFilling(ThisObject) Then
+		Cancel = True;
+	EndIf;	
 	For Each Row In ThisObject.ItemList Do
 		ItemKeyRow = New Structure();
 		ItemKeyRow.Insert("LineNumber"  , Row.LineNumber);
@@ -102,16 +134,4 @@ Procedure FillCheckProcessing(Cancel, CheckedAttributes)
 
 		EndIf;
 	EndDo;
-EndProcedure
-
-Procedure OnWrite(Cancel)
-	If DataExchange.Load Then
-		Return;
-	EndIf;	
-EndProcedure
-
-Procedure BeforeDelete(Cancel)
-	If DataExchange.Load Then
-		Return;
-	EndIf;
 EndProcedure

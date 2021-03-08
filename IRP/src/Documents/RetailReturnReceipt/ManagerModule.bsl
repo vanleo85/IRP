@@ -3,15 +3,23 @@
 Function PostingGetDocumentDataTables(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
 	AccReg = Metadata.AccumulationRegisters;
 	Tables = New Structure();
-	Tables.Insert("StockReservation", PostingServer.CreateTable(AccReg.StockReservation));
-	Tables.Insert("SalesTurnovers", PostingServer.CreateTable(AccReg.SalesTurnovers));
-	Tables.Insert("StockBalance", PostingServer.CreateTable(AccReg.StockBalance));
-	Tables.Insert("SalesReturnTurnovers", PostingServer.CreateTable(AccReg.SalesReturnTurnovers));
-	Tables.Insert("AccountBalance", PostingServer.CreateTable(AccReg.AccountBalance));
-	Tables.Insert("RetailSales", PostingServer.CreateTable(AccReg.RetailSales));
-	Tables.Insert("RetailCash", PostingServer.CreateTable(AccReg.RetailCash));
+	Tables.Insert("StockReservation"     , PostingServer.CreateTable(AccReg.StockReservation));
+	Tables.Insert("SalesTurnovers"       , PostingServer.CreateTable(AccReg.SalesTurnovers));
+	Tables.Insert("StockBalance"         , PostingServer.CreateTable(AccReg.StockBalance));
+	Tables.Insert("SalesReturnTurnovers" , PostingServer.CreateTable(AccReg.SalesReturnTurnovers));
+	Tables.Insert("AccountBalance"       , PostingServer.CreateTable(AccReg.AccountBalance));
+	Tables.Insert("RetailSales"          , PostingServer.CreateTable(AccReg.RetailSales));
+	Tables.Insert("RetailCash"           , PostingServer.CreateTable(AccReg.RetailCash));
 	
-
+	Tables.Insert("StockReservation_Exists" , PostingServer.CreateTable(AccReg.StockReservation));
+	Tables.Insert("StockBalance_Exists"     , PostingServer.CreateTable(AccReg.StockBalance));
+	
+	Tables.StockReservation_Exists = 
+	AccumulationRegisters.StockReservation.GetExistsRecords(Ref, AccumulationRecordType.Receipt, AddInfo);
+	
+	Tables.StockBalance_Exists = 
+	AccumulationRegisters.StockBalance.GetExistsRecords(Ref, AccumulationRecordType.Receipt, AddInfo);
+	
 	QuantityByUnit = QuantityByUnit(Ref);
 	
 	PostingServer.CalculateQuantityByUnit(QuantityByUnit);
@@ -58,7 +66,6 @@ Function PostingGetDocumentDataTables(Ref, Cancel, PostingMode, Parameters, AddI
 	Return Tables;
 EndFunction
 
-
 Function GetQueryText_AllTables()
 	Return 
 		"SELECT
@@ -76,13 +83,13 @@ Function GetQueryText_AllTables()
 		|	QueryTable.Period AS Period,
 		|	QueryTable.RetailSalesReceipt AS RetailSalesReceipt,
 		|	QueryTable.RowKey AS RowKey,
-		|	QueryTable.IsOpeningEntry AS IsOpeningEntry
+		|	QueryTable.IsService AS IsService
 		|INTO tmp
 		|FROM
 		|	&QueryTable AS QueryTable
 		|;
 		|
-		|// 1//////////////////////////////////////////////////////////////////////////////
+		|// 1. StockBalance //////////////////////////////////////////////////////////////////////////////
 		|SELECT
 		|	tmp.Company,
 		|	tmp.Store,
@@ -93,7 +100,7 @@ Function GetQueryText_AllTables()
 		|FROM
 		|	tmp AS tmp
 		|WHERE
-		|	NOT tmp.IsOpeningEntry
+		|	NOT tmp.IsService
 		|GROUP BY
 		|	tmp.Company,
 		|	tmp.Store,
@@ -102,7 +109,7 @@ Function GetQueryText_AllTables()
 		|	tmp.Period
 		|;
 		|
-		|// 2//////////////////////////////////////////////////////////////////////////////
+		|// 2. StockReservation //////////////////////////////////////////////////////////////////////////////
 		|SELECT
 		|	tmp.Company,
 		|	tmp.Store,
@@ -113,7 +120,7 @@ Function GetQueryText_AllTables()
 		|FROM
 		|	tmp AS tmp
 		|WHERE
-		|	NOT tmp.IsOpeningEntry
+		|	NOT tmp.IsService
 		|GROUP BY
 		|	tmp.Company,
 		|	tmp.Store,
@@ -122,7 +129,7 @@ Function GetQueryText_AllTables()
 		|	tmp.Period
 		|;
 		|
-		|// 3//////////////////////////////////////////////////////////////////////////////
+		|// 3. SalesReturnTurnovers //////////////////////////////////////////////////////////////////////////////
 		|SELECT
 		|	tmp.Company,
 		|	tmp.Currency,
@@ -152,8 +159,8 @@ Function QuantityByUnit(Ref)
 		|	RetailReturnReceiptItemList.Store AS Store,
 		|	RetailReturnReceiptItemList.ItemKey AS ItemKey,
 		|	RetailReturnReceiptItemList.Ref AS SalesReturn,
-		|	SUM(RetailReturnReceiptItemList.Quantity) AS Quantity,
-		|	SUM(RetailReturnReceiptItemList.TotalAmount) AS TotalAmount,
+		|	RetailReturnReceiptItemList.Quantity AS Quantity,
+		|	RetailReturnReceiptItemList.TotalAmount AS TotalAmount,
 		|	RetailReturnReceiptItemList.Ref.Partner AS Partner,
 		|	RetailReturnReceiptItemList.Ref.LegalName AS LegalName,
 		|	CASE
@@ -176,38 +183,15 @@ Function QuantityByUnit(Ref)
 		|		ELSE RetailReturnReceiptItemList.RetailSalesReceipt
 		|	END AS RetailSalesReceipt,
 		|	RetailReturnReceiptItemList.Key AS RowKey,
-		|	RetailReturnReceiptItemList.Ref.IsOpeningEntry AS IsOpeningEntry
+		|	CASE
+		|		WHEN RetailReturnReceiptItemList.ItemKey.Item.ItemType.Type = VALUE(Enum.ItemTypes.Service)
+		|			THEN TRUE
+		|		ELSE FALSE
+		|	END AS IsService
 		|FROM
 		|	Document.RetailReturnReceipt.ItemList AS RetailReturnReceiptItemList
 		|WHERE
-		|	RetailReturnReceiptItemList.Ref = &Ref
-		|GROUP BY
-		|	RetailReturnReceiptItemList.Ref.Company,
-		|	RetailReturnReceiptItemList.Ref.Partner,
-		|	RetailReturnReceiptItemList.Ref.LegalName,
-		|	CASE
-		|		WHEN RetailReturnReceiptItemList.Ref.Agreement.Kind = VALUE(Enum.AgreementKinds.Regular)
-		|		AND RetailReturnReceiptItemList.Ref.Agreement.ApArPostingDetail = VALUE(Enum.ApArPostingDetail.ByStandardAgreement)
-		|			THEN RetailReturnReceiptItemList.Ref.Agreement.StandardAgreement
-		|		ELSE RetailReturnReceiptItemList.Ref.Agreement
-		|	END,
-		|	ISNULL(RetailReturnReceiptItemList.Ref.Currency, VALUE(Catalog.Currencies.EmptyRef)),
-		|	RetailReturnReceiptItemList.Store,
-		|	RetailReturnReceiptItemList.ItemKey,
-		|	RetailReturnReceiptItemList.Ref,
-		|	RetailReturnReceiptItemList.Unit,
-		|	RetailReturnReceiptItemList.ItemKey.Item.Unit,
-		|	RetailReturnReceiptItemList.ItemKey.Unit,
-		|	RetailReturnReceiptItemList.ItemKey.Item,
-		|	RetailReturnReceiptItemList.Ref.Date,
-		|	VALUE(Catalog.Units.EmptyRef),
-		|	CASE
-		|		WHEN RetailReturnReceiptItemList.RetailSalesReceipt = VALUE(Document.RetailSalesReceipt.EmptyRef)
-		|			THEN RetailReturnReceiptItemList.Ref
-		|		ELSE RetailReturnReceiptItemList.RetailSalesReceipt
-		|	END,
-		|	RetailReturnReceiptItemList.Key,
-		|	RetailReturnReceiptItemList.Ref.IsOpeningEntry";
+		|	RetailReturnReceiptItemList.Ref = &Ref";
 	
 	Query.SetParameter("Ref", Ref);
 	QueryResults = Query.Execute();
@@ -252,7 +236,11 @@ Function GetQueryText_RetailReturnReceipt_RetailSales()
 	|	SUM(RetailReturnReceiptItemList.Quantity) AS Quantity,
 	|	SUM(ISNULL(RetailReturnReceiptSerialLotNumbers.Quantity, 0)) AS QuantityBySerialLtNumbers,
 	|	RetailReturnReceiptItemList.Ref.Date AS Period,
-	|	RetailReturnReceiptItemList.Ref AS RetailSalesReceipt,
+	|	CASE
+	|		WHEN RetailReturnReceiptItemList.RetailSalesReceipt = VALUE(Document.RetailSalesReceipt.EmptyRef)
+	|			THEN RetailReturnReceiptItemList.Ref
+	|		ELSE RetailReturnReceiptItemList.RetailSalesReceipt
+	|	END AS RetailSalesReceipt,
 	|	SUM(RetailReturnReceiptItemList.TotalAmount) AS Amount,
 	|	SUM(RetailReturnReceiptItemList.NetAmount) AS NetAmount,
 	|	SUM(RetailReturnReceiptItemList.OffersAmount) AS OffersAmount,
@@ -274,11 +262,16 @@ Function GetQueryText_RetailReturnReceipt_RetailSales()
 	|	RetailReturnReceiptItemList.Ref.Company,
 	|	RetailReturnReceiptItemList.ItemKey,
 	|	RetailReturnReceiptItemList.Ref.Date,
-	|	RetailReturnReceiptItemList.Ref,
+	|	CASE
+	|		WHEN RetailReturnReceiptItemList.RetailSalesReceipt = VALUE(Document.RetailSalesReceipt.EmptyRef)
+	|			THEN RetailReturnReceiptItemList.Ref
+	|		ELSE RetailReturnReceiptItemList.RetailSalesReceipt
+	|	END,
 	|	RetailReturnReceiptItemList.Key,
 	|	RetailReturnReceiptSerialLotNumbers.SerialLotNumber,
 	|	RetailReturnReceiptItemList.Store
 	|;
+	|
 	|////////////////////////////////////////////////////////////////////////////////
 	|SELECT
 	|	tmp.Company AS Company,
@@ -494,14 +487,14 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 		New Structure("RecordType, RecordSet, WriteInTransaction",
 			AccumulationRecordType.Receipt,
 			Parameters.DocumentDataTables.StockBalance,
-			Parameters.IsReposting));
+			True));
 	
 	// StockReservation	
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.StockReservation,
 		New Structure("RecordType, RecordSet, WriteInTransaction",
 			AccumulationRecordType.Receipt,
 			Parameters.DocumentDataTables.StockReservation,
-			Parameters.IsReposting));
+			True));
 		
 	// AccountBalance
 	PostingDataTables.Insert(Parameters.Object.RegisterRecords.AccountBalance,
@@ -521,7 +514,7 @@ Function PostingGetPostingDataTables(Ref, Cancel, PostingMode, Parameters, AddIn
 EndFunction
 
 Procedure PostingCheckAfterWrite(Ref, Cancel, PostingMode, Parameters, AddInfo = Undefined) Export
-	Return;
+	CheckAfterWrite(Ref, Cancel, Parameters, AddInfo);
 EndProcedure
 
 #EndRegion
@@ -529,11 +522,22 @@ EndProcedure
 #Region Undoposting
 
 Function UndopostingGetDocumentDataTables(Ref, Cancel, Parameters, AddInfo = Undefined) Export
-	Return Undefined;
+	Return PostingGetDocumentDataTables(Ref, Cancel, Undefined, Parameters, AddInfo);
 EndFunction
 
 Function UndopostingGetLockDataSource(Ref, Cancel, Parameters, AddInfo = Undefined) Export
-	Return Undefined;
+	DocumentDataTables = Parameters.DocumentDataTables;
+	DataMapWithLockFields = New Map();
+	
+	// StockReservation
+	StockReservation = AccumulationRegisters.StockReservation.GetLockFields(DocumentDataTables.StockReservation_Exists);
+	DataMapWithLockFields.Insert(StockReservation.RegisterName, StockReservation.LockInfo);
+	
+	// StockBalance
+	StockBalance = AccumulationRegisters.StockBalance.GetLockFields(DocumentDataTables.StockBalance_Exists);
+	DataMapWithLockFields.Insert(StockBalance.RegisterName, StockBalance.LockInfo);
+	
+	Return DataMapWithLockFields;
 EndFunction
 
 Procedure UndopostingCheckBeforeWrite(Ref, Cancel, Parameters, AddInfo = Undefined) Export
@@ -541,8 +545,45 @@ Procedure UndopostingCheckBeforeWrite(Ref, Cancel, Parameters, AddInfo = Undefin
 EndProcedure
 
 Procedure UndopostingCheckAfterWrite(Ref, Cancel, Parameters, AddInfo = Undefined) Export
-	Return;
+	Parameters.Insert("Unposting", True);
+	CheckAfterWrite(Ref, Cancel, Parameters, AddInfo);
 EndProcedure
 
 #EndRegion
 
+#Region CheckAfterWrite
+
+Procedure CheckAfterWrite(Ref, Cancel, Parameters, AddInfo = Undefined)
+	PostingServer.CheckBalance_AfterWrite(Ref, Cancel, Parameters, "Document.RetailReturnReceipt.ItemList", AddInfo);
+EndProcedure
+
+#EndRegion
+
+#Region NewRegistersPosting
+Function GetInformationAboutMovements(Ref) Export
+	Str = New Structure;
+	Str.Insert("QueryParamenters", GetAdditionalQueryParamenters(Ref));
+	Str.Insert("QueryTextsMasterTables", GetQueryTextsMasterTables());
+	Str.Insert("QueryTextsSecondaryTables", GetQueryTextsSecondaryTables());
+	Return Str;
+EndFunction
+
+Function GetAdditionalQueryParamenters(Ref)
+	StrParams = New Structure();
+	StrParams.Insert("Ref", Ref);
+	Return StrParams;
+EndFunction
+
+Function GetQueryTextsSecondaryTables()
+	QueryArray = New Array;
+
+	Return QueryArray;
+EndFunction
+
+Function GetQueryTextsMasterTables()
+	QueryArray = New Array;
+
+	Return QueryArray;
+EndFunction
+
+#EndRegion

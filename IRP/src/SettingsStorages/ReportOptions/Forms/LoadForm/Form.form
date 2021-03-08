@@ -23,6 +23,58 @@
         <excludedCommands>Create</excludedCommands>
         <excludedCommands>Delete</excludedCommands>
         <items xsi:type="form:FormField">
+          <name>OptionsListDefaultPicture</name>
+          <id>182</id>
+          <visible>true</visible>
+          <enabled>true</enabled>
+          <userVisible>
+            <common>true</common>
+          </userVisible>
+          <dataPath xsi:type="form:MultiLanguageDataPath">
+            <paths xsi:type="form:DataPath">
+              <segments>OptionsList.DefaultPicture</segments>
+            </paths>
+          </dataPath>
+          <titleLocation>None</titleLocation>
+          <extendedTooltip>
+            <name>OptionsListDefaultPictureExtendedTooltip</name>
+            <id>184</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <type>Label</type>
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <extInfo xsi:type="form:LabelDecorationExtInfo">
+              <horizontalAlign>Left</horizontalAlign>
+            </extInfo>
+          </extendedTooltip>
+          <contextMenu>
+            <name>OptionsListDefaultPictureContextMenu</name>
+            <id>183</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <autoFill>true</autoFill>
+          </contextMenu>
+          <type>PictureField</type>
+          <editMode>Enter</editMode>
+          <showInHeader>true</showInHeader>
+          <headerHorizontalAlign>Left</headerHorizontalAlign>
+          <showInFooter>true</showInFooter>
+          <extInfo xsi:type="form:ImageFieldExtInfo">
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <horizontalStretch>true</horizontalStretch>
+            <verticalStretch>true</verticalStretch>
+            <fileDragMode>AsFileRef</fileDragMode>
+          </extInfo>
+        </items>
+        <items xsi:type="form:FormField">
           <name>OptionsListisCurrentOption</name>
           <id>133</id>
           <visible>true</visible>
@@ -271,12 +323,42 @@
         <autoCommandBar>
           <name>OptionsListCommandBar</name>
           <id>118</id>
+          <items xsi:type="form:Button">
+            <name>OptionsListShowMarkedForDeletion</name>
+            <id>189</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <extendedTooltip>
+              <name>OptionsListShowMarkedForDeletionExtendedTooltip</name>
+              <id>190</id>
+              <visible>true</visible>
+              <enabled>true</enabled>
+              <userVisible>
+                <common>true</common>
+              </userVisible>
+              <type>Label</type>
+              <autoMaxWidth>true</autoMaxWidth>
+              <autoMaxHeight>true</autoMaxHeight>
+              <extInfo xsi:type="form:LabelDecorationExtInfo">
+                <horizontalAlign>Left</horizontalAlign>
+              </extInfo>
+            </extendedTooltip>
+            <commandName>Form.Command.ShowMarkedForDeletion</commandName>
+            <representation>Auto</representation>
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <placementArea>UserCmds</placementArea>
+            <representationInContextMenu>Auto</representationInContextMenu>
+          </items>
           <visible>true</visible>
           <enabled>true</enabled>
           <userVisible>
             <common>true</common>
           </userVisible>
-          <horizontalAlign>Left</horizontalAlign>
+          <horizontalAlign>Right</horizontalAlign>
         </autoCommandBar>
         <handlers>
           <event>Selection</event>
@@ -495,20 +577,18 @@
           <segments>StandardOptions</segments>
         </dataPath>
         <titleLocation>None</titleLocation>
-        <excludedCommands>ShowMultipleSelection</excludedCommands>
-        <excludedCommands>SelectAll</excludedCommands>
-        <excludedCommands>CopyToClipboard</excludedCommands>
-        <excludedCommands>Pickup</excludedCommands>
-        <excludedCommands>ShowRowRearrangement</excludedCommands>
-        <excludedCommands>UncheckAll</excludedCommands>
-        <excludedCommands>CheckAll</excludedCommands>
-        <excludedCommands>EndEdit</excludedCommands>
-        <excludedCommands>Delete</excludedCommands>
-        <excludedCommands>MoveUp</excludedCommands>
-        <excludedCommands>MoveDown</excludedCommands>
         <excludedCommands>Add</excludedCommands>
-        <excludedCommands>Copy</excludedCommands>
         <excludedCommands>Change</excludedCommands>
+        <excludedCommands>Copy</excludedCommands>
+        <excludedCommands>CopyToClipboard</excludedCommands>
+        <excludedCommands>Delete</excludedCommands>
+        <excludedCommands>EndEdit</excludedCommands>
+        <excludedCommands>MoveDown</excludedCommands>
+        <excludedCommands>MoveUp</excludedCommands>
+        <excludedCommands>SearchHistory</excludedCommands>
+        <excludedCommands>SelectAll</excludedCommands>
+        <excludedCommands>ShowMultipleSelection</excludedCommands>
+        <excludedCommands>ShowRowRearrangement</excludedCommands>
         <items xsi:type="form:FormField">
           <name>StandardOptionsisCurrentOption</name>
           <id>173</id>
@@ -516,8 +596,10 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:DataPath">
-            <segments>StandardOptions.isCurrentOption</segments>
+          <dataPath xsi:type="form:MultiLanguageDataPath">
+            <paths xsi:type="form:DataPath">
+              <segments>StandardOptions.isCurrentOption</segments>
+            </paths>
           </dataPath>
           <extendedTooltip>
             <name>StandardOptionsisCurrentOptionExtendedTooltip</name>
@@ -563,8 +645,10 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:DataPath">
-            <segments>StandardOptions.Presentation</segments>
+          <dataPath xsi:type="form:MultiLanguageDataPath">
+            <paths xsi:type="form:DataPath">
+              <segments>StandardOptions.Presentation</segments>
+            </paths>
           </dataPath>
           <extendedTooltip>
             <name>StandardOptionsPresentationExtendedTooltip</name>
@@ -612,8 +696,10 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:DataPath">
-            <segments>StandardOptions.OptionKey</segments>
+          <dataPath xsi:type="form:MultiLanguageDataPath">
+            <paths xsi:type="form:DataPath">
+              <segments>StandardOptions.OptionKey</segments>
+            </paths>
           </dataPath>
           <extendedTooltip>
             <name>StandardOptionsOptionKeyExtendedTooltip</name>
@@ -825,6 +911,7 @@
         <horizontalStretch>true</horizontalStretch>
         <verticalStretch>true</verticalStretch>
         <fileDragMode>AsFileRef</fileDragMode>
+        <rowFilter xsi:type="core:UndefinedValue"/>
       </items>
       <visible>true</visible>
       <enabled>true</enabled>
@@ -923,6 +1010,10 @@
     </userVisible>
     <horizontalAlign>Left</horizontalAlign>
   </autoCommandBar>
+  <handlers>
+    <event>OnOpen</event>
+    <name>OnOpen</name>
+  </handlers>
   <handlers>
     <event>OnCreateAtServer</event>
     <name>OnCreateAtServer</name>
@@ -1109,6 +1200,23 @@ WHERE
     <action xsi:type="form:FormCommandHandlerContainer">
       <handler>
         <name>LoadSetting</name>
+      </handler>
+    </action>
+    <currentRowUse>Auto</currentRowUse>
+  </formCommands>
+  <formCommands>
+    <name>ShowMarkedForDeletion</name>
+    <title>
+      <key>en</key>
+      <value>Show marked for deletion</value>
+    </title>
+    <id>2</id>
+    <use>
+      <common>true</common>
+    </use>
+    <action xsi:type="form:FormCommandHandlerContainer">
+      <handler>
+        <name>ShowMarkedForDeletion</name>
       </handler>
     </action>
     <currentRowUse>Auto</currentRowUse>

@@ -1,7 +1,8 @@
 ﻿#language: en
 @tree
 @Positive
-@Group14
+@PrintForm
+
 Feature: check print functionality (Sales order)
 
 
@@ -11,12 +12,59 @@ Background:
 
 
 
+Scenario: _092001 preparation (PrintFormSalesOrder)
+	When set True value to the constant
+	And I close TestClient session
+	Given I open new TestClient session or connect the existing one
+	* Load info
+		When Create catalog Agreements objects
+		When Create catalog ObjectStatuses objects
+		When Create catalog ItemKeys objects
+		When Create catalog ItemTypes objects
+		When Create catalog Units objects
+		When Create catalog Items objects
+		When Create catalog PriceTypes objects
+		When Create catalog Specifications objects
+		When Create chart of characteristic types AddAttributeAndProperty objects
+		When Create catalog AddAttributeAndPropertySets objects
+		When Create catalog AddAttributeAndPropertyValues objects
+		When Create catalog Currencies objects
+		When Create catalog Companies objects (Main company)
+		When Create catalog Stores objects
+		When Create catalog Partners objects
+		When Create catalog Companies objects (partners company)
+		When Create information register PartnerSegments records
+		When Create catalog PartnerSegments objects
+		When Create chart of characteristic types CurrencyMovementType objects
+		When Create catalog TaxRates objects
+		When Create catalog Taxes objects	
+		When Create information register TaxSettings records
+		When Create information register PricesByItemKeys records
+		When Create catalog IntegrationSettings objects
+		When Create information register CurrencyRates records
+		When update ItemKeys
+	* Add plugin for taxes calculation
+		Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
+		If "List" table does not contain lines Then
+				| "Description" |
+				| "TaxCalculateVAT_TR" |
+			When add Plugin for tax calculation
+		When Create information register Taxes records (VAT)
+	* Tax settings
+		When filling in Tax settings for company
+	* Add sales tax
+		When Create catalog Taxes objects (Sales tax)
+		When Create information register TaxSettings (Sales tax)
+		When Create information register Taxes records (Sales tax)
+		When add sales tax settings 
+		When auto filling Configuration metadata catalog
+
 Scenario: _25001 adding print plugin for sales order
 	* Open form to add plugin
 		Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
 		And I click the button named "FormCreate"
 	* Filling plugin data and adding it to the database
-		And I select external file "#workingDir#\DataProcessor\PrintFormSalesOrder.epf"
+		And I select external file "#workingDir#/DataProcessor/PrintFormSalesOrder.epf"
 		And I click the button named "FormAddExtDataProc"
 		And I input "" text in "Path to plugin for test" field
 		And I input "PrintFormSalesOrder" text in "Name" field
@@ -32,16 +80,27 @@ Scenario: _25001 adding print plugin for sales order
 Scenario: _25002 create a print command for Sales order
 	* Open Command register
 		Given I open hyperlink "e1cib/list/InformationRegister.ExternalCommands"
-		And I click the button named "FormCreate"
 	* Filling test command data for Sales order
 		* Create metadata for sales order and select it for the command
-			And I click Select button of "Configuration metadata" field
-			And I go to line in "List" table
+			If "List" table does not contain lines Then
 				| 'Description' |
-				| 'Documents'   |
+				| 'Sales order'  |
+				And I click the button named "FormCreate"
+				And I click Select button of "Configuration metadata" field
+				And I click "List" button
+				And I go to line in "List" table
+					| 'Description' |
+					| 'Sales order'  |
+				And I click the button named "FormChoose"
+				And I click Select button of "Plugins" field
+				And I go to line in "List" table
+					| 'Description' |
+					| 'Sales order' |
+				And I select current line in "List" table 
+				And I click "Save and close" button		
 			And I go to line in "List" table
-				| 'Description' |
-				| 'SalesOrder'  |
+				| 'Configuration metadata' |
+				| 'Sales order'  |
 			And I select current line in "List" table
 			And I click Select button of "Plugins" field
 			Then "Plugins" window is opened
@@ -65,10 +124,13 @@ Scenario: _25002 create a print command for Sales order
 	* Check command save
 		Given I open hyperlink "e1cib/list/InformationRegister.ExternalCommands"
 		And "List" table contains lines
-		| 'Configuration metadata' | 'Plugins' | 'UI group' |
-		| 'SalesOrder'             | 'Sales Order'        | 'Print'           |
+		| 'Configuration metadata' | 'Plugins'            | 'UI group' |
+		| 'Sales order'            | 'Sales Order'        | 'Print'    |
 
 Scenario: _25003 check Sales order printing
+	And I delete "$$NumberSalesOrder5003$$" variable
+	And I delete "$$DateSalesOrder5003$$" variable
+	And I delete "$$SalesOrder25003$$" variable
 	* Create Sales order
 		Given I open hyperlink "e1cib/list/Document.SalesOrder"
 		And I click the button named "FormCreate"
@@ -109,35 +171,27 @@ Scenario: _25003 check Sales order printing
 			| 'Boots' | '37/18SD'  |
 		And I select current line in "List" table
 		And I finish line editing in "ItemList" table
-	* Change document number and date
-		And I move to "Other" tab
-		And I input "8 000" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "8 000" text in "Number" field
-		And I input "01.12.2019  0:00:01" text in "Date" field
-		And I move to "Item list" tab
 	* Post document
-		And I click "Post and close" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberSalesOrder5003$$" variable
+		And I delete "$$DateSalesOrder5003$$" variable
+		And I delete "$$SalesOrder25003$$" variable
+		And I save the value of "Number" field as "$$NumberSalesOrder5003$$"
+		And I save the value of "Date" field as "$$DateSalesOrder5003$$"
+		And I save the window as "$$SalesOrder25003$$"
+		And I click the button named "FormPostAndClose"
 		And I go to line in "List" table
 		| 'Number' |
-		| '8 000'  |
+		| '$$NumberSalesOrder5003$$'  |
 		And I select current line in "List" table
 	* Printing out of a document
 		And I click "Sales Order" button
 	* Check printing form
 		And I wait "Table" window opening in 20 seconds
-		Given "" spreadsheet document is equal to "SalesOrderPrintForm" by template
+		Given "" spreadsheet document is equal to "SalesOrderPrint" by template
 		And Delay 30
 	And I close all client application windows
 
 
-
-
-
-
-
-
-
-
-
+Scenario: _999999 close TestClient session
+	And I close TestClient session

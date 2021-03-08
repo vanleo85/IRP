@@ -46,6 +46,9 @@ Scenario: create a test SO for VerificationPosting
 	* Filling in item tab
 		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Dress'  |
 		And I select current line in "List" table
 		And I activate "Item key" field in "ItemList" table
 		And I click choice button of "Item key" attribute in "ItemList" table
@@ -58,6 +61,9 @@ Scenario: create a test SO for VerificationPosting
 		And I finish line editing in "ItemList" table
 		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Dress'  |
 		And I select current line in "List" table
 		And I activate "Item key" field in "ItemList" table
 		And I click choice button of "Item key" attribute in "ItemList" table
@@ -68,7 +74,7 @@ Scenario: create a test SO for VerificationPosting
 		And I input "20,000" text in "Q" field of "ItemList" table
 		And I select "Stock" exact value from "Procurement method" drop-down list in "ItemList" table
 		And I finish line editing in "ItemList" table
-	And I click "Post" button
+	And I click the button named "FormPost"
 
 Scenario: create a test SO for VerificationPosting by package
 	* Open form to create Sales Order
@@ -106,6 +112,9 @@ Scenario: create a test SO for VerificationPosting by package
 	* Filling in item tab
 		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Dress'  |
 		And I select current line in "List" table
 		And I activate "Item key" field in "ItemList" table
 		And I click choice button of "Item key" attribute in "ItemList" table
@@ -151,5 +160,5 @@ Scenario: create a test SO for VerificationPosting by package
 		And I input "50,000" text in "Q" field of "ItemList" table
 		And I select "Stock" exact value from "Procurement method" drop-down list in "ItemList" table
 		And I finish line editing in "ItemList" table
-	And I click "Post" button
+	And I click the button named "FormPost"
 

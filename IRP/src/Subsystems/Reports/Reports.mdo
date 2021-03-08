@@ -10,4 +10,9 @@
   <picture xsi:type="core:PictureRef">
     <picture>CommonPicture.Reports</picture>
   </picture>
+  <content>Report.ItemsInfo</content>
+  <subsystems>Sales</subsystems>
+  <subsystems>Purchase</subsystems>
+  <subsystems>Inventory</subsystems>
+  <subsystems>Finance</subsystems>
 </mdclass:Subsystem>

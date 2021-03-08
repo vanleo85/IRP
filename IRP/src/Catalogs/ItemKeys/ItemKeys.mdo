@@ -314,7 +314,7 @@
         <value>Key</value>
       </synonym>
       <type>
-        <types>UUID</types>
+        <types>DefinedType.typeRowID</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -376,6 +376,20 @@
     <commandParameterType>
       <types>CatalogRef.Items</types>
     </commandParameterType>
+    <shortcut></shortcut>
+  </commands>
+  <commands uuid="b00c47bb-8914-4d6c-8844-bf797375de3c">
+    <name>UpdateItemKeysDescription</name>
+    <synonym>
+      <key>en</key>
+      <value>Update item keys description</value>
+    </synonym>
+    <group>CommandGroup.Service</group>
+    <commandParameterType>
+      <types>CatalogRef.ItemKeys</types>
+    </commandParameterType>
+    <modifiesData>true</modifiesData>
+    <representation>Auto</representation>
     <shortcut></shortcut>
   </commands>
 </mdclass:Catalog>

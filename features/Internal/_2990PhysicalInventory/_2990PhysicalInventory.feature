@@ -1,7 +1,7 @@
 ﻿#language: en
 @tree
 @Positive
-@Group17
+@PhysicalInventory
 
 Feature: product inventory
 
@@ -14,33 +14,61 @@ Background:
 	Given I launch TestClient opening script or connect the existing one
 
 
-Scenario:_2990000 preparation
-	* Create store that use Shipment confirmation and Goods receipt - Store 05
-		Given I open hyperlink "e1cib/list/Catalog.Stores"
-		And I click the button named "FormCreate"
-		And Delay 2
-		And I click Open button of the field named "Description_en"
-		And I input "Store 05" text in the field named "Description_en"
-		And I input "Store 05 TR" text in the field named "Description_tr"
-		And I click "Ok" button
-		And I set checkbox named "UseGoodsReceipt"
-		And I set checkbox named "UseShipmentConfirmation"
-		Then the form attribute named "Transit" became equal to "No"
-		And I click the button named "FormWriteAndClose"
-		And Delay 5
-	* Create store that use Shipment confirmation and Goods receipt - Store 06
-		Given I open hyperlink "e1cib/list/Catalog.Stores"
-		And I click the button named "FormCreate"
-		And Delay 2
-		And I click Open button of the field named "Description_en"
-		And I input "Store 06" text in the field named "Description_en"
-		And I input "Store 06 TR" text in the field named "Description_tr"
-		And I click "Ok" button
-		And I remove checkbox named "UseGoodsReceipt"
-		And I remove checkbox named "UseShipmentConfirmation"
-		Then the form attribute named "Transit" became equal to "No"
-		And I click the button named "FormWriteAndClose"
-		And Delay 5
+
+
+	
+Scenario: _2990000 preparation (product inventory)
+	When set True value to the constant
+	And I close TestClient session
+	Given I open new TestClient session or connect the existing one
+	* Load info
+		When Create catalog ExpenseAndRevenueTypes objects
+		When Create catalog BusinessUnits objects
+		When Create information register Barcodes records
+		When Create catalog Companies objects (own Second company)
+		When Create catalog CashAccounts objects
+		When Create catalog Agreements objects
+		When Create catalog ObjectStatuses objects
+		When Create catalog ItemKeys objects
+		When Create catalog ItemTypes objects
+		When Create catalog Units objects
+		When Create catalog Items objects
+		When Create catalog PriceTypes objects
+		When Create catalog Specifications objects
+		When Create chart of characteristic types AddAttributeAndProperty objects
+		When Create catalog AddAttributeAndPropertySets objects
+		When Create catalog AddAttributeAndPropertyValues objects
+		When Create catalog Currencies objects
+		When Create catalog Companies objects (Main company)
+		When Create catalog Stores objects
+		When Create catalog Partners objects
+		When Create catalog Companies objects (partners company)
+		When Create catalog Partners objects (Ferron BP)
+		When Create catalog Partners objects (Kalipso)
+		When Create information register PartnerSegments records
+		When Create catalog PartnerSegments objects
+		When Create chart of characteristic types CurrencyMovementType objects
+		When Create catalog TaxRates objects
+		When Create catalog Taxes objects	
+		When Create information register TaxSettings records
+		When Create information register PricesByItemKeys records
+		When Create catalog IntegrationSettings objects
+		When Create information register CurrencyRates records
+		When update ItemKeys
+	* Add plugin for taxes calculation
+		Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
+		If "List" table does not contain lines Then
+				| "Description" |
+				| "TaxCalculateVAT_TR" |
+			When add Plugin for tax calculation
+		When Create information register Taxes records (VAT)
+	* Tax settings
+		When filling in Tax settings for company
+	* Add sales tax
+		When Create catalog Taxes objects (Sales tax)
+		When Create information register TaxSettings (Sales tax)
+		When Create information register Taxes records (Sales tax)
+		When add sales tax settings 
 	* Add balances for created store (Opening entry)
 		* Open document form opening entry
 			Given I open hyperlink "e1cib/list/Document.OpeningEntry"
@@ -51,12 +79,6 @@ Scenario:_2990000 preparation
 				| Description  |
 				| Main Company |
 			And I select current line in "List" table
-		* Change the document number
-			And I move to "Other" tab
-			And I input "8" text in "Number" field
-			Then "1C:Enterprise" window is opened
-			And I click "Yes" button
-			And I input "8" text in "Number" field
 		* Filling in the tabular part Inventory
 			And I move to "Inventory" tab
 			And in the table "Inventory" I click the button named "InventoryAdd"
@@ -142,18 +164,24 @@ Scenario:_2990000 preparation
 			And I select current line in "Inventory" table
 			And I input "400,000" text in "Quantity" field of "Inventory" table
 			And I finish line editing in "Inventory" table
-			And I click "Post and close" button
+			And I click the button named "FormPost"
+			And I delete "$$NumberOpeningEntry2990000$$" variable
+			And I delete "$$OpeningEntry2990000$$" variable
+			And I save the value of "Number" field as "$$NumberOpeningEntry2990000$$"
+			And I save the window as "$$OpeningEntry2990000$$"
+			And I click the button named "FormPostAndClose"
 
 
 Scenario: _2990001 filling in the status guide for PhysicalInventory and PhysicalCountByLocation
 	* Open a creation form Object Statuses
 		Given I open hyperlink "e1cib/list/Catalog.ObjectStatuses"
 	* Assigning a name to a predefined element of PhysicalInventory
-		And I expand a line in "List" table
-			| 'Description'     |
-			| 'Objects status history' |
 		And I go to line in "List" table
-			| Predefined data item name |
+			| 'Code'    |
+			| 'Objects statuses'|
+		And I expand current line in "List" table
+		And I go to line in "List" table
+			| Predefined data name |
 			| PhysicalInventory         |
 		And I select current line in "List" table
 		And I click Open button of the field named "Description_en"
@@ -162,47 +190,24 @@ Scenario: _2990001 filling in the status guide for PhysicalInventory and Physica
 		And I click "Ok" button
 		And I click "Save and close" button
 		And Delay 10
-	* Add status "Prepared"
+	* Add status "Draft"
 		And I go to line in "List" table
 		| 'Description'              |
 		| 'Physical inventory' |
 		And I click the button named "FormCreate"
 		And I click Open button of the field named "Description_en"
-		And I input "Prepared" text in the field named "Description_en"
-		And I input "Prepared TR" text in the field named "Description_tr"
-		And I click "Ok" button
-		And I set checkbox "Set by default"
-		And I click "Save and close" button
-		And Delay 2
-	* Add status "In processing"
-		And I go to line in "List" table
-		| 'Description'              |
-		| 'Physical inventory' |
-		And I click the button named "FormCreate"
-		And I click Open button of the field named "Description_en"
-		And I input "In processing" text in the field named "Description_en"
-		And I input "In processing TR" text in the field named "Description_tr"
-		And I click "Ok" button
-		And I click "Save and close" button
-		And Delay 2
-	* Add status "Done"
-		And I go to line in "List" table
-		| 'Description'              |
-		| 'Physical inventory' |
-		And I click the button named "FormCreate"
-		And I set checkbox "Posting"
-		And I click Open button of the field named "Description_en"
-		And I input "Done" text in the field named "Description_en"
-		And I input "Done TR" text in the field named "Description_tr"
+		And I input "Draft" text in the field named "Description_en"
+		And I input "Draft TR" text in the field named "Description_tr"
 		And I click "Ok" button
 		And I click "Save and close" button
 		And Delay 2
 	* Assigning a name to a predefined element of PhysicalCountByLocation
-		And I expand a line in "List" table
-			| 'Description'     |
-			| 'Objects status history' |
 		And I go to line in "List" table
-			| Predefined data item name |
+			| 'Code'    |
+			| 'Objects statuses'|
+		And I expand current line in "List" table
+		And I go to line in "List" table
+			| Predefined data name |
 			| PhysicalCountByLocation         |
 		And I select current line in "List" table
 		And I click Open button of the field named "Description_en"
@@ -211,42 +216,17 @@ Scenario: _2990001 filling in the status guide for PhysicalInventory and Physica
 		And I click "Ok" button
 		And I click "Save and close" button
 		And Delay 10
-	* Add status "Prepared"
+	* Add status "Draft"
 		And I go to line in "List" table
 		| 'Description'              |
 		| 'Physical count by location' |
 		And I click the button named "FormCreate"
 		And I click Open button of the field named "Description_en"
-		And I input "Prepared" text in the field named "Description_en"
-		And I input "Prepared TR" text in the field named "Description_tr"
-		And I click "Ok" button
-		And I set checkbox "Set by default"
-		And I click "Save and close" button
-		And Delay 2
-	* Add status "In processing"
-		And I go to line in "List" table
-		| 'Description'              |
-		| 'Physical count by location' |
-		And I click the button named "FormCreate"
-		And I click Open button of the field named "Description_en"
-		And I input "In processing" text in the field named "Description_en"
-		And I input "In processing TR" text in the field named "Description_tr"
+		And I input "Draft" text in the field named "Description_en"
+		And I input "Draft TR" text in the field named "Description_tr"
 		And I click "Ok" button
 		And I click "Save and close" button
 		And Delay 2
-	* Add status "Done"
-		And I go to line in "List" table
-		| 'Description'              |
-		| 'Physical count by location' |
-		And I click the button named "FormCreate"
-		And I set checkbox "Posting"
-		And I click Open button of the field named "Description_en"
-		And I input "Done" text in the field named "Description_en"
-		And I input "Done TR" text in the field named "Description_tr"
-		And I click "Ok" button
-		And I click "Save and close" button
-		And Delay 2
-
 
 
 Scenario: _2990002 create Stock adjustment as surplus
@@ -267,6 +247,9 @@ Scenario: _2990002 create Stock adjustment as surplus
 	* Filling in the tabular part
 		And I click "Add" button
 		And I click choice button of "Item" attribute in "ItemList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Dress'  |
 		And I select current line in "List" table
 		And I activate "Item key" field in "ItemList" table
 		And I click choice button of "Item key" attribute in "ItemList" table
@@ -291,38 +274,44 @@ Scenario: _2990002 create Stock adjustment as surplus
 		And "ItemList" table contains lines
 		| 'Item'  | 'Quantity' | 'Item key' | 'Business unit'           | 'Unit' | 'Revenue type' | 'Basis document' |
 		| 'Dress' | '8,000'    | 'M/White'  | 'Distribution department' | 'pcs'  | 'Delivery'     | ''               |
-	* Change the document number
-		And I move to "Other" tab
-		And I input "1" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "1" text in "Number" field
 	* Post document
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberStockAdjustmentAsSurplus2990002$$" variable
+		And I delete "$$StockAdjustmentAsSurplus2990002$$" variable
+		And I save the value of "Number" field as "$$NumberStockAdjustmentAsSurplus2990002$$"
+		And I save the window as "$$StockAdjustmentAsSurplus2990002$$"
 	* Check movements
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Stock adjustment as surplus 1*' | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Document registrations records' | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Inventory balance"'  | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | ''            | ''          | 'Quantity'     | 'Company'                 | 'Item key'     | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | 'Receipt'     | '*'         | '8'            | 'Main Company'            | 'M/White'      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Stock reservation"'  | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | ''            | ''          | 'Quantity'     | 'Store'                   | 'Item key'     | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | 'Receipt'     | '*'         | '8'            | 'Store 02'                | 'M/White'      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Revenues turnovers"' | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | 'Period'      | 'Resources' | 'Dimensions'   | ''                        | ''             | ''         | ''         | ''                    | ''                       | 'Attributes'           |
-		| ''                               | ''            | 'Amount'    | 'Company'      | 'Business unit'           | 'Revenue type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
-		| ''                               | '*'           | ''          | 'Main Company' | 'Distribution department' | 'Delivery'     | 'M/White'  | ''         | ''                    | ''                       | 'No'                   |
-		| ''                               | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Stock balance"'      | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | ''            | ''          | 'Quantity'     | 'Store'                   | 'Item key'     | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | 'Receipt'     | '*'         | '8'            | 'Store 02'                | 'M/White'      | ''         | ''         | ''                    | ''                       | ''                     |
+		And I select "Inventory balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$StockAdjustmentAsSurplus2990002$$' | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| 'Document registrations records'      | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| 'Register  "Inventory balance"'       | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| ''                                    | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''         | '' | '' | '' | '' | '' |
+		| ''                                    | ''            | ''       | 'Quantity'  | 'Company'      | 'Item key' | '' | '' | '' | '' | '' |
+		| ''                                    | 'Receipt'     | '*'      | '8'         | 'Main Company' | 'M/White'  | '' | '' | '' | '' | '' |
+		And I select "Stock reservation" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock reservation"' | ''            | ''       | ''          | ''           | ''         | '' | '' | '' | '' | '' |
+		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''         | '' | '' | '' | '' | '' |
+		| ''                              | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key' | '' | '' | '' | '' | '' |
+		| ''                              | 'Receipt'     | '*'      | '8'         | 'Store 02'   | 'M/White'  | '' | '' | '' | '' | '' |
+		And I select "Revenues turnovers" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Revenues turnovers"' | ''       | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                               | 'Period' | 'Resources' | 'Dimensions'   | ''                        | ''             | ''         | ''         | ''                    | ''                             | 'Attributes'           |
+		| ''                               | ''       | 'Amount'    | 'Company'      | 'Business unit'           | 'Revenue type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
+		| ''                               | '*'      | ''          | 'Main Company' | 'Distribution department' | 'Delivery'     | 'M/White'  | ''         | ''                    | ''                             | 'No'                   |
+		And I select "Stock balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock balance"'           | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                                    | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                                    | ''            | ''          | 'Quantity'     | 'Store'                   | 'Item key'     | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                                    | 'Receipt'     | '*'         | '8'            | 'Store 02'                | 'M/White'      | ''         | ''         | ''                    | ''                             | ''                     |
 		And I close all client application windows
 	* Check movements after re-select store and company (store does not use Shipment confirmation and Goods receipt)
 		Given I open hyperlink "e1cib/list/Document.StockAdjustmentAsSurplus"
@@ -338,26 +327,34 @@ Scenario: _2990002 create Stock adjustment as surplus
 			| 'Description'    |
 			| 'Store 01' |
 		And I select current line in "List" table
-		And I click "Post" button
+		And I click the button named "FormPost"
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Stock adjustment as surplus 1*' | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Document registrations records' | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Inventory balance"'  | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | 'Record type' | 'Period'    | 'Resources'      | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | ''            | ''          | 'Quantity'       | 'Company'                 | 'Item key'     | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | 'Receipt'     | '*'         | '8'              | 'Second Company'          | 'M/White'      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Stock reservation"'  | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | 'Record type' | 'Period'    | 'Resources'      | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | ''            | ''          | 'Quantity'       | 'Store'                   | 'Item key'     | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | 'Receipt'     | '*'         | '8'              | 'Store 01'                | 'M/White'      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Revenues turnovers"' | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                               | 'Period'      | 'Resources' | 'Dimensions'     | ''                        | ''             | ''         | ''         | ''                    | ''                       | 'Attributes'           |
-		| ''                               | ''            | 'Amount'    | 'Company'        | 'Business unit'           | 'Revenue type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
-		| ''                               | '*'           | ''          | 'Second Company' | 'Distribution department' | 'Delivery'     | 'M/White'  | ''         | ''                    | ''                       | 'No'                   |
-		| ''                               | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
+		And I select "Inventory balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$StockAdjustmentAsSurplus2990002$$' | ''            | ''       | ''          | ''               | ''         | '' | '' | '' | '' | '' |
+		| 'Document registrations records'      | ''            | ''       | ''          | ''               | ''         | '' | '' | '' | '' | '' |
+		| 'Register  "Inventory balance"'       | ''            | ''       | ''          | ''               | ''         | '' | '' | '' | '' | '' |
+		| ''                                    | 'Record type' | 'Period' | 'Resources' | 'Dimensions'     | ''         | '' | '' | '' | '' | '' |
+		| ''                                    | ''            | ''       | 'Quantity'  | 'Company'        | 'Item key' | '' | '' | '' | '' | '' |
+		| ''                                    | 'Receipt'     | '*'      | '8'         | 'Second Company' | 'M/White'  | '' | '' | '' | '' | '' |
+		And I select "Stock reservation" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock reservation"' | ''            | ''       | ''          | ''           | ''         | '' | '' | '' | '' | '' |
+		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''         | '' | '' | '' | '' | '' |
+		| ''                              | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key' | '' | '' | '' | '' | '' |
+		| ''                              | 'Receipt'     | '*'      | '8'         | 'Store 01'   | 'M/White'  | '' | '' | '' | '' | '' |
+		And I select "Revenues turnovers" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Revenues turnovers"' | ''       | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                               | 'Period' | 'Resources' | 'Dimensions'     | ''                        | ''             | ''         | ''         | ''                    | ''                             | 'Attributes'           |
+		| ''                               | ''       | 'Amount'    | 'Company'        | 'Business unit'           | 'Revenue type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
+		| ''                               | '*'      | ''          | 'Second Company' | 'Distribution department' | 'Delivery'     | 'M/White'  | ''         | ''                    | ''                             | 'No'                   |
+		And I select "Stock balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
 		| 'Register  "Stock balance"'      | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
 		| ''                               | 'Record type' | 'Period'    | 'Resources'      | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                       | ''                     |
 		| ''                               | ''            | ''          | 'Quantity'       | 'Store'                   | 'Item key'     | ''         | ''         | ''                    | ''                       | ''                     |
@@ -382,6 +379,9 @@ Scenario: _2990003 create Stock adjustment as write off
 	* Filling in the tabular part
 		And I click "Add" button
 		And I click choice button of "Item" attribute in "ItemList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Dress'  |
 		And I select current line in "List" table
 		And I activate "Item key" field in "ItemList" table
 		And I click choice button of "Item key" attribute in "ItemList" table
@@ -406,38 +406,44 @@ Scenario: _2990003 create Stock adjustment as write off
 		And "ItemList" table contains lines
 		| 'Item'  | 'Quantity' | 'Item key' | 'Business unit'           | 'Unit' | 'Expense type' | 'Basis document' |
 		| 'Dress' | '8,000'    | 'M/White'  | 'Distribution department' | 'pcs'  | 'Delivery'     | ''               |
-	* Change the document number
-		And I move to "Other" tab
-		And I input "1" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "1" text in "Number" field
 	* Post document
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberStockAdjustmentAsWriteOff2990003$$" variable
+		And I delete "$$StockAdjustmentAsWriteOff2990003$$" variable
+		And I save the value of "Number" field as "$$NumberStockAdjustmentAsWriteOff2990003$$"
+		And I save the window as "$$StockAdjustmentAsWriteOff2990003$$"
 	* Check movements
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Stock adjustment as write-off 1*' | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Document registrations records'   | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Inventory balance"'    | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | ''            | ''          | 'Quantity'     | 'Company'                 | 'Item key'     | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Expense'     | '*'         | '8'            | 'Main Company'            | 'M/White'      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Expenses turnovers"'   | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Period'      | 'Resources' | 'Dimensions'   | ''                        | ''             | ''         | ''         | ''                    | ''                       | 'Attributes'           |
-		| ''                                 | ''            | 'Amount'    | 'Company'      | 'Business unit'           | 'Expense type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
-		| ''                                 | '*'           | ''          | 'Main Company' | 'Distribution department' | 'Delivery'     | 'M/White'  | ''         | ''                    | ''                       | 'No'                   |
-		| ''                                 | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Stock reservation"'    | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | ''            | ''          | 'Quantity'     | 'Store'                   | 'Item key'     | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Expense'     | '*'         | '8'            | 'Store 02'                | 'M/White'      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Stock balance"'        | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | ''            | ''          | 'Quantity'     | 'Store'                   | 'Item key'     | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Expense'     | '*'         | '8'            | 'Store 02'                | 'M/White'      | ''         | ''         | ''                    | ''                       | ''                     |
+		And I select "Inventory balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$StockAdjustmentAsWriteOff2990003$$' | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| 'Document registrations records'       | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| 'Register  "Inventory balance"'        | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''         | '' | '' | '' | '' | '' |
+		| ''                                     | ''            | ''       | 'Quantity'  | 'Company'      | 'Item key' | '' | '' | '' | '' | '' |
+		| ''                                     | 'Expense'     | '*'      | '8'         | 'Main Company' | 'M/White'  | '' | '' | '' | '' | '' |
+		And I select "Expenses turnovers" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Expenses turnovers"' | ''       | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                               | 'Period' | 'Resources' | 'Dimensions'   | ''                        | ''             | ''         | ''         | ''                    | ''                             | 'Attributes'           |
+		| ''                               | ''       | 'Amount'    | 'Company'      | 'Business unit'           | 'Expense type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
+		| ''                               | '*'      | ''          | 'Main Company' | 'Distribution department' | 'Delivery'     | 'M/White'  | ''         | ''                    | ''                             | 'No'                   |
+		And I select "Stock reservation" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock reservation"' | ''            | ''       | ''          | ''           | ''         | '' | '' | '' | '' | '' |
+		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''         | '' | '' | '' | '' | '' |
+		| ''                              | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key' | '' | '' | '' | '' | '' |
+		| ''                              | 'Expense'     | '*'      | '8'         | 'Store 02'   | 'M/White'  | '' | '' | '' | '' | '' |
+		And I select "Stock balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock balance"'            | ''            | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                                     | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                                     | ''            | ''          | 'Quantity'     | 'Store'                   | 'Item key'     | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                                     | 'Expense'     | '*'         | '8'            | 'Store 02'                | 'M/White'      | ''         | ''         | ''                    | ''                             | ''                     |
 		And I close all client application windows
 	* Check movements after re-select store and company (store does not use Shipment confirmation and Goods receipt)
 		Given I open hyperlink "e1cib/list/Document.StockAdjustmentAsWriteOff"
@@ -453,36 +459,45 @@ Scenario: _2990003 create Stock adjustment as write off
 			| 'Description'    |
 			| 'Store 01' |
 		And I select current line in "List" table
-		And I click "Post" button
+		And I click the button named "FormPost"
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Stock adjustment as write-off 1*' | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Document registrations records'   | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Inventory balance"'    | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Record type' | 'Period'    | 'Resources'      | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | ''            | ''          | 'Quantity'       | 'Company'                 | 'Item key'     | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Expense'     | '*'         | '8'              | 'Second Company'          | 'M/White'      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Expenses turnovers"'   | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Period'      | 'Resources' | 'Dimensions'     | ''                        | ''             | ''         | ''         | ''                    | ''                       | 'Attributes'           |
-		| ''                                 | ''            | 'Amount'    | 'Company'        | 'Business unit'           | 'Expense type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
-		| ''                                 | '*'           | ''          | 'Second Company' | 'Distribution department' | 'Delivery'     | 'M/White'  | ''         | ''                    | ''                       | 'No'                   |
-		| ''                                 | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Stock reservation"'    | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Record type' | 'Period'    | 'Resources'      | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | ''            | ''          | 'Quantity'       | 'Store'                   | 'Item key'     | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Expense'     | '*'         | '8'              | 'Store 01'                | 'M/White'      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Stock balance"'        | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Record type' | 'Period'    | 'Resources'      | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | ''            | ''          | 'Quantity'       | 'Store'                   | 'Item key'     | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                 | 'Expense'     | '*'         | '8'              | 'Store 01'                | 'M/White'      | ''         | ''         | ''                    | ''                       | ''                     |
+		And I select "Inventory balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$StockAdjustmentAsWriteOff2990003$$' | ''            | ''       | ''          | ''               | ''         | '' | '' | '' | '' | '' |
+		| 'Document registrations records'       | ''            | ''       | ''          | ''               | ''         | '' | '' | '' | '' | '' |
+		| 'Register  "Inventory balance"'        | ''            | ''       | ''          | ''               | ''         | '' | '' | '' | '' | '' |
+		| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'     | ''         | '' | '' | '' | '' | '' |
+		| ''                                     | ''            | ''       | 'Quantity'  | 'Company'        | 'Item key' | '' | '' | '' | '' | '' |
+		| ''                                     | 'Expense'     | '*'      | '8'         | 'Second Company' | 'M/White'  | '' | '' | '' | '' | '' |
+		And I select "Expenses turnovers" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Expenses turnovers"' | ''       | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                               | 'Period' | 'Resources' | 'Dimensions'     | ''                        | ''             | ''         | ''         | ''                    | ''                             | 'Attributes'           |
+		| ''                               | ''       | 'Amount'    | 'Company'        | 'Business unit'           | 'Expense type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
+		| ''                               | '*'      | ''          | 'Second Company' | 'Distribution department' | 'Delivery'     | 'M/White'  | ''         | ''                    | ''                             | 'No'                   |
+		And I select "Stock reservation" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock reservation"' | ''            | ''       | ''          | ''           | ''         | '' | '' | '' | '' | '' |
+		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''         | '' | '' | '' | '' | '' |
+		| ''                              | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key' | '' | '' | '' | '' | '' |
+		| ''                              | 'Expense'     | '*'      | '8'         | 'Store 01'   | 'M/White'  | '' | '' | '' | '' | '' |
+		And I select "Stock balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock balance"'            | ''            | ''          | ''               | ''                        | ''             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                                     | 'Record type' | 'Period'    | 'Resources'      | 'Dimensions'              | ''             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                                     | ''            | ''          | 'Quantity'       | 'Store'                   | 'Item key'     | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                                     | 'Expense'     | '*'         | '8'              | 'Store 01'                | 'M/White'      | ''         | ''         | ''                    | ''                             | ''                     |
 		And I close all client application windows
 
 Scenario: _2990004 create Physical inventory (store use GR and SC)
 	* Open document form
 		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
 		And I click the button named "FormCreate"
+		And I set checkbox "Use responsible person by row"
 		And I select "Done" exact value from "Status" drop-down list
 	* Check filling in document with stock balances
 		And I click Select button of "Store" field
@@ -510,89 +525,104 @@ Scenario: _2990004 create Physical inventory (store use GR and SC)
 		And I select current line in "ItemList" table
 		And I input "125,000" text in "Phys. count" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-	* Change the document number
-		And I move to "Other" tab
-		And I input "1" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "1" text in "Number" field
 	* Posting the document Physical inventory
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberPhysicalInventory2990004$$" variable
+		And I delete "$$PhysicalInventory2990004$$" variable
+		And I save the value of "Number" field as "$$NumberPhysicalInventory2990004$$"
+		And I save the window as "$$PhysicalInventory2990004$$"
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Physical inventory 1*'                     | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Document registrations records'            | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Register  "Stock adjustment as surplus"'   | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''         |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'        | 'Item key' |
-		| ''                                          | 'Receipt'     | '*'      | '5'         | 'Store 05'   | 'Physical inventory 1*' | 'S/Yellow' |
-		| ''                                          | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Register  "Stock reservation"'             | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''         |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'              | ''         |
-		| ''                                          | 'Receipt'     | '*'      | '5'         | 'Store 05'   | 'S/Yellow'              | ''         |
-		| ''                                          | 'Expense'     | '*'      | '2'         | 'Store 05'   | 'XS/Blue'               | ''         |
-		| ''                                          | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Register  "Stock adjustment as write-off"' | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''         |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'        | 'Item key' |
-		| ''                                          | 'Receipt'     | '*'      | '2'         | 'Store 05'   | 'Physical inventory 1*' | 'XS/Blue'  |
-		| ''                                          | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Register  "Stock balance"'                 | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''         |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'              | ''         |
-		| ''                                          | 'Receipt'     | '*'      | '5'         | 'Store 05'   | 'S/Yellow'              | ''         |
-		| ''                                          | 'Expense'     | '*'      | '2'         | 'Store 05'   | 'XS/Blue'               | ''         |
+		And I select "Stock adjustment as surplus" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$PhysicalInventory2990004$$'            | ''            | ''       | ''          | ''           | ''                             | ''         |
+		| 'Document registrations records'          | ''            | ''       | ''          | ''           | ''                             | ''         |
+		| 'Register  "Stock adjustment as surplus"' | ''            | ''       | ''          | ''           | ''                             | ''         |
+		| ''                                        | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                             | ''         |
+		| ''                                        | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'               | 'Item key' |
+		| ''                                        | 'Receipt'     | '*'      | '5'         | 'Store 05'   | '$$PhysicalInventory2990004$$' | 'S/Yellow' |
+		And I select "Stock reservation" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock reservation"' | ''            | ''       | ''          | ''           | ''         | '' |
+		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''         | '' |
+		| ''                              | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key' | '' |
+		| ''                              | 'Receipt'     | '*'      | '5'         | 'Store 05'   | 'S/Yellow' | '' |
+		| ''                              | 'Expense'     | '*'      | '2'         | 'Store 05'   | 'XS/Blue'  | '' |
+		And I select "Stock adjustment as write-off" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock adjustment as write-off"' | ''            | ''       | ''          | ''           | ''                             | ''         |
+		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                             | ''         |
+		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'               | 'Item key' |
+		| ''                                          | 'Receipt'     | '*'      | '2'         | 'Store 05'   | '$$PhysicalInventory2990004$$' | 'XS/Blue'  |
+		And I select "Stock balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock balance"'                 | ''            | ''       | ''          | ''           | ''                             | ''         |
+		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                             | ''         |
+		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'                     | ''         |
+		| ''                                          | 'Receipt'     | '*'      | '5'         | 'Store 05'   | 'S/Yellow'                     | ''         |
+		| ''                                          | 'Expense'     | '*'      | '2'         | 'Store 05'   | 'XS/Blue'                      | ''         |
 		And I close all client application windows
 	* Clear movements Physical Inventory and check movements
 		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
 		And I go to line in "List" table
 			| 'Number'  |
-			| '1'       |
+			| '$$NumberPhysicalInventory2990004$$'       |
 		And in the table "List" I click the button named "ListContextMenuUndoPosting"
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Physical inventory 1*' |
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$PhysicalInventory2990004$$' |
 		| 'Document registrations records'                |
 		And I close all client application windows
 	* Re-post Physical Inventory and check movements
 		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
 		And I go to line in "List" table
 			| 'Number'  |
-			| '1'       |
+			| '$$NumberPhysicalInventory2990004$$'       |
 		And in the table "List" I click the button named "ListContextMenuPost"
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Physical inventory 1*'                     | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Document registrations records'            | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Register  "Stock adjustment as surplus"'   | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''         |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'        | 'Item key' |
-		| ''                                          | 'Receipt'     | '*'      | '5'         | 'Store 05'   | 'Physical inventory 1*' | 'S/Yellow' |
-		| ''                                          | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Register  "Stock reservation"'             | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''         |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'              | ''         |
-		| ''                                          | 'Receipt'     | '*'      | '5'         | 'Store 05'   | 'S/Yellow'              | ''         |
-		| ''                                          | 'Expense'     | '*'      | '2'         | 'Store 05'   | 'XS/Blue'               | ''         |
-		| ''                                          | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Register  "Stock adjustment as write-off"' | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''         |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'        | 'Item key' |
-		| ''                                          | 'Receipt'     | '*'      | '2'         | 'Store 05'   | 'Physical inventory 1*' | 'XS/Blue'  |
-		| ''                                          | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Register  "Stock balance"'                 | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''         |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'              | ''         |
-		| ''                                          | 'Receipt'     | '*'      | '5'         | 'Store 05'   | 'S/Yellow'              | ''         |
-		| ''                                          | 'Expense'     | '*'      | '2'         | 'Store 05'   | 'XS/Blue'               | ''         |
+		And I select "Stock adjustment as surplus" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$PhysicalInventory2990004$$'            | ''            | ''       | ''          | ''           | ''                             | ''         |
+		| 'Document registrations records'          | ''            | ''       | ''          | ''           | ''                             | ''         |
+		| 'Register  "Stock adjustment as surplus"' | ''            | ''       | ''          | ''           | ''                             | ''         |
+		| ''                                        | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                             | ''         |
+		| ''                                        | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'               | 'Item key' |
+		| ''                                        | 'Receipt'     | '*'      | '5'         | 'Store 05'   | '$$PhysicalInventory2990004$$' | 'S/Yellow' |
+		And I select "Stock reservation" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock reservation"' | ''            | ''       | ''          | ''           | ''         | '' |
+		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''         | '' |
+		| ''                              | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key' | '' |
+		| ''                              | 'Receipt'     | '*'      | '5'         | 'Store 05'   | 'S/Yellow' | '' |
+		| ''                              | 'Expense'     | '*'      | '2'         | 'Store 05'   | 'XS/Blue'  | '' |
+		And I select "Stock adjustment as write-off" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock adjustment as write-off"' | ''            | ''       | ''          | ''           | ''                             | ''         |
+		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                             | ''         |
+		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'               | 'Item key' |
+		| ''                                          | 'Receipt'     | '*'      | '2'         | 'Store 05'   | '$$PhysicalInventory2990004$$' | 'XS/Blue'  |
+		And I select "Stock balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock balance"'                 | ''            | ''       | ''          | ''           | ''                             | ''         |
+		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                             | ''         |
+		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'                     | ''         |
+		| ''                                          | 'Receipt'     | '*'      | '5'         | 'Store 05'   | 'S/Yellow'                     | ''         |
+		| ''                                          | 'Expense'     | '*'      | '2'         | 'Store 05'   | 'XS/Blue'                      | ''         |
 		And I close all client application windows
 
 
-Scenario: _2990004 create Physical inventory (store doesn't use GR and SC)
+Scenario: _2990005 create Physical inventory (store does not use GR and SC)
 	* Open document form
 		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
 		And I click the button named "FormCreate"
+		And I set checkbox "Use responsible person by row"
 		And I select "Done" exact value from "Status" drop-down list
 	* Check filling in document with stock balances
 		And I click Select button of "Store" field
@@ -620,34 +650,40 @@ Scenario: _2990004 create Physical inventory (store doesn't use GR and SC)
 		And I select current line in "ItemList" table
 		And I input "405,000" text in "Phys. count" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-	* Change the document number
-		And I move to "Other" tab
-		And I input "2" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "2" text in "Number" field
 	* Posting the document Physical inventory
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberPhysicalInventory2990005$$" variable
+		And I delete "$$PhysicalInventory2990005$$" variable
+		And I save the value of "Number" field as "$$NumberPhysicalInventory2990005$$"
+		And I save the window as "$$PhysicalInventory2990005$$"
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Physical inventory 2*'                     | ''            | ''       | ''          | ''           | ''                      | ''          |
-		| 'Document registrations records'            | ''            | ''       | ''          | ''           | ''                      | ''          |
-		| 'Register  "Stock adjustment as surplus"'   | ''            | ''       | ''          | ''           | ''                      | ''          |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''          |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'        | 'Item key'  |
-		| ''                                          | 'Receipt'     | '*'      | '5'         | 'Store 06'   | 'Physical inventory 2*' | '36/Yellow' |
-		| ''                                          | ''            | ''       | ''          | ''           | ''                      | ''          |
-		| 'Register  "Stock reservation"'             | ''            | ''       | ''          | ''           | ''                      | ''          |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''          |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'              | ''          |
-		| ''                                          | 'Receipt'     | '*'      | '5'         | 'Store 06'   | '36/Yellow'             | ''          |
-		| ''                                          | 'Expense'     | '*'      | '2'         | 'Store 06'   | 'XS/Blue'               | ''          |
-		| ''                                          | ''            | ''       | ''          | ''           | ''                      | ''          |
-		| 'Register  "Stock adjustment as write-off"' | ''            | ''       | ''          | ''           | ''                      | ''          |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''          |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'        | 'Item key'  |
-		| ''                                          | 'Receipt'     | '*'      | '2'         | 'Store 06'   | 'Physical inventory 2*' | 'XS/Blue'   |
-		| ''                                          | ''            | ''       | ''          | ''           | ''                      | ''          |
+		And I select "Stock adjustment as surplus" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$PhysicalInventory2990005$$'            | ''            | ''       | ''          | ''           | ''                             | ''          |
+		| 'Document registrations records'          | ''            | ''       | ''          | ''           | ''                             | ''          |
+		| 'Register  "Stock adjustment as surplus"' | ''            | ''       | ''          | ''           | ''                             | ''          |
+		| ''                                        | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                             | ''          |
+		| ''                                        | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'               | 'Item key'  |
+		| ''                                        | 'Receipt'     | '*'      | '5'         | 'Store 06'   | '$$PhysicalInventory2990005$$' | '36/Yellow' |
+		And I select "Stock reservation" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock reservation"' | ''            | ''       | ''          | ''           | ''          | '' |
+		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''          | '' |
+		| ''                              | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'  | '' |
+		| ''                              | 'Receipt'     | '*'      | '5'         | 'Store 06'   | '36/Yellow' | '' |
+		| ''                              | 'Expense'     | '*'      | '2'         | 'Store 06'   | 'XS/Blue'   | '' |
+		And I select "Stock adjustment as write-off" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock adjustment as write-off"' | ''            | ''       | ''          | ''           | ''                             | ''         |
+		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                             | ''         |
+		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'               | 'Item key' |
+		| ''                                          | 'Receipt'     | '*'      | '2'         | 'Store 06'   | '$$PhysicalInventory2990005$$' | 'XS/Blue'  |
+		And I select "Stock balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
 		| 'Register  "Stock balance"'                 | ''            | ''       | ''          | ''           | ''                      | ''          |
 		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''          |
 		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'              | ''          |
@@ -655,12 +691,12 @@ Scenario: _2990004 create Physical inventory (store doesn't use GR and SC)
 		| ''                                          | 'Expense'     | '*'      | '2'         | 'Store 06'   | 'XS/Blue'               | ''          |
 		And I close all client application windows
 
-Scenario: _2990005 create Stock adjustment as surplus based on Physical inventory
+Scenario: _2990006 create Stock adjustment as surplus based on Physical inventory
 	* Open document form
 		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
 		And I go to line in "List" table
 			| 'Number' |
-			| '1'    |
+			| '$$NumberPhysicalInventory2990004$$'    |
 	* Create a document StockAdjustmentAsSurplus and check filling in
 		And I click the button named "FormDocumentStockAdjustmentAsSurplusGenerateStockAdjustmentAsSurplus"
 		And I click Select button of "Company" field
@@ -682,31 +718,34 @@ Scenario: _2990005 create Stock adjustment as surplus based on Physical inventor
 	* Check filling in
 		And "ItemList" table contains lines
 		| 'Item'  | 'Quantity' | 'Item key' | 'Business unit'        | 'Unit' | 'Revenue type' | 'Basis document'        |
-		| 'Dress' | '5,000'    | 'S/Yellow' | 'Logistics department' | 'pcs'  | 'Delivery'     | 'Physical inventory 1*' |
+		| 'Dress' | '5,000'    | 'S/Yellow' | 'Logistics department' | 'pcs'  | 'Delivery'     | '$$PhysicalInventory2990004$$' |
 		Then the number of "ItemList" table lines is "меньше или равно" 1
-	* Change the document number
-		And I move to "Other" tab
-		And I input "0" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		Then "Stock adjustment as surplus (create) *" window is opened
-		And I input "2" text in "Number" field
 	* Posting the document and check movements
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberStockAdjustmentAsSurplus2990006$$" variable
+		And I delete "$$StockAdjustmentAsSurplus$$" variable
+		And I save the value of "Number" field as "$$NumberStockAdjustmentAsSurplus2990006$$"
+		And I save the window as "$$StockAdjustmentAsSurplus$$"
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Stock adjustment as surplus 2*'          | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Document registrations records'          | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Stock adjustment as surplus"' | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'           | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | ''            | ''          | 'Quantity'     | 'Store'                | 'Basis document'        | 'Item key' | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | 'Expense'     | '*'         | '5'            | 'Store 05'             | 'Physical inventory 1*' | 'S/Yellow' | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Inventory balance"'           | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'           | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | ''            | ''          | 'Quantity'     | 'Company'              | 'Item key'              | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | 'Receipt'     | '*'         | '5'            | 'Main Company'         | 'S/Yellow'              | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
+		And I select "Stock adjustment as surplus" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$StockAdjustmentAsSurplus$$'            | ''            | ''       | ''          | ''           | ''                             | ''         | '' | '' | '' | '' |
+		| 'Document registrations records'          | ''            | ''       | ''          | ''           | ''                             | ''         | '' | '' | '' | '' |
+		| 'Register  "Stock adjustment as surplus"' | ''            | ''       | ''          | ''           | ''                             | ''         | '' | '' | '' | '' |
+		| ''                                        | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                             | ''         | '' | '' | '' | '' |
+		| ''                                        | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'               | 'Item key' | '' | '' | '' | '' |
+		| ''                                        | 'Expense'     | '*'      | '5'         | 'Store 05'   | '$$PhysicalInventory2990004$$' | 'S/Yellow' | '' | '' | '' | '' |
+		And I select "Inventory balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Inventory balance"' | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''         | '' | '' | '' | '' | '' |
+		| ''                              | ''            | ''       | 'Quantity'  | 'Company'      | 'Item key' | '' | '' | '' | '' | '' |
+		| ''                              | 'Receipt'     | '*'      | '5'         | 'Main Company' | 'S/Yellow' | '' | '' | '' | '' | '' |
+		And I select "Revenues turnovers" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
 		| 'Register  "Revenues turnovers"'          | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
 		| ''                                        | 'Period'      | 'Resources' | 'Dimensions'   | ''                     | ''                      | ''         | ''         | ''                    | ''                       | 'Attributes'           |
 		| ''                                        | ''            | 'Amount'    | 'Company'      | 'Business unit'        | 'Revenue type'          | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
@@ -716,33 +755,39 @@ Scenario: _2990005 create Stock adjustment as surplus based on Physical inventor
 		Given I open hyperlink "e1cib/list/Document.StockAdjustmentAsSurplus"
 		And I go to line in "List" table
 			| 'Number'  |
-			| '2'       |
+			| '$$NumberStockAdjustmentAsSurplus2990006$$'       |
 		And in the table "List" I click the button named "ListContextMenuUndoPosting"
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Stock adjustment as surplus 2*'          |
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$StockAdjustmentAsSurplus$$'          |
 		| 'Document registrations records'                |
 		And I close all client application windows
 	* Re-post Physical Inventory and check movements
 		Given I open hyperlink "e1cib/list/Document.StockAdjustmentAsSurplus"
 		And I go to line in "List" table
 			| 'Number'  |
-			| '2'       |
+			| '$$NumberStockAdjustmentAsSurplus2990006$$'       |
 		And in the table "List" I click the button named "ListContextMenuPost"
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Stock adjustment as surplus 2*'          | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Document registrations records'          | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Stock adjustment as surplus"' | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'           | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | ''            | ''          | 'Quantity'     | 'Store'                | 'Basis document'        | 'Item key' | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | 'Expense'     | '*'         | '5'            | 'Store 05'             | 'Physical inventory 1*' | 'S/Yellow' | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Inventory balance"'           | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'           | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | ''            | ''          | 'Quantity'     | 'Company'              | 'Item key'              | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | 'Receipt'     | '*'         | '5'            | 'Main Company'         | 'S/Yellow'              | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                        | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
+		And I select "Stock adjustment as surplus" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$StockAdjustmentAsSurplus$$'            | ''            | ''       | ''          | ''           | ''                             | ''         | '' | '' | '' | '' |
+		| 'Document registrations records'          | ''            | ''       | ''          | ''           | ''                             | ''         | '' | '' | '' | '' |
+		| 'Register  "Stock adjustment as surplus"' | ''            | ''       | ''          | ''           | ''                             | ''         | '' | '' | '' | '' |
+		| ''                                        | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                             | ''         | '' | '' | '' | '' |
+		| ''                                        | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'               | 'Item key' | '' | '' | '' | '' |
+		| ''                                        | 'Expense'     | '*'      | '5'         | 'Store 05'   | '$$PhysicalInventory2990004$$' | 'S/Yellow' | '' | '' | '' | '' |
+		And I select "Inventory balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Inventory balance"' | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''         | '' | '' | '' | '' | '' |
+		| ''                              | ''            | ''       | 'Quantity'  | 'Company'      | 'Item key' | '' | '' | '' | '' | '' |
+		| ''                              | 'Receipt'     | '*'      | '5'         | 'Main Company' | 'S/Yellow' | '' | '' | '' | '' | '' |
+		And I select "Revenues turnovers" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
 		| 'Register  "Revenues turnovers"'          | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
 		| ''                                        | 'Period'      | 'Resources' | 'Dimensions'   | ''                     | ''                      | ''         | ''         | ''                    | ''                       | 'Attributes'           |
 		| ''                                        | ''            | 'Amount'    | 'Company'      | 'Business unit'        | 'Revenue type'          | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
@@ -755,7 +800,7 @@ Scenario: _2990007 create Stock adjustment as write off based on Physical invent
 		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
 		And I go to line in "List" table
 			| 'Number' |
-			| '1'    |
+			| '$$NumberPhysicalInventory2990004$$'    |
 	* Create a document StockAdjustmentAsWriteOff and check filling in
 		And I click the button named "FormDocumentStockAdjustmentAsWriteOffGenerateStockAdjustmentAsWriteOff"
 		And I click Select button of "Company" field
@@ -777,70 +822,80 @@ Scenario: _2990007 create Stock adjustment as write off based on Physical invent
 	* Check filling in
 		And "ItemList" table contains lines
 		| 'Item'  | 'Quantity' | 'Item key' | 'Business unit'        | 'Unit' | 'Expense type' | 'Basis document'        |
-		| 'Dress' | '2,000'    | 'XS/Blue'  | 'Logistics department' | 'pcs'  | 'Delivery'     | 'Physical inventory 1*' |
+		| 'Dress' | '2,000'    | 'XS/Blue'  | 'Logistics department' | 'pcs'  | 'Delivery'     | '$$PhysicalInventory2990004$$' |
 		Then the number of "ItemList" table lines is "меньше или равно" 1
-	* Change the document number
-		And I move to "Other" tab
-		And I input "0" text in "Number" field
-		Then "1C:Enterprise" window is opened
-		And I click "Yes" button
-		And I input "2" text in "Number" field
 	* Posting the document and check movements
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberStockAdjustmentAsWriteOff2990007$$" variable
+		And I delete "$$StockAdjustmentAsWriteOff2990007$$" variable
+		And I save the value of "Number" field as "$$NumberStockAdjustmentAsWriteOff2990007$$"
+		And I save the window as "$$StockAdjustmentAsWriteOff2990007$$"
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Stock adjustment as write-off 2*'          | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Document registrations records'            | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Inventory balance"'             | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'           | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | ''            | ''          | 'Quantity'     | 'Company'              | 'Item key'              | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | 'Expense'     | '*'         | '2'            | 'Main Company'         | 'XS/Blue'               | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Expenses turnovers"'            | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | 'Period'      | 'Resources' | 'Dimensions'   | ''                     | ''                      | ''         | ''         | ''                    | ''                       | 'Attributes'           |
-		| ''                                          | ''            | 'Amount'    | 'Company'      | 'Business unit'        | 'Expense type'          | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
-		| ''                                          | '*'           | ''          | 'Main Company' | 'Logistics department' | 'Delivery'              | 'XS/Blue'  | ''         | ''                    | ''                       | 'No'                   |
-		| ''                                          | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Stock adjustment as write-off"' | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'           | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | ''            | ''          | 'Quantity'     | 'Store'                | 'Basis document'        | 'Item key' | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | 'Expense'     | '*'         | '2'            | 'Store 05'             | 'Physical inventory 1*' | 'XS/Blue'  | ''         | ''                    | ''                       | ''                     |
+		And I select "Inventory balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$StockAdjustmentAsWriteOff2990007$$' | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| 'Document registrations records'       | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| 'Register  "Inventory balance"'        | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''         | '' | '' | '' | '' | '' |
+		| ''                                     | ''            | ''       | 'Quantity'  | 'Company'      | 'Item key' | '' | '' | '' | '' | '' |
+		| ''                                     | 'Expense'     | '*'      | '2'         | 'Main Company' | 'XS/Blue'  | '' | '' | '' | '' | '' |
+		And I select "Expenses turnovers" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Expenses turnovers"' | ''       | ''          | ''             | ''                     | ''             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                               | 'Period' | 'Resources' | 'Dimensions'   | ''                     | ''             | ''         | ''         | ''                    | ''                             | 'Attributes'           |
+		| ''                               | ''       | 'Amount'    | 'Company'      | 'Business unit'        | 'Expense type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
+		| ''                               | '*'      | ''          | 'Main Company' | 'Logistics department' | 'Delivery'     | 'XS/Blue'  | ''         | ''                    | ''                             | 'No'                   |
+		And I select "Stock adjustment as write-off" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Stock adjustment as write-off"' | ''            | ''          | ''             | ''                     | ''                             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                                          | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'           | ''                             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                                          | ''            | ''          | 'Quantity'     | 'Store'                | 'Basis document'               | 'Item key' | ''         | ''                    | ''                             | ''                     |
+		| ''                                          | 'Expense'     | '*'         | '2'            | 'Store 05'             | '$$PhysicalInventory2990004$$' | 'XS/Blue'  | ''         | ''                    | ''                             | ''                     |
 		And I close all client application windows
 	* Clear movements Stock adjustment as write-off and check movements
 		Given I open hyperlink "e1cib/list/Document.StockAdjustmentAsWriteOff"
 		And I go to line in "List" table
 			| 'Number'  |
-			| '2'       |
+			| '$$NumberStockAdjustmentAsWriteOff2990007$$'       |
 		And in the table "List" I click the button named "ListContextMenuUndoPosting"
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Stock adjustment as write-off 2*'          |
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$StockAdjustmentAsWriteOff2990007$$'          |
 		| 'Document registrations records'                |
 		And I close all client application windows
 	* Re-post Physical Inventory and check movements
 		Given I open hyperlink "e1cib/list/Document.StockAdjustmentAsWriteOff"
 		And I go to line in "List" table
 			| 'Number'  |
-			| '2'       |
+			| '$$NumberStockAdjustmentAsWriteOff2990007$$'       |
 		And in the table "List" I click the button named "ListContextMenuPost"
 		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Stock adjustment as write-off 2*'          | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Document registrations records'            | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Inventory balance"'             | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'           | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | ''            | ''          | 'Quantity'     | 'Company'              | 'Item key'              | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | 'Expense'     | '*'         | '2'            | 'Main Company'         | 'XS/Blue'               | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| 'Register  "Expenses turnovers"'            | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | 'Period'      | 'Resources' | 'Dimensions'   | ''                     | ''                      | ''         | ''         | ''                    | ''                       | 'Attributes'           |
-		| ''                                          | ''            | 'Amount'    | 'Company'      | 'Business unit'        | 'Expense type'          | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
-		| ''                                          | '*'           | ''          | 'Main Company' | 'Logistics department' | 'Delivery'              | 'XS/Blue'  | ''         | ''                    | ''                       | 'No'                   |
-		| ''                                          | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
+		And I select "Inventory balance" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| '$$StockAdjustmentAsWriteOff2990007$$' | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| 'Document registrations records'       | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| 'Register  "Inventory balance"'        | ''            | ''       | ''          | ''             | ''         | '' | '' | '' | '' | '' |
+		| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''         | '' | '' | '' | '' | '' |
+		| ''                                     | ''            | ''       | 'Quantity'  | 'Company'      | 'Item key' | '' | '' | '' | '' | '' |
+		| ''                                     | 'Expense'     | '*'      | '2'         | 'Main Company' | 'XS/Blue'  | '' | '' | '' | '' | '' |
+		And I select "Expenses turnovers" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
+		| 'Register  "Expenses turnovers"' | ''       | ''          | ''             | ''                     | ''             | ''         | ''         | ''                    | ''                             | ''                     |
+		| ''                               | 'Period' | 'Resources' | 'Dimensions'   | ''                     | ''             | ''         | ''         | ''                    | ''                             | 'Attributes'           |
+		| ''                               | ''       | 'Amount'    | 'Company'      | 'Business unit'        | 'Expense type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' |
+		| ''                               | '*'      | ''          | 'Main Company' | 'Logistics department' | 'Delivery'     | 'XS/Blue'  | ''         | ''                    | ''                             | 'No'                   |
+		And I select "Stock adjustment as write-off" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		And "ResultTable" spreadsheet document contains lines:
 		| 'Register  "Stock adjustment as write-off"' | ''            | ''          | ''             | ''                     | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
 		| ''                                          | 'Record type' | 'Period'    | 'Resources'    | 'Dimensions'           | ''                      | ''         | ''         | ''                    | ''                       | ''                     |
 		| ''                                          | ''            | ''          | 'Quantity'     | 'Store'                | 'Basis document'        | 'Item key' | ''         | ''                    | ''                       | ''                     |
-		| ''                                          | 'Expense'     | '*'         | '2'            | 'Store 05'             | 'Physical inventory 1*' | 'XS/Blue'  | ''         | ''                    | ''                       | ''                     |
+		| ''                                          | 'Expense'     | '*'         | '2'            | 'Store 05'             | '$$PhysicalInventory2990004$$' | 'XS/Blue'  | ''         | ''                    | ''                       | ''                     |
 		And I close all client application windows
 
 Scenario: _2990008 create Stock adjustment as surplus and Stock adjustment as write off based on Physical inventory on a partial quantity
@@ -848,7 +903,7 @@ Scenario: _2990008 create Stock adjustment as surplus and Stock adjustment as wr
 		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
 		And I go to line in "List" table
 			| 'Number' |
-			| '2'    |
+			| '$$NumberPhysicalInventory2990005$$'    |
 	* Create a document StockAdjustmentAsWriteOff on a partial quantity
 		And I click the button named "FormDocumentStockAdjustmentAsWriteOffGenerateStockAdjustmentAsWriteOff"
 		And I click Select button of "Company" field
@@ -872,7 +927,7 @@ Scenario: _2990008 create Stock adjustment as surplus and Stock adjustment as wr
 		And I select current line in "ItemList" table
 		And I input "1,000" text in "Quantity" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click "Post and close" button
+		And I click the button named "FormPostAndClose"
 	* Create a document StockAdjustmentAsWriteOff for the remaining quantity and check filling in
 		And I click the button named "FormDocumentStockAdjustmentAsWriteOffGenerateStockAdjustmentAsWriteOff"
 		And I click Select button of "Company" field
@@ -893,9 +948,9 @@ Scenario: _2990008 create Stock adjustment as surplus and Stock adjustment as wr
 		And I finish line editing in "ItemList" table
 		And "ItemList" table contains lines
 			| 'Item'  | 'Quantity' | 'Item key' | 'Business unit'        | 'Unit' | 'Expense type' | 'Basis document'        |
-			| 'Dress' | '1,000'    | 'XS/Blue'  | 'Logistics department' | 'pcs'  | 'Delivery'     | 'Physical inventory 2*' |
+			| 'Dress' | '1,000'    | 'XS/Blue'  | 'Logistics department' | 'pcs'  | 'Delivery'     | '$$PhysicalInventory2990005$$' |
 		Then the number of "ItemList" table lines is "меньше или равно" 1
-		And I click "Post and close" button
+		And I click the button named "FormPostAndClose"
 	* Create a document StockAdjustmentAsSurplus on a partial quantity
 		And I click the button named "FormDocumentStockAdjustmentAsSurplusGenerateStockAdjustmentAsSurplus"
 		And I click Select button of "Company" field
@@ -919,7 +974,7 @@ Scenario: _2990008 create Stock adjustment as surplus and Stock adjustment as wr
 		And I select current line in "ItemList" table
 		And I input "1,000" text in "Quantity" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click "Post and close" button
+		And I click the button named "FormPostAndClose"
 	* Create a document StockAdjustmentAsSurplus for the remaining quantity and check filling in
 		And I click the button named "FormDocumentStockAdjustmentAsSurplusGenerateStockAdjustmentAsSurplus"
 		And I click Select button of "Company" field
@@ -940,14 +995,15 @@ Scenario: _2990008 create Stock adjustment as surplus and Stock adjustment as wr
 		And I finish line editing in "ItemList" table
 		And "ItemList" table contains lines
 			| 'Item'     | 'Quantity' | 'Item key'   | 'Business unit'        | 'Unit' | 'Revenue type' | 'Basis document'        |
-			| 'Trousers' | '4,000'    | '36/Yellow'  | 'Logistics department' | 'pcs'  | 'Delivery'     | 'Physical inventory 2*' |
+			| 'Trousers' | '4,000'    | '36/Yellow'  | 'Logistics department' | 'pcs'  | 'Delivery'     | '$$PhysicalInventory2990005$$' |
 		Then the number of "ItemList" table lines is "меньше или равно" 1
-		And I click "Post and close" button
+		And I click the button named "FormPostAndClose"
 
 Scenario: _2990009 check for updates Update Exp Count
 	* Open document form
 		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
 		And I click the button named "FormCreate"
+		And I set checkbox "Use responsible person by row"
 	* Check filling in document with stock balances
 		And I click Select button of "Store" field
 		And I go to line in "List" table
@@ -999,6 +1055,7 @@ Scenario: _2990010 create Physical inventory and Physical count by location with
 	* Open document form
 		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
 		And I click the button named "FormCreate"
+		And I set checkbox "Use responsible person by row"
 	* Filling out a document with stock balances
 		And I click Select button of "Store" field
 		And I go to line in "List" table
@@ -1025,7 +1082,11 @@ Scenario: _2990010 create Physical inventory and Physical count by location with
 			| 'Description'  |
 			| 'Anna Petrova' |
 		And I select current line in "List" table
-		And I click "Post" button
+		And I click the button named "FormPost"
+		And I delete "$$NumberPhysicalInventory2990010$$" variable
+		And I delete "$$PhysicalInventory2990010$$" variable
+		And I save the value of "Number" field as "$$NumberPhysicalInventory2990010$$"
+		And I save the window as "$$PhysicalInventory2990010$$"
 	* Create Physical count by locatio
 		And I click "Physical count by location" button
 	* Check the display of which recalculations the string has got into
@@ -1058,6 +1119,9 @@ Scenario: _2990010 create Physical inventory and Physical count by location with
 			* Add first string
 				And I click "Add" button
 				And I click choice button of "Item" attribute in "ItemList" table
+				And I go to line in "List" table
+					| 'Description' |
+					| 'Dress'  |
 				And I select current line in "List" table
 				And I activate "Item key" field in "ItemList" table
 				And I click choice button of "Item key" attribute in "ItemList" table
@@ -1081,6 +1145,9 @@ Scenario: _2990010 create Physical inventory and Physical count by location with
 			* Add second string
 				And I click "Add" button
 				And I click choice button of "Item" attribute in "ItemList" table
+				And I go to line in "List" table
+					| 'Description' |
+					| 'Dress'  |
 				And I select current line in "List" table
 				And I activate "Item key" field in "ItemList" table
 				And I click choice button of "Item key" attribute in "ItemList" table
@@ -1155,7 +1222,7 @@ Scenario: _2990010 create Physical inventory and Physical count by location with
 				And I finish line editing in "ItemList" table
 			* Change date and post
 				And I input begin of the current month date in "Date" field
-				And I click "Post and close" button
+				And I click the button named "FormPostAndClose"
 	* Post Shipment confirmation retroactively
 		* Open Shipment confirmation
 			Given I open hyperlink "e1cib/list/Document.ShipmentConfirmation"
@@ -1193,13 +1260,13 @@ Scenario: _2990010 create Physical inventory and Physical count by location with
 		* Change date and post
 			And I move to "Other" tab
 			And I input begin of the current month date in "Date" field
-			And I click "Post and close" button
+			And I click the button named "FormPostAndClose"
 		And I close all client application windows
 	* Updating the quantity in the inventory document with Physical count by location created
 		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
 		And I go to line in "List" table
 			| 'Number' |
-			| '3'      |
+			| '$$NumberPhysicalInventory2990010$$'      |
 		And I select current line in "List" table
 		And I click "Update exp. count" button
 		And "ItemList" table contains lines
@@ -1208,7 +1275,7 @@ Scenario: _2990010 create Physical inventory and Physical count by location with
 			| 'Shirt' | '-7,000'     | '36/Red'   | '7,000'      | 'pcs'  | ''                   | ''               |
 			| 'Boots' | '-4,000'     | '36/18SD'  | '4,000'      | 'pcs'  | ''                   | ''               |
 			| 'Dress' | '-125,000'   | 'S/Yellow' | '125,000'    | 'pcs'  | 'Anna Petrova'       | '#1 date*'       |
-			| 'Dress' | '-202,000'   | 'XS/Blue'  | '202,000'    | 'pcs'  | 'Arina Brown'        | '#2 date*'       |
+			| 'Dress' | '-206,000'   | 'XS/Blue'  | '206,000'    | 'pcs'  | 'Arina Brown'        | '#2 date*'       |
 		* Check for line locks on which a Physical count by location has already been created
 			* Inability to delete a line
 				And I go to line in "ItemList" table
@@ -1259,7 +1326,7 @@ Scenario: _2990010 create Physical inventory and Physical count by location with
 				| 'Description'  |
 				| 'Anna Petrova' |
 			And I select current line in "List" table
-			And I click "Post" button
+			And I click the button named "FormPost"
 			And I click "Physical count by location" button
 		* Create new Physical count by location
 			And "ItemList" table contains lines
@@ -1268,193 +1335,204 @@ Scenario: _2990010 create Physical inventory and Physical count by location with
 			| 'Shirt' | '36/Red'   | '7,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date:*'      |
 			| 'Boots' | '36/18SD'  | '4,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date:*'      |
 			| 'Dress' | 'S/Yellow' | '125,000'    | 'pcs'  | 'Anna Petrova'       | '#1 date:*'      |
-			| 'Dress' | 'XS/Blue'  | '202,000'    | 'pcs'  | 'Arina Brown'        | '#2 date:*'      |
+			| 'Dress' | 'XS/Blue'  | '206,000'    | 'pcs'  | 'Arina Brown'        | '#2 date:*'      |
 		* Check for impossibility to change the status to the one that makes movements with open Physical count by location
 			And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
 			And I select "Done" exact value from "Status" drop-down list
-			And I click "Post" button
+			And I click the button named "FormPost"
 			Then I wait that in user messages the 'There are "Physical count by location" documents that are not closed.' substring will appear in 30 seconds
 		* Change the status to "In processing" and post the document
 			And I select "In processing" exact value from "Status" drop-down list
-			And I click "Post and close" button
+			And I click the button named "FormPostAndClose"
 
-Scenario: _2990011 re-filling Physical inventory based on Physical count by location list
-	* Open Physical count by location list
-		Given I open hyperlink "e1cib/list/Document.PhysicalCountByLocation"
-	* Filling in Phys. count  in the first Physical count by location and select status that make movements
-		And I go to line in "List" table
-			| 'Number' | 'Status'   | 'Store'    |
-			| '1'      | 'Prepared' | 'Store 05' |
-		And I select current line in "List" table
-		And I activate "Phys. count" field in "ItemList" table
-		And I input "124,000" text in "Phys. count" field of "ItemList" table
-		And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
-		And I select "Done" exact value from "Status" drop-down list
-		And I click "Save and close" button
-		And Delay 2
-	* Filling in Phys. count  in the second Physical count by location and select status that does not make movements
-		Given I open hyperlink "e1cib/list/Document.PhysicalCountByLocation"
-		And I go to line in "List" table
-			| 'Number' | 'Status'   | 'Store'    |
-			| '2'      | 'Prepared' | 'Store 05' |
-		And I select current line in "List" table
-		And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
-		And I activate "Phys. count" field in "ItemList" table
-		And I select current line in "ItemList" table
-		And I input "197,000" text in "Phys. count" field of "ItemList" table
-		And I finish line editing in "ItemList" table
-		And I select "In processing" exact value from "Status" drop-down list
-		And I click "Save and close" button
-		And Delay 2
-	* Filling in Phys. count  in the third Physical count by location and select status that make movements
-		Given I open hyperlink "e1cib/list/Document.PhysicalCountByLocation"
-		And I go to line in "List" table
-			| 'Number' | 'Status'   | 'Store'    |
-			| '3'      | 'Prepared' | 'Store 05' |
-		And I select current line in "List" table
-		And I go to line in "ItemList" table
-			| 'Item'  | 'Item key' | 'Unit' |
-			| 'Dress' | 'M/White'  | 'pcs'  |
-		And I activate "Phys. count" field in "ItemList" table
-		And I input "10,000" text in "Phys. count" field of "ItemList" table
-		And I finish line editing in "ItemList" table
-		And I go to line in "ItemList" table
-			| 'Item'  | 'Item key' | 'Unit' |
-			| 'Shirt' | '36/Red'   | 'pcs'  |
-		And I select current line in "ItemList" table
-		And I input "7,000" text in "Phys. count" field of "ItemList" table
-		And I finish line editing in "ItemList" table
-		And I go to line in "ItemList" table
-			| 'Item'  | 'Item key' | 'Unit' |
-			| 'Boots' | '36/18SD'  | 'pcs'  |
-		And I select current line in "ItemList" table
-		And I input "4,000" text in "Phys. count" field of "ItemList" table
-		And I finish line editing in "ItemList" table
-		And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
-		And I select "Done" exact value from "Status" drop-down list
-		And I click "Save and close" button
-		And Delay 2
-		And I close all client application windows
-	* Filling in Physical inventory with the results of the first and third Physical count by location
-		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
-		And I go to line in "List" table
-			| 'Number' |
-			| '3'      |
-		And I select current line in "List" table
-		And I click "Update phys. count" button
-		And "ItemList" table contains lines
-		| 'Phys. count' | 'Item'  | 'Difference' | 'Item key' | 'Exp. count' | 'Unit' | 'Responsible person' | 'Physical count' |
-		| '10,000'      | 'Dress' | '2,000'      | 'M/White'  | '8,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date*'       |
-		| '7,000'       | 'Shirt' | ''           | '36/Red'   | '7,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date*'       |
-		| '4,000'       | 'Boots' | ''           | '36/18SD'  | '4,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date*'       |
-		| '124,000'     | 'Dress' | '-1,000'     | 'S/Yellow' | '125,000'    | 'pcs'  | 'Anna Petrova'       | '#1 date*'       |
-		| ''            | 'Dress' | '-202,000'   | 'XS/Blue'  | '202,000'    | 'pcs'  | 'Arina Brown'        | '#2 date*'       |
-		And I click "Save" button
-	* Check that you cannot close the inventory without closed Physical count by location
-		And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
-		And I select "Done" exact value from "Status" drop-down list
-		And I click "Post" button
-		Then I wait that in user messages the 'There are "Physical count by location" documents that are not closed.' substring will appear in 30 seconds
-	* Check that Physical count by location are not created and their statuses do not change
-		And I select "In processing" exact value from "Status" drop-down list
-		And I click "Physical count by location" button
-		And I move to "Physical count by location" tab
-		And "PhysicalCountByLocationList" table contains lines
-		| 'Reference'                     | 'Status'        |
-		| 'Physical count by location 1*' | 'Done'          |
-		| 'Physical count by location 2*' | 'In processing' |
-		| 'Physical count by location 3*' | 'Done'          |
-		And I close all client application windows
-	* Closing the second Physical count by location and refilling Physical inventory
-		Given I open hyperlink "e1cib/list/Document.PhysicalCountByLocation"
-		And I go to line in "List" table
-			| 'Number' |
-			| '2'      |
-		And I select current line in "List" table
-		And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
-		And I select "Done" exact value from "Status" drop-down list
-		And I click "Save and close" button
-		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
-		And I go to line in "List" table
-			| 'Number' |
-			| '3'      |
-		And I select current line in "List" table
-		And I click "Update phys. count" button
-		And "ItemList" table contains lines
-		| 'Phys. count' | 'Item'  | 'Difference' | 'Item key' | 'Exp. count' | 'Unit' | 'Responsible person' | 'Physical count' |
-		| '10,000'      | 'Dress' | '2,000'      | 'M/White'  | '8,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date:*'      |
-		| '7,000'       | 'Shirt' | ''           | '36/Red'   | '7,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date:*'      |
-		| '4,000'       | 'Boots' | ''           | '36/18SD'  | '4,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date:*'      |
-		| '124,000'     | 'Dress' | '-1,000'     | 'S/Yellow' | '125,000'    | 'pcs'  | 'Anna Petrova'       | '#1 date:*'      |
-		| '197,000'     | 'Dress' | '-5,000'     | 'XS/Blue'  | '202,000'    | 'pcs'  | 'Arina Brown'        | '#2 date:*'      |
-		And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
-		And I select "Done" exact value from "Status" drop-down list
-		And I click "Post" button
-	* Check movements Physical inventory
-		And I click "Registrations report" button
-		Then "ResultTable" spreadsheet document is equal by template
-		| 'Physical inventory 3*'                     | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Document registrations records'            | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Register  "Stock adjustment as surplus"'   | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''         |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'        | 'Item key' |
-		| ''                                          | 'Receipt'     | '*'      | '2'         | 'Store 05'   | 'Physical inventory 3*' | 'M/White'  |
-		| ''                                          | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Register  "Stock reservation"'             | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''         |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'              | ''         |
-		| ''                                          | 'Receipt'     | '*'      | '2'         | 'Store 05'   | 'M/White'               | ''         |
-		| ''                                          | 'Expense'     | '*'      | '1'         | 'Store 05'   | 'S/Yellow'              | ''         |
-		| ''                                          | 'Expense'     | '*'      | '5'         | 'Store 05'   | 'XS/Blue'               | ''         |
-		| ''                                          | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Register  "Stock adjustment as write-off"' | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''         |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'        | 'Item key' |
-		| ''                                          | 'Receipt'     | '*'      | '1'         | 'Store 05'   | 'Physical inventory 3*' | 'S/Yellow' |
-		| ''                                          | 'Receipt'     | '*'      | '5'         | 'Store 05'   | 'Physical inventory 3*' | 'XS/Blue'  |
-		| ''                                          | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| 'Register  "Stock balance"'                 | ''            | ''       | ''          | ''           | ''                      | ''         |
-		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                      | ''         |
-		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'              | ''         |
-		| ''                                          | 'Receipt'     | '*'      | '2'         | 'Store 05'   | 'M/White'               | ''         |
-		| ''                                          | 'Expense'     | '*'      | '1'         | 'Store 05'   | 'S/Yellow'              | ''         |
-		| ''                                          | 'Expense'     | '*'      | '5'         | 'Store 05'   | 'XS/Blue'               | ''         |
-		And I close all client application windows
+# Scenario: _2990011 refilling Physical inventory based on Physical count by location list
+# 	And I close all client application windows
+# 	* Open Physical count by location list
+# 		Given I open hyperlink "e1cib/list/Document.PhysicalCountByLocation"
+# 	* Filling in Phys. count  in the first Physical count by location and select status that make movements
+# 		And I go to line in "List" table
+# 			| 'Number' | 'Status'   | 'Store'    |
+# 			| '1'      | 'Prepared' | 'Store 05' |
+# 		And I select current line in "List" table
+# 		And I activate "Phys. count" field in "ItemList" table
+# 		And I input "124,000" text in "Phys. count" field of "ItemList" table
+# 		And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
+# 		And I select "Done" exact value from "Status" drop-down list
+# 		And I click "Save and close" button
+# 		And Delay 2
+# 	* Filling in Phys. count  in the second Physical count by location and select status that does not make movements
+# 		Given I open hyperlink "e1cib/list/Document.PhysicalCountByLocation"
+# 		And I go to line in "List" table
+# 			| 'Number' | 'Status'   | 'Store'    |
+# 			| '2'      | 'Prepared' | 'Store 05' |
+# 		And I select current line in "List" table
+# 		And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
+# 		And I activate "Phys. count" field in "ItemList" table
+# 		And I select current line in "ItemList" table
+# 		And I input "197,000" text in "Phys. count" field of "ItemList" table
+# 		And I finish line editing in "ItemList" table
+# 		And I select "In processing" exact value from "Status" drop-down list
+# 		And I click "Save and close" button
+# 		And Delay 2
+# 	* Filling in Phys. count  in the third Physical count by location and select status that make movements
+# 		Given I open hyperlink "e1cib/list/Document.PhysicalCountByLocation"
+# 		And I go to line in "List" table
+# 			| 'Number' | 'Status'   | 'Store'    |
+# 			| '3'      | 'Prepared' | 'Store 05' |
+# 		And I select current line in "List" table
+# 		And I go to line in "ItemList" table
+# 			| 'Item'  | 'Item key' | 'Unit' |
+# 			| 'Dress' | 'M/White'  | 'pcs'  |
+# 		And I activate "Phys. count" field in "ItemList" table
+# 		And I input "10,000" text in "Phys. count" field of "ItemList" table
+# 		And I finish line editing in "ItemList" table
+# 		And I go to line in "ItemList" table
+# 			| 'Item'  | 'Item key' | 'Unit' |
+# 			| 'Shirt' | '36/Red'   | 'pcs'  |
+# 		And I select current line in "ItemList" table
+# 		And I input "7,000" text in "Phys. count" field of "ItemList" table
+# 		And I finish line editing in "ItemList" table
+# 		And I go to line in "ItemList" table
+# 			| 'Item'  | 'Item key' | 'Unit' |
+# 			| 'Boots' | '36/18SD'  | 'pcs'  |
+# 		And I select current line in "ItemList" table
+# 		And I input "4,000" text in "Phys. count" field of "ItemList" table
+# 		And I finish line editing in "ItemList" table
+# 		And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
+# 		And I select "Done" exact value from "Status" drop-down list
+# 		And I click "Save and close" button
+# 		And Delay 2
+# 		And I close all client application windows
+# 	* Filling in Physical inventory with the results of the first and third Physical count by location
+# 		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
+# 		And I go to line in "List" table
+# 			| 'Number' |
+# 			| '$$NumberPhysicalInventory2990010$$'      |
+# 		And I select current line in "List" table
+# 		And I click "Update phys. count" button
+# 		And "ItemList" table contains lines
+# 		| 'Phys. count' | 'Item'  | 'Difference' | 'Item key' | 'Exp. count' | 'Unit' | 'Responsible person' | 'Physical count' |
+# 		| '10,000'      | 'Dress' | '2,000'      | 'M/White'  | '8,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date*'       |
+# 		| '7,000'       | 'Shirt' | ''           | '36/Red'   | '7,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date*'       |
+# 		| '4,000'       | 'Boots' | ''           | '36/18SD'  | '4,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date*'       |
+# 		| '124,000'     | 'Dress' | '-1,000'     | 'S/Yellow' | '125,000'    | 'pcs'  | 'Anna Petrova'       | '#1 date*'       |
+# 		| ''            | 'Dress' | '-206,000'   | 'XS/Blue'  | '206,000'    | 'pcs'  | 'Arina Brown'        | '#2 date*'       |
+# 		And I click "Save" button
+# 	* Check that you cannot close the inventory without closed Physical count by location
+# 		And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
+# 		And I select "Done" exact value from "Status" drop-down list
+# 		And I click the button named "FormPost"
+# 		Then I wait that in user messages the 'There are "Physical count by location" documents that are not closed.' substring will appear in 30 seconds
+# 	* Check that Physical count by location are not created and their statuses do not change
+# 		And I select "In processing" exact value from "Status" drop-down list
+# 		And I click "Physical count by location" button
+# 		And I move to "Physical count by location" tab
+# 		And "PhysicalCountByLocationList" table contains lines
+# 		| 'Reference'                     | 'Status'        |
+# 		| 'Location count 1*' | 'Done'          |
+# 		| 'Location count 2*' | 'In processing' |
+# 		| 'Location count 3*' | 'Done'          |
+# 		And I close all client application windows
+# 	* Closing the second Physical count by location and refilling Physical inventory
+# 		Given I open hyperlink "e1cib/list/Document.PhysicalCountByLocation"
+# 		And I go to line in "List" table
+# 			| 'Number' |
+# 			| '2'      |
+# 		And I select current line in "List" table
+# 		And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
+# 		And I select "Done" exact value from "Status" drop-down list
+# 		And I click "Save and close" button
+# 		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
+# 		And I go to line in "List" table
+# 			| 'Number' |
+# 			| '$$NumberPhysicalInventory2990010$$'      |
+# 		And I select current line in "List" table
+# 		And I click "Update phys. count" button
+# 		And "ItemList" table contains lines
+# 		| 'Phys. count' | 'Item'  | 'Difference' | 'Item key' | 'Exp. count' | 'Unit' | 'Responsible person' | 'Physical count' |
+# 		| '10,000'      | 'Dress' | '2,000'      | 'M/White'  | '8,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date:*'      |
+# 		| '7,000'       | 'Shirt' | ''           | '36/Red'   | '7,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date:*'      |
+# 		| '4,000'       | 'Boots' | ''           | '36/18SD'  | '4,000'      | 'pcs'  | 'Anna Petrova'       | '#3 date:*'      |
+# 		| '124,000'     | 'Dress' | '-1,000'     | 'S/Yellow' | '125,000'    | 'pcs'  | 'Anna Petrova'       | '#1 date:*'      |
+# 		| '197,000'     | 'Dress' | '-9,000'     | 'XS/Blue'  | '206,000'    | 'pcs'  | 'Arina Brown'        | '#2 date:*'      |
+# 		And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
+# 		And I select "Done" exact value from "Status" drop-down list
+# 		And I click the button named "FormPost"
+# 	* Check movements Physical inventory
+# 		And I click "Registrations report" button
+# 		And I select "Stock adjustment as surplus" exact value from "Register" drop-down list
+# 		And I click "Generate report" button
+# 		And "ResultTable" spreadsheet document contains lines:
+# 		| '$$PhysicalInventory2990010$$'            | ''            | ''       | ''          | ''           | ''                             | ''         |
+# 		| 'Document registrations records'          | ''            | ''       | ''          | ''           | ''                             | ''         |
+# 		| 'Register  "Stock adjustment as surplus"' | ''            | ''       | ''          | ''           | ''                             | ''         |
+# 		| ''                                        | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                             | ''         |
+# 		| ''                                        | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'               | 'Item key' |
+# 		| ''                                        | 'Receipt'     | '*'      | '2'         | 'Store 05'   | '$$PhysicalInventory2990010$$' | 'M/White'  |
+# 		And I select "Stock reservation" exact value from "Register" drop-down list
+# 		And I click "Generate report" button
+# 		And "ResultTable" spreadsheet document contains lines:
+# 		| 'Register  "Stock reservation"' | ''            | ''       | ''          | ''           | ''         | '' |
+# 		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''         | '' |
+# 		| ''                              | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key' | '' |
+# 		| ''                              | 'Receipt'     | '*'      | '2'         | 'Store 05'   | 'M/White'  | '' |
+# 		| ''                              | 'Expense'     | '*'      | '1'         | 'Store 05'   | 'S/Yellow' | '' |
+# 		| ''                              | 'Expense'     | '*'      | '9'         | 'Store 05'   | 'XS/Blue'  | '' |
+# 		And I select "Stock adjustment as write-off" exact value from "Register" drop-down list
+# 		And I click "Generate report" button
+# 		And "ResultTable" spreadsheet document contains lines:
+# 		| 'Register  "Stock adjustment as write-off"' | ''            | ''       | ''          | ''           | ''                             | ''         |
+# 		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                             | ''         |
+# 		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Basis document'               | 'Item key' |
+# 		| ''                                          | 'Receipt'     | '*'      | '1'         | 'Store 05'   | '$$PhysicalInventory2990010$$' | 'S/Yellow' |
+# 		| ''                                          | 'Receipt'     | '*'      | '9'         | 'Store 05'   | '$$PhysicalInventory2990010$$' | 'XS/Blue'  |
+# 		And I select "Stock balance" exact value from "Register" drop-down list
+# 		And I click "Generate report" button
+# 		And "ResultTable" spreadsheet document contains lines:
+# 		| 'Register  "Stock balance"'                 | ''            | ''       | ''          | ''           | ''                             | ''         |
+# 		| ''                                          | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                             | ''         |
+# 		| ''                                          | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'                     | ''         |
+# 		| ''                                          | 'Receipt'     | '*'      | '2'         | 'Store 05'   | 'M/White'                      | ''         |
+# 		| ''                                          | 'Expense'     | '*'      | '1'         | 'Store 05'   | 'S/Yellow'                     | ''         |
+# 		| ''                                          | 'Expense'     | '*'      | '9'         | 'Store 05'   | 'XS/Blue'                      | ''         |
+# 		And I close all client application windows
 
-Scenario: _2990012 check the opening of the status history in Physical inventory and Physical count by location
-	* Check the opening of the status history in Physical inventory
-		* Open test document
-			Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
-			And I go to line in "List" table
-				| 'Number'  |
-				| '3'       |
-			And I select current line in "List" table
-		* Open and check status history
-			And I move to "Other" tab
-			And I click "History" hyperlink
-			And "List" table contains lines
-			| 'Period' | 'Object'                | 'Status'        |
-			| '*'      | 'Physical inventory 3*' | 'Prepared'      |
-			| '*'      | 'Physical inventory 3*' | 'In processing' |
-			| '*'      | 'Physical inventory 3*' | 'Done'          |
-			And I close all client application windows
-	* Check the opening of the status history in Physical inventory
-		* Open document
-			Given I open hyperlink "e1cib/list/Document.PhysicalCountByLocation"
-			And I go to line in "List" table
-				| 'Number'  |
-				| '3'       |
-			And I select current line in "List" table
-		* Open and check status history
-			And I move to "Other" tab
-			And I click "History" hyperlink
-			And "List" table contains lines
-			| 'Period' | 'Object'                        | 'Status'        |
-			| '*'      | 'Physical count by location 3*' | 'Prepared'      |
-			| '*'      | 'Physical count by location 3*' | 'Done'          |
-			And I close all client application windows
+# Scenario: _2990012 check the opening of the status history in Physical inventory and Physical count by location
+# 	And I close all client application windows
+# 	* Check the opening of the status history in Physical inventory
+# 		* Open test document
+# 			Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
+# 			And I go to line in "List" table
+# 				| 'Number' |
+# 				| '$$NumberPhysicalInventory2990010$$'      |
+# 			And I select current line in "List" table
+# 		* Open and check status history
+# 			And I move to "Other" tab
+# 			And I click "History" hyperlink
+# 			And "List" table contains lines
+# 			| 'Period' | 'Object'                | 'Status'        |
+# 			| '*'      | '$$PhysicalInventory2990010$$' | 'Prepared'      |
+# 			| '*'      | '$$PhysicalInventory2990010$$' | 'In processing' |
+# 			| '*'      | '$$PhysicalInventory2990010$$' | 'Done'          |
+# 			And I close all client application windows
+# 	* Check the opening of the status history in Physical inventory
+# 		* Open document
+# 			Given I open hyperlink "e1cib/list/Document.PhysicalCountByLocation"
+# 			And I go to line in "List" table
+# 				| 'Number'  |
+# 				| '3'       |
+# 			And I select current line in "List" table
+# 		* Open and check status history
+# 			And I move to "Other" tab
+# 			And I click "History" hyperlink
+# 			And "List" table contains lines
+# 			| 'Period' | 'Object'            | 'Status'        |
+# 			| '*'      | 'Location count 3*' | 'Prepared'      |
+# 			| '*'      | 'Location count 3*' | 'Done'          |
+# 			And I close all client application windows
 	
 Scenario: _2990013 check the question of saving Physical inventory before creating Physical count by location
+	And I close all client application windows
 	* Open document form
 		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
 		And I click the button named "FormCreate"
@@ -1464,6 +1542,7 @@ Scenario: _2990013 check the question of saving Physical inventory before creati
 			| 'Description' |
 			| 'Store 05'    |
 		And I select current line in "List" table
+		And I set checkbox "Use responsible person by row"
 		And I click "Fill exp. count" button
 	* Check message output
 		And I click "Physical count by location" button
@@ -1474,6 +1553,7 @@ Scenario: _2990013 check the question of saving Physical inventory before creati
 
 
 
-
+Scenario: _999999 close TestClient session
+	And I close TestClient session
 
 

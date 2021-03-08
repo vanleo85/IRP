@@ -15,6 +15,7 @@
   <content>Constant.DefaultPictureStorageVolume</content>
   <content>CommonForm.MainSettings</content>
   <content>DataProcessor.DataHistory</content>
+  <content>Catalog.DataBaseStatus</content>
   <subsystems>AttributeAndProperty</subsystems>
   <subsystems>Contacts</subsystems>
   <subsystems>Equipment</subsystems>
@@ -22,4 +23,6 @@
   <subsystems>ItemsSettings</subsystems>
   <subsystems>OrdersSettings</subsystems>
   <subsystems>Users</subsystems>
+  <subsystems>LockDataModification</subsystems>
+  <subsystems>BaseSettings</subsystems>
 </mdclass:Subsystem>

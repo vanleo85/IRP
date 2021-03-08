@@ -1,21 +1,5 @@
-Procedure DescriptionsFillCheckProcessing(Source, Cancel, CheckedAttributes) Export
-	If Cancel Or TypeOf(Source) = Type("Structure")
-		Or Not LocalizationReuse.UseMultiLanguage(Source.Metadata().FullName()) Then
-		Return;
-	EndIf;
-	
-	IsFilledDescription = False;
-	For Each Attribute In LocalizationReuse.AllDescription() Do
-		If ValueIsFilled(Source[Attribute]) Then
-			IsFilledDescription = True;
-			Break;
-		EndIf;
-	EndDo;
-	If NOT IsFilledDescription Then
-		Cancel = True;
-		CommonFunctionsClientServer.ShowUsersMessage(R().Error_003);
-	EndIf;
-EndProcedure
+
+#Region Public
 
 Procedure FindDataForInputStringChoiceDataGetProcessing(Source, ChoiceData, Parameters, StandardProcessing) Export
 	
@@ -76,8 +60,19 @@ Procedure FindDataForInputStringChoiceDataGetProcessing(Source, ChoiceData, Para
 	ChoiceData = New ValueList();
 	QueryTable = Query.Execute().Unload();
 	For Each Row In QueryTable Do
-		ChoiceData.Add(Row.Ref, Row.Presentation);
-	EndDo;
+        If Not ChoiceData.FindByValue(Row.Ref) = Undefined Then
+            Continue;
+        EndIf;
+        If Row.Sort = 0 Then
+            If IsBlankString(Row.Ref.ItemID) Then
+                ChoiceData.Add(Row.Ref, Row.Presentation, , PictureLib.Price);
+            Else
+                ChoiceData.Add(Row.Ref, "(" + Row.Ref.ItemID + ") " + Row.Presentation, , PictureLib.Price);
+            EndIf;
+        Else
+            ChoiceData.Add(Row.Ref, Row.Presentation);
+        EndIf;
+    EndDo;
 EndProcedure
 
 Function ReplaceDescriptionLocalizationPrefix(QueryText, TableName = "Table") Export
@@ -92,16 +87,13 @@ Procedure GetCatalogPresentation(Source, Data, Presentation, StandardProcessing)
 	EndIf;
 	StandardProcessing = False;
 	SourceType = TypeOf(Source);
-	If SourceType = Type("CatalogManager.ItemKeys") Then		
-		If ValueIsFilled(Data.Specification) Then
-			Presentation = String(Data.Item) + "/" + String(Data.Specification);
-		Else
-			Presentation = LocalizationReuse.CatalogDescriptionWithAddAttributes(Data.Ref);
-		EndIf;
-	ElsIf SourceType = Type("CatalogManager.Currencies") Then		
+	If SourceType = Type("CatalogManager.Currencies") Then		
 		Presentation = Data.Code;
 	ElsIf SourceType = Type("CatalogManager.PriceKeys") Then
 		Presentation = LocalizationReuse.CatalogDescriptionWithAddAttributes(Data.Ref);
+		If IsBlankString(Presentation) Then
+			Presentation = StrTemplate(R().Error_005, LocalizationReuse.UserLanguageCode());
+		EndIf;
 	ElsIf Data.Property("Description") Then
 		Presentation = Data["Description"];
 	ElsIf Data.Property("FullDescription") Then
@@ -113,7 +105,8 @@ Procedure GetCatalogPresentation(Source, Data, Presentation, StandardProcessing)
 				If KeyData.Value = "" Then 
 					Continue;
 				EndIf;
-				Presentation = KeyData.Value;				
+				Presentation = KeyData.Value;
+				Break;				
 			EndDo;
 			
 			If Presentation = "" Then
@@ -173,25 +166,25 @@ Procedure CreateSubFormItemDescription(Form, Values, GroupName, AddInfo = Undefi
 	ArrayOfNewFormAttributes = New Array();
 	
 	For Each AttributeName In AttributeNames Do
-		MetadataInfo = Metadata.CommonAttributes[AttributeName];
+		MetadataValue = Metadata.CommonAttributes[AttributeName];
 		
-		ArrayOfNewFormAttributes.Add(New FormAttribute(MetadataInfo.Name
-				, MetadataInfo.Type
+		ArrayOfNewFormAttributes.Add(New FormAttribute(MetadataValue.Name
+				, MetadataValue.Type
 				,
-				, String(MetadataInfo)
+				, String(MetadataValue)
 				, True));
 	EndDo;
 	
 	Form.ChangeAttributes(ArrayOfNewFormAttributes);
 	
 	For Each AttributeName In AttributeNames Do
-		MetadataInfo = Metadata.CommonAttributes[AttributeName];
+		MetadataValue = Metadata.CommonAttributes[AttributeName];
 		If Form.Items.Find(AttributeName) = Undefined Then
-			NewAttribute = Form.Items.Add(MetadataInfo.Name, Type("FormField"), ParentGroup);
+			NewAttribute = Form.Items.Add(MetadataValue.Name, Type("FormField"), ParentGroup);
 			NewAttribute.Type = FormFieldType.InputField;
-			NewAttribute.DataPath = MetadataInfo.Name;
+			NewAttribute.DataPath = MetadataValue.Name;
 			
-			Form[MetadataInfo.Name] = Values[MetadataInfo.Name];
+			Form[MetadataValue.Name] = Values[MetadataValue.Name];
 		EndIf;
 	EndDo;
 EndProcedure
@@ -201,7 +194,110 @@ Procedure GetCatalogPresentationFieldsPresentationFieldsGetProcessing(Source, Fi
 		Return;
 	EndIf;
 	StandardProcessing = False;
-	Fields = LocalizationServer.FieldsListForDescriptions(Source);
-	
+	Fields = LocalizationServer.FieldsListForDescriptions(String(Source));	
 EndProcedure
 
+Procedure BeforeWrite_DescriptionsCheckFilling(Source, Cancel) Export
+	If Source.DataExchange.Load Then
+		Return;
+	EndIf;
+	CheckDescriptionFilling(Source, Cancel);
+	CheckDescriptionDuplicate(Source, Cancel);
+EndProcedure
+
+Procedure FillCheckProcessing_DescriptionCheckFilling(Source, Cancel, CheckedAttributes) Export
+	CheckDescriptionFilling(Source, Cancel);
+	CheckDescriptionDuplicate(Source, Cancel);
+EndProcedure
+
+#EndRegion
+
+#Region Private
+
+Procedure CheckDescriptionFilling(Source, Cancel)
+	If Cancel Or TypeOf(Source) = Type("Structure")
+		Or Not CatConfigurationMetadataServer.CheckDescriptionFillingEnabled(Source)
+		Or Not LocalizationReuse.UseMultiLanguage(Source.Metadata().FullName()) Then
+		Return;
+	EndIf;
+	
+	IsFilledDescription = False;
+	For Each Attribute In LocalizationReuse.AllDescription() Do
+		If ValueIsFilled(Source[Attribute]) Then
+			IsFilledDescription = True;
+			Break;
+		EndIf;
+	EndDo;
+	If NOT IsFilledDescription Then
+		Cancel = True;
+		CommonFunctionsClientServer.ShowUsersMessage(R().Error_003);
+	EndIf;
+EndProcedure
+
+Procedure CheckDescriptionDuplicate(Source, Cancel)
+	If Cancel
+		Or TypeOf(Source) = Type("Structure")
+		Or Not CatConfigurationMetadataServer.CheckDescriptionDuplicateEnabled(Source) Then
+		Return;
+	EndIf;
+	
+	SourceMetadata = Source.Metadata();	
+	UseMultiLanguage = LocalizationReuse.UseMultiLanguage(SourceMetadata.FullName());
+	If UseMultiLanguage Then
+		AllDescription = LocalizationReuse.AllDescription();
+	Else
+		AllDescription = New Array;
+		If	ServiceSystemClientServer.ObjectHasAttribute("Description", Source)
+			And ValueIsFilled(Source.Description) Then
+			AllDescription.Add("Description");
+		EndIf;
+	EndIf;
+	QueryFieldsSection = New Array;
+	QueryConditionsSection = New Array;
+	DescriptionAttributes = New Array;
+	
+	Query = New Query;
+	Query.Text = "SELECT
+		|	""%1"",
+		|	%2
+		|FROM
+		|	Catalog.%1 AS Cat
+		|WHERE
+		|	(%3)
+		|	AND Cat.Ref <> &Ref
+		|GROUP BY
+		|	""%1""";
+	For Each Attribute In AllDescription Do
+		If ValueIsFilled(Source[Attribute]) Then
+			FieldLeftString = "Cat." + Attribute + " = &" + Attribute;
+			FieldString = "ISNUll(MAX(" + FieldLeftString + "), FALSE) AS " + Attribute;
+			QueryFieldsSection.Add(FieldString);
+			QueryConditionsSection.Add(FieldLeftString);
+			Query.SetParameter(Attribute, Source[Attribute]);
+			DescriptionAttributes.Add(Attribute);
+		EndIf;
+	EndDo;
+	If Not DescriptionAttributes.Count() Then
+		Return;
+	EndIf;
+	QueryFields = StrConcat(QueryFieldsSection, "," + Chars.LF + "	");
+	QueryConditions = StrConcat(QueryConditionsSection, Chars.LF + "	OR ");
+	Query.Text = StrTemplate(Query.Text, SourceMetadata.Name, QueryFields, QueryConditions);
+	Query.SetParameter("Ref", Source.Ref);
+	
+	QueryExecution = Query.Execute();
+	QuerySelection = QueryExecution.Select();
+	QuerySelection.Next();
+	For Each DescriptionAttribute In DescriptionAttributes Do
+		If QuerySelection[DescriptionAttribute] Then
+			If Not Cancel Then
+				Cancel = True;
+			EndIf;
+			LangCode = StrReplace(DescriptionAttribute, "Description", "");
+			DescriptionLanguage = ?(IsBlankString(LangCode), "", " (" + StrReplace(LangCode, "_", "") + ")");
+			CommonFunctionsClientServer.ShowUsersMessage(StrTemplate(R().Error_089, DescriptionLanguage, Source[DescriptionAttribute]));
+		EndIf;
+	EndDo;
+EndProcedure
+
+#EndRegion

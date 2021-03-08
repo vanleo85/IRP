@@ -24,10 +24,13 @@ Scenario: check the product selection form with price information in Sales order
 			| Clothes     |
 		And I select current line in "List" table
 		And "ItemList" table became equal
-			| Title                | Unit | In stock | Price | Picked out |
-			| Dress                | '*'  | '*'      | '*'   | '*'        |
-			| Trousers             | '*'  | '*'      | '*'   | '*'        |
-			| Shirt                | '*'  | '*'      | '*'   | '*'        |
+			| 'Title'                | 'In stock' | 'Unit' | 'Price' | 'Picked out' |
+			| 'Dress'                | '*'       | 'pcs'  | ''      | ''           |
+			| 'Trousers'             | '*'       | 'pcs'  | ''      | ''           |
+			| 'Shirt'                | ''         | 'pcs'  | ''      | ''           |
+			| 'Bound Dress+Shirt'    | ''         | 'pcs'  | ''      | ''           |
+			| 'Bound Dress+Trousers' | ''         | 'pcs'  | ''      | ''           |
+			| 'Scarf'                | ''         | 'pcs'  | ''      | ''           |
 	* Check selection updates when choosing another type of item
 		And I click Select button of "Item type" field
 		And I go to line in "List" table
@@ -40,19 +43,27 @@ Scenario: check the product selection form with price information in Sales order
 			| High shoes | '*'   | '*'      |'*'     | '*'         |
 	* Check the rejection
 		And I click Clear button of "Item type" field
-		And "ItemList" table became equal
-			| Title                | Unit  | In stock | Price  | Picked out |
-			| Dress                | '*'   | '*'      |'*'     | '*'         |
-			| Trousers             | '*'   | '*'      |'*'     | '*'         |
-			| Shirt                | '*'   | '*'      |'*'     | '*'         |
-			| Boots                | '*'   | '*'      |'*'     | '*'         |
-			| High shoes           | '*'   | '*'      |'*'     | '*'         |
+		And "ItemList" table contains lines
+			| 'Title'                | 'In stock' | 'Unit' | 'Price' | 'Picked out' |
+			| 'Dress'                | '*'       | 'pcs'  | ''      | ''           |
+			| 'Trousers'             | '*'       | 'pcs'  | ''      | ''           |
+			| 'Shirt'                | ''         | 'pcs'  | ''      | ''           |
+			| 'Boots'                | ''         | 'pcs'  | ''      | ''           |
+			| 'High shoes'           | ''         | 'pcs'  | ''      | ''           |
+			| 'Bound Dress+Shirt'    | ''         | 'pcs'  | ''      | ''           |
+			| 'Bound Dress+Trousers' | ''         | 'pcs'  | ''      | ''           |
+			| 'Service'              | ''         | 'pcs'  | ''      | ''           |
+			| 'Router'               | ''         | 'pcs'  | ''      | ''           |
+			| 'Bag'                  | ''         | 'pcs'  | ''      | ''           |
+			| 'Scarf'                | ''         | 'pcs'  | ''      | ''           |
+			| 'Chewing gum'          | ''         | 'pcs'  | ''      | ''           |
+			| 'Skittles'             | ''         | 'pcs'  | ''      | ''           |
 	* Check the display for item item key in the selection form
 		And I go to line in "ItemList" table
 			| Title |
 			| Dress |
 		And I select current line in "ItemList" table
-		And "ItemKeyList" table became equal
+		And "ItemKeyList" table contains lines
 			| Title     | Unit  | In stock | Price  | Picked out  |
 			| S/Yellow  | '*'   | '*'      |'*'     | '*'         |
 			| XS/Blue   | '*'   | '*'      |'*'     | '*'         |
@@ -61,7 +72,7 @@ Scenario: check the product selection form with price information in Sales order
 			| XL/Green  | '*'   | '*'      |'*'     | '*'         |
 			| Dress/A-8 | '*'   | '*'      |'*'     | '*'         |
 			| XXL/Red   | '*'   | '*'      |'*'     | '*'         |
-			# | M/Brown   | '*'   | '*'      |'*'     | '*'         |
+			| M/Brown   | '*'   | '*'      |'*'     | '*'         |
 	* Check the items adding
 		And I go to line in "ItemKeyList" table
 			| Title    |
@@ -166,36 +177,47 @@ Scenario: check the product selection form with price information in Sales invoi
 			| Description |
 			| Clothes     |
 		And I select current line in "List" table
-		And "ItemList" table became equal
-			| Title               | Unit  | In stock | Price  | Picked out |
-			| Dress               | '*'   | '*'     | '*'    | '*'         |
-			| Trousers            | '*'   | '*'     | '*'    | '*'         |
-			| Shirt               | '*'   | '*'     | '*'    | '*'         |
+		And "ItemList" table contains lines
+			| 'Title'               | 'In stock' | 'Unit' | 'Price' | 'Picked out' |
+			| 'Dress'                | '*'       | 'pcs'  | ''      | ''           |
+			| 'Trousers'             | '*'       | 'pcs'  | ''      | ''           |
+			| 'Shirt'                | '*'         | 'pcs'  | ''      | ''           |
+			| 'Bound Dress+Shirt'    | ''         | 'pcs'  | ''      | ''           |
+			| 'Bound Dress+Trousers' | ''         | 'pcs'  | ''      | ''           |
+			| 'Scarf'                | ''         | 'pcs'  | ''      | ''           |
 	* Check selection updates when choosing another type of item
 		And I click Select button of "Item type" field
 		And I go to line in "List" table
 			| Description |
 			| Shoes       |
 		And I select current line in "List" table
-		And "ItemList" table became equal
+		And "ItemList" table contains lines
 			| Title      | Unit  | In stock | Price  | Picked out |
 			| Boots      | '*'   | '*'      |'*'     | '*'         |
 			| High shoes | '*'   | '*'      |'*'     | '*'         |
 	* Check the rejection
 		And I click Clear button of "Item type" field
-		And "ItemList" table became equal
-			| Title                | Unit  | In stock | Price  | Picked out |
-			| Dress                | '*'   | '*'      |'*'     | '*'         |
-			| Trousers             | '*'   | '*'      |'*'     | '*'         |
-			| Shirt                | '*'   | '*'      |'*'     | '*'         |
-			| Boots                | '*'   | '*'      |'*'     | '*'         |
-			| High shoes           | '*'   | '*'      |'*'     | '*'         |
+		And "ItemList" table contains lines
+			| 'Title'                | 'In stock' | 'Unit' | 'Price' | 'Picked out' |
+			| 'Dress'                | '*'        | 'pcs'  | ''      | ''           |
+			| 'Trousers'             | '*'        | 'pcs'  | ''      | ''           |
+			| 'Shirt'                | '*'        | 'pcs'  | ''      | ''           |
+			| 'Boots'                | ''         | 'pcs'  | ''      | ''           |
+			| 'High shoes'           | ''         | 'pcs'  | ''      | ''           |
+			| 'Bound Dress+Shirt'    | ''         | 'pcs'  | ''      | ''           |
+			| 'Bound Dress+Trousers' | ''         | 'pcs'  | ''      | ''           |
+			| 'Service'              | ''         | 'pcs'  | ''      | ''           |
+			| 'Router'               | ''         | 'pcs'  | ''      | ''           |
+			| 'Bag'                  | ''         | 'pcs'  | ''      | ''           |
+			| 'Scarf'                | ''         | 'pcs'  | ''      | ''           |
+			| 'Chewing gum'          | ''         | 'pcs'  | ''      | ''           |
+			| 'Skittles'             | ''         | 'pcs'  | ''      | ''           |
 	* Check the display for item item key in the selection form
 		And I go to line in "ItemList" table
 			| Title |
 			| Dress |
 		And I select current line in "ItemList" table
-		And "ItemKeyList" table became equal
+		And "ItemKeyList" table contains lines
 			| Title     | Unit  | In stock | Price  | Picked out  |
 			| S/Yellow  | '*'   | '*'      |'*'     | '*'         |
 			| XS/Blue   | '*'   | '*'      |'*'     | '*'         |
@@ -204,7 +226,7 @@ Scenario: check the product selection form with price information in Sales invoi
 			| XL/Green  | '*'   | '*'      |'*'     | '*'         |
 			| Dress/A-8 | '*'   | '*'      |'*'     | '*'         |
 			| XXL/Red   | '*'   | '*'      |'*'     | '*'         |
-			# | M/Brown   | '*'   | '*'      |'*'     | '*'         |
+			| M/Brown   | '*'   | '*'      |'*'     | '*'         |
 	* Check the items adding
 		And I go to line in "ItemKeyList" table
 			| Title    |
@@ -583,7 +605,7 @@ Scenario: check the product selection form in StockAdjustmentAsWriteOff/StockAdj
 		And I select current line in "ItemKeyList" table
 		And I go to line in "ItemKeyList" table
 			| 'In stock' | 'Title'    | 'Unit' |
-			| '124'      | 'S/Yellow' | 'pcs'  |
+			| '134'      | 'S/Yellow' | 'pcs'  |
 		And I select current line in "ItemKeyList" table
 		And I go to line in "ItemTableValue" table
 			| 'Item'  | 'Item key' | 'Quantity' | 'Unit' |
@@ -633,7 +655,7 @@ Scenario: check the product selection form in PhysicalInventory
 		And I select current line in "ItemKeyList" table
 		And I go to line in "ItemKeyList" table
 			| 'In stock' | 'Title'    | 'Unit' |
-			| '124'      | 'S/Yellow' | 'pcs'  |
+			| '134'      | 'S/Yellow' | 'pcs'  |
 		And I select current line in "ItemKeyList" table
 		And I go to line in "ItemTableValue" table
 			| 'Item'  | 'Item key' | 'Quantity' | 'Unit' |
@@ -679,7 +701,7 @@ Scenario: check the product selection form in InventoryTransferOrder/InventoryTr
 		And I select current line in "ItemKeyList" table
 		And I go to line in "ItemKeyList" table
 			| 'In stock' | 'Title'    | 'Unit' |
-			| '124'      | 'S/Yellow' | 'pcs'  |
+			| '134'      | 'S/Yellow' | 'pcs'  |
 		And I select current line in "ItemKeyList" table
 		And I go to line in "ItemTableValue" table
 			| 'Item'  | 'Item key' | 'Quantity' | 'Unit' |
@@ -1002,7 +1024,7 @@ Scenario: check the filter by my own company in Cheque bond transaction
 			|'Then the form attribute named "LegalName" became equal to 'Company Kalipso''|
 	And I close all client application windows
 
-Scenario: check the filter by my own company in Opening entry
+Scenario: check the filter by my own company in Opening entry/Item stock adjustment
 	And I click the button named "FormCreate"
 	* Check visual filter
 		And I click Select button of "Company" field
@@ -1061,8 +1083,9 @@ Scenario: check the filter by Partner term (by segments + expiration date)
 Scenario: check the filter by customers in the sales documents
 * Check visual filter
 	And I click Select button of "Partner" field
+	And I click "List" button
 	And I save number of "List" table lines as "QS"
-	Then "QS" variable is equal to 14
+	Then "QS" variable is equal to 23
 	And "List" table contains lines
 		| Description  |
 		| Ferron BP    |
@@ -1078,7 +1101,7 @@ Scenario: check the filter by customers in the sales documents
 	And Delay 2
 	And I input "Alexander Orlov" text in "Partner" field
 	And Delay 2
-	And I click Select button of "Partner term" field
+	And I click Select button of "Company" field
 	And "List" table does not contain lines
 			| Description  |
 			| Alexander Orlov |
@@ -1090,8 +1113,9 @@ And I close all client application windows
 Scenario: check the filter by vendors in the purchase documents
 * Check visual filter
 	And I click Select button of "Partner" field
+	And I click "List" button
 	And I save number of "List" table lines as "QS"
-	Then "QS" variable is equal to 8
+	Then "QS" variable is equal to 16
 	And "List" table contains lines
 		| 'Description'      |
 		| 'Ferron BP'        |
@@ -1105,7 +1129,7 @@ Scenario: check the filter by vendors in the purchase documents
 	And Delay 2
 	And I input "Kalipso" text in "Partner" field
 	And Delay 2
-	And I click Select button of "Partner term" field
+	And I click Select button of "Company" field
 	And "List" table does not contain lines
 			| Description  |
 			| Kalipso |
@@ -1446,7 +1470,7 @@ Scenario: create a test partner with one vendor partner term and one customer pa
 			| Basic Price Types |
 		And I select current line in "List" table
 		And I input "28.08.2019" text in "Start using" field
-		And I set checkbox "Price include tax"
+		And I set checkbox "Price includes tax"
 		And I click Select button of "Store" field
 		And I go to line in "List" table
 			| Description |
@@ -1477,7 +1501,7 @@ Scenario: create a test partner with one vendor partner term and one customer pa
 			| Vendor price, TRY |
 		And I select current line in "List" table
 		And I input "28.08.2019" text in "Start using" field
-		And I set checkbox "Price include tax"
+		And I set checkbox "Price includes tax"
 		And I click Select button of "Store" field
 		And I go to line in "List" table
 			| Description |
@@ -1493,11 +1517,11 @@ Scenario: check the autocompletion of the partner term (by vendor) in the docume
 		And I click "List" button
 		And I go to line in "List" table
 			| Description |
-			| Partner Kalipso   |
+			| Veritas   |
 		And I select current line in "List" table
-		Then the form attribute named "Partner" became equal to "Partner Kalipso"
-		Then the form attribute named "LegalName" became equal to "Company Kalipso"
-		Then the form attribute named "Agreement" became equal to "Partner Kalipso Vendor"
+		Then the form attribute named "Partner" became equal to "Veritas"
+		Then the form attribute named "LegalName" became equal to "Company Veritas "
+		Then the form attribute named "Agreement" became equal to "Posting by Standard Partner term (Veritas)"
 		Then the form attribute named "Company" became equal to "Main Company"
 
 
@@ -1507,11 +1531,11 @@ Scenario: check the autocompletion of the partner term (by customer) in the docu
 		And I click "List" button
 		And I go to line in "List" table
 			| Description |
-			| Partner Kalipso   |
+			| Nicoletta   |
 		And I select current line in "List" table
-		Then the form attribute named "Partner" became equal to "Partner Kalipso"
-		Then the form attribute named "LegalName" became equal to "Company Kalipso"
-		Then the form attribute named "Agreement" became equal to "Partner Kalipso Customer"
+		Then the form attribute named "Partner" became equal to "Nicoletta"
+		Then the form attribute named "LegalName" became equal to "Company Nicoletta"
+		Then the form attribute named "Agreement" became equal to "Posting by Standard Partner term Customer"
 		Then the form attribute named "Company" became equal to "Main Company"
 
 Scenario: create test item with one item key
@@ -1556,6 +1580,11 @@ Scenario: check item key autofilling in sales/returns documents for an item that
 			| Scarf       |
 		And I select current line in "List" table
 	* Check filling in item key
+		# temporarily
+		And I activate "Item key" field in "ItemList" table
+		And I click choice button of "Item key" attribute in "ItemList" table
+		And I close "Item keys" window
+		# temporarily
 		And "ItemList" table contains lines
 			| Item  |Item key | Unit |
 			| Scarf |XS/Red   | pcs  |
@@ -1595,8 +1624,13 @@ Scenario: check the barcode search in the sales documents + price and tax fillin
 	And I click the button named "FormCreate"
 	And I click Select button of "Partner" field
 	And I go to line in "List" table
-		| Description |
-		| Partner Kalipso     |
+		| 'Description' |
+		| 'Kalipso'     |
+	And I select current line in "List" table
+	And I click Select button of "Partner term" field
+	And I go to line in "List" table
+		| 'Description' |
+		| 'Basic Partner terms, TRY'     |
 	And I select current line in "List" table
 	And in the table "ItemList" I click "SearchByBarcode" button
 	And I input "2202283705" text in "InputFld" field
@@ -1604,7 +1638,7 @@ Scenario: check the barcode search in the sales documents + price and tax fillin
 	* Check adding an items and filling in the price in the tabular part
 		And "ItemList" table contains lines
 			| 'Item'  | 'Price'  | 'Item key' |'Q'     | 'Unit' | 'Total amount' |
-			|'Dress TR' |'700,00' | 'XS/Blue TR'  |'1,000' | 'adet'  | '700,00'       |
+			|'Dress' |'520,00' | 'XS/Blue'  |'1,000' | 'pcs'  | '520,00'       |
 	And I close all client application windows
 
 Scenario: check the barcode search on the return documents
@@ -1612,7 +1646,7 @@ Scenario: check the barcode search on the return documents
 	And I click Select button of "Partner" field
 	And I go to line in "List" table
 		| Description |
-		| Partner Kalipso     |
+		| Kalipso     |
 	And I select current line in "List" table
 	And I click "SearchByBarcode" button
 	And I input "2202283705" text in "InputFld" field
@@ -1620,7 +1654,7 @@ Scenario: check the barcode search on the return documents
 	* Check the items adding
 		And "ItemList" table contains lines
 			| 'Item'  | 'Item key' |'Q'     | 'Unit' |
-			|'Dress TR' | 'XS/Blue TR' |'1,000' | 'adet'  |
+			|'Dress' | 'XS/Blue' |'1,000' | 'pcs'  |
 	And I close all client application windows
 
 
@@ -1629,7 +1663,7 @@ Scenario: check the barcode search in the purchase/purchase returns
 	And I click Select button of "Partner" field
 	And I go to line in "List" table
 		| Description |
-		| Partner Kalipso     |
+		| Ferron BP     |
 	And I select current line in "List" table
 	And I click the button named "ItemListSearchByBarcode"
 	And I input "2202283713" text in "InputFld" field
@@ -1637,7 +1671,7 @@ Scenario: check the barcode search in the purchase/purchase returns
 	* Check adding an items and filling in the price in the tabular part
 		And "ItemList" table contains lines
 			| 'Item'  |'Item key' |'Q'     | 'Unit' |
-			|'Dress TR' |'S/Yellow TR'  |'1,000' | 'adet'  |
+			|'Dress' |'S/Yellow'  |'1,000' | 'pcs'  |
 	And I close all client application windows
 
 Scenario: check the barcode search in storage operations documents	
@@ -1648,7 +1682,7 @@ Scenario: check the barcode search in storage operations documents
 	* Check adding an items and filling in the price in the tabular part
 		And "ItemList" table contains lines
 			| 'Item'    |'Item key'     | 'Unit' |
-			|'Dress TR' |'S/Yellow TR'  | 'adet'  |
+			|'Dress' |'S/Yellow'  | 'pcs'  |
 	And I close all client application windows
 
 
@@ -1661,7 +1695,7 @@ Scenario: check the barcode search in the product bundling documents
 	* Check adding an items and filling in the price in the tabular part
 		And "ItemList" table contains lines
 			| 'Item'  |'Item key' |'Quantity'     | 'Unit' |
-			|'Dress TR' |'S/Yellow TR'  |'1,000' | 'adet'  |
+			|'Dress' |'S/Yellow'  |'1,000' | 'pcs'  |
 	And I close all client application windows
 
 Scenario: check the barcode search in the PhysicalInventory documents
@@ -1672,6 +1706,16 @@ Scenario: check the barcode search in the PhysicalInventory documents
 	* Check adding an items and filling in tabular part
 		And "ItemList" table contains lines
 			| 'Item'    |'Item key'     | 'Unit' |
-			|'Dress TR' |'S/Yellow TR'  | 'adet'  |
+			|'Dress' |'S/Yellow'  | 'pcs'  |
 	And I close all client application windows
 
+Scenario: check the barcode search in the Item stock adjustment
+	And I click the button named "FormCreate"
+	And I click "SearchByBarcode" button
+	And I input "2202283713" text in "InputFld" field
+	And I click "OK" button
+	* Check adding an items and filling in the price in the tabular part
+		And "ItemList" table contains lines
+			| 'Item' |'Item key (surplus)'     | 'Unit' |
+			|'Dress' |'S/Yellow'               | 'pcs'  |
+	And I close all client application windows

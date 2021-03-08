@@ -1,5 +1,17 @@
 
 &AtServer
+Procedure OnCreateAtServer(Cancel, StandardProcessing)
+	ExtensionServer.AddAttributesFromExtensions(ThisObject, DataProcessors.MobileDesktop, Items.PageAddInfo);
+EndProcedure
+
+&AtClient
+Procedure NotificationProcessing(EventName, Parameter, Source)
+	If EventName = "NewBarcode" And IsInputAvailable() Then
+		SearchByBarcode(Undefined, Parameter);
+	EndIf;
+EndProcedure
+
+&AtServer
 Procedure ItemOnChangeAtServer()
 	Query = New Query;
 	Query.Text = 
@@ -43,40 +55,88 @@ Procedure SetPictureView()
 EndProcedure
 
 &AtClient
-Procedure ItemOnChange(Item)
+Procedure ItemOnChange(ItemData)
 	ItemOnChangeAtServer();
-	SetPictureView();
-	ShowStatus();
+	Row = New Structure;
+	Row.Insert("Item", Item);
+	Row.Insert("ItemKey", ItemKey);
+	Row.Insert("Barcode", "");
+	Barcodes = BarcodeClient.GetBarcodesByItemKey(ItemKey);
+	If Barcodes.Count() Then
+		Row.Insert("Barcode", Barcodes[0]);
+	EndIf;
+	FillData(Row);
 EndProcedure
 
 &AtClient
-Procedure ItemKeyOnChange(Item)
-	SetPictureView();
-	ShowStatus();
+Procedure ItemKeyOnChange(ItemData)
+	Row = New Structure;
+	Row.Insert("Item", Item);
+	Row.Insert("ItemKey", ItemKey);
+	Row.Insert("Barcode", "");
+	Barcodes = BarcodeClient.GetBarcodesByItemKey(ItemKey);
+	If Barcodes.Count() Then
+		Row.Insert("Barcode", Barcodes[0]);
+	EndIf;
+	FillData(Row);
 EndProcedure
 
 &AtClient
-Procedure SearchByBarcode(Command)
-	DocumentsClient.SearchByBarcode(Command, Object, ThisObject, ThisObject);
+Procedure SearchByBarcode(Command, Barcode = "")
+	AddInfo = New Structure();
+	#If MobileClient Then
+		AddInfo.Insert("MobileModule", ThisObject);
+	#EndIf
+	DocumentsClient.SearchByBarcode(Barcode, Object, ThisObject, ThisObject, , AddInfo);
 EndProcedure
 
 &AtClient
-Procedure SearchByBarcodeEnd(BarcodeItems, Parameters) Export
-	For Each Row In BarcodeItems Do
-		Item =  Row.Item;
-		ItemKey =  Row.ItemKey;
-		If Not ValueIsFilled(ItemKey) Then
-			ItemOnChangeAtServer();
-		EndIf;
-		SetPictureView();
-		
+Procedure SearchByBarcodeEnd(Result, AdditionalParameters) Export
+
+	NotifyParameters = New Structure();
+	NotifyParameters.Insert("Form", ThisObject);
+	NotifyParameters.Insert("Object", Object);
+	
+	If AdditionalParameters.FoundedItems.Count() Then
 		#If MobileClient Then
 		MultimediaTools.CloseBarcodeScanning();
 		#EndIf
-		ShowStatus();
-		Barcode = Row.Barcode;
-		Return;
+	Else
+		#If NOT MobileClient Then
+		For Each Row In AdditionalParameters.Barcodes Do
+			CommonFunctionsClientServer.ShowUsersMessage(StrTemplate(R().S_019, Row));
+		EndDo;
+		#EndIf
+	EndIf;
+	
+	For Each Row In AdditionalParameters.FoundedItems Do
+		FillData(Row);
 	EndDo;
+
+EndProcedure
+
+&AtClient
+Procedure FillData(Row)
+	Item =  Row.Item;
+	ItemKey =  Row.ItemKey;
+	If Not ValueIsFilled(ItemKey) Then
+		ItemOnChangeAtServer();
+	EndIf;
+
+	SetPictureView();
+	ShowStatus();
+	Barcode = Row.Barcode;
+EndProcedure
+
+&AtClient
+Procedure ScanBarcodeEndMobile(Barcode, Result, Message, Parameters) Export
+	ProcessBarcodeResult = Barcodeclient.ProcessBarcode(Barcode, Parameters);
+	If ProcessBarcodeResult Then
+		Message = R().S_018;
+	Else
+		Result = False;
+		Message = StrTemplate(R().S_019, Barcode);
+	EndIf;
 EndProcedure
 
 &AtServer
@@ -97,7 +157,6 @@ Procedure ShowStatus()
 		Items.NotOK.Representation = ?(Not Status, ButtonRepresentation.PictureAndText, ButtonRepresentation.Text);
 	EndIf;
 EndProcedure
-
 
 &AtServer
 Procedure WriteReg(Status)
@@ -128,4 +187,3 @@ EndProcedure
 Procedure NotOK(Command)
 	WriteReg(False);
 EndProcedure
-

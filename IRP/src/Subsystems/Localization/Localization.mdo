@@ -12,7 +12,5 @@
   <content>CommonAttribute.Description_en</content>
   <content>DefinedType.typeDescription</content>
   <content>CommonModule.LocalizationEvents</content>
-  <content>EventSubscription.GetCatalogPresentation</content>
-  <content>EventSubscription.CheckDescriptionsFillCheck</content>
-  <content>DataProcessor.FirstStartSettings</content>
+  <content>EventSubscription.PresentationGetProcessing_GetCatalogPresentation</content>
 </mdclass:Subsystem>

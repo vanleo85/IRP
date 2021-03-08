@@ -2,11 +2,12 @@ Function GetCalculationSettings(Actions = Undefined, AddInfo = Undefined) Export
 	If Actions = Undefined Then
 		Actions = New Structure;
 	EndIf;
-	
+	Actions.Insert("CalculateQuantityInBaseUnit");
 	Actions.Insert("CalculateSpecialOffers");
 	Actions.Insert("CalculateNetAmount");
 	Actions.Insert("CalculateTax");
 	Actions.Insert("CalculateTotalAmount");
+	
 	#If MobileClient Then
 	Actions.Insert("UpdateInfoString");
 	#EndIf
@@ -53,7 +54,7 @@ EndProcedure
 
 Function GetColumnNames_ItemList(ArrayOfTaxInfo = Undefined) Export
 	ColumnNames = "Key, Unit, Price, PriceType, ItemKey, Quantity, OffersAmount, 
-				  |TotalAmount, NetAmount, TaxAmount, Info, Barcode, DontCalculateRow";
+				  |TotalAmount, NetAmount, TaxAmount, Info, Barcode, DontCalculateRow, QuantityInBaseUnit";
 	If ArrayOfTaxInfo <> Undefined Then
 		For Each ItemOfTaxInfo In ArrayOfTaxInfo Do
 			ColumnNames = ColumnNames + "," +	ItemOfTaxInfo.Name;
@@ -122,11 +123,11 @@ Function CalculateItemsRows(Object, Form, ItemRows, Actions, ArrayOfTaxInfo = Un
 		
 		ColumnNames_ItemList      = GetColumnNames_ItemList(ArrayOfTaxInfo);
 		ColumnNames_TaxList       = GetColumnNames_TaxList();
-		ColumnNames_SpecilaOffers = GetColumnNames_SpecialOffers();
+		ColumnNames_SpecialOffers = GetColumnNames_SpecialOffers();
 	
 		ArrayOfRows_ItemList      = DataCollectionToArrayOfStructures(ItemRows             , ColumnNames_ItemList);
 		ArrayOfRows_TaxList       = DataCollectionToArrayOfStructures(Object.TaxList       , ColumnNames_TaxList);
-		ArrayOfRows_SpecialOffers = DataCollectionToArrayOfStructures(Object.SpecialOffers , ColumnNames_SpecilaOffers);
+		ArrayOfRows_SpecialOffers = DataCollectionToArrayOfStructures(Object.SpecialOffers , ColumnNames_SpecialOffers);
 		
 		ObjectAsStructure = New Structure("Date, Company, Partner, Agreement, PriceIncludeTax");
 		FillPropertyValues(ObjectAsStructure, Object);
@@ -148,7 +149,7 @@ Function CalculateItemsRows(Object, Form, ItemRows, Actions, ArrayOfTaxInfo = Un
 		If UpdateRowsAfterCalculate Then
 			UpdateDataCollectionByArrayOfStructures(Object.ItemList      , ObjectAsStructure.ItemList      , ColumnNames_ItemList);
 			FillDataCollectionByArrayOfStructures(Object.TaxList         , ObjectAsStructure.TaxList       , ColumnNames_TaxList);		                                        
-			FillDataCollectionByArrayOfStructures(Object.SpecialOffers   , ObjectAsStructure.SpecialOffers , ColumnNames_SpecilaOffers);									 
+			FillDataCollectionByArrayOfStructures(Object.SpecialOffers   , ObjectAsStructure.SpecialOffers , ColumnNames_SpecialOffers);									 
 		EndIf;
 	Else
 		For Each ItemRow In ItemRows Do
@@ -198,6 +199,10 @@ Procedure CalculateItemsRow(Object, ItemRow, Actions, ArrayOfTaxInfo = Undefined
 	If Actions.Property("UpdateRowUnit") Then
 		UpdateRowUnit(Object, ItemRow, AddInfo);
 	EndIf;
+
+	If Actions.Property("CalculateQuantityInBaseUnit") Then
+		CalculateQuantityInBaseUnit(Object, ItemRow, AddInfo);
+	EndIf;
 	
 	If Actions.Property("ChangePriceType") Then
 		ChangePriceType(Object, ItemRow, Actions.ChangePriceType, AddInfo);
@@ -230,7 +235,7 @@ Procedure CalculateItemsRow(Object, ItemRow, Actions, ArrayOfTaxInfo = Undefined
 			
 			If Actions.Property("CalculateNetAmountAsTotalAmountMinusTaxAmount") And IsCalculatedRow Then
 				CalculateNetAmount_PriceIncludeTax(Object, ItemRow, AddInfo);
-			EndIF;
+			EndIf;
 			
 			If Actions.Property("CalculateNetAmount") And IsCalculatedRow Then
 				CalculateNetAmount_PriceIncludeTax(Object, ItemRow, AddInfo);
@@ -398,9 +403,15 @@ Procedure CalculateNetAmount_PriceNotIncludeTax(Object, ItemRow, AddInfo = Undef
 EndProcedure
 
 Function CalculateAmount(ItemRow)
-	If CommonFunctionsClientServer.ObjectHasProperty(ItemRow, "Price") 
-			And CommonFunctionsClientServer.ObjectHasProperty(ItemRow, "Quantity") Then
-		Return ItemRow.Price * ItemRow.Quantity;
+	If CommonFunctionsClientServer.ObjectHasProperty(ItemRow, "Price") Then
+		If CommonFunctionsClientServer.ObjectHasProperty(ItemRow, "QuantityInBaseUnit")
+			And ItemRow.PriceType = PredefinedValue("Catalog.PriceTypes.ManualPriceType") Then
+			Return ItemRow.Price * ItemRow.QuantityInBaseUnit;
+		ElsIf CommonFunctionsClientServer.ObjectHasProperty(ItemRow, "Quantity") Then
+			Return ItemRow.Price * ItemRow.Quantity;
+		Else
+			Return ItemRow.TotalAmount;
+		EndIf;
 	Else
 		Return ItemRow.TotalAmount;
 	EndIf;
@@ -450,18 +461,18 @@ Function GetTaxCalculationParameters(Object, ItemRow, ItemOfTaxInfo, PriceInclud
 	ElsIf Object.Property("PaymentList") Then
 		Table = Object.PaymentList;
 	Else
-		Raise "Not supported table";
+		Raise R().I_5;
 	EndIf;
 	
 	ArrayOfItemRows = Table.FindRows(New Structure("Key", ItemRow.Key));
 	If ArrayOfItemRows.Count() <> 1 Then
-		Raise StrTemplate("Find %1 rows in table by key %2", ArrayOfItemRows.Count(), ItemRow.Key);
+		Raise StrTemplate(R().I_4, ArrayOfItemRows.Count(), ItemRow.Key);
 	EndIf;
 	
 	ItemRow = ArrayOfItemRows[0];
 	TaxParameters.Insert("TotalAmount", ItemRow.TotalAmount);
-	TaxParameters.Insert("NetAmount" ,ItemRow.NetAmount);
-	TaxParameters.Insert("Ref" ,Object.Ref);
+	TaxParameters.Insert("NetAmount", ItemRow.NetAmount);
+	TaxParameters.Insert("Ref", Object.Ref);
 		
 	TaxParameters.Insert("Reverse", Reverse);
 	Return TaxParameters;
@@ -679,10 +690,11 @@ EndProcedure
 
 Procedure RecalculateAppliedOffers_ForRow(Object, AddInfo = Undefined) Export
 	For Each Row In Object.SpecialOffers Do
-		If ValueIsFilled(Row.Offer)
+		isOfferRow = ValueIsFilled(Row.Offer)
 			And OffersServer.IsOfferForRow(Row.Offer)
 			And ValueIsFilled(Row.Percent)
-			And ValueIsFilled(Row.Key) Then
+			And ValueIsFilled(Row.Key);
+		If isOfferRow Then
 			
 			ArrayOfOffers = New Array();
 			ArrayOfOffers.Add(Row.Offer);
@@ -791,7 +803,7 @@ Function GetPriceDateByRefAndDate(Ref, Date) Export
 	Else
 		Return Date;
 	EndIf;
-Endfunction
+EndFunction
 
 Function UpdateBarcode(Object, ItemRow, AddInfo = Undefined)
 	ReturnValue = "";
@@ -805,7 +817,7 @@ Function UpdateBarcode(Object, ItemRow, AddInfo = Undefined)
 	Return ReturnValue;
 EndFunction
 
-#Region NeewForms
+#Region NewForms
 
 Procedure CalculateRow(Object, Form, Settings, Actions) Export
 	
@@ -888,6 +900,11 @@ Function UpdateUnit(Object, ItemRow, AddInfo = Undefined)
     ItemRow.Unit = UnitInfo.Unit;
     Return UnitInfo.Unit;
 EndFunction
+
+Procedure CalculateQuantityInBaseUnit(Object, ItemRow, AddInfo = Undefined)
+	UnitFactor = GetItemInfo.GetUnitFactor(ItemRow.ItemKey, ItemRow.Unit);
+	ItemRow.QuantityInBaseUnit = ItemRow.Quantity * UnitFactor;	
+EndProcedure
 
 Procedure UpdateRowUnit(Object, Form, Settings, AddInfo = Undefined)
 	

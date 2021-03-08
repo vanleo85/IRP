@@ -32,12 +32,15 @@ Function GetDocumentsStructure(ArrayOfBasisDocuments)
 	
 	ArrayOf_PurchaseInvoice = New Array();
 	ArrayOf_PurchaseReturnOrder = New Array();
+	ArrayOf_ShipmentConfirmation = New Array();
 	
 	For Each Row In ArrayOfBasisDocuments Do
 		If TypeOf(Row) = Type("DocumentRef.PurchaseInvoice") Then
 			ArrayOf_PurchaseInvoice.Add(Row);
 		ElsIf TypeOf(Row) = Type("DocumentRef.PurchaseReturnOrder") Then
 			ArrayOf_PurchaseReturnOrder.Add(Row);
+		ElsIf TypeOf(Row) = Type("DocumentRef.ShipmentConfirmation") Then
+			ArrayOf_ShipmentConfirmation.Add(Row);
 		Else
 			Raise R().Error_043;
 		EndIf;
@@ -46,13 +49,14 @@ Function GetDocumentsStructure(ArrayOfBasisDocuments)
 	ArrayOfTables = New Array();
 	ArrayOfTables.Add(GetDocumentTable_PurchaseInvoice(ArrayOf_PurchaseInvoice));
 	ArrayOfTables.Add(GetDocumentTable_PurchaseReturnOrder(ArrayOf_PurchaseReturnOrder));
+	ArrayOfTables.Add(GetDocumentTable_ShipmentConfirmation(ArrayOf_ShipmentConfirmation));
 	
 	Return JoinDocumentsStructure(ArrayOfTables, 
-	"BasedOn, Company, Partner, LegalName, Agreement, Currency, PriceIncludeTax");
+	"BasedOn, Company, Partner, LegalName, Agreement, Currency, PriceIncludeTax, BusinessUnit, RevenueType, AdditionalAnalytic");
 EndFunction
 
 &AtServer
-Function JoinDocumentsStructure(ArrayOfTables, UnjoinFileds)
+Function JoinDocumentsStructure(ArrayOfTables, UnjoinFields)
 	
 	ItemList = New ValueTable();
 	ItemList.Columns.Add("BasedOn"			, New TypeDescription("String"));
@@ -75,11 +79,14 @@ Function JoinDocumentsStructure(ArrayOfTables, UnjoinFileds)
 	ItemList.Columns.Add("OffersAmount"		, New TypeDescription(Metadata.DefinedTypes.typeAmount.Type));
 	ItemList.Columns.Add("PriceType"		, New TypeDescription("CatalogRef.PriceTypes"));
 	ItemList.Columns.Add("Price"			, New TypeDescription(Metadata.DefinedTypes.typePrice.Type));
-	ItemList.Columns.Add("Key"				, New TypeDescription("UUID"));
+	ItemList.Columns.Add("Key"				, New TypeDescription(Metadata.DefinedTypes.typeRowID.Type));
 	ItemList.Columns.Add("RowKey"			, New TypeDescription("String"));
 	ItemList.Columns.Add("DontCalculateRow" , New TypeDescription("Boolean"));
+	ItemList.Columns.Add("BusinessUnit"		, New TypeDescription("CatalogRef.BusinessUnits"));
+	ItemList.Columns.Add("RevenueType"		, New TypeDescription("CatalogRef.ExpenseAndRevenueTypes"));
+	ItemList.Columns.Add("AdditionalAnalytic");
 	
-	TaxListMetadataColumns = Metadata.Documents.PurchaseInvoice.TabularSections.TaxList.Attributes;
+	TaxListMetadataColumns = Metadata.Documents.PurchaseReturn.TabularSections.TaxList.Attributes;
 	TaxList = New ValueTable();
 	TaxList.Columns.Add("Key"					, TaxListMetadataColumns.Key.Type);
 	TaxList.Columns.Add("Tax"					, TaxListMetadataColumns.Tax.Type);
@@ -90,12 +97,27 @@ Function JoinDocumentsStructure(ArrayOfTables, UnjoinFileds)
 	TaxList.Columns.Add("ManualAmount"			, TaxListMetadataColumns.ManualAmount.Type);
 	TaxList.Columns.Add("Ref"					, New TypeDescription("DocumentRef.PurchaseReturnOrder"));
 	
-	SpecialOffersMetadataColumns = Metadata.Documents.PurchaseInvoice.TabularSections.SpecialOffers.Attributes;
+	SpecialOffersMetadataColumns = Metadata.Documents.PurchaseReturn.TabularSections.SpecialOffers.Attributes;
 	SpecialOffers = New ValueTable();
 	SpecialOffers.Columns.Add("Key"		, SpecialOffersMetadataColumns.Key.Type);
 	SpecialOffers.Columns.Add("Offer"	, SpecialOffersMetadataColumns.Offer.Type);
 	SpecialOffers.Columns.Add("Amount"	, SpecialOffersMetadataColumns.Amount.Type);
 	SpecialOffers.Columns.Add("Ref"		, New TypeDescription("DocumentRef.PurchaseReturnOrder"));
+	
+	SerialLotNumbersMetadataColumns = Metadata.Documents.PurchaseReturn.TabularSections.SerialLotNumbers.Attributes;
+	SerialLotNumbers = New ValueTable();
+	SerialLotNumbers.Columns.Add("Key"		       , SerialLotNumbersMetadataColumns.Key.Type);
+	SerialLotNumbers.Columns.Add("SerialLotNumber" , SerialLotNumbersMetadataColumns.SerialLotNumber.Type);
+	SerialLotNumbers.Columns.Add("Quantity"        , SerialLotNumbersMetadataColumns.Quantity.Type);
+	SerialLotNumbers.Columns.Add("Ref"		       , New TypeDescription("DocumentRef.PurchaseReturnOrder"));
+	
+	ShipmentConfirmtionsMetadataColumns = Metadata.Documents.PurchaseReturn.TabularSections.ShipmentConfirmations.Attributes;
+	ShipmentConfirmations = New ValueTable();
+	ShipmentConfirmations.Columns.Add("Key"		                       , ShipmentConfirmtionsMetadataColumns.Key.Type);
+	ShipmentConfirmations.Columns.Add("ShipmentConfirmation"           , ShipmentConfirmtionsMetadataColumns.ShipmentConfirmation.Type);
+	ShipmentConfirmations.Columns.Add("Quantity"	                   , ShipmentConfirmtionsMetadataColumns.Quantity.Type);
+	ShipmentConfirmations.Columns.Add("QuantityInShipmentConfirmation" , ShipmentConfirmtionsMetadataColumns.QuantityInShipmentConfirmation.Type);
+	ShipmentConfirmations.Columns.Add("Ref"		                       , New TypeDescription("DocumentRef.PurchaseReturnOrder"));
 	
 	For Each TableStructure In ArrayOfTables Do
 		For Each Row In TableStructure.ItemList Do
@@ -107,26 +129,36 @@ Function JoinDocumentsStructure(ArrayOfTables, UnjoinFileds)
 		For Each Row In TableStructure.SpecialOffers Do
 			FillPropertyValues(SpecialOffers.Add(), Row);
 		EndDo;
+		For Each Row In TableStructure.SerialLotNumbers Do
+			FillPropertyValues(SerialLotNumbers.Add(), Row);
+		EndDo;
+		For Each Row In TableStructure.ShipmentConfirmations Do
+			FillPropertyValues(ShipmentConfirmations.Add(), Row);
+		EndDo;		
 	EndDo;
 	
 	ItemListCopy = ItemList.Copy();
-	ItemListCopy.GroupBy(UnjoinFileds);
+	ItemListCopy.GroupBy(UnjoinFields);
 	
 	ArrayOfResults = New Array();
 	
 	For Each Row In ItemListCopy Do
-		Result = New Structure(UnjoinFileds);
+		Result = New Structure(UnjoinFields);
 		FillPropertyValues(Result, Row);
 		
-		Result.Insert("ItemList"		, New Array());
-		Result.Insert("TaxList"			, New Array());
-		Result.Insert("SpecialOffers"	, New Array());
+		Result.Insert("ItemList"		     , New Array());
+		Result.Insert("TaxList"			     , New Array());
+		Result.Insert("SpecialOffers"	     , New Array());
+		Result.Insert("SerialLotNumbers"     , New Array());
+		Result.Insert("ShipmentConfirmations" , New Array());
 		
-		Filter = New Structure(UnjoinFileds);
+		Filter = New Structure(UnjoinFields);
 		FillPropertyValues(Filter, Row);
 		
 		ArrayOfTaxListFilters = New Array();
 		ArrayOfSpecialOffersFilters = New Array();
+		ArrayOfSerialLotNumbersFilters = New Array();
+		ArrayOfShipmentConfirmationsFilters = New Array();
 		
 		ItemListFiltered = ItemList.Copy(Filter);
 		For Each RowItemList In ItemListFiltered Do
@@ -136,11 +168,13 @@ Function JoinDocumentsStructure(ArrayOfTables, UnjoinFileds)
 				NewRow.Insert(ColumnItemList.Name, RowItemList[ColumnItemList.Name]);
 			EndDo;
 			
-			NewRow.Key = New UUID(RowItemList.RowKey);
+			NewRow.Key = RowItemList.RowKey;
 			
 			ArrayOfTaxListFilters.Add(New Structure("Ref, Key", RowItemList.PurchaseReturnOrder, NewRow.Key));
 			ArrayOfSpecialOffersFilters.Add(New Structure("Ref, Key", RowItemList.PurchaseReturnOrder, NewRow.Key));
-			
+			ArrayOfSerialLotNumbersFilters.Add(New Structure("Ref, Key", RowItemList.PurchaseReturnOrder, NewRow.Key));
+			ArrayOfShipmentConfirmationsFilters.Add(New Structure("Ref, Key", RowItemList.PurchaseReturnOrder, NewRow.Key));
+						
 			Result.ItemList.Add(NewRow);
 		EndDo;
 		
@@ -168,14 +202,60 @@ Function JoinDocumentsStructure(ArrayOfTables, UnjoinFileds)
 			EndDo;
 		EndDo;
 		
+		For Each SerialLotNumbersFilter In ArrayOfSerialLotNumbersFilters Do
+			For Each RowSerialLotNumber In SerialLotNumbers.Copy(SerialLotNumbersFilter) Do
+				NewRow = New Structure();
+				NewRow.Insert("Key", RowSerialLotNumber.Key);
+				NewRow.Insert("SerialLotNumber", RowSerialLotNumber.SerialLotNumber);
+				NewRow.Insert("Quantity", RowSerialLotNumber.Quantity);
+				Result.SerialLotNumbers.Add(NewRow);
+			EndDo;
+		EndDo;
+		
+		For Each ShipmentConfirmationsFilter In ArrayOfShipmentConfirmationsFilters Do
+			For Each RowShipmentConfirmation In ShipmentConfirmations.Copy(ShipmentConfirmationsFilter) Do
+				NewRow = New Structure();
+				NewRow.Insert("Key"		                       , RowShipmentConfirmation.Key);
+				NewRow.Insert("ShipmentConfirmation"           , RowShipmentConfirmation.ShipmentConfirmation);
+				NewRow.Insert("Quantity"	                   , RowShipmentConfirmation.Quantity);
+				NewRow.Insert("QuantityInShipmentConfirmation" , RowShipmentConfirmation.QuantityInShipmentConfirmation);
+				Result.ShipmentConfirmations.Add(NewRow);
+			EndDo;
+		EndDo;
+		
 		ArrayOfResults.Add(Result);
 	EndDo;
 	Return ArrayOfResults;
 EndFunction
 
 &AtServer
-Function GetDocumentTable_PurchaseInvoice(ArrayOfBasisDocuments)
-	Return GetDocumentTable(ArrayOfBasisDocuments, "PurchaseInvoice");
+Function GetDocumentTable_ShipmentConfirmation(ArrayOfBasisDocuments)
+	Query = New Query();
+	Query.Text =
+		"SELECT ALLOWED
+		|	""ShipmentConfirmation"" AS BasedOn,
+		|	ReceiptInvoicing.Store AS Store,
+		|	VALUE(Document.PurchaseReturnOrder.EmptyRef) AS PurchaseReturnOrder,
+		|	ReceiptInvoicing.ItemKey AS ItemKey,
+		|	CASE
+		|		WHEN ReceiptInvoicing.ItemKey.Unit <> VALUE(Catalog.Units.EmptyRef)
+		|			THEN ReceiptInvoicing.ItemKey.Unit
+		|		ELSE ReceiptInvoicing.ItemKey.Item.Unit
+		|	END AS Unit,
+		|	CAST(ReceiptInvoicing.Basis AS Document.ShipmentConfirmation) AS ShipmentConfirmation,
+		|	CAST(ReceiptInvoicing.Basis AS Document.ShipmentConfirmation).Company AS Company,
+		|	CAST(ReceiptInvoicing.Basis AS Document.ShipmentConfirmation).Partner AS Partner,
+		|	CAST(ReceiptInvoicing.Basis AS Document.ShipmentConfirmation).LegalName AS LegalName,
+		|	ReceiptInvoicing.QuantityBalance AS Quantity
+		|FROM
+		|	AccumulationRegister.R1031B_ReceiptInvoicing.Balance(, Basis IN (&ArrayOfShipmentConfirmation)
+		|	AND CAST(Basis AS
+		|		Document.ShipmentConfirmation).TransactionType = VALUE(Enum.ShipmentConfirmationTransactionTypes.ReturnToVendor)) AS
+		|		ReceiptInvoicing";
+	Query.SetParameter("ArrayOfShipmentConfirmation", ArrayOfBasisDocuments);
+	
+	QueryTable = Query.Execute().Unload();
+	Return ExtractInfoFromRows_ShipmentConfirmation(QueryTable);
 EndFunction
 
 &AtServer
@@ -199,15 +279,15 @@ Function GetDocumentTable_PurchaseReturnOrder(ArrayOfBasisDocuments)
 	Query.SetParameter("ArrayOfOrders", ArrayOfBasisDocuments);
 	
 	QueryTable = Query.Execute().Unload();
-	Return ExtractInfoFromOrderRows_PurchaseReturnOrder(QueryTable);
+	Return ExtractInfoFromRows_PurchaseReturnOrder(QueryTable);
 EndFunction
 
 &AtServer
-Function GetDocumentTable(ArrayOfBasisDocuments, BasedOn)
+Function GetDocumentTable_PurchaseInvoice(ArrayOfBasisDocuments)
 	Query = New Query();
 	Query.Text =
 		"SELECT ALLOWED
-		|	&BasedOn AS BasedOn,
+		|	""PurchaseInvoice"" AS BasedOn,
 		|	Table.PurchaseInvoice AS PurchaseInvoice,
 		|	Table.ItemKey,
 		|	Table.RowKey,
@@ -224,17 +304,45 @@ Function GetDocumentTable(ArrayOfBasisDocuments, BasedOn)
 		|WHERE
 		|	Table.QuantityTurnover > 0";
 	Query.SetParameter("ArrayOfBasises", ArrayOfBasisDocuments);
-	Query.SetParameter("BasedOn", BasedOn);
 	
 	QueryTable = Query.Execute().Unload();
-	Return ExtractInfoFromOrderRows(QueryTable);
+	Return ExtractInfoFromRows_PurchaseInvoice(QueryTable);
 EndFunction
 
 &AtServer
-Function ExtractInfoFromOrderRows(QueryTable)
-	QueryTable.Columns.Add("Key", New TypeDescription("UUID"));
+Function ExtractInfoFromRows_ShipmentConfirmation(QueryTable)
+	ShipmentConfirmationsTable = CreateTable_ShipmentConfirmations();
+	ItemList = QueryTable.Copy();
+	ItemList.GroupBy("BasedOn, Store, PurchaseReturnOrder, ItemKey, Unit, Company, Partner, LegalName", "Quantity");
+	ItemList.Columns.Add("Key", Metadata.DefinedTypes.typeRowID.Type);
+	ItemList.Columns.Add("RowKey", Metadata.DefinedTypes.typeRowID.Type);
+	For Each RowItemList In ItemList Do
+		RowKey = String(New UUID());
+		RowItemList.Key = RowKey;
+		RowItemList.RowKey = RowKey;
+		Filter = New Structure("BasedOn, Store, PurchaseReturnOrder, ItemKey, Unit, Company, Partner, LegalName");
+		FillPropertyValues(Filter, RowItemList);
+		For Each RowShipmentConfirmation In QueryTable.Copy(Filter) Do
+			NewRowShipmentConfirmation = ShipmentConfirmationsTable.Add();
+			NewRowShipmentConfirmation.Key = RowItemList.Key;
+			NewRowShipmentConfirmation.ShipmentConfirmation = RowShipmentConfirmation.ShipmentConfirmation;
+			NewRowShipmentConfirmation.Quantity = RowShipmentConfirmation.Quantity;
+			NewRowShipmentConfirmation.QuantityInShipmentConfirmation = RowShipmentConfirmation.Quantity;
+		EndDo;	
+	EndDo;
+	Return New Structure("ItemList, TaxList, SpecialOffers, SerialLotNumbers, ShipmentConfirmations", 
+	ItemList, 
+	New ValueTable(), 
+	New ValueTable(),
+	New ValueTable(),
+	ShipmentConfirmationsTable);
+EndFunction
+
+&AtServer
+Function ExtractInfoFromRows_PurchaseInvoice(QueryTable)
+	QueryTable.Columns.Add("Key", New TypeDescription(Metadata.DefinedTypes.typeRowID.Type));
 	For Each Row In QueryTable Do
-		Row.Key = New UUID(Row.RowKey);
+		Row.Key = Row.RowKey;
 	EndDo;
 	
 	Query = New Query();
@@ -276,7 +384,8 @@ Function ExtractInfoFromOrderRows(QueryTable)
 		|	ISNULL(ItemList.OffersAmount, 0) AS OffersAmount,
 		|	ISNULL(ItemList.PriceType, VALUE(Catalog.PriceTypes.EmptyRef)) AS PriceType,
 		|	ISNULL(ItemList.Store, VALUE(Catalog.Stores.EmptyRef)) AS Store,
-		|	ISNULL(ItemList.DontCalculateRow, FALSE) AS DontCalculateRow
+		|	ISNULL(ItemList.DontCalculateRow, FALSE) AS DontCalculateRow,
+		|	*
 		|FROM
 		|	tmpQueryTable AS tmpQueryTable
 		|		INNER JOIN Document.PurchaseInvoice.ItemList AS ItemList
@@ -313,7 +422,22 @@ Function ExtractInfoFromOrderRows(QueryTable)
 		|	Document.PurchaseInvoice.SpecialOffers AS SpecialOffers
 		|		INNER JOIN tmpQueryTable AS tmpQueryTable
 		|		ON tmpQueryTable.PurchaseInvoice = SpecialOffers.Ref
-		|		AND tmpQueryTable.Key = SpecialOffers.Key";
+		|		AND tmpQueryTable.Key = SpecialOffers.Key
+		|
+		|;
+		|
+		|////////////////////////////////////////////////////////////////////////////////
+		|SELECT
+		|	SerialLotNumbers.Ref,
+		|	SerialLotNumbers.Key,
+		|	SerialLotNumbers.SerialLotNumber,
+		|	SerialLotNumbers.Quantity
+		|FROM
+		|	Document.PurchaseInvoice.SerialLotNumbers AS SerialLotNumbers
+		|		INNER JOIN tmpQueryTable AS tmpQueryTable
+		|		ON tmpQueryTable.PurchaseInvoice = SerialLotNumbers.Ref
+		|		AND tmpQueryTable.Key = SerialLotNumbers.Key
+		|";
 	
 	Query.SetParameter("QueryTable", QueryTable);
 	QueryResults = Query.ExecuteBatch();
@@ -323,15 +447,21 @@ Function ExtractInfoFromOrderRows(QueryTable)
 	
 	QueryTable_TaxList = QueryResults[2].Unload();
 	QueryTable_SpecialOffers = QueryResults[3].Unload();
+	QueryTable_SerialLotNumbers = QueryResults[4].Unload();
 	
-	Return New Structure("ItemList, TaxList, SpecialOffers", QueryTable_ItemList, QueryTable_TaxList, QueryTable_SpecialOffers);
+	Return New Structure("ItemList, TaxList, SpecialOffers, SerialLotNumbers, ShipmentConfirmations", 
+		QueryTable_ItemList, 
+		QueryTable_TaxList, 
+		QueryTable_SpecialOffers,
+		QueryTable_SerialLotNumbers,
+		New ValueTable());
 EndFunction
 
 &AtServer
-Function ExtractInfoFromOrderRows_PurchaseReturnOrder(QueryTable)
-	QueryTable.Columns.Add("Key", New TypeDescription("UUID"));
+Function ExtractInfoFromRows_PurchaseReturnOrder(QueryTable)
+	QueryTable.Columns.Add("Key", New TypeDescription(Metadata.DefinedTypes.typeRowID.Type));
 	For Each Row In QueryTable Do
-		Row.Key = New UUID(Row.RowKey);
+		Row.Key = Row.RowKey;
 	EndDo;
 	
 	Query = New Query();
@@ -374,7 +504,8 @@ Function ExtractInfoFromOrderRows_PurchaseReturnOrder(QueryTable)
 		|	ISNULL(ItemList.OffersAmount, 0) AS OffersAmount,
 		|	ISNULL(ItemList.PriceType, VALUE(Catalog.PriceTypes.EmptyRef)) AS PriceType,
 		|	ISNULL(ItemList.PurchaseInvoice, VALUE(Document.PurchaseInvoice.EmptyRef)) AS PurchaseInvoice,
-		|	ISNULL(ItemList.DontCalculateRow, FALSE) AS DontCalculateRow
+		|	ISNULL(ItemList.DontCalculateRow, FALSE) AS DontCalculateRow,
+		|	*
 		|FROM
 		|	Document.PurchaseReturnOrder.ItemList AS ItemList
 		|		INNER JOIN tmpQueryTable AS tmpQueryTable
@@ -422,7 +553,23 @@ Function ExtractInfoFromOrderRows_PurchaseReturnOrder(QueryTable)
 	QueryTable_TaxList = QueryResults[2].Unload();
 	QueryTable_SpecialOffers = QueryResults[3].Unload();
 	
-	Return New Structure("ItemList, TaxList, SpecialOffers", QueryTable_ItemList, QueryTable_TaxList, QueryTable_SpecialOffers);
+	Return New Structure("ItemList, TaxList, SpecialOffers, SerialLotNumbers, ShipmentConfirmations", 
+		QueryTable_ItemList, 
+		QueryTable_TaxList, 
+		QueryTable_SpecialOffers,
+		New ValueTable(),
+		New ValueTable());
+EndFunction
+
+Function CreateTable_ShipmentConfirmations()
+	ColumnsMetadata = Metadata.Documents.PurchaseReturn.TabularSections.ShipmentConfirmations.Attributes;
+	GoodsReceiptsTable = New ValueTable();
+	GoodsReceiptsTable.Columns.Add("Key", ColumnsMetadata.Key.Type);
+	GoodsReceiptsTable.Columns.Add("ShipmentConfirmation", ColumnsMetadata.ShipmentConfirmation.Type);
+	GoodsReceiptsTable.Columns.Add("Quantity", ColumnsMetadata.Quantity.Type);
+	GoodsReceiptsTable.Columns.Add("QuantityInShipmentConfirmation", ColumnsMetadata.Quantity.Type);
+	GoodsReceiptsTable.Columns.Add("Ref" , New TypeDescription("DocumentRef.PurchaseReturnOrder"));
+	Return GoodsReceiptsTable;
 EndFunction
 
 #Region Errors

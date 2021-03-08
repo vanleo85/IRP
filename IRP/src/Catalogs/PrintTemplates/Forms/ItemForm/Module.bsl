@@ -21,32 +21,87 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	EndIf;
 	
 	DataSourceScheme = GenerateDataSourceScheme();
-	
-	GetDefaultAtServer();
-	ExtensionServer.AddAtributesFromExtensions(ThisObject, Object.Ref);
+	SetAvailableFields(DataSourceScheme);
+	ExtensionServer.AddAttributesFromExtensions(ThisObject, Object.Ref);
 EndProcedure
 
 &AtClient
-Procedure OnOpen(Cancel)
-	
+Procedure OnOpen(Cancel)	
 	If Not ValueIsFilled(ThisObject.PasteFieldAs) Then
 		ThisObject.PasteFieldAs = Items.PasteType.ChoiceList.Get(0);
+	EndIf;	
+EndProcedure
+
+&AtServer
+Procedure BeforeWriteAtServer(Cancel, CurrentObject, WriteParameters)		
+	TemplateStructure = New Structure;
+	
+	ParametersMap = GetTemplateParameters();
+	TemplateStructure.Insert("ParametersMap", ParametersMap);
+	
+	TemplateStructure.Insert("LabelsInRow", ThisObject.LabelsInRow);
+	TemplateStructure.Insert("LabelsInColumn", ThisObject.LabelsInColumn);
+	
+	SetByUserFields = New Array;	
+	
+	If ValueIsFilled(Object.ExternalDataProc) Then
+		Info = AddDataProcServer.AddDataProcInfo(Object.ExternalDataProc);
+		Info.Create = True;
+		AddDataProc = AddDataProcServer.CallMethodAddDataProc(Info);
+		If Not AddDataProc = Undefined Then
+			AdditionalFields = AddDataProc.GetAvailableFields();
+			
+			For Each AdditionalField In AdditionalFields Do
+				
+				If AdditionalField.SetByUser Then
+					AdditionalField.Insert("UUID", New UUID());
+					SetByUserFields.Add(AdditionalField);
+				EndIf;
+				
+			EndDo;
+		EndIf;
 	EndIf;
 	
+	TemplateStructure.Insert("SetByUserFields", SetByUserFields);	
+	
+	TemplateStructure.Insert("Spreadsheet", ThisObject.TemplateSpreadsheet);
+	TemplateStructure.Insert("Hash", GetHashMD5(ThisObject.TemplateSpreadsheet));
+	
+	TemplateStructure.Insert("PrintParametersKey", ThisObject.TemplateSpreadsheet.PrintParametersKey);		
+	
+	CurrentObject.ValueOfTemplate = New ValueStorage(TemplateStructure, New Deflation(9));	
 EndProcedure
 
 #EndRegion
 
+#Region FormCommandEvents
+
 &AtClient
-Procedure ExternalDataProcOnChange(Item)
-	
+Procedure GetDefault(Command)
+	GetDefaultAtServer();
+EndProcedure
+
+#EndRegion
+
+#Region FormHeaderItemsEventHandlers
+
+&AtClient
+Procedure ExternalDataProcOnChange(Item)	
+	ExternalDataProcOnChangeAtServer();
+EndProcedure
+
+#EndRegion
+
+#Region Private
+
+&AtServer
+Procedure ExternalDataProcOnChangeAtServer()
 	DataSourceScheme = GenerateDataSourceScheme();
 	SetAvailableFields(DataSourceScheme);
 EndProcedure
 
 &AtServer
-Function GenerateDataSourceScheme()
-		
+Function GenerateDataSourceScheme()		
 	DataSourceScheme = New DataCompositionSchema();
 	
 	Source = DataSourceScheme.DataSources.Add();
@@ -90,8 +145,7 @@ Function GenerateDataSourceScheme()
 		EndIf;
 	EndIf;
 	
-	Return DataSourceScheme;
-	
+	Return DataSourceScheme;	
 EndFunction
 
 &AtServer
@@ -102,8 +156,7 @@ Procedure SetAvailableFields(DataSourceScheme)
 	
 	DataCompositionAddress = PutToTempStorage(DataSourceScheme, New UUID);
 	AvailableFields = SettingsComposer;
-	AvailableFields.Initialize(New DataCompositionAvailableSettingsSource(DataCompositionAddress));
-	
+	AvailableFields.Initialize(New DataCompositionAvailableSettingsSource(DataCompositionAddress));	
 EndProcedure
 
 &AtServer
@@ -180,13 +233,11 @@ Function GetMainFieldsArray()
 	FieldStructure.Insert("SetByUser", False);
 	ReturnValue.Add(FieldStructure);
 		
-	Return ReturnValue;
-	
+	Return ReturnValue;	
 EndFunction
 	
 &AtClient
-Procedure OrderOrderAvailableFieldsSelection(Item, RowSelected, Field, StandardProcessing)
-	
+Procedure OrderOrderAvailableFieldsSelection(Item, RowSelected, Field, StandardProcessing)	
 	#If MobileAppClient Then
 		Return;
 	#EndIf
@@ -201,10 +252,11 @@ Procedure OrderOrderAvailableFieldsSelection(Item, RowSelected, Field, StandardP
 
 	If TypeOf(SelectedAreas[0]) = Type("SpreadsheetDocumentDrawing")
 		And ThisObject.PasteFieldAs = "free" Then
-		If RowSelectedString = "BarcodePicture" Or RowSelectedString = "QRPicture"
+		isPicture = RowSelectedString = "BarcodePicture" Or RowSelectedString = "QRPicture"
 			Or RowSelectedString = "ItemPicture"
 			Or RowSelectedString = "ItemKeyPicture"
-			Or RowSelectedString = "Picture" Then
+			Or RowSelectedString = "Picture";
+		If isPicture Then
 			Return;
 		Else
 			RowSelectedValue = StrReplace(RowSelectedString, "[", "{");
@@ -236,13 +288,11 @@ Procedure OrderOrderAvailableFieldsSelection(Item, RowSelected, Field, StandardP
 				PlaceTextToCellsArea(TemplateSpreadsheet, SelectedAreas[0].Name, RowSelectedString);
 			EndIf;
 		EndIf;
-	EndIf;
-	
+	EndIf;	
 EndProcedure
 
 &AtServer
 Procedure PlacePictureToCellsArea(SpreadsheetDocument, AreaRange, PictureName)	
-	
 	DrawingPicture = Undefined;
 	
 	If PictureName = "Picture" Then
@@ -274,63 +324,18 @@ Procedure PlacePictureToCellsArea(SpreadsheetDocument, AreaRange, PictureName)
 	
 	SpreadsheetDocument.Drawings[PictureIndex].Picture = NewPicture;
 	SpreadsheetDocument.Drawings[PictureIndex].Place(SpreadsheetDocument.Area(AreaRange));
-	SpreadsheetDocument.Drawings[PictureIndex].PictureSize = PictureSize.Proportionally;
-	
+	SpreadsheetDocument.Drawings[PictureIndex].PictureSize = PictureSize.Proportionally;	
 EndProcedure
 
 &AtServer
-Procedure PlaceTextToCellsArea(SpreadsheetDocument, AreaRange, TextName)
-	
+Procedure PlaceTextToCellsArea(SpreadsheetDocument, AreaRange, TextName)	
 	SpreadsheetText = SpreadsheetDocument.Drawings.Add(SpreadsheetDocumentDrawingType.Text);
 	TextIndex = SpreadsheetDocument.Drawings.IndexOf(SpreadsheetText);	
 	SpreadsheetDocument.Drawings[TextIndex].FillType = SpreadsheetDocumentAreaFillType.Template;
 	TextName = StrReplace(TextName, "[", "{");
 	TextName = StrReplace(TextName, "]", "}");	
 	SpreadsheetDocument.Drawings[TextIndex].Text = "[" + TextName + "]";
-	SpreadsheetDocument.Drawings[TextIndex].Place(SpreadsheetDocument.Area(AreaRange));
-		
-EndProcedure
-
-&AtServer
-Procedure BeforeWriteAtServer(Cancel, CurrentObject, WriteParameters)
-		
-	TemplateStructure = New Structure;
-	
-	ParametersMap = GetTemplateParameters();
-	TemplateStructure.Insert("ParametersMap", ParametersMap);
-	
-	TemplateStructure.Insert("LabelsInRow", ThisObject.LabelsInRow);
-	TemplateStructure.Insert("LabelsInColumn", ThisObject.LabelsInColumn);
-	
-	SetByUserFields = New Array;	
-	
-	If ValueIsFilled(Object.ExternalDataProc) Then
-		Info = AddDataProcServer.AddDataProcInfo(Object.ExternalDataProc);
-		Info.Create = True;
-		AddDataProc = AddDataProcServer.CallMethodAddDataProc(Info);
-		If Not AddDataProc = Undefined Then
-			AdditionalFields = AddDataProc.GetAvailableFields();
-			
-			For Each AdditionalField In AdditionalFields Do
-				
-				If AdditionalField.SetByUser Then
-					AdditionalField.Insert("UUID", New UUID());
-					SetByUserFields.Add(AdditionalField);
-				EndIf;
-				
-			EndDo;
-		EndIf;
-	EndIf;
-	
-	TemplateStructure.Insert("SetByUserFields", SetByUserFields);	
-	
-	TemplateStructure.Insert("Spreadsheet", ThisObject.TemplateSpreadsheet);
-	TemplateStructure.Insert("Hash", GetHashMD5(ThisObject.TemplateSpreadsheet));
-	
-	TemplateStructure.Insert("PrintParametersKey", ThisObject.TemplateSpreadsheet.PrintParametersKey);		
-	
-	CurrentObject.ValueOfTemplate = New ValueStorage(TemplateStructure, New Deflation(9));
-	
+	SpreadsheetDocument.Drawings[TextIndex].Place(SpreadsheetDocument.Area(AreaRange));		
 EndProcedure
 
 &AtServer
@@ -394,13 +399,11 @@ Function GetTemplateParameters()
 		EndIf;
 	EndDo;
 	
-	Return ReturnValue;
-	
+	Return ReturnValue;	
 EndFunction
 
 &AtServer
-Function RecognizeTemplateInStringTemplate(StringTemplate)
-	
+Function RecognizeTemplateInStringTemplate(StringTemplate)	
     ReturnValue = New Array;
     
 	Start = 0;
@@ -419,13 +422,11 @@ Function RecognizeTemplateInStringTemplate(StringTemplate)
         EndIf;        
     EndDo;
     
-    Return ReturnValue;
-    
+    Return ReturnValue;    
 EndFunction
 
 &AtServer
-Function GetHashMD5(Data)
-	
+Function GetHashMD5(Data)	
 	XMLWriter = New XMLWriter();
 	XMLWriter.SetString();
 	XDTOSerializer.WriteXML(XMLWriter, Data);
@@ -443,18 +444,11 @@ Function GetHashMD5(Data)
                         Mid(HashSumString, 15, 4)   + "-" + 
                         Mid(HashSumString, 18, 4)   + "-" + 
                         Right(HashSumString, 12);
-    Return HashSumStringUUID;
-    
+    Return HashSumStringUUID;    
 EndFunction
 
-&AtClient
-Procedure GetDefault(Command)
-	GetDefaultAtServer();
-EndProcedure
-
 &AtServer
-Procedure GetDefaultAtServer()
-	
+Procedure GetDefaultAtServer()	
 	Items.DataSchemeSource.ChoiceList.Clear();
 	DataCompositionSchemaValueArray = New Array;
 	
@@ -486,6 +480,7 @@ Procedure GetDefaultAtServer()
 	Items.DataSchemeSource.ChoiceList.LoadValues(DataCompositionSchemaValueArray);
 	
 	ThisObject.TemplateSpreadsheet = TemplateSpreadsheetValue;
-	SetAvailableFields(DataCompositionSchemaValue);
-	
+	SetAvailableFields(DataCompositionSchemaValue);	
 EndProcedure
+
+#EndRegion
