@@ -54,7 +54,7 @@
       <name>Document_SalesInvoice</name>
       <description>Document Sales invoice</description>
       <code xsi:type="core:NumberValue">
-        <value>69</value>
+        <value>136</value>
       </code>
     </items>
     <items id="8846cea1-3716-4606-bdc5-f47a7aa533ce">
@@ -89,7 +89,7 @@
       <name>Document_SalesOrder</name>
       <description>Document Sales order</description>
       <code xsi:type="core:NumberValue">
-        <value>70</value>
+        <value>137</value>
       </code>
     </items>
     <items id="dd8f4747-410a-4bf3-8599-40a05cb32058">
@@ -110,14 +110,14 @@
       <name>Document_PurchaseInvoice</name>
       <description>Document Purchase invoice</description>
       <code xsi:type="core:NumberValue">
-        <value>62</value>
+        <value>128</value>
       </code>
     </items>
     <items id="888eb86f-c74e-45fa-bee5-bf3e7baa99d1">
       <name>Document_PurchaseOrder</name>
       <description>Document Purchase order</description>
       <code xsi:type="core:NumberValue">
-        <value>63</value>
+        <value>129</value>
       </code>
     </items>
     <items id="8bbe12f5-44d2-4a75-85e2-32bcb48692a7">
@@ -201,210 +201,210 @@
       <name>Catalog_Users</name>
       <description>Catalog Users</description>
       <code xsi:type="core:NumberValue">
-        <value>36</value>
+        <value>37</value>
       </code>
     </items>
     <items id="b51b4fc3-9af0-49be-bc0f-1f50629c4951">
       <name>Document_BankPayment</name>
       <description>Document Bank payment</description>
       <code xsi:type="core:NumberValue">
-        <value>38</value>
+        <value>101</value>
       </code>
     </items>
     <items id="5e98ef39-7a7f-4e2e-ac27-ef61c75418a4">
       <name>Document_BankReceipt</name>
       <description>Document Bank receipt</description>
       <code xsi:type="core:NumberValue">
-        <value>39</value>
+        <value>102</value>
       </code>
     </items>
     <items id="dbc9ff5e-39a5-4968-a585-dad9f87c15a4">
       <name>Document_Bundling</name>
       <description>Document Bundling</description>
       <code xsi:type="core:NumberValue">
-        <value>40</value>
+        <value>103</value>
       </code>
     </items>
     <items id="1ea8bd75-b87f-48b4-af96-1b7d6dfdd4b0">
       <name>Document_CashExpense</name>
       <description>Document Cash expense</description>
       <code xsi:type="core:NumberValue">
-        <value>41</value>
+        <value>104</value>
       </code>
     </items>
     <items id="4a3c08bd-dd13-4e82-92f9-a0002041d98c">
       <name>Document_CashPayment</name>
       <description>Document Cash payment</description>
       <code xsi:type="core:NumberValue">
-        <value>42</value>
+        <value>105</value>
       </code>
     </items>
     <items id="59e6837a-c968-415c-81c5-454ed7728831">
       <name>Document_CashReceipt</name>
       <description>Document Cash receipt</description>
       <code xsi:type="core:NumberValue">
-        <value>43</value>
+        <value>106</value>
       </code>
     </items>
     <items id="0b05d183-3aef-4b78-9897-0beebfb766ae">
       <name>Document_CashRevenue</name>
       <description>Document Cash revenue</description>
       <code xsi:type="core:NumberValue">
-        <value>44</value>
+        <value>107</value>
       </code>
     </items>
     <items id="a1216e62-2d10-48b2-9c15-7c7632e37c9f">
       <name>Document_CashTransferOrder</name>
       <description>Document Cash transfer order</description>
       <code xsi:type="core:NumberValue">
-        <value>46</value>
+        <value>109</value>
       </code>
     </items>
     <items id="81ea25f6-8b13-4e90-8dfa-b2ba20b26a83">
       <name>Document_ChequeBondTransaction</name>
       <description>Document Cheque bond transaction</description>
       <code xsi:type="core:NumberValue">
-        <value>47</value>
+        <value>110</value>
       </code>
     </items>
     <items id="d165f449-9d6e-49bb-aac3-2d86efda2eae">
       <name>Document_GoodsReceipt</name>
       <description>Document Goods receipt</description>
       <code xsi:type="core:NumberValue">
-        <value>50</value>
+        <value>113</value>
       </code>
     </items>
     <items id="ef6ee0a7-b975-4ed0-9efc-4737f1890c54">
       <name>Document_IncomingPaymentOrder</name>
       <description>Document Incoming payment order</description>
       <code xsi:type="core:NumberValue">
-        <value>51</value>
+        <value>114</value>
       </code>
     </items>
     <items id="70839530-948e-4961-bdd6-17632148e6a9">
       <name>Document_InventoryTransfer</name>
       <description>Document Inventory transfer</description>
       <code xsi:type="core:NumberValue">
-        <value>53</value>
+        <value>116</value>
       </code>
     </items>
     <items id="74d7ecaa-6ac0-45ca-93ba-6be5806c5f7a">
       <name>Document_InventoryTransferOrder</name>
       <description>Document Inventory transfer order</description>
       <code xsi:type="core:NumberValue">
-        <value>54</value>
+        <value>117</value>
       </code>
     </items>
     <items id="c092fb1e-3000-41ed-babb-7a9dff84d16c">
       <name>Document_InvoiceMatch</name>
       <description>Document Invoice match</description>
       <code xsi:type="core:NumberValue">
-        <value>55</value>
+        <value>118</value>
       </code>
     </items>
     <items id="027d2fc5-5f0b-4955-9d72-599fca2c241d">
       <name>Document_Labeling</name>
       <description>Document Labeling</description>
       <code xsi:type="core:NumberValue">
-        <value>56</value>
+        <value>120</value>
       </code>
     </items>
     <items id="250546bc-ecf2-4173-933a-dcd17d2c8fd7">
       <name>Document_OpeningEntry</name>
       <description>Document Opening entry</description>
       <code xsi:type="core:NumberValue">
-        <value>57</value>
+        <value>122</value>
       </code>
     </items>
     <items id="ae211661-bece-46b7-8946-c29d131b45fc">
       <name>Document_OutgoingPaymentOrder</name>
       <description>Document Outgoing payment order</description>
       <code xsi:type="core:NumberValue">
-        <value>58</value>
+        <value>123</value>
       </code>
     </items>
     <items id="b07e942f-58ef-4049-b954-37ab8f4d6820">
       <name>Document_PhysicalCountByLocation</name>
       <description>Document Physical count by location</description>
       <code xsi:type="core:NumberValue">
-        <value>59</value>
+        <value>124</value>
       </code>
     </items>
     <items id="b90b3451-a811-4a27-b15d-1a8fd6827de8">
       <name>Document_PhysicalInventory</name>
       <description>Document Physical inventory</description>
       <code xsi:type="core:NumberValue">
-        <value>60</value>
+        <value>125</value>
       </code>
     </items>
     <items id="edde0b2e-e4c3-435d-8f04-61a431134d32">
       <name>Document_PriceList</name>
       <description>Document Price list</description>
       <code xsi:type="core:NumberValue">
-        <value>61</value>
+        <value>127</value>
       </code>
     </items>
     <items id="9bad61d7-11f0-483c-9ab0-da72bb315745">
       <name>Document_PurchaseReturn</name>
       <description>Document Purchase return</description>
       <code xsi:type="core:NumberValue">
-        <value>64</value>
+        <value>131</value>
       </code>
     </items>
     <items id="6c9873c1-9449-40b1-bd65-02a7648dc9f4">
       <name>Document_PurchaseReturnOrder</name>
       <description>Document Purchase return order</description>
       <code xsi:type="core:NumberValue">
-        <value>65</value>
+        <value>132</value>
       </code>
     </items>
     <items id="50d761b3-30ae-4bb0-afd5-3e011e8083c0">
       <name>Document_ReconciliationStatement</name>
       <description>Document Reconciliation statement</description>
       <code xsi:type="core:NumberValue">
-        <value>66</value>
+        <value>133</value>
       </code>
     </items>
     <items id="906608c9-2fa7-421e-9b37-b1dea20ae04e">
       <name>Document_SalesReturn</name>
       <description>Document Sales return</description>
       <code xsi:type="core:NumberValue">
-        <value>71</value>
+        <value>139</value>
       </code>
     </items>
     <items id="c7ba1218-4713-4028-b9e7-35514690620c">
       <name>Document_SalesReturnOrder</name>
       <description>Document Sales return order</description>
       <code xsi:type="core:NumberValue">
-        <value>72</value>
+        <value>140</value>
       </code>
     </items>
     <items id="de357601-3033-45a8-b7c3-2e46ac141890">
       <name>Document_ShipmentConfirmation</name>
       <description>Document Shipment confirmation</description>
       <code xsi:type="core:NumberValue">
-        <value>73</value>
+        <value>141</value>
       </code>
     </items>
     <items id="07e4eae5-710d-4c5b-9ad8-28013e48abe9">
       <name>Document_StockAdjustmentAsSurplus</name>
       <description>Document Stock adjustment as surplus</description>
       <code xsi:type="core:NumberValue">
-        <value>74</value>
+        <value>142</value>
       </code>
     </items>
     <items id="eae67cef-3488-4f12-afb0-d130932ad37c">
       <name>Document_StockAdjustmentAsWriteOff</name>
       <description>Document Stock adjustment as write off</description>
       <code xsi:type="core:NumberValue">
-        <value>75</value>
+        <value>143</value>
       </code>
     </items>
     <items id="b8ae16fc-14a3-4f14-a1f2-11d01097bcec">
       <name>Document_Unbundling</name>
       <description>Document Unbundling</description>
       <code xsi:type="core:NumberValue">
-        <value>76</value>
+        <value>144</value>
       </code>
     </items>
     <items id="cce02b56-5a53-4cee-af83-062f1d468981">
@@ -418,7 +418,7 @@
       <name>Document_RetailSalesReceipt</name>
       <description>Document Retail sales receipt</description>
       <code xsi:type="core:NumberValue">
-        <value>68</value>
+        <value>135</value>
       </code>
     </items>
     <items id="0acebd7b-ff65-452a-b032-85a1295e1d94">
@@ -432,7 +432,7 @@
       <name>Document_RetailReturnReceipt</name>
       <description>Document Retail return receipt</description>
       <code xsi:type="core:NumberValue">
-        <value>67</value>
+        <value>134</value>
       </code>
     </items>
     <items id="6a361b94-41b0-4947-9777-628809f62438">
@@ -453,7 +453,7 @@
       <name>Document_CashStatement</name>
       <description>Document Cash statement</description>
       <code xsi:type="core:NumberValue">
-        <value>45</value>
+        <value>108</value>
       </code>
     </items>
     <items id="9fc76d05-8a26-4010-993e-b9d2e703710e">
@@ -467,21 +467,21 @@
       <name>Document_CreditNote</name>
       <description>Document Credit note</description>
       <code xsi:type="core:NumberValue">
-        <value>48</value>
+        <value>111</value>
       </code>
     </items>
     <items id="819c80cf-0def-402c-900c-7faf4b52fda1">
       <name>Document_DebitNote</name>
       <description>Document Debit note</description>
       <code xsi:type="core:NumberValue">
-        <value>49</value>
+        <value>112</value>
       </code>
     </items>
     <items id="af639881-4729-4a33-a46e-0d7a22ef12dd">
       <name>Catalog_Workstations</name>
       <description>Catalog Workstations</description>
       <code xsi:type="core:NumberValue">
-        <value>37</value>
+        <value>38</value>
       </code>
     </items>
     <items id="6e0be277-489c-449e-8b22-a6f1147a926a">
@@ -544,14 +544,14 @@
       <name>Catalog_UserGroups</name>
       <description>Catalog User groups</description>
       <code xsi:type="core:NumberValue">
-        <value>35</value>
+        <value>36</value>
       </code>
     </items>
     <items id="3a38d2cb-1b63-48aa-a4e1-8cfd219f69c6">
       <name>Document_InternalSupplyRequest</name>
       <description>Document Internal supply request</description>
       <code xsi:type="core:NumberValue">
-        <value>52</value>
+        <value>115</value>
       </code>
     </items>
     <items id="2c781412-a4ea-4fb2-b9fc-fb021c5c2bdb">
@@ -572,34 +572,41 @@
       <name>Document_ItemStockAdjustment</name>
       <description>Document Item stock adjustment</description>
       <code xsi:type="core:NumberValue">
-        <value>78</value>
+        <value>119</value>
       </code>
     </items>
     <items id="8a4cc1a3-e127-4c82-82b2-99af25bccff2">
       <name>Document_ManualRegisterEntry</name>
       <description>Document Manual register entry</description>
       <code xsi:type="core:NumberValue">
-        <value>79</value>
+        <value>121</value>
       </code>
     </items>
     <items id="a98a551d-17dc-45db-aac6-fa95fb59a46b">
       <name>Document_SalesOrderClosing</name>
       <description>Document Sales order closing</description>
       <code xsi:type="core:NumberValue">
-        <value>80</value>
+        <value>138</value>
       </code>
     </items>
     <items id="302d65dc-1ddb-4dc6-8bf1-e6f6c9edb40b">
       <name>Document_PlannedReceiptReservation</name>
       <code xsi:type="core:NumberValue">
-        <value>81</value>
+        <value>126</value>
       </code>
     </items>
     <items id="055d95f2-231c-4c1b-b4a1-94ed0a06ef67">
       <name>Document_PurchaseOrderClosing</name>
       <description>Document Purchase order closing</description>
       <code xsi:type="core:NumberValue">
-        <value>82</value>
+        <value>130</value>
+      </code>
+    </items>
+    <items id="57b57e9a-891f-4098-bc56-0f9fee811456">
+      <name>Catalog_UnitsOfMeasurement</name>
+      <description>Catalog Units of measurement</description>
+      <code xsi:type="core:NumberValue">
+        <value>35</value>
       </code>
     </items>
   </predefined>

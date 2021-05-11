@@ -146,6 +146,18 @@
     <fullTextSearch>Use</fullTextSearch>
     <dataHistory>Use</dataHistory>
   </attributes>
+  <attributes uuid="a22aa0ab-0da8-4f46-8b28-a873f38918b9">
+    <name>PackageUnit</name>
+    <synonym>
+      <key>en</key>
+      <value>Package unit</value>
+    </synonym>
+    <type>
+      <types>CatalogRef.Units</types>
+    </type>
+    <createOnInput>DontUse</createOnInput>
+    <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>
+  </attributes>
   <tabularSections uuid="e3609755-5008-429d-a577-246046f74702">
     <producedTypes>
       <objectType typeId="9654fef5-89da-4b6c-964f-8875a75a6d50" valueTypeId="15da890f-647a-418a-8809-add8417164e9"/>
