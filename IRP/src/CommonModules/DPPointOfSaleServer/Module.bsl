@@ -37,7 +37,10 @@ Function GetLastRetailSalesReceiptDoc(AddInfo = Undefined) Export
 	Return Documents.RetailSalesReceipt.EmptyRef();
 EndFunction
 
-Function GetRetailSalesReceiptPrint(Workstation, Ref, AddInfo = Undefined) Export	
+Function GetRetailSalesReceiptPrint(Ref, Workstation = Undefined, AddInfo = Undefined) Export
+	If Workstation = Undefined Then
+		Workstation = SessionParameters.Workstation;
+	EndIf;	
 	TemplateStructure = Workstation.PrintTemplate.ValueOfTemplate.Get();
 	If TemplateStructure = Undefined Then
 		Return New SpreadsheetDocument();

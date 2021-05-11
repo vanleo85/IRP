@@ -1721,3 +1721,11 @@ Function R5010B_ReconciliationStatement()
 EndFunction
 
 #EndRegion
+
+#Region PrintForm
+
+Function GetPrintForm(Ref, PrintTemplate, AddInfo = Undefined) Export
+	Return Undefined;
+EndFunction
+
+#EndRegion

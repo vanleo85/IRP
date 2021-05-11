@@ -28,7 +28,7 @@ Procedure PrintLastReceipt(Object, Cancel, AddInfo = Undefined) Export
 		Return;
 	EndIf;
 	
-	PrintResult = DPPointOfSaleServer.GetRetailSalesReceiptPrint(Object.Workstation, LastRetailSalesReceipt);
+	PrintResult = DPPointOfSaleServer.GetRetailSalesReceiptPrint(LastRetailSalesReceipt, Object.Workstation);
 	If PrintResult = Undefined Then
 		Return;
 	EndIf;
