@@ -213,6 +213,15 @@
     <usePurposes>PersonalComputer</usePurposes>
     <usePurposes>MobileDevice</usePurposes>
   </forms>
+  <forms uuid="49b3f664-3205-4236-b1da-107118ec715e">
+    <name>ChoiceFormPackageUnit</name>
+    <synonym>
+      <key>en</key>
+      <value>Choice form package unit</value>
+    </synonym>
+    <usePurposes>PersonalComputer</usePurposes>
+    <usePurposes>MobileDevice</usePurposes>
+  </forms>
   <commands uuid="d856385f-cf73-474b-bf8b-e578af0b76fa">
     <name>OpenUnits</name>
     <synonym>

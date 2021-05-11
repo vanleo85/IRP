@@ -336,8 +336,10 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:DataPath">
-            <segments>Object.PackageUnit</segments>
+          <dataPath xsi:type="form:MultiLanguageDataPath">
+            <paths xsi:type="form:DataPath">
+              <segments>Object.PackageUnit</segments>
+            </paths>
           </dataPath>
           <extendedTooltip>
             <name>PackageUnitExtendedTooltip</name>
@@ -376,6 +378,12 @@
             <chooseType>true</chooseType>
             <typeDomainEnabled>true</typeDomainEnabled>
             <textEdit>true</textEdit>
+            <choiceParameterLinks>
+              <name>Filter.BasisUnit</name>
+              <datapath xsi:type="form:DataPath">
+                <segments>Object.Unit</segments>
+              </datapath>
+            </choiceParameterLinks>
           </extInfo>
         </items>
         <items xsi:type="form:Decoration">

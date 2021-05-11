@@ -155,7 +155,19 @@
     <type>
       <types>CatalogRef.Units</types>
     </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <choiceParameterLinks>
+      <name>Filter.Item</name>
+      <field>Catalog.Items.StandardAttribute.Ref</field>
+    </choiceParameterLinks>
+    <choiceParameterLinks>
+      <name>Filter.BasisUnit</name>
+      <field>Catalog.Items.Attribute.Unit</field>
+    </choiceParameterLinks>
     <createOnInput>DontUse</createOnInput>
+    <choiceForm>Catalog.Units.Form.ChoiceFormPackageUnit</choiceForm>
+    <fillValue xsi:type="core:UndefinedValue"/>
     <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>
   </attributes>
   <tabularSections uuid="e3609755-5008-429d-a577-246046f74702">

@@ -24,7 +24,6 @@ Procedure ListBeforeAddRow(Item, Cancel, Clone, Parent, IsFolder, Parameter)
 	OpenForm("Catalog.Units.ObjectForm", Filter);
 EndProcedure
 
-
 &AtClient
 Procedure ShowAllUnits(Command)
 	Items.FormShowAllUnits.Check = Not Items.FormShowAllUnits.Check;
