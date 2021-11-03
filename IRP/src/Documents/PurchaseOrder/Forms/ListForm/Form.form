@@ -59,10 +59,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Number</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Number</segments>
       </dataPath>
       <defaultItem>true</defaultItem>
       <extendedTooltip>
@@ -108,10 +106,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Date</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Date</segments>
       </dataPath>
       <extendedTooltip>
         <name>DateExtendedTooltip</name>
@@ -156,10 +152,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Status</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Status</segments>
       </dataPath>
       <extendedTooltip>
         <name>StatusExtendedTooltip</name>
@@ -251,10 +245,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Partner</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Partner</segments>
       </dataPath>
       <extendedTooltip>
         <name>PartnerExtendedTooltip</name>
@@ -303,10 +295,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.LegalName</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.LegalName</segments>
       </dataPath>
       <extendedTooltip>
         <name>LegalNameExtendedTooltip</name>
@@ -355,10 +345,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.DocumentAmount</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.DocumentAmount</segments>
       </dataPath>
       <extendedTooltip>
         <name>DocumentAmountExtendedTooltip</name>
@@ -407,10 +395,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Currency</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Currency</segments>
       </dataPath>
       <extendedTooltip>
         <name>CurrencyExtendedTooltip</name>
@@ -459,10 +445,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Company</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Company</segments>
       </dataPath>
       <extendedTooltip>
         <name>CompanyExtendedTooltip</name>
@@ -561,10 +545,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Author</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Author</segments>
       </dataPath>
       <extendedTooltip>
         <name>AuthorExtendedTooltip</name>
@@ -613,10 +595,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Ref</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Ref</segments>
       </dataPath>
       <extendedTooltip>
         <name>RefExtendedTooltip</name>
@@ -888,7 +868,6 @@
 	PurchaseOrderList.Agreement,
 	PurchaseOrderList.Company,
 	PurchaseOrderList.Currency,
-	PurchaseOrderList.GoodsReceiptBeforePurchaseInvoice,
 	PurchaseOrderList.LegalName,
 	PurchaseOrderList.Partner,
 	PurchaseOrderList.PriceIncludeTax,
@@ -896,7 +875,7 @@
 	PurchaseOrderList.PartnerBankAccount,
 	PurchaseOrderList.UseItemsReceiptScheduling,
 	PurchaseOrderList.Author,
-	PurchaseOrderList.BusinessUnit,
+	PurchaseOrderList.Branch,
 	PurchaseOrderList.Description,
 	PurchaseOrderList.DocumentAmount,
 	Not PurchaseOrderClosing.Ref IS NULL AS Closed,
@@ -921,7 +900,6 @@ GROUP BY
 	PurchaseOrderList.Agreement,
 	PurchaseOrderList.Company,
 	PurchaseOrderList.Currency,
-	PurchaseOrderList.GoodsReceiptBeforePurchaseInvoice,
 	PurchaseOrderList.LegalName,
 	PurchaseOrderList.Partner,
 	PurchaseOrderList.PriceIncludeTax,
@@ -929,7 +907,7 @@ GROUP BY
 	PurchaseOrderList.PartnerBankAccount,
 	PurchaseOrderList.UseItemsReceiptScheduling,
 	PurchaseOrderList.Author,
-	PurchaseOrderList.BusinessUnit,
+	PurchaseOrderList.Branch,
 	PurchaseOrderList.Description,
 	PurchaseOrderList.DocumentAmount,
 	NOT PurchaseOrderClosing.Ref IS NULL,

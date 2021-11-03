@@ -108,13 +108,6 @@
 		</right>
 	</object>
 	<object>
-		<name>Document.ChequeBondTransactionItem</name>
-		<right>
-			<name>InteractiveDelete</name>
-			<value>false</value>
-		</right>
-	</object>
-	<object>
 		<name>Document.Labeling</name>
 		<right>
 			<name>InteractiveDelete</name>
@@ -641,13 +634,6 @@
 		</right>
 	</object>
 	<object>
-		<name>Document.ChequeBondTransaction</name>
-		<right>
-			<name>InteractiveDelete</name>
-			<value>false</value>
-		</right>
-	</object>
-	<object>
 		<name>Catalog.AccessProfiles</name>
 		<right>
 			<name>InteractiveDelete</name>
@@ -733,6 +719,17 @@
 		</right>
 		<right>
 			<name>InteractiveDeleteMarkedPredefinedData</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Catalog.CancelReturnReasons</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+		<right>
+			<name>InteractiveDeletePredefinedData</name>
 			<value>false</value>
 		</right>
 	</object>
@@ -864,6 +861,13 @@
 	</object>
 	<object>
 		<name>Document.Bundling</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
+		<name>Document.PurchaseOrderClosing</name>
 		<right>
 			<name>InteractiveDelete</name>
 			<value>false</value>
@@ -1110,6 +1114,13 @@
 		</right>
 	</object>
 	<object>
+		<name>Document.PlannedReceiptReservation</name>
+		<right>
+			<name>InteractiveDelete</name>
+			<value>false</value>
+		</right>
+	</object>
+	<object>
 		<name>ChartOfCharacteristicTypes.CurrencyMovementType</name>
 		<right>
 			<name>InteractiveDelete</name>
@@ -1290,27 +1301,6 @@
 		</right>
 		<right>
 			<name>InteractiveDeleteMarkedPredefinedData</name>
-			<value>false</value>
-		</right>
-	</object>
-	<object>
-		<name>Document.PlannedReceiptReservation</name>
-		<right>
-			<name>InteractiveDelete</name>
-			<value>false</value>
-		</right>
-	</object>
-	<object>
-		<name>Catalog.CancelReturnReasons</name>
-		<right>
-			<name>InteractiveDelete</name>
-			<value>false</value>
-		</right>
-	</object>
-	<object>
-		<name>Document.PurchaseOrderClosing</name>
-		<right>
-			<name>InteractiveDelete</name>
 			<value>false</value>
 		</right>
 	</object>

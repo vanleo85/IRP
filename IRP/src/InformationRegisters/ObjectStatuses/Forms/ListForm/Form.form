@@ -59,10 +59,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Period</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Period</segments>
       </dataPath>
       <defaultItem>true</defaultItem>
       <extendedTooltip>
@@ -108,10 +106,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Object</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Object</segments>
       </dataPath>
       <extendedTooltip>
         <name>ObjectExtendedTooltip</name>
@@ -156,10 +152,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Status</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Status</segments>
       </dataPath>
       <extendedTooltip>
         <name>StatusExtendedTooltip</name>
@@ -204,10 +198,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Author</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Author</segments>
       </dataPath>
       <extendedTooltip>
         <name>AuthorExtendedTooltip</name>

@@ -14,10 +14,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.Code</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.Code</segments>
         </dataPath>
         <extendedTooltip>
           <name>CodeExtendedTooltip</name>
@@ -66,10 +64,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.Item</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.Item</segments>
         </dataPath>
         <handlers>
           <event>OnChange</event>
@@ -122,10 +118,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemType</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemType</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemTypeExtendedTooltip</name>
@@ -171,10 +165,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.ItemKeyID</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.ItemKeyID</segments>
         </dataPath>
         <extendedTooltip>
           <name>ExtendedTooltip</name>
@@ -228,10 +220,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>InheritUnit</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>InheritUnit</segments>
             </dataPath>
             <extendedTooltip>
               <name>InheritUnitExtendedTooltip</name>
@@ -277,10 +267,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Object.Unit</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Object.Unit</segments>
             </dataPath>
             <extendedTooltip>
               <name>OwnUnitExtendedTooltip</name>
@@ -337,10 +325,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>UnitMode</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>UnitMode</segments>
             </dataPath>
             <titleLocation>None</titleLocation>
             <handlers>
@@ -439,10 +425,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>SpecificationMode</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>SpecificationMode</segments>
             </dataPath>
             <handlers>
               <event>OnChange</event>
@@ -490,10 +474,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Object.Specification</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Object.Specification</segments>
             </dataPath>
             <titleLocation>None</titleLocation>
             <handlers>
@@ -614,10 +596,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Length</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Length</segments>
           </dataPath>
           <handlers>
             <event>OnChange</event>
@@ -670,10 +650,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Width</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Width</segments>
           </dataPath>
           <handlers>
             <event>OnChange</event>
@@ -726,10 +704,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Height</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Height</segments>
           </dataPath>
           <handlers>
             <event>OnChange</event>
@@ -782,10 +758,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Volume</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Volume</segments>
           </dataPath>
           <extendedTooltip>
             <name>VolumeExtendedTooltip</name>
@@ -878,10 +852,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Weight</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Weight</segments>
           </dataPath>
           <extendedTooltip>
             <name>WeightExtendedTooltip</name>
@@ -1046,10 +1018,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.UniqueMD5</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.UniqueMD5</segments>
           </dataPath>
           <extendedTooltip>
             <name>UniqueMD5ExtendedTooltip</name>
@@ -1099,10 +1069,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.AffectPricingMD5</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.AffectPricingMD5</segments>
           </dataPath>
           <extendedTooltip>
             <name>AffectPricingMD5ExtendedTooltip</name>
@@ -1164,10 +1132,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Object.SpecificationAffectPricingMD5.LineNumber</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Object.SpecificationAffectPricingMD5.LineNumber</segments>
             </dataPath>
             <extendedTooltip>
               <name>SpecificationAffectPricingMD5LineNumberExtendedTooltip</name>
@@ -1216,10 +1182,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Object.SpecificationAffectPricingMD5.Key</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Object.SpecificationAffectPricingMD5.Key</segments>
             </dataPath>
             <extendedTooltip>
               <name>SpecificationAffectPricingMD5KeyExtendedTooltip</name>
@@ -1264,10 +1228,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Object.SpecificationAffectPricingMD5.AffectPricingMD5</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Object.SpecificationAffectPricingMD5.AffectPricingMD5</segments>
             </dataPath>
             <extendedTooltip>
               <name>SpecificationAffectPricingMD5AffectPricingMD5ExtendedTooltip</name>
@@ -1556,10 +1518,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>PictureViewHTML</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>PictureViewHTML</segments>
         </dataPath>
         <titleLocation>None</titleLocation>
         <extendedTooltip>
@@ -1620,10 +1580,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>AddAttributeViewHTML</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>AddAttributeViewHTML</segments>
         </dataPath>
         <titleLocation>None</titleLocation>
         <extendedTooltip>

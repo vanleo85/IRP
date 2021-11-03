@@ -60,10 +60,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Code</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Code</segments>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -116,10 +114,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Description</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Description</segments>
       </dataPath>
       <extendedTooltip>
         <name>DescriptionExtendedTooltip</name>
@@ -168,10 +164,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.SetByDefault</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.SetByDefault</segments>
       </dataPath>
       <extendedTooltip>
         <name>SetByDefaultExtendedTooltip</name>
@@ -213,10 +207,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Posting</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Posting</segments>
       </dataPath>
       <extendedTooltip>
         <name>PostedExtendedTooltip</name>
@@ -262,10 +254,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.PredefinedDataName</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.PredefinedDataName</segments>
       </dataPath>
       <extendedTooltip>
         <name>PredefinedDataNameExtendedTooltip</name>
@@ -314,10 +304,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Ref</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Ref</segments>
       </dataPath>
       <extendedTooltip>
         <name>RefExtendedTooltip</name>

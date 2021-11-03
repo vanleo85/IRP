@@ -55,19 +55,19 @@ Scenario: _0230000 preparation (Sales order closing)
 		When Create document SalesOrder objects (SI before SC for check closing)
 		And I execute 1C:Enterprise script at server
  			| "Documents.SalesOrder.FindByNumber(32).GetObject().Write(DocumentWriteMode.Posting);" |
+		
 
 Scenario: _0230001 create and check filling Sales order closing (SO not shipped)
 	* Create Sales order closing 
 		Given I open hyperlink "e1cib/list/Document.SalesOrder"
 		And I go to line in "List" table
-			| 'Number'  |
-			| '32' |
+			| 'Number'  | 'Date'                |
+			| '32'      | '09.02.2021 19:53:45'	|	
 		And I click the button named "FormDocumentSalesOrderClosingGenerateSalesOrderClosing"
 	* Check filling in
 		Then the form attribute named "Partner" became equal to "Ferron BP"
 		Then the form attribute named "LegalName" became equal to "Company Ferron BP"
 		Then the form attribute named "Agreement" became equal to "Basic Partner terms, TRY"
-		Then the form attribute named "Status" became equal to "Approved"
 		Then the form attribute named "Company" became equal to "Main Company"
 		Then the form attribute named "Store" became equal to "Store 02"
 		Then the form attribute named "SalesOrder" became equal to "Sales order 32 dated 09.02.2021 19:53:45"
@@ -120,6 +120,12 @@ Scenario: _0230001 create and check filling Sales order closing (SO not shipped)
 		And I click Open button of "Sales order" field
 		Then the form attribute named "ClosingOrder" became equal to "$$SalesOrderClosing0230001$$"
 		And I close all client application windows
+	* Check creation
+		Given I open hyperlink "e1cib/list/Document.SalesOrderClosing"
+		And "List" table contains lines
+			| 'Number'                |
+			| '$$NumberSalesOrderClosing0230001$$' |
+		And I close all client application windows
 	
 
 Scenario: _0230002 create and check filling Sales order closing (SO partially shipped)
@@ -141,24 +147,56 @@ Scenario: _0230002 create and check filling Sales order closing (SO partially sh
 		And I close all client application windows
 		Given I open hyperlink "e1cib/list/Document.SalesOrder"
 		And I go to line in "List" table
-			| 'Number'  |
-			| '32' |
+			| 'Number'  | 'Date'                |
+			| '32'      | '09.02.2021 19:53:45'	|
 		And I click the button named "FormDocumentSalesOrderClosingGenerateSalesOrderClosing"	
 	* Check filling in
 		Then the form attribute named "Partner" became equal to "Ferron BP"
 		Then the form attribute named "LegalName" became equal to "Company Ferron BP"
 		Then the form attribute named "Agreement" became equal to "Basic Partner terms, TRY"
 		Then the form attribute named "Description" became equal to "Click to enter description"
-		Then the form attribute named "Status" became equal to "Approved"
 		Then the form attribute named "Company" became equal to "Main Company"
 		Then the form attribute named "Store" became equal to "Store 02"
 		Then the form attribute named "SalesOrder" became equal to "Sales order 32 dated 09.02.2021 19:53:45"
 		And "ItemList" table contains lines
-			| 'Business unit'           | 'Price type'              | 'Item'    | 'Dont calculate row' | 'Q'      | 'Unit' | 'Tax amount' | 'Price'    | 'Offers amount' | 'Net amount' | 'Total amount' | 'Store'    | 'Revenue type' | 'Detail' | 'Item key' | 'Procurement method' | 'Cancel' | 'Delivery date' | 'Cancel reason' |
+			| 'Profit loss center'      | 'Price type'              | 'Item'    | 'Dont calculate row' | 'Q'      | 'Unit' | 'Tax amount' | 'Price'    | 'Offers amount' | 'Net amount' | 'Total amount' | 'Store'    | 'Revenue type' | 'Detail' | 'Item key' | 'Procurement method' | 'Cancel' | 'Delivery date' | 'Cancel reason' |
 			| 'Distribution department' | 'Basic Price Types'       | 'Shirt'   | 'No'                 | '1,000'  | 'pcs'  | '53,39'      | '350,00'   | ''              | '296,61'     | '350,00'       | 'Store 02' | 'Revenue'      | ''       | '36/Red'   | 'No reserve'         | 'Yes'    | '09.02.2021'    | ''              |
 			| 'Distribution department' | 'Basic Price Types'       | 'Boots'   | 'No'                 | '24,000' | 'pcs'  | '2 562,71'   | '8 400,00' | ''              | '14 237,29'  | '16 800,00'    | 'Store 02' | 'Revenue'      | ''       | '37/18SD'  | 'Purchase'           | 'Yes'    | '09.02.2021'    | ''              |
 			| 'Front office'            | 'en description is empty' | 'Service' | 'No'                 | '1,000'  | 'pcs'  | '15,25'      | '100,00'   | ''              | '84,75'      | '100,00'       | 'Store 02' | 'Revenue'      | ''       | 'Interner' | ''                   | 'Yes'    | '09.02.2021'    | ''              |
 		Then the number of "ItemList" table lines is "equal" "3"
+		And I go to line in "ItemList" table
+			| '#' |
+			| '1' |
+		And I select current line in "ItemList" table
+		And I click choice button of "Cancel reason" attribute in "ItemList" table
+		And I select current line in "List" table
+		And I finish line editing in "ItemList" table
+		And I go to line in "ItemList" table
+			| '#' |
+			| '2' |
+		And I select current line in "ItemList" table
+		And I click choice button of "Cancel reason" attribute in "ItemList" table
+		And I select current line in "List" table
+		And I finish line editing in "ItemList" table
+		And I go to line in "ItemList" table
+			| '#' |
+			| '3' |
+		And I select current line in "ItemList" table
+		And I click choice button of "Cancel reason" attribute in "ItemList" table
+		And I select current line in "List" table
+		And I finish line editing in "ItemList" table
+		And I click "Post and close" button
+	* Check SO mark
+		Given I open hyperlink "e1cib/list/Document.SalesOrder"
+		And "List" table contains lines
+			| 'Number' | 'Closed' |
+			| '32'     | 'Yes'    |
+	* Repost SO
+		And I go to line in "List" table
+			| 'Number' |
+			| '32' |
+		And in the table "List" I click the button named "ListContextMenuPost"
+		Then user message window does not contain messages
 		And I close all client application windows
 
 
@@ -204,7 +242,7 @@ Scenario: _0230002 create and check filling Sales order closing (SO partially sh
 # 		And I click "Fill by order" button
 # 		Then the form attribute named "Store" became equal to "Store 02"
 # 		And "ItemList" table contains lines
-# 			| 'Business unit'           | 'Price type'              | 'Item'    | 'Dont calculate row' | 'Q'      | 'Unit' | 'Tax amount' | 'Price'    | 'Offers amount' | 'Net amount' | 'Total amount' | 'Store'    | 'Revenue type' | 'Detail' | 'Item key' | 'Procurement method' | 'Cancel' | 'Delivery date' | 'Cancel reason' |
+# 			| 'Profit loss center'           | 'Price type'              | 'Item'    | 'Dont calculate row' | 'Q'      | 'Unit' | 'Tax amount' | 'Price'    | 'Offers amount' | 'Net amount' | 'Total amount' | 'Store'    | 'Revenue type' | 'Detail' | 'Item key' | 'Procurement method' | 'Cancel' | 'Delivery date' | 'Cancel reason' |
 # 			| 'Distribution department' | 'Basic Price Types'       | 'Shirt'   | 'No'                 | '1,000'  | 'pcs'  | '53,39'      | '350,00'   | ''              | '296,61'     | '350,00'       | 'Store 02' | 'Revenue'      | ''       | '36/Red'   | 'No reserve'         | 'Yes'    | '09.02.2021'    | ''              |
 # 			| 'Distribution department' | 'Basic Price Types'       | 'Boots'   | 'No'                 | '24,000' | 'pcs'  | '2 562,71'   | '8 400,00' | ''              | '14 237,29'  | '16 800,00'    | 'Store 02' | 'Revenue'      | ''       | '37/18SD'  | 'Purchase'           | 'Yes'    | '09.02.2021'    | ''              |
 # 			| 'Front office'            | 'en description is empty' | 'Service' | 'No'                 | '1,000'  | 'pcs'  | '15,25'      | '100,00'   | ''              | '84,75'      | '100,00'       | 'Store 02' | 'Revenue'      | ''       | 'Interner' | ''                   | 'Yes'    | '09.02.2021'    | ''              |

@@ -11,10 +11,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>PictureViewHTML</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>PictureViewHTML</segments>
       </dataPath>
       <titleLocation>None</titleLocation>
       <extendedTooltip>
@@ -87,10 +85,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Object.Code</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Object.Code</segments>
             </dataPath>
             <extendedTooltip>
               <name>CodeExtendedTooltip</name>
@@ -168,10 +164,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.ItemID</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.ItemID</segments>
           </dataPath>
           <extendedTooltip>
             <name>ExtendedTooltip</name>
@@ -220,10 +214,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.ItemType</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.ItemType</segments>
           </dataPath>
           <handlers>
             <event>OnChange</event>
@@ -276,10 +268,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Unit</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Unit</segments>
           </dataPath>
           <extendedTooltip>
             <name>UnitExtendedTooltip</name>
@@ -326,6 +316,62 @@
                 </value>
               </value>
             </choiceParameters>
+          </extInfo>
+        </items>
+        <items xsi:type="form:FormField">
+          <name>PackageUnit</name>
+          <id>167</id>
+          <visible>true</visible>
+          <enabled>true</enabled>
+          <userVisible>
+            <common>true</common>
+          </userVisible>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.PackageUnit</segments>
+          </dataPath>
+          <extendedTooltip>
+            <name>PackageUnitExtendedTooltip</name>
+            <id>169</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <type>Label</type>
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <extInfo xsi:type="form:LabelDecorationExtInfo">
+              <horizontalAlign>Left</horizontalAlign>
+            </extInfo>
+          </extendedTooltip>
+          <contextMenu>
+            <name>PackageUnitContextMenu</name>
+            <id>168</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <autoFill>true</autoFill>
+          </contextMenu>
+          <type>InputField</type>
+          <editMode>Enter</editMode>
+          <showInHeader>true</showInHeader>
+          <headerHorizontalAlign>Left</headerHorizontalAlign>
+          <showInFooter>true</showInFooter>
+          <extInfo xsi:type="form:InputFieldExtInfo">
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <wrap>true</wrap>
+            <chooseType>true</chooseType>
+            <typeDomainEnabled>true</typeDomainEnabled>
+            <textEdit>true</textEdit>
+            <choiceParameterLinks>
+              <name>Filter.Item</name>
+              <datapath xsi:type="form:DataPath">
+                <segments>Object.Ref</segments>
+              </datapath>
+            </choiceParameterLinks>
           </extInfo>
         </items>
         <items xsi:type="form:Decoration">
@@ -376,10 +422,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Vendor</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Vendor</segments>
           </dataPath>
           <extendedTooltip>
             <name>VendorExtendedTooltip</name>
@@ -431,10 +475,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Object.Length</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Object.Length</segments>
             </dataPath>
             <handlers>
               <event>OnChange</event>
@@ -487,10 +529,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Object.Width</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Object.Width</segments>
             </dataPath>
             <handlers>
               <event>OnChange</event>
@@ -543,10 +583,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Object.Height</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Object.Height</segments>
             </dataPath>
             <handlers>
               <event>OnChange</event>
@@ -599,10 +637,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Object.Volume</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Object.Volume</segments>
             </dataPath>
             <extendedTooltip>
               <name>VolumeExtendedTooltip</name>
@@ -695,10 +731,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Object.Weight</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Object.Weight</segments>
             </dataPath>
             <extendedTooltip>
               <name>WeightExtendedTooltip</name>
@@ -1103,10 +1137,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>AddAttributeViewHTML</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>AddAttributeViewHTML</segments>
       </dataPath>
       <titleLocation>None</titleLocation>
       <extendedTooltip>
@@ -1328,14 +1360,6 @@
         </commandParameter>
         <group>FormNavigationPanelGoTo</group>
         <index>4</index>
-      </cmiFragmentRecord>
-      <cmiFragmentRecord>
-        <command>InformationRegister.AttachedFiles.StandardCommand.OpenByValue.Owner</command>
-        <commandParameter xsi:type="form:DataPath">
-          <segments>Object.Ref</segments>
-        </commandParameter>
-        <group>FormNavigationPanelGoTo</group>
-        <index>5</index>
       </cmiFragmentRecord>
       <cmiFragmentRecord>
         <command>InformationRegister.BarcodeScanInfoCheck.StandardCommand.OpenByValue.Item</command>

@@ -277,6 +277,10 @@
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
+      <choiceParameterLinks>
+        <name>Filter.Owner</name>
+        <field>Catalog.ItemKeys.TabularSection.AddAttributes.Attribute.Property</field>
+      </choiceParameterLinks>
       <dataHistory>Use</dataHistory>
     </attributes>
     <attributes uuid="e53a367f-90d3-4a96-ad79-25b5f4a2d993">
@@ -376,7 +380,6 @@
     <commandParameterType>
       <types>CatalogRef.Items</types>
     </commandParameterType>
-    <shortcut></shortcut>
   </commands>
   <commands uuid="b00c47bb-8914-4d6c-8844-bf797375de3c">
     <name>UpdateItemKeysDescription</name>
@@ -390,6 +393,5 @@
     </commandParameterType>
     <modifiesData>true</modifiesData>
     <representation>Auto</representation>
-    <shortcut></shortcut>
   </commands>
 </mdclass:Catalog>

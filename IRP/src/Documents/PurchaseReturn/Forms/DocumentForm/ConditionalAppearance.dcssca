@@ -247,6 +247,9 @@
 			<item>
 				<field>ShipmentConfirmationsTreeShipmentConfirmation</field>
 			</item>
+			<item>
+				<field>ShipmentConfirmationsTreePictureDocument</field>
+			</item>
 		</selection>
 		<filter>
 			<item xsi:type="FilterItemComparison">
@@ -269,6 +272,9 @@
 			</item>
 			<item>
 				<field>ShipmentConfirmationsTreeItemKey</field>
+			</item>
+			<item>
+				<field>ShipmentConfirmationsTreePictureItem</field>
 			</item>
 		</selection>
 		<filter>
@@ -379,32 +385,6 @@
 				<left xsi:type="dcscor:Field">ShipmentConfirmationsTree.Level</left>
 				<comparisonType>Equal</comparisonType>
 				<right xsi:type="xs:decimal">1</right>
-			</item>
-		</filter>
-		<appearance>
-			<dcscor:item xsi:type="SettingsParameterValue">
-				<dcscor:parameter>ReadOnly</dcscor:parameter>
-				<dcscor:value xsi:type="xs:boolean">true</dcscor:value>
-			</dcscor:item>
-		</appearance>
-	</item>
-	<item>
-		<selection>
-			<item>
-				<field>ItemListItem</field>
-			</item>
-			<item>
-				<field>ItemListItemKey</field>
-			</item>
-			<item>
-				<field>ItemListPurchaseReturnOrder</field>
-			</item>
-		</selection>
-		<filter>
-			<item xsi:type="FilterItemComparison">
-				<left xsi:type="dcscor:Field">Object.ItemList.LockedRow</left>
-				<comparisonType>Equal</comparisonType>
-				<right xsi:type="xs:boolean">true</right>
 			</item>
 		</filter>
 		<appearance>

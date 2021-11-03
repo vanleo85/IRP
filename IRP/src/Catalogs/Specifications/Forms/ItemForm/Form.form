@@ -11,10 +11,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Code</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Code</segments>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -95,10 +93,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.UniqueMD5</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.UniqueMD5</segments>
       </dataPath>
       <extendedTooltip>
         <name>UniqueMD5ExtendedTooltip</name>
@@ -188,10 +184,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Type</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Type</segments>
       </dataPath>
       <handlers>
         <event>OnChange</event>
@@ -257,10 +251,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.ItemBundle</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.ItemBundle</segments>
       </dataPath>
       <extendedTooltip>
         <name>ItemBundleExtendedTooltip</name>

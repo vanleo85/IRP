@@ -71,10 +71,6 @@
     <use>Use</use>
   </content>
   <content>
-    <metadata>Document.ChequeBondTransaction</metadata>
-    <use>Use</use>
-  </content>
-  <content>
     <metadata>Document.CashRevenue</metadata>
     <use>Use</use>
   </content>
@@ -100,6 +96,10 @@
   </content>
   <content>
     <metadata>Document.Bundling</metadata>
+    <use>Use</use>
+  </content>
+  <content>
+    <metadata>Document.PurchaseOrderClosing</metadata>
     <use>Use</use>
   </content>
   <content>
@@ -159,6 +159,10 @@
     <use>Use</use>
   </content>
   <content>
+    <metadata>Document.PlannedReceiptReservation</metadata>
+    <use>Use</use>
+  </content>
+  <content>
     <metadata>Document.CreditNote</metadata>
     <use>Use</use>
   </content>
@@ -184,14 +188,6 @@
   </content>
   <content>
     <metadata>Document.CashStatement</metadata>
-    <use>Use</use>
-  </content>
-  <content>
-    <metadata>Document.PlannedReceiptReservation</metadata>
-    <use>Use</use>
-  </content>
-  <content>
-    <metadata>Document.PurchaseOrderClosing</metadata>
     <use>Use</use>
   </content>
   <autoUse>DontUse</autoUse>

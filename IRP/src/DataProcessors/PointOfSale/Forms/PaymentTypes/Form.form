@@ -41,6 +41,7 @@
         <font>Style.NormalTextFont</font>
         <height>20.0</height>
       </font>
+      <toolTipRepresentation>Auto</toolTipRepresentation>
       <representationInContextMenu>Auto</representationInContextMenu>
     </items>
     <visible>true</visible>

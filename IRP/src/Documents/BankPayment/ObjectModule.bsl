@@ -3,13 +3,20 @@ Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 		Return;
 	EndIf;
 	
-	ThisObject.DocumentAmount = ThisObject.PaymentList.Total("Amount");
+	CurrenciesClientServer.DeleteUnusedRowsFromCurrenciesTable(ThisObject.Currencies, ThisObject.PaymentList);
+	For Each Row In ThisObject.PaymentList Do
+		Parameters = CurrenciesClientServer.GetParameters_V8(ThisObject, Row);
+		CurrenciesClientServer.DeleteRowsByKeyFromCurrenciesTable(ThisObject.Currencies, Row.Key);
+		CurrenciesServer.UpdateCurrencyTable(Parameters, ThisObject.Currencies);
+	EndDo;
+	
+	ThisObject.DocumentAmount = ThisObject.PaymentList.Total("TotalAmount");
 EndProcedure
 
 Procedure OnWrite(Cancel)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
 EndProcedure
 
 Procedure BeforeDelete(Cancel)
@@ -32,10 +39,9 @@ Procedure UndoPosting(Cancel)
 EndProcedure
 
 Procedure Filling(FillingData, FillingText, StandardProcessing)
-	If TypeOf(FillingData) = Type("Structure") And FillingData.Property("BasedOn")   Then
-		If  FillingData.BasedOn = "CashTransferOrder" Or
-				FillingData.BasedOn = "OutgoingPaymentOrder" Or
-				FillingData.BasedOn = "PurchaseInvoice" Then
+	If TypeOf(FillingData) = Type("Structure") And FillingData.Property("BasedOn") Then
+		If FillingData.BasedOn = "CashTransferOrder" Or FillingData.BasedOn = "OutgoingPaymentOrder"
+			Or FillingData.BasedOn = "PurchaseInvoice" Then
 			Filling_BasedOn(FillingData);
 		EndIf;
 	EndIf;
@@ -43,24 +49,18 @@ Procedure Filling(FillingData, FillingText, StandardProcessing)
 		If Not ValueIsFilled(Row.Key) Then
 			Row.Key = New UUID();
 		EndIf;
-		AgreementInfo = Undefined;
-		If ValueIsFilled(Row.BasisDocument) 
-			And Row.BasisDocument.Metadata().Attributes.Find("Agreement") <> Undefined
-			And ValueIsFilled(Row.BasisDocument.Agreement) Then
-			AgreementInfo = CatAgreementsServer.GetAgreementInfo(Row.BasisDocument.Agreement);
-		EndIf;
 	EndDo;
 EndProcedure
 
 Procedure Filling_BasedOn(FillingData)
-	ThisObject.Company = FillingData.Company;
-	ThisObject.Account = FillingData.Account;
-	ThisObject.TransitAccount = FillingData.TransitAccount;
-	ThisObject.Currency = FillingData.Currency;
+	ThisObject.Company         = FillingData.Company;
+	ThisObject.Account         = FillingData.Account;
+	ThisObject.TransitAccount  = FillingData.TransitAccount;
+	ThisObject.Currency        = FillingData.Currency;
 	ThisObject.TransactionType = FillingData.TransactionType;
 	For Each Row In FillingData.PaymentList Do
 		NewRow = ThisObject.PaymentList.Add();
 		FillPropertyValues(NewRow, Row);
 	EndDo;
-	ThisObject.DocumentAmount = ThisObject.PaymentList.Total("Amount");
+	ThisObject.DocumentAmount = ThisObject.PaymentList.Total("TotalAmount");
 EndProcedure

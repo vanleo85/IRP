@@ -1,14 +1,13 @@
-
 Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
 EndProcedure
 
 Procedure OnWrite(Cancel)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
 EndProcedure
 
 Procedure BeforeDelete(Cancel)
@@ -26,26 +25,22 @@ Procedure UndoPosting(Cancel)
 EndProcedure
 
 Procedure Filling(FillingData, FillingText, StandardProcessing)
-	If TypeOf(FillingData) = Type("Structure") Then
-		If FillingData.Property("BasedOn") And FillingData.BasedOn = "PhysicalInventory" Then
-			Filling_BasedOn(FillingData);
-		EndIf;
+	If TypeOf(FillingData) = Type("Structure") And FillingData.Property("BasedOn") Then
+		FillPropertyValues(ThisObject, FillingData, RowIDInfoServer.GetSeperatorColumns(ThisObject.Metadata()));
+		RowIDInfoServer.AddLinkedDocumentRows(ThisObject, FillingData);
 	EndIf;
-EndProcedure
-
-Procedure Filling_BasedOn(FillingData)
-	FillPropertyValues(ThisObject, FillingData, "Store");
-	For Each Row In FillingData.ItemList Do
-		NewRow = ThisObject.ItemList.Add();
-		FillPropertyValues(NewRow, Row);
-		If Not ValueIsFilled(NewRow.Key) Then
-			NewRow.Key = New UUID();
-		EndIf;
-	EndDo;
 EndProcedure
 
 Procedure FillCheckProcessing(Cancel, CheckedAttributes)
 	If Not SerialLotNumbersServer.CheckFilling(ThisObject) Then
 		Cancel = True;
-	EndIf;	
+	EndIf;
+	If Not Cancel = True Then
+		LinkedFilter = RowIDInfoClientServer.GetLinkedDocumentsFilter_StockAdjustmentAsSurplus(ThisObject);
+		RowIDInfoTable = ThisObject.RowIDInfo.Unload();
+		ItemListTable = ThisObject.ItemList.Unload(,"Key, LineNumber, ItemKey");
+		ItemListTable.Columns.Add("Store", New TypeDescription("CatalogRef.Stores"));
+		ItemListTable.FillValues(ThisObject.Store, "Store");
+		RowIDInfoServer.FillCheckProcessing(ThisObject, Cancel, LinkedFilter, RowIDInfoTable, ItemListTable);
+	EndIf;
 EndProcedure

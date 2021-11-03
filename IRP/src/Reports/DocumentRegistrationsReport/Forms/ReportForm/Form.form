@@ -33,6 +33,7 @@
       <autoMaxWidth>true</autoMaxWidth>
       <autoMaxHeight>true</autoMaxHeight>
       <placementArea>UserCmds</placementArea>
+      <toolTipRepresentation>Auto</toolTipRepresentation>
       <representationInContextMenu>Auto</representationInContextMenu>
     </items>
     <items xsi:type="form:FormField">
@@ -43,10 +44,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>FilterRegister</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>FilterRegister</segments>
       </dataPath>
       <extendedTooltip>
         <name>FilterRegisterExtendedTooltip</name>
@@ -96,10 +95,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Document</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Document</segments>
       </dataPath>
       <extendedTooltip>
         <name>DocumentExtendedTooltip</name>
@@ -152,10 +149,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>PutInTable</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>PutInTable</segments>
       </dataPath>
       <extendedTooltip>
         <name>PutInTableExtendedTooltip</name>
@@ -203,10 +198,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>ShowItemInItemKey</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>ShowItemInItemKey</segments>
       </dataPath>
       <extendedTooltip>
         <name>ShowItemInItemKeyExtendedTooltip</name>
@@ -277,10 +270,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>ResultTable</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>ResultTable</segments>
     </dataPath>
     <titleLocation>None</titleLocation>
     <extendedTooltip>
@@ -375,9 +366,7 @@
       <value>Document</value>
     </title>
     <id>3</id>
-    <valueType>
-      <types>DocumentRef</types>
-    </valueType>
+    <valueType/>
     <view>
       <common>true</common>
     </view>

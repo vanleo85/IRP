@@ -11,10 +11,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Code</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Code</segments>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -92,10 +90,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.Parent</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.Parent</segments>
     </dataPath>
     <extendedTooltip>
       <name>ParentExtendedTooltip</name>
@@ -144,10 +140,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.SpecialOfferType</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.SpecialOfferType</segments>
     </dataPath>
     <extendedTooltip>
       <name>SpecialOfferTypeExtendedTooltip</name>
@@ -204,10 +198,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.Priority</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.Priority</segments>
     </dataPath>
     <extendedTooltip>
       <name>PriorityExtendedTooltip</name>

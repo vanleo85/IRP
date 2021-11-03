@@ -66,22 +66,17 @@
   <defaultListForm>Document.PurchaseOrder.Form.ListForm</defaultListForm>
   <defaultChoiceForm>Document.PurchaseOrder.Form.ChoiceForm</defaultChoiceForm>
   <realTimePosting>Deny</realTimePosting>
-  <registerRecords>AccumulationRegister.InventoryBalance</registerRecords>
-  <registerRecords>AccumulationRegister.OrderProcurement</registerRecords>
-  <registerRecords>AccumulationRegister.GoodsInTransitIncoming</registerRecords>
+  <registerRecords>AccumulationRegister.TM1010B_RowIDMovements</registerRecords>
   <registerRecords>AccumulationRegister.R1012B_PurchaseOrdersInvoiceClosing</registerRecords>
   <registerRecords>AccumulationRegister.R4035B_IncomingStocks</registerRecords>
-  <registerRecords>AccumulationRegister.StockReservation</registerRecords>
   <registerRecords>AccumulationRegister.R2013T_SalesOrdersProcurement</registerRecords>
   <registerRecords>AccumulationRegister.R1014T_CanceledPurchaseOrders</registerRecords>
   <registerRecords>AccumulationRegister.R4016B_InternalSupplyRequestOrdering</registerRecords>
-  <registerRecords>AccumulationRegister.ReceiptOrders</registerRecords>
   <registerRecords>AccumulationRegister.R1010T_PurchaseOrders</registerRecords>
+  <registerRecords>AccumulationRegister.R1022B_VendorsPaymentPlanning</registerRecords>
   <registerRecords>AccumulationRegister.R4033B_GoodsReceiptSchedule</registerRecords>
-  <registerRecords>AccumulationRegister.GoodsReceiptSchedule</registerRecords>
   <registerRecords>AccumulationRegister.R1011B_PurchaseOrdersReceipt</registerRecords>
-  <registerRecords>AccumulationRegister.OrderBalance</registerRecords>
-  <registerRecords>AccumulationRegister.StockBalance</registerRecords>
+  <registerRecords>InformationRegister.T3010S_RowIDInfo</registerRecords>
   <postInPrivilegedMode>true</postInPrivilegedMode>
   <unpostInPrivilegedMode>true</unpostInPrivilegedMode>
   <choiceHistoryOnInput>DontUse</choiceHistoryOnInput>
@@ -125,21 +120,6 @@
     </synonym>
     <type>
       <types>CatalogRef.Currencies</types>
-    </type>
-    <minValue xsi:type="core:UndefinedValue"/>
-    <maxValue xsi:type="core:UndefinedValue"/>
-    <fillValue xsi:type="core:UndefinedValue"/>
-    <fullTextSearch>Use</fullTextSearch>
-    <dataHistory>Use</dataHistory>
-  </attributes>
-  <attributes uuid="4dbe14b3-f7d1-4396-86d1-3cb538912103">
-    <name>GoodsReceiptBeforePurchaseInvoice</name>
-    <synonym>
-      <key>en</key>
-      <value>Goods receipt before purchase invoice</value>
-    </synonym>
-    <type>
-      <types>Boolean</types>
     </type>
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>
@@ -456,10 +436,10 @@
       <fullTextSearch>Use</fullTextSearch>
     </attributes>
     <attributes uuid="855f6b59-6740-45de-8bf6-b9f485a4bcb5">
-      <name>BusinessUnit</name>
+      <name>ProfitLossCenter</name>
       <synonym>
         <key>en</key>
-        <value>Business unit</value>
+        <value>Profit loss center</value>
       </synonym>
       <type>
         <types>CatalogRef.BusinessUnits</types>
@@ -590,6 +570,20 @@
       </synonym>
       <type>
         <types>DocumentRef.InternalSupplyRequest</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
+    <attributes uuid="49378773-4a8b-4da3-9eb8-9e93413599c5">
+      <name>PartnerItem</name>
+      <synonym>
+        <key>en</key>
+        <value>Partner item</value>
+      </synonym>
+      <type>
+        <types>CatalogRef.PartnerItems</types>
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
@@ -898,6 +892,20 @@
       <dataHistory>Use</dataHistory>
       <fullTextSearch>Use</fullTextSearch>
     </attributes>
+    <attributes uuid="74ea36f4-bac2-4770-9be4-ef0e1a6830b1">
+      <name>IsFixed</name>
+      <synonym>
+        <key>en</key>
+        <value>Is fixed</value>
+      </synonym>
+      <type>
+        <types>Boolean</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
   </tabularSections>
   <tabularSections uuid="6ac8f75b-4043-417f-8164-8d541077ddb1">
     <producedTypes>
@@ -933,11 +941,235 @@
       </type>
       <minValue xsi:type="core:UndefinedValue"/>
       <maxValue xsi:type="core:UndefinedValue"/>
+      <choiceParameterLinks>
+        <name>Filter.Owner</name>
+        <field>Document.PurchaseOrder.TabularSection.AddAttributes.Attribute.Property</field>
+      </choiceParameterLinks>
       <dataHistory>Use</dataHistory>
     </attributes>
   </tabularSections>
-  <commands uuid="496559c7-f7cd-402c-8890-4d84580ebb15">
-    <name>GeneratePurchaseOrder</name>
+  <tabularSections uuid="4ad08e2a-7986-4ade-967f-b7925f5cbbd2">
+    <producedTypes>
+      <objectType typeId="2aa11de7-fc77-444f-b4b3-8296b582e671" valueTypeId="98de85d1-efb3-4f81-9a77-e059b9576fea"/>
+      <rowType typeId="9b0a9c1a-724e-4f15-94a0-ac38a8745054" valueTypeId="636bd15b-72d1-4b0b-9503-b7cc7331dcc5"/>
+    </producedTypes>
+    <name>PaymentTerms</name>
+    <synonym>
+      <key>en</key>
+      <value>Payment terms</value>
+    </synonym>
+    <attributes uuid="7282abc0-7a63-4894-b5bf-f318808d95cf">
+      <name>Date</name>
+      <synonym>
+        <key>en</key>
+        <value>Date</value>
+      </synonym>
+      <type>
+        <types>Date</types>
+        <dateQualifiers>
+          <dateFractions>Date</dateFractions>
+        </dateQualifiers>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <fillChecking>ShowError</fillChecking>
+      <dataHistory>Use</dataHistory>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
+    <attributes uuid="a4b6edbf-760d-44bf-95f3-2ec4a6fd9bf0">
+      <name>ProportionOfPayment</name>
+      <synonym>
+        <key>en</key>
+        <value>Proportion of payment</value>
+      </synonym>
+      <type>
+        <types>Number</types>
+        <numberQualifiers>
+          <precision>5</precision>
+          <scale>2</scale>
+          <nonNegative>true</nonNegative>
+        </numberQualifiers>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <fillChecking>ShowError</fillChecking>
+      <dataHistory>Use</dataHistory>
+    </attributes>
+    <attributes uuid="447dc11c-873d-46c8-9320-8d07a232eea3">
+      <name>DuePeriod</name>
+      <synonym>
+        <key>en</key>
+        <value>Due period, days</value>
+      </synonym>
+      <type>
+        <types>Number</types>
+        <numberQualifiers>
+          <precision>3</precision>
+          <nonNegative>true</nonNegative>
+        </numberQualifiers>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+    </attributes>
+    <attributes uuid="37904a35-82a3-4bd2-95b4-cfb4280c4193">
+      <name>Amount</name>
+      <synonym>
+        <key>en</key>
+        <value>Amount</value>
+      </synonym>
+      <type>
+        <types>DefinedType.typeAmount</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
+    <attributes uuid="54faf607-14c5-4d58-9904-82d21f785f22">
+      <name>CalculationType</name>
+      <synonym>
+        <key>en</key>
+        <value>Calculation type</value>
+      </synonym>
+      <type>
+        <types>EnumRef.CalculationTypes</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <fillChecking>ShowError</fillChecking>
+    </attributes>
+  </tabularSections>
+  <tabularSections uuid="0e515f74-1081-48be-be7d-5a5673acc4ff">
+    <producedTypes>
+      <objectType typeId="7ce156c6-e888-4585-bf88-e1ee731797df" valueTypeId="4ae9ad58-788d-46be-91b9-9591667d7805"/>
+      <rowType typeId="7a84b799-0f3e-4c34-95c3-cdf3c06b266e" valueTypeId="ef65c12d-6676-4e32-8017-9179da19dd91"/>
+    </producedTypes>
+    <name>RowIDInfo</name>
+    <synonym>
+      <key>en</key>
+      <value>Row IDInfo</value>
+    </synonym>
+    <standardAttributes>
+      <dataHistory>Use</dataHistory>
+      <name>LineNumber</name>
+      <fillValue xsi:type="core:UndefinedValue"/>
+      <fullTextSearch>Use</fullTextSearch>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+    </standardAttributes>
+    <attributes uuid="c1a024a1-00bb-4f6d-abcf-ed15eeeb62ad">
+      <name>Key</name>
+      <synonym>
+        <key>en</key>
+        <value>Key</value>
+      </synonym>
+      <type>
+        <types>DefinedType.typeRowID</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+    </attributes>
+    <attributes uuid="3a8aed19-60a7-4f9c-96de-bca9e0d67b90">
+      <name>RowID</name>
+      <synonym>
+        <key>en</key>
+        <value>Row ID</value>
+      </synonym>
+      <type>
+        <types>DefinedType.typeRowID</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+    </attributes>
+    <attributes uuid="90b98f63-9ba3-4b31-bb08-3d2874aa7fb9">
+      <name>Quantity</name>
+      <synonym>
+        <key>en</key>
+        <value>Q</value>
+      </synonym>
+      <type>
+        <types>DefinedType.typeQuantity</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <fillChecking>ShowError</fillChecking>
+      <dataHistory>Use</dataHistory>
+    </attributes>
+    <attributes uuid="f1ebda50-ad9a-46f8-a4a0-5b273b07afc9">
+      <name>Basis</name>
+      <synonym>
+        <key>en</key>
+        <value>Basis</value>
+      </synonym>
+      <type>
+        <types>DocumentRef</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
+    <attributes uuid="7123d5a1-40eb-4f6a-91c7-e08c14146bdd">
+      <name>CurrentStep</name>
+      <synonym>
+        <key>en</key>
+        <value>Current step</value>
+      </synonym>
+      <type>
+        <types>CatalogRef.MovementRules</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <createOnInput>Use</createOnInput>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
+    <attributes uuid="a0559ffb-11cd-40e6-870c-f524013f2bdf">
+      <name>NextStep</name>
+      <synonym>
+        <key>en</key>
+        <value>Next step</value>
+      </synonym>
+      <type>
+        <types>CatalogRef.MovementRules</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
+    <attributes uuid="e6085a70-94d2-4165-a22c-62d52507f0ef">
+      <name>RowRef</name>
+      <synonym>
+        <key>en</key>
+        <value>Row ref</value>
+      </synonym>
+      <type>
+        <types>CatalogRef.RowIDs</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+      <fullTextSearch>Use</fullTextSearch>
+    </attributes>
+    <attributes uuid="bd110ea1-5a9a-4a9e-b627-29dc8e47afc3">
+      <name>BasisKey</name>
+      <synonym>
+        <key>en</key>
+        <value>Basis key</value>
+      </synonym>
+      <type>
+        <types>DefinedType.typeRowID</types>
+      </type>
+      <minValue xsi:type="core:UndefinedValue"/>
+      <maxValue xsi:type="core:UndefinedValue"/>
+      <dataHistory>Use</dataHistory>
+    </attributes>
+  </tabularSections>
+  <commands uuid="8dd76af3-6277-48eb-8356-498c1f68a2ef">
+    <name>Generate</name>
     <synonym>
       <key>en</key>
       <value>Purchase order</value>
@@ -949,6 +1181,5 @@
     </commandParameterType>
     <parameterUseMode>Multiple</parameterUseMode>
     <representation>Auto</representation>
-    <shortcut></shortcut>
   </commands>
 </mdclass:Document>

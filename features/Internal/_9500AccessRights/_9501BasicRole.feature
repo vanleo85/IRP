@@ -20,7 +20,6 @@ Scenario: 950100 Basic role
 	When Create catalog Agreements objects
 	When Create catalog BusinessUnits objects
 	When Create catalog CashAccounts objects
-	When Create catalog ChequeBonds objects
 	When Create catalog Companies objects (Main company)
 	When Create catalog Companies objects (partners company)
 	When Create catalog Countries objects
@@ -76,7 +75,6 @@ Scenario: 950100 Basic role
 	When Create catalog IntegrationSettings objects
 	When Create information register CurrencyRates records
 	When Create information register Barcodes records
-	When Create accumulation register StockBalance records
 	When Create information register UserSettings records (Retail document)
 	When update ItemKeys
 	When Create catalog ItemKeys objects (Table)
@@ -84,6 +82,7 @@ Scenario: 950100 Basic role
 	When Create information register UserSettings records
 	When Create catalog SpecialOfferRules objects
 	When Create catalog SpecialOfferTypes objects
+	When Create catalog PlanningPeriods objects
 	When Create catalog SpecialOffers objects
 	When Create document SalesInvoice objects
 	When Create document SalesOrder objects
@@ -108,18 +107,17 @@ Scenario: 950100 Basic role
 	When Create document InternalSupplyRequest objects
 	When Create document InventoryTransfer objects
 	When Create document InventoryTransferOrder objects
-	When Create document InvoiceMatch objects
+	# When Create document InvoiceMatch objects
 	When Create document OpeningEntry objects
 	When Create document OutgoingPaymentOrder objects
 	When Create document Bundling objects
-	When Create document ChequeBondTransaction objects
-	When Create document ChequeBondTransactionItem objects
 	When Create document PhysicalCountByLocation objects
 	When Create document PhysicalInventory objects
 	When Create document ReconciliationStatement objects
 	When Create document StockAdjustmentAsSurplus objects
 	When Create document StockAdjustmentAsWriteOff objects
 	When Create document Unbundling objects
+	When Create catalog PlanningPeriods objects
 	* Update user roles
 		Given I open hyperlink "e1cib/list/Catalog.AccessGroups"
 		And I click "Update all user roles" button	

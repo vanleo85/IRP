@@ -248,7 +248,7 @@ Scenario: create PurchaseOrder017001
 			| 'Store 01'  |
 		And I select current line in "List" table
 	* Filling in items table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 				| Description |
@@ -261,7 +261,7 @@ Scenario: create PurchaseOrder017001
 			| 'M/White'  |
 		And I select current line in "List" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 				| Description |
@@ -275,7 +275,7 @@ Scenario: create PurchaseOrder017001
 			| 'L/Green'  |
 		And I select current line in "List" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		Then "Items" window is opened
 		And I go to line in "List" table
@@ -354,7 +354,7 @@ Scenario: create PurchaseOrder017003
 				| 'Store 02'  |
 			And I select current line in "List" table
 		* Filling in items table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| Description |
@@ -391,14 +391,13 @@ Scenario: create PurchaseInvoice018001 based on PurchaseOrder017001
 			| '$$NumberPurchaseOrder017001$$' |
 		And I select current line in "List" table
 		* Check filling of elements upon entry based on
-			And I click the button named "FormDocumentPurchaseInvoiceGeneratePurchaseInvoice"
+			And I click the button named "FormDocumentPurchaseInvoiceGenerate"
+			And I click "Ok" button
 			Then the form attribute named "Partner" became equal to "Ferron BP"
 			Then the form attribute named "LegalName" became equal to "Company Ferron BP"
 			Then the form attribute named "Agreement" became equal to "Vendor Ferron, TRY"
 			Then the form attribute named "Store" became equal to "Store 01"
-		* Filling in the main details of the document
-			And I click Select button of "Company" field
-			And I select current line in "List" table
+			Then the form attribute named "Company" became equal to "Main Company"
 		* Check filling items table
 			And I move to "Item list" tab
 			And "ItemList" table contains lines
@@ -430,15 +429,13 @@ Scenario: create PurchaseInvoice018006 based on PurchaseOrder017003
 			| 'Number'                        |
 			| '$$NumberPurchaseOrder017003$$' |
 		And I select current line in "List" table
-		And I click the button named "FormDocumentPurchaseInvoiceGeneratePurchaseInvoice"
+		And I click the button named "FormDocumentPurchaseInvoiceGenerate"
+		And I click "Ok" button
 		* Check filling of elements upon entry based on
 			Then the form attribute named "Partner" became equal to "Ferron BP"
 			Then the form attribute named "LegalName" became equal to "Company Ferron BP"
 			Then the form attribute named "Agreement" became equal to "Vendor Ferron, USD"
 			Then the form attribute named "Store" became equal to "Store 02"
-		* Filling in the main details of the document
-			And I click Select button of "Company" field
-			And I select current line in "List" table
 		* Check filling items table
 			And I move to "Item list" tab
 			And "ItemList" table contains lines
@@ -464,7 +461,8 @@ Scenario: create PurchaseReturnOrder022001 based on PurchaseInvoice018006 (Purch
 		| 'Number' |
 		| '$$NumberPurchaseInvoice018006$$'      |
 	And I select current line in "List" table
-	And I click the button named "FormDocumentPurchaseReturnOrderGeneratePurchaseReturnOrder"
+	And I click the button named "FormDocumentPurchaseReturnOrderGenerate"
+	And I click "Ok" button
 	* Check filling in
 		Then the form attribute named "Partner" became equal to "Ferron BP"
 		Then the form attribute named "LegalName" became equal to "Company Ferron BP"
@@ -497,26 +495,20 @@ Scenario: create PurchaseReturnOrder022001 based on PurchaseInvoice018006 (Purch
 	And I save the window as "$$PurchaseReturnOrder022001$$"
 	And I click the button named "FormPostAndClose"
 	
-Scenario: create PurchaseReturnOrder022006 based on PurchaseInvoice018001 (PurchaseOrder017001)
+Scenario: create PurchaseReturnOrder022006 based on PurchaseInvoice018001
 	Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
 	And I go to line in "List" table
 		| 'Number' |
 		| '$$NumberPurchaseInvoice018001$$'      |
 	And I select current line in "List" table
-	And I click the button named "FormDocumentPurchaseReturnOrderGeneratePurchaseReturnOrder"
+	And I click the button named "FormDocumentPurchaseReturnOrderGenerate"
+	And I click "Ok" button
 	* Check filling details
 		Then the form attribute named "Partner" became equal to "Ferron BP"
 		Then the form attribute named "LegalName" became equal to "Company Ferron BP"
 		Then the form attribute named "Agreement" became equal to "Vendor Ferron, TRY"
 		Then the form attribute named "Description" became equal to "Click to enter description"
 		Then the form attribute named "Company" became equal to "Main Company"
-	* Filling in the main details of the document
-		And I click Select button of "Store" field
-		Then "Stores" window is opened
-		And I go to line in "List" table
-			| 'Description' |
-			| 'Store 01'  |
-		And I select current line in "List" table
 	And I select "Approved" exact value from "Status" drop-down list
 	And I move to "Item list" tab
 	And I go to line in "ItemList" table
@@ -569,7 +561,7 @@ Scenario: create InventoryTransferOrder020001
 			And I select current line in "List" table
 		* Filling in items table
 			And I move to "Item list" tab
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| Description |
@@ -586,7 +578,7 @@ Scenario: create InventoryTransferOrder020001
 			And I move to the next attribute
 			And I input "50,000" text in "Quantity" field of "ItemList" table
 			And I finish line editing in "ItemList" table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| Description |
@@ -634,7 +626,7 @@ Scenario: create InventoryTransferOrder020004
 		And I select current line in "List" table
 	* Filling in items table
 		And I move to "Item list" tab
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| Description |
@@ -682,7 +674,7 @@ Scenario: create InventoryTransferOrder020007
 		And I select current line in "List" table
 	* Filling in items table
 		And I move to "Item list" tab
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| Description |
@@ -730,7 +722,7 @@ Scenario: create InventoryTransferOrder020010
 		And I select current line in "List" table
 	* Filling in items table
 		And I move to "Item list" tab
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| Description |
@@ -790,6 +782,19 @@ Scenario: create SalesOrder023001
 		And I activate "Q" field in "ItemList" table
 		And I input "5,000" text in "Q" field of "ItemList" table
 		And I select "Stock" exact value from "Procurement method" drop-down list in "ItemList" table
+		And I activate "Profit loss center" field in "ItemList" table
+		And I click choice button of the attribute named "ItemListProfitLossCenter" in "ItemList" table
+		And I go to line in "List" table
+			| 'Description'             |
+			| 'Distribution department' |
+		And I select current line in "List" table
+		And I activate "Revenue type" field in "ItemList" table
+		And I click choice button of "Revenue type" attribute in "ItemList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Revenue'     |
+		And I select current line in "List" table
+		And I input "123" text in "Detail" field of "ItemList" table
 		And I finish line editing in "ItemList" table
 		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
@@ -803,6 +808,18 @@ Scenario: create SalesOrder023001
 		And I activate "Q" field in "ItemList" table
 		And I input "4,000" text in "Q" field of "ItemList" table
 		And I select "Stock" exact value from "Procurement method" drop-down list in "ItemList" table
+		And I activate "Profit loss center" field in "ItemList" table
+		And I click choice button of the attribute named "ItemListProfitLossCenter" in "ItemList" table
+		And I go to line in "List" table
+			| 'Description'             |
+			| 'Distribution department' |
+		And I select current line in "List" table
+		And I activate "Revenue type" field in "ItemList" table
+		And I click choice button of "Revenue type" attribute in "ItemList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Revenue'     |
+		And I select current line in "List" table
 		And I finish line editing in "ItemList" table
 	* Check store filling in the tabular section
 		And "ItemList" table contains lines
@@ -857,6 +874,19 @@ Scenario: create SalesOrder023005
 	And I activate "Q" field in "ItemList" table
 	And I input "10,000" text in "Q" field of "ItemList" table
 	And I select "Stock" exact value from "Procurement method" drop-down list in "ItemList" table
+	And I activate "Profit loss center" field in "ItemList" table
+	And I click choice button of "Profit loss center" attribute in "ItemList" table
+	And I go to line in "List" table
+		| 'Description'             |
+		| 'Distribution department' |
+	And I select current line in "List" table
+	And I activate "Revenue type" field in "ItemList" table
+	And I click choice button of "Revenue type" attribute in "ItemList" table
+	And I go to line in "List" table
+		| 'Description' |
+		| 'Revenue'     |
+	And I select current line in "List" table
+	And I input "123" text in "Detail" field of "ItemList" table
 	And I finish line editing in "ItemList" table
 	And in the table "ItemList" I click the button named "ItemListAdd"
 	And I click choice button of "Item" attribute in "ItemList" table
@@ -870,6 +900,19 @@ Scenario: create SalesOrder023005
 	And I activate "Q" field in "ItemList" table
 	And I input "14,000" text in "Q" field of "ItemList" table
 	And I select "Stock" exact value from "Procurement method" drop-down list in "ItemList" table
+	And I activate "Profit loss center" field in "ItemList" table
+	And I click choice button of "Profit loss center" attribute in "ItemList" table
+	And I go to line in "List" table
+		| 'Description'             |
+		| 'Distribution department' |
+	And I select current line in "List" table
+	And I activate "Revenue type" field in "ItemList" table
+	And I click choice button of "Revenue type" attribute in "ItemList" table
+	And I go to line in "List" table
+		| 'Description' |
+		| 'Revenue'     |
+	And I select current line in "List" table
+	And I input "123" text in "Detail" field of "ItemList" table
 	And I finish line editing in "ItemList" table
 	* Check default sales order status
 		And I move to "Other" tab
@@ -888,7 +931,8 @@ Scenario: create SalesInvoice024001
 	And I go to line in "List" table
 		| Number |
 		| $$NumberSalesOrder023001$$       |
-	And I click the button named "FormDocumentSalesInvoiceGenerateSalesInvoice"
+	And I click the button named "FormDocumentSalesInvoiceGenerate"	
+	And I click "Ok" button
 	* Check that information is filled in when creating based on
 		Then the form attribute named "Partner" became equal to "Ferron BP"
 		Then the form attribute named "LegalName" became equal to "Company Ferron BP"
@@ -919,7 +963,8 @@ Scenario: create SalesInvoice024008
 		| 'Number'                     | 'Partner'   |
 		| '$$NumberSalesOrder023005$$' | 'Ferron BP' |
 	And I select current line in "List" table
-	And I click the button named "FormDocumentSalesInvoiceGenerateSalesInvoice"
+	And I click the button named "FormDocumentSalesInvoiceGenerate"
+	And I click "Ok" button
 	* Check the details
 		Then the form attribute named "Partner" became equal to "Ferron BP"
 		Then the form attribute named "LegalName" became equal to "Company Ferron BP"
@@ -946,7 +991,8 @@ Scenario: create SalesReturnOrder028004
 			| 'Number' | 'Partner'     |
 			| '$$NumberSalesInvoice024001$$'      |  'Ferron BP' |
 		And I select current line in "List" table
-		And I click the button named "FormDocumentSalesReturnOrderGenerateSalesReturnOrder"
+		And I click the button named "FormDocumentSalesReturnOrderGenerate"
+		And I click "Ok" button
 		* Check the details
 			Then the form attribute named "Partner" became equal to "Ferron BP"
 			Then the form attribute named "LegalName" became equal to "Company Ferron BP"
@@ -990,7 +1036,8 @@ Scenario: create SalesReturnOrder028001
 		| 'Number'                       | 'Partner'   |
 		| '$$NumberSalesInvoice024008$$' | 'Ferron BP' |
 	And I select current line in "List" table
-	And I click the button named "FormDocumentSalesReturnOrderGenerateSalesReturnOrder"
+	And I click the button named "FormDocumentSalesReturnOrderGenerate"
+	And I click "Ok" button
 	* Check the details
 		Then the form attribute named "Partner" became equal to "Ferron BP"
 		Then the form attribute named "LegalName" became equal to "Company Ferron BP"
@@ -1065,6 +1112,7 @@ Scenario: create SalesInvoice024025
 		And I select current line in "List" table
 		And I activate "Q" field in "ItemList" table
 		And I input "20,000" text in "Q" field of "ItemList" table
+		And I set "Use shipment confirmation" checkbox in "ItemList" table
 		And I finish line editing in "ItemList" table
 	And I click the button named "FormPost"
 	And I delete "$$NumberSalesInvoice024025$$" variable
@@ -1079,17 +1127,14 @@ Scenario: create PurchaseReturn022314
 		| 'Number' |
 		| '$$NumberPurchaseInvoice018006$$'      |
 	And I select current line in "List" table
-	And I click the button named "FormDocumentPurchaseReturnGeneratePurchaseReturn"
+	And I click the button named "FormDocumentPurchaseReturnGenerate"
+	And I click "Ok" button
 	* Check filling details
 		Then the form attribute named "Partner" became equal to "Ferron BP"
 		Then the form attribute named "Agreement" became equal to "Vendor Ferron, USD"
 		Then the form attribute named "LegalName" became equal to "Company Ferron BP"
 		Then the form attribute named "Company" became equal to "Main Company"
-	And I click Select button of "Store" field
-	And I go to line in "List" table
-		| 'Description' |
-		| 'Store 02'  |
-	And I select current line in "List" table
+		Then the form attribute named "Store" became equal to "Store 02"
 	And I click the button named "FormPost"
 	And I delete "$$NumberPurchaseReturn022314$$" variable
 	And I delete "$$PurchaseReturn022314$$" variable
@@ -1118,7 +1163,7 @@ Scenario: create InventoryTransfer021030
 		| 'Main Company' |
 	And I select current line in "List" table
 	And I move to "Items" tab
-	And I click the button named "Add"
+	And in the table "ItemList" I click the button named "ItemListAdd"
 	And I click choice button of "Item" attribute in "ItemList" table
 	And I go to line in "List" table
 		| 'Description' |
@@ -1360,9 +1405,6 @@ Scenario: auto filling Configuration metadata catalog
 		| 'Cash transfer order'            |
 		| 'Cash/Bank accounts'             |
 		| 'Catalogs'                       |
-		| 'Cheque bond transaction'        |
-		| 'Cheque bond transaction item'   |
-		| 'Cheque bonds'                   |
 		| 'Companies'                      |
 		| 'Configuration metadata'         |
 		| 'Contact info sets'              |
@@ -1512,10 +1554,9 @@ Scenario: create Bank terms
 		And I input "2,00" text in "Percent" field of "PaymentTypes" table
 		And I finish line editing in "PaymentTypes" table
 		And I click "Save" button
-		And In this window I click command interface button "Business unit bank terms"
+		And In this window I click command interface button "Branch bank terms"
 		And I click the button named "FormCreate"
-		Then "Business unit bank terms (create)" window is opened
-		And I click Select button of "Business unit" field
+		And I click Select button of "Branch" field
 		And I go to line in "List" table
 			| 'Description' |
 			| 'Shop 01'     |

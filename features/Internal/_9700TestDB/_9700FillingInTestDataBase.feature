@@ -52,12 +52,12 @@ When Create catalog ExternalDataProc objects (test data base)
 When Create catalog AddAttributeAndPropertySets objects (test data base)
 When Create catalog AddAttributeAndPropertyValues objects (test data base)
 When Create catalog IDInfoAddresses objects (test data base)
+When Create catalog RowIDs objects (test data base)
 When Create catalog BankTerms objects (test data base)
 When Create catalog BusinessUnits objects (test data base)
 When Create catalog CancelReturnReasons objects (test data base)
 When Create catalog CashStatementStatuses objects (test data base)
 When Create catalog CashAccounts objects (test data base)
-When Create catalog ChequeBonds objects (test data base)	
 When Create catalog Companies objects (test data base)
 When Create catalog ConfigurationMetadata objects (test data base)
 When Create catalog IDInfoSets objects (test data base)
@@ -111,6 +111,7 @@ When Create catalog AccessProfiles objects (test data base)
 When Create catalog UserGroups objects (test data base)
 When Create catalog Users objects (test data base)
 When Create catalog Workstations objects (test data base)
+When Create catalog PlanningPeriods objects (test data base)
 When update ItemKeys
 When Create document BankPayment objects (test data base)
 When Create document BankReceipt objects (test data base)
@@ -120,8 +121,6 @@ When Create document CashPayment objects (test data base)
 When Create document CashReceipt objects (test data base)
 When Create document CashRevenue objects (test data base)
 When Create document CashTransferOrder objects (test data base)
-When Create document ChequeBondTransaction objects (test data base)
-When Create document ChequeBondTransactionItem objects (test data base)
 When Create document CreditNote objects (test data base)
 When Create document DebitNote objects (test data base)
 When Create document GoodsReceipt objects (test data base)
@@ -157,13 +156,17 @@ When Create chart of characteristic types IDInfoTypes objects (test data base)
 When Create chart of characteristic types CustomUserSettings objects (test data base)
 When Create chart of characteristic types CurrencyMovementType objects (test data base)
 When Create information register BundleContents records (test data base)
-When Create information register BusinessUnitBankTerms records (test data base)
-When Create information register ChequeBondStatuses records (test data base)
+When Create information register BranchBankTerms records (test data base)
 When Create information register CurrencyRates records (test data base)
 When Create information register Barcodes records (test data base)
 When Create information register PartnerSegments records (test data base)
 When Create information register TaxSettings records (test data base)
 When Create information register UserSettings records (test data base)
+When Create document CashStatement objects  (test data base)
+When Create catalog PartnerItems objects (test data base)
+* Posting first documents
+	And I execute 1C:Enterprise script at server
+			| "Documents.GoodsReceipt.FindByNumber(4).GetObject().Write(DocumentWriteMode.Posting);" |
 * Posting Opening entry
 		Given I open hyperlink "e1cib/list/Document.OpeningEntry"
 		Then "Opening entries" window is opened
@@ -197,13 +200,36 @@ When Create information register UserSettings records (test data base)
 		Then I select all lines of "List" table
 		And in the table "List" I click the button named "ListContextMenuPost"
 		And Delay "3"
+		And I close all client application windows
 * Posting Sales return
 		Given I open hyperlink "e1cib/list/Document.SalesReturn"
 		Then I select all lines of "List" table
 		And in the table "List" I click the button named "ListContextMenuPost"
  		And Delay "3"
+* Posting PurchaseReturnOrder
+		Given I open hyperlink "e1cib/list/Document.PurchaseReturnOrder"
+		Then I select all lines of "List" table
+		And in the table "List" I click the button named "ListContextMenuPost"
+ 		And Delay "3"
+		And I close all client application windows
 * Posting Purchase return
 		Given I open hyperlink "e1cib/list/Document.PurchaseReturn"
+		Then I select all lines of "List" table
+		And in the table "List" I click the button named "ListContextMenuPost"
+ 		And Delay "3"
+* Posting InternalSupplyRequest
+		Given I open hyperlink "e1cib/list/Document.InternalSupplyRequest"
+		Then I select all lines of "List" table
+		And in the table "List" I click the button named "ListContextMenuPost"
+ 		And Delay "3"
+* Posting Inventory transfer order
+		Given I open hyperlink "e1cib/list/Document.InventoryTransferOrder"
+		Then I select all lines of "List" table
+		And in the table "List" I click the button named "ListContextMenuPost"
+ 		And Delay "3"
+		And I close all client application windows
+* Posting Inventory transfer
+		Given I open hyperlink "e1cib/list/Document.InventoryTransfer"
 		Then I select all lines of "List" table
 		And in the table "List" I click the button named "ListContextMenuPost"
  		And Delay "3"
@@ -214,6 +240,11 @@ When Create information register UserSettings records (test data base)
  		And Delay "3"
 * Posting Shipment confirmation
 		Given I open hyperlink "e1cib/list/Document.ShipmentConfirmation"
+		Then I select all lines of "List" table
+		And in the table "List" I click the button named "ListContextMenuPost"
+ 		And Delay "3"
+* Posting PhysicalInventory
+		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
 		Then I select all lines of "List" table
 		And in the table "List" I click the button named "ListContextMenuPost"
  		And Delay "3"
@@ -237,21 +268,6 @@ When Create information register UserSettings records (test data base)
 		Then I select all lines of "List" table
 		And in the table "List" I click the button named "ListContextMenuPost"
  		And Delay "3"
-* Posting Inventory transfer order
-		Given I open hyperlink "e1cib/list/Document.InventoryTransferOrder"
-		Then I select all lines of "List" table
-		And in the table "List" I click the button named "ListContextMenuPost"
- 		And Delay "3"
-* Posting Inventory transfer
-		Given I open hyperlink "e1cib/list/Document.InventoryTransfer"
-		Then I select all lines of "List" table
-		And in the table "List" I click the button named "ListContextMenuPost"
- 		And Delay "3"
-* Posting InternalSupplyRequest
-		Given I open hyperlink "e1cib/list/Document.InternalSupplyRequest"
-		Then I select all lines of "List" table
-		And in the table "List" I click the button named "ListContextMenuPost"
- 		And Delay "3"
 * Posting PurchaseOrderClosing
 		Given I open hyperlink "e1cib/list/Document.PurchaseOrderClosing"
 		Then I select all lines of "List" table
@@ -265,11 +281,6 @@ When Create information register UserSettings records (test data base)
  		And Delay "3"
 * Posting PlannedReceiptReservation
 		Given I open hyperlink "e1cib/list/Document.PlannedReceiptReservation"
-		Then I select all lines of "List" table
-		And in the table "List" I click the button named "ListContextMenuPost"
- 		And Delay "3"
-* Posting PhysicalInventory
-		Given I open hyperlink "e1cib/list/Document.PhysicalInventory"
 		Then I select all lines of "List" table
 		And in the table "List" I click the button named "ListContextMenuPost"
  		And Delay "3"
@@ -323,11 +334,6 @@ When Create information register UserSettings records (test data base)
 		Then I select all lines of "List" table
 		And in the table "List" I click the button named "ListContextMenuPost"
  		And Delay "3"
-* Posting ChequeBondTransaction
-		Given I open hyperlink "e1cib/list/Document.ChequeBondTransaction"
-		Then I select all lines of "List" table
-		And in the table "List" I click the button named "ListContextMenuPost"
- 		And Delay "3"
 * Posting IncomingPaymentOrder
 		Given I open hyperlink "e1cib/list/Document.IncomingPaymentOrder"
 		Then I select all lines of "List" table
@@ -335,11 +341,6 @@ When Create information register UserSettings records (test data base)
  		And Delay "3"
 * Posting OutgoingPaymentOrder
 		Given I open hyperlink "e1cib/list/Document.OutgoingPaymentOrder"
-		Then I select all lines of "List" table
-		And in the table "List" I click the button named "ListContextMenuPost"
- 		And Delay "3"
-* Posting PurchaseReturnOrder
-		Given I open hyperlink "e1cib/list/Document.PurchaseReturnOrder"
 		Then I select all lines of "List" table
 		And in the table "List" I click the button named "ListContextMenuPost"
  		And Delay "3"
@@ -363,5 +364,23 @@ When Create information register UserSettings records (test data base)
 		Then I select all lines of "List" table
 		And in the table "List" I click the button named "ListContextMenuPost"
 		And Delay "3"
+* Posting CashStatement
+		Given I open hyperlink "e1cib/list/Document.CashStatement"
+		Then I select all lines of "List" table
+		And in the table "List" I click the button named "ListContextMenuPost"
+		And Delay "3"
+* Posting SalesReturn
+		Given I open hyperlink "e1cib/list/Document.SalesReturn"
+		Then I select all lines of "List" table
+		And in the table "List" I click the button named "ListContextMenuPost"
+		And Delay "3"
 And I close all client application windows
+
+
+	
+		
+	
+		
+	
+		
 

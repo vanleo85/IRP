@@ -30,6 +30,19 @@
     <maxValue xsi:type="core:UndefinedValue"/>
     <fullTextSearch>Use</fullTextSearch>
   </resources>
+  <resources uuid="51ffa3bb-e7f9-4df5-bad0-ad8bf54c0904">
+    <name>AmountWithTaxes</name>
+    <synonym>
+      <key>en</key>
+      <value>Amount with taxes</value>
+    </synonym>
+    <type>
+      <types>DefinedType.typeAmount</types>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+  </resources>
   <dimensions uuid="cf230907-0f51-447c-9786-e93f5355ad79">
     <name>Company</name>
     <synonym>
@@ -44,11 +57,25 @@
     <fullTextSearch>Use</fullTextSearch>
     <useInTotals>true</useInTotals>
   </dimensions>
-  <dimensions uuid="558e5f58-a31a-4159-ad88-1881c2d1fe0e">
-    <name>BusinessUnit</name>
+  <dimensions uuid="2b4f32e9-8218-4949-9857-70dfbc4e5d04">
+    <name>Branch</name>
     <synonym>
       <key>en</key>
-      <value>Business unit</value>
+      <value>Branch</value>
+    </synonym>
+    <type>
+      <types>CatalogRef.BusinessUnits</types>
+    </type>
+    <minValue xsi:type="core:UndefinedValue"/>
+    <maxValue xsi:type="core:UndefinedValue"/>
+    <fullTextSearch>Use</fullTextSearch>
+    <useInTotals>true</useInTotals>
+  </dimensions>
+  <dimensions uuid="558e5f58-a31a-4159-ad88-1881c2d1fe0e">
+    <name>ProfitLossCenter</name>
+    <synonym>
+      <key>en</key>
+      <value>Profit loss center</value>
     </synonym>
     <type>
       <types>CatalogRef.BusinessUnits</types>
@@ -107,7 +134,7 @@
       <value>Additional analytic</value>
     </synonym>
     <type>
-      <types>CatalogRef.AddAttributeAndPropertyValues</types>
+      <types>Characteristic.AddAttributeAndProperty</types>
     </type>
     <minValue xsi:type="core:UndefinedValue"/>
     <maxValue xsi:type="core:UndefinedValue"/>

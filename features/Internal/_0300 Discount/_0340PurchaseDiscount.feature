@@ -53,7 +53,7 @@ Scenario: _034001 check the Document discount in Purchase order
 				| 'Store 01'  |
 			And I select current line in "List" table
 		* Filling in items table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| 'Description' |
@@ -66,7 +66,7 @@ Scenario: _034001 check the Document discount in Purchase order
 				| 'M/White'  |
 			And I select current line in "List" table
 			And I finish line editing in "ItemList" table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| 'Description' |
@@ -80,7 +80,7 @@ Scenario: _034001 check the Document discount in Purchase order
 				| 'L/Green'  |
 			And I select current line in "List" table
 			And I finish line editing in "ItemList" table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| 'Description' |
@@ -129,7 +129,8 @@ Scenario: _034001 check the Document discount in Purchase order
 		| 'Trousers' | '250,00' | '36/Yellow' | '300,000' | '7 500,00'      | 'pcs'  | '67 500,00'    | 'Store 01' |
 	* Check the transfer of the discount value from Purchase order to Purchase invoice when creating based on
 		And I click the button named "FormPost"
-		And I click "Purchase invoice" button
+		And I click the button named "FormDocumentPurchaseInvoiceGenerate"
+		And I click "Ok" button
 		And "ItemList" table contains lines
 		| 'Item'     | 'Price'  | 'Item key'  | 'Q'       | 'Offers amount' | 'Unit' | 'Total amount' | 'Store'    |
 		| 'Dress'    | '200,00' | 'M/White'   | '100,000' | '2 000,00'      | 'pcs'  | '18 000,00'    | 'Store 01' |
@@ -174,7 +175,7 @@ Scenario: _034002 check the Document discount in Purchase invoice
 				| 'Store 01'  |
 			And I select current line in "List" table
 		* Filling in items table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| 'Description' |
@@ -187,7 +188,7 @@ Scenario: _034002 check the Document discount in Purchase invoice
 				| 'M/White'  |
 			And I select current line in "List" table
 			And I finish line editing in "ItemList" table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| 'Description' |
@@ -201,7 +202,7 @@ Scenario: _034002 check the Document discount in Purchase invoice
 				| 'L/Green'  |
 			And I select current line in "List" table
 			And I finish line editing in "ItemList" table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| 'Description' |
@@ -320,7 +321,8 @@ Scenario: _034030 check discount recalculation when change quantity in the Purch
 			And I go to line in "List" table
 				| 'Number' |
 				| '$$NumberPurchaseInvoice034001$$'  |
-			And I click the button named "FormDocumentPurchaseReturnOrderGeneratePurchaseReturnOrder"
+			And I click the button named "FormDocumentPurchaseReturnOrderGenerate"
+			And I click "Ok" button	
 			And the editing text of form attribute named "ItemListTotalOffersAmount" became equal to "13 700,00"
 			Then the form attribute named "ItemListTotalNetAmount" became equal to "104 491,53"
 			Then the form attribute named "ItemListTotalTaxAmount" became equal to "18 808,47"
@@ -361,7 +363,8 @@ Scenario: _034031 check discount recalculation when change quantity in the Purch
 			And I go to line in "List" table
 				| 'Number' |
 				| '$$NumberPurchaseInvoice034001$$'  |
-			And I click the button named "FormDocumentPurchaseReturnGeneratePurchaseReturn"
+			And I click the button named "FormDocumentPurchaseReturnGenerate"
+			And I click "Ok" button	
 			And the editing text of form attribute named "ItemListTotalOffersAmount" became equal to "13 700,00"
 			Then the form attribute named "ItemListTotalNetAmount" became equal to "104 491,53"
 			Then the form attribute named "ItemListTotalTaxAmount" became equal to "18 808,47"

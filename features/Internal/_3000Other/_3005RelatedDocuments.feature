@@ -42,6 +42,7 @@ Scenario: _300520 preparation (check post/unpost/mark for deletion from report R
 		When update ItemKeys
 
 Scenario: _300521 check post/unpost/mark for deletion from report "Related documents"
+	And I close all client application windows
 	* Preparation
 		* Create Sales order
 			Given I open hyperlink "e1cib/list/Document.SalesOrder"
@@ -79,14 +80,14 @@ Scenario: _300521 check post/unpost/mark for deletion from report "Related docum
 				| '2 Region'    |
 			And I select current line in "List" table
 			And I move to "Other" tab
-			And I set checkbox "Shipment confirmations before sales invoice"
 			And I click the button named "FormPost"
 			And I delete "$$NumberSalesOrder300521$$" variable
 			And I delete "$$SalesOrder300521$$" variable
 			And I save the value of "Number" field as "$$NumberSalesOrder300521$$"
 			And I save the window as "$$SalesOrder300521$$"
 		* Create Shipment confirmation based on SO
-			And I click "Shipment confirmation" button
+			And I click the button named "FormDocumentShipmentConfirmationGenerate"
+			And I click "Ok" button		
 			And I click the button named "FormPost"
 			And I delete "$$NumberShipmentConfirmation300521$$" variable
 			And I delete "$$ShipmentConfirmation300521$$" variable
@@ -95,8 +96,7 @@ Scenario: _300521 check post/unpost/mark for deletion from report "Related docum
 			And I click the button named "FormPostAndClose"
 			And Delay 5
 		* Create Sales invoice based on created SC
-			And I click "Sales invoice" button
-			And I click the button named "FormSelectAll"
+			And I click the button named "FormDocumentSalesInvoiceGenerate"
 			And I click "Ok" button
 			And I move to "Other" tab
 			And I click the button named "FormPost"
@@ -117,7 +117,10 @@ Scenario: _300521 check post/unpost/mark for deletion from report "Related docum
 		* Check unpost Sales invoice from report Related documents
 			And I go to the last line in "DocumentsTree" table
 			And in the table "DocumentsTree" I click the button named "DocumentsTreeUnpost"
-			Given I open hyperlink "e1cib/list/AccumulationRegister.PartnerArTransactions"
+			And the current line of "DocumentsTree" table is equal to
+				| 'Presentation'                          |
+				| '$$SalesInvoice300521$$'         |
+			Given I open hyperlink "e1cib/list/AccumulationRegister.R2021B_CustomersTransactions"
 			And Delay 10
 			And "List" table does not contain lines
 			| 'Recorder'             |
@@ -126,7 +129,10 @@ Scenario: _300521 check post/unpost/mark for deletion from report "Related docum
 			When in opened panel I select "Related documents"
 			And I go to the last line in "DocumentsTree" table
 			And in the table "DocumentsTree" I click the button named "DocumentsTreePost"
-			Given I open hyperlink "e1cib/list/AccumulationRegister.PartnerArTransactions"
+			And the current line of "DocumentsTree" table is equal to
+				| 'Presentation'                          |
+				| '$$SalesInvoice300521$$'         |
+			Given I open hyperlink "e1cib/list/AccumulationRegister.R2021B_CustomersTransactions"
 			And I click "Refresh" button
 			And Delay 10
 			And "List" table contains lines
@@ -136,6 +142,9 @@ Scenario: _300521 check post/unpost/mark for deletion from report "Related docum
 			When in opened panel I select "Related documents"
 			And I go to the last line in "DocumentsTree" table
 			And in the table "DocumentsTree" I click the button named "DocumentsTreeDelete"
+			And the current line of "DocumentsTree" table is equal to
+				| 'Presentation'                          |
+				| '$$SalesInvoice300521$$'         |
 			And I go to the last line in "DocumentsTree" table
 		* Unmark for deletion  Sales invoice from report Related documents
 			When in opened panel I select "Related documents"

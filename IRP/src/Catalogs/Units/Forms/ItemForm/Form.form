@@ -11,10 +11,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Code</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Code</segments>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -92,10 +90,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.Item</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.Item</segments>
     </dataPath>
     <extendedTooltip>
       <name>ItemExtendedTooltip</name>
@@ -144,10 +140,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.BasisUnit</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.BasisUnit</segments>
     </dataPath>
     <extendedTooltip>
       <name>BasisUnitExtendedTooltip</name>
@@ -202,10 +196,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.UOM</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.UOM</segments>
     </dataPath>
     <extendedTooltip>
       <name>UOMExtendedTooltip</name>
@@ -254,10 +246,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.Quantity</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.Quantity</segments>
     </dataPath>
     <extendedTooltip>
       <name>QuantityExtendedTooltip</name>
@@ -309,10 +299,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Length</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Length</segments>
       </dataPath>
       <handlers>
         <event>OnChange</event>
@@ -365,10 +353,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Width</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Width</segments>
       </dataPath>
       <handlers>
         <event>OnChange</event>
@@ -421,10 +407,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Height</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Height</segments>
       </dataPath>
       <handlers>
         <event>OnChange</event>
@@ -477,10 +461,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Volume</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Volume</segments>
       </dataPath>
       <extendedTooltip>
         <name>VolumeExtendedTooltip</name>
@@ -573,10 +555,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Weight</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Weight</segments>
       </dataPath>
       <extendedTooltip>
         <name>WeightExtendedTooltip</name>
@@ -689,6 +669,7 @@
       <autoMaxWidth>true</autoMaxWidth>
       <autoMaxHeight>true</autoMaxHeight>
       <placementArea>UserCmds</placementArea>
+      <toolTipRepresentation>Auto</toolTipRepresentation>
       <representationInContextMenu>Auto</representationInContextMenu>
     </items>
     <visible>true</visible>

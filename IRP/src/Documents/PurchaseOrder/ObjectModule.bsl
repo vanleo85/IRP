@@ -1,17 +1,19 @@
-
 Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
-	
-	ThisObject.DocumentAmount = CalculationServer.CalculateDocumentAmount(ItemList);
+	EndIf;
 
+	Parameters = CurrenciesClientServer.GetParameters_V3(ThisObject);
+	CurrenciesClientServer.DeleteRowsByKeyFromCurrenciesTable(ThisObject.Currencies);
+	CurrenciesServer.UpdateCurrencyTable(Parameters, ThisObject.Currencies);
+
+	ThisObject.DocumentAmount = CalculationServer.CalculateDocumentAmount(ItemList);
 EndProcedure
 
 Procedure OnWrite(Cancel)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
 EndProcedure
 
 Procedure BeforeDelete(Cancel)
@@ -22,12 +24,12 @@ EndProcedure
 
 Procedure Posting(Cancel, PostingMode)
 	PostingServer.Post(ThisObject, Cancel, PostingMode, ThisObject.AdditionalProperties);
-	
+
 	If Not Cancel Then
 		IsBasedOnInternalSupplyRequest = False;
 		For Each Row In ThisObject.ItemList Do
-			If ValueIsFilled(Row.PurchaseBasis) 
-				And TypeOf(Row.PurchaseBasis) = Type("DocumentRef.InternalSupplyRequest") Then
+			If ValueIsFilled(Row.PurchaseBasis) And TypeOf(Row.PurchaseBasis) = Type(
+				"DocumentRef.InternalSupplyRequest") Then
 				IsBasedOnInternalSupplyRequest = True;
 			EndIf;
 		EndDo;
@@ -49,48 +51,45 @@ Procedure Posting(Cancel, PostingMode)
 EndProcedure
 
 Procedure UndoPosting(Cancel)
-	
+
 	UndopostingServer.Undopost(ThisObject, Cancel, ThisObject.AdditionalProperties);
-	
+
 EndProcedure
 
 Procedure Filling(FillingData, FillingText, StandardProcessing)
-	If TypeOf(FillingData) = Type("Structure") Then
-		If FillingData.Property("BasedOn") And FillingData.BasedOn = "InternalSupplyRequest" Then
-			Filling_BasedOn(FillingData);
-		EndIf;
-		If FillingData.Property("BasedOn") And FillingData.BasedOn = "SalesOrder" Then
-			Filling_BasedOn(FillingData);
-		EndIf;
+	If TypeOf(FillingData) = Type("Structure") And FillingData.Property("BasedOn") Then
+		FillPropertyValues(ThisObject, FillingData, RowIDInfoServer.GetSeperatorColumns(ThisObject.Metadata()));
+		RowIDInfoServer.AddLinkedDocumentRows(ThisObject, FillingData);
 	EndIf;
 EndProcedure
 
-Procedure Filling_BasedOn(FillingData)
-	ThisObject.Company = FillingData.Company;
-	For Each Row In FillingData.ItemList Do
-		NewRow = ThisObject.ItemList.Add();
-		FillPropertyValues(NewRow, Row);
-		If Not ValueIsFilled(NewRow.Key) Then
-			NewRow.Key = New UUID();
-		EndIf;
-		If ValueIsFilled(Row.Unit) And ValueIsFilled(Row.Unit.Quantity) Then
-			NewRow.Quantity = Row.Quantity / Row.Unit.Quantity;
-		EndIf;
-	EndDo;
-EndProcedure
-
 Procedure OnCopy(CopiedObject)
-	
 	LinkedTables = New Array();
 	LinkedTables.Add(SpecialOffers);
 	LinkedTables.Add(TaxList);
 	LinkedTables.Add(Currencies);
 	DocumentsServer.SetNewTableUUID(ItemList, LinkedTables);
-	
 EndProcedure
 
 Procedure FillCheckProcessing(Cancel, CheckedAttributes)
 	If DocumentsServer.CheckItemListStores(ThisObject) Then
-		Cancel = True;	
+		Cancel = True;
 	EndIf;
+
+	For RowIndex = 0 To (ThisObject.ItemList.Count() - 1) Do
+		Row = ThisObject.ItemList[RowIndex];
+		If Row.Cancel And Row.CancelReason.IsEmpty() Then
+			CommonFunctionsClientServer.ShowUsersMessage(R().Error_093, "Object.ItemList[" + RowIndex
+				+ "].CancelReason", "Object.ItemList");
+			Cancel = True;
+		EndIf;
+	EndDo;
+	
+	If Not Cancel = True Then
+		LinkedFilter = RowIDInfoClientServer.GetLinkedDocumentsFilter_PO(ThisObject);
+		RowIDInfoTable = ThisObject.RowIDInfo.Unload();
+		ItemListTable = ThisObject.ItemList.Unload(,"Key, LineNumber, ItemKey, Store");
+		RowIDInfoServer.FillCheckProcessing(ThisObject, Cancel, LinkedFilter, RowIDInfoTable, ItemListTable);
+	EndIf;
+
 EndProcedure

@@ -9,54 +9,132 @@
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Company</dataPath>
 			<field>Company</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Company</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Quantity</dataPath>
 			<field>Quantity</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Quantity</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Invoice</dataPath>
 			<field>Invoice</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Invoice</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>ItemKey</dataPath>
 			<field>ItemKey</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Item key</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>CurrencyMovementType</dataPath>
 			<field>CurrencyMovementType</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Currency movement type</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>DeferredCalculation</dataPath>
 			<field>DeferredCalculation</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Deferred calculation</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>LineNumber</dataPath>
 			<field>LineNumber</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Line number</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Period</dataPath>
 			<field>Period</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Period</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Currency</dataPath>
 			<field>Currency</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Currency</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Recorder</dataPath>
 			<field>Recorder</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Recorder</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Amount</dataPath>
 			<field>Amount</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Amount</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>OffersAmount</dataPath>
 			<field>OffersAmount</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Offers amount</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>NetAmount</dataPath>
 			<field>NetAmount</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Net amount</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>RegisterName</dataPath>
@@ -575,162 +653,462 @@
 		<field xsi:type="DataSetFieldField">
 			<dataPath>RowKey</dataPath>
 			<field>RowKey</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Row key</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Active</dataPath>
 			<field>Active</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Active</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>ReturnReason</dataPath>
 			<field>ReturnReason</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Return reason</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>SpecialOffer</dataPath>
 			<field>SpecialOffer</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Special offer</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Order</dataPath>
 			<field>Order</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Order</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>CancelReason</dataPath>
 			<field>CancelReason</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Cancel reason</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>LegalName</dataPath>
 			<field>LegalName</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Legal name</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Partner</dataPath>
 			<field>Partner</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Partner</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Basis</dataPath>
 			<field>Basis</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Basis</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Agreement</dataPath>
 			<field>Agreement</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Agreement</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>TaxAmount</dataPath>
 			<field>TaxAmount</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Tax amount</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>TaxMovementType</dataPath>
 			<field>TaxMovementType</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Tax movement type</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>TaxRate</dataPath>
 			<field>TaxRate</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Tax rate</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Tax</dataPath>
 			<field>Tax</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Tax</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>TaxableAmount</dataPath>
 			<field>TaxableAmount</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Taxable amount</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>SalesAmount</dataPath>
 			<field>SalesAmount</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Sales amount</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>NetOfferAmount</dataPath>
 			<field>NetOfferAmount</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Net offer amount</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>ProcurementMethod</dataPath>
 			<field>ProcurementMethod</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Procurement method</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>SalesQuantity</dataPath>
 			<field>SalesQuantity</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Sales quantity</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>ReOrderedQuantity</dataPath>
 			<field>ReOrderedQuantity</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Re ordered quantity</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>ReceiptQuantity</dataPath>
 			<field>ReceiptQuantity</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Receipt quantity</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>OrderedQuantity</dataPath>
 			<field>OrderedQuantity</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Ordered quantity</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>PurchaseQuantity</dataPath>
 			<field>PurchaseQuantity</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Purchase quantity</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>ShippedQuantity</dataPath>
 			<field>ShippedQuantity</field>
-		</field>
-		<field xsi:type="DataSetFieldField">
-			<dataPath>MovementType</dataPath>
-			<field>MovementType</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Shipped quantity</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Account</dataPath>
 			<field>Account</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Account</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Cheque</dataPath>
 			<field>Cheque</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Cheque</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Store</dataPath>
 			<field>Store</field>
-		</field>
-		<field xsi:type="DataSetFieldField">
-			<dataPath>IncomingDocument</dataPath>
-			<field>IncomingDocument</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Store</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>SerialLotNumber</dataPath>
 			<field>SerialLotNumber</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Serial lot number</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>InternalSupplyRequest</dataPath>
 			<field>InternalSupplyRequest</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Internal supply request</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>StoreReceiver</dataPath>
 			<field>StoreReceiver</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Store receiver</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>StoreSender</dataPath>
 			<field>StoreSender</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Store sender</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>IncomingStore</dataPath>
 			<field>IncomingStore</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Incoming store</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>RequesterStore</dataPath>
 			<field>RequesterStore</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Requester store</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>Requester</dataPath>
 			<field>Requester</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Requester</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>PaymentDate</dataPath>
 			<field>PaymentDate</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Payment date</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>AdditionalAnalytic</dataPath>
 			<field>AdditionalAnalytic</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Additional analytic</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
 			<dataPath>RevenueType</dataPath>
 			<field>RevenueType</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Revenue type</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<field xsi:type="DataSetFieldField">
-			<dataPath>BusinessUnit</dataPath>
-			<field>BusinessUnit</field>
+			<dataPath>VendorsAdvancesClosing</dataPath>
+			<field>VendorsAdvancesClosing</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Vendors advances closing</v8:content>
+				</v8:item>
+			</title>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>CustomersAdvancesClosing</dataPath>
+			<field>CustomersAdvancesClosing</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Customers advances closing</v8:content>
+				</v8:item>
+			</title>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>AgingClosing</dataPath>
+			<field>AgingClosing</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Aging closing</v8:content>
+				</v8:item>
+			</title>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ExpenseType</dataPath>
+			<field>ExpenseType</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Expense type</v8:content>
+				</v8:item>
+			</title>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>ProfitLossCenter</dataPath>
+			<field>ProfitLossCenter</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Profit loss center</v8:content>
+				</v8:item>
+			</title>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Branch</dataPath>
+			<field>Branch</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Branch</v8:content>
+				</v8:item>
+			</title>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>LegalNameContract</dataPath>
+			<field>LegalNameContract</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Legal name contract</v8:content>
+				</v8:item>
+			</title>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>RecordType</dataPath>
+			<field>RecordType</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Record type</v8:content>
+				</v8:item>
+			</title>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>AmountWithTaxes</dataPath>
+			<field>AmountWithTaxes</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Amount with taxes</v8:content>
+				</v8:item>
+			</title>
 		</field>
 		<item xsi:type="DataSetQuery">
 			<name>R1001T_Purchases</name>
@@ -803,6 +1181,10 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Amount</dataPath>
 				<field>Amount</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R1001T_Purchases" AS RegisterName, * FROM AccumulationRegister.R1001T_Purchases</query>
@@ -879,6 +1261,10 @@
 				<dataPath>RowKey</dataPath>
 				<field>RowKey</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R1002T_PurchaseReturns" AS RegisterName, * FROM AccumulationRegister.R1002T_PurchaseReturns</query>
 		</item>
@@ -945,6 +1331,10 @@
 						<v8:content>Register name</v8:content>
 					</v8:item>
 				</title>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R1005T_PurchaseSpecialOffers" AS RegisterName, * FROM AccumulationRegister.R1005T_PurchaseSpecialOffers</query>
@@ -1017,6 +1407,10 @@
 				<dataPath>NetAmount</dataPath>
 				<field>NetAmount</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R1010T_PurchaseOrders" AS RegisterName, * FROM AccumulationRegister.R1010T_PurchaseOrders</query>
 		</item>
@@ -1063,6 +1457,14 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Order</dataPath>
 				<field>Order</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R1011B_PurchaseOrdersReceipt" AS RegisterName, * FROM AccumulationRegister.R1011B_PurchaseOrdersReceipt</query>
@@ -1126,6 +1528,14 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Amount</dataPath>
 				<field>Amount</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R1012B_PurchaseOrdersInvoiceClosing" AS RegisterName, * FROM AccumulationRegister.R1012B_PurchaseOrdersInvoiceClosing</query>
@@ -1202,6 +1612,10 @@
 				<dataPath>Period</dataPath>
 				<field>Period</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R1014T_CanceledPurchaseOrders" AS RegisterName, * FROM AccumulationRegister.R1014T_CanceledPurchaseOrders</query>
 		</item>
@@ -1264,6 +1678,18 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>LineNumber</dataPath>
 				<field>LineNumber</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>VendorsAdvancesClosing</dataPath>
+				<field>VendorsAdvancesClosing</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R1020B_AdvancesToVendors" AS RegisterName, * FROM AccumulationRegister.R1020B_AdvancesToVendors</query>
@@ -1332,6 +1758,18 @@
 				<dataPath>Company</dataPath>
 				<field>Company</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>VendorsAdvancesClosing</dataPath>
+				<field>VendorsAdvancesClosing</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R1021B_VendorsTransactions" AS RegisterName, * FROM AccumulationRegister.R1021B_VendorsTransactions</query>
 		</item>
@@ -1378,6 +1816,18 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>ItemKey</dataPath>
 				<field>ItemKey</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Store</dataPath>
+				<field>Store</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R1031B_ReceiptInvoicing" AS RegisterName, * FROM AccumulationRegister.R1031B_ReceiptInvoicing</query>
@@ -1433,6 +1883,14 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>LineNumber</dataPath>
 				<field>LineNumber</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R1040B_TaxesOutgoing" AS RegisterName, * FROM AccumulationRegister.R1040B_TaxesOutgoing</query>
@@ -1504,6 +1962,10 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>NetAmount</dataPath>
 				<field>NetAmount</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R2001T_Sales" AS RegisterName, * FROM AccumulationRegister.R2001T_Sales</query>
@@ -1580,6 +2042,10 @@
 				<dataPath>Invoice</dataPath>
 				<field>Invoice</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R2002T_SalesReturns" AS RegisterName, * FROM AccumulationRegister.R2002T_SalesReturns</query>
 		</item>
@@ -1654,6 +2120,10 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Company</dataPath>
 				<field>Company</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R2005T_SalesSpecialOffers" AS RegisterName, * FROM AccumulationRegister.R2005T_SalesSpecialOffers</query>
@@ -1734,6 +2204,10 @@
 					</v8:item>
 				</title>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R2010T_SalesOrders" AS RegisterName, * FROM AccumulationRegister.R2010T_SalesOrders</query>
 		</item>
@@ -1780,6 +2254,14 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Order</dataPath>
 				<field>Order</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R2011B_SalesOrdersShipment" AS RegisterName, * FROM AccumulationRegister.R2011B_SalesOrdersShipment</query>
@@ -1843,6 +2325,14 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Currency</dataPath>
 				<field>Currency</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R2012B_SalesOrdersInvoiceClosing" AS RegisterName, * FROM AccumulationRegister.R2012B_SalesOrdersInvoiceClosing</query>
@@ -1910,6 +2400,10 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>ReOrderedQuantity</dataPath>
 				<field>ReOrderedQuantity</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R2013T_SalesOrdersProcurement" AS RegisterName, * FROM AccumulationRegister.R2013T_SalesOrdersProcurement</query>
@@ -1986,6 +2480,10 @@
 				<dataPath>Active</dataPath>
 				<field>Active</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R2014T_CanceledSalesOrders" AS RegisterName, * FROM AccumulationRegister.R2014T_CanceledSalesOrders</query>
 		</item>
@@ -2048,6 +2546,18 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Active</dataPath>
 				<field>Active</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>CustomersAdvancesClosing</dataPath>
+				<field>CustomersAdvancesClosing</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R2020B_AdvancesFromCustomers" AS RegisterName, * FROM AccumulationRegister.R2020B_AdvancesFromCustomers</query>
@@ -2116,6 +2626,18 @@
 				<dataPath>CurrencyMovementType</dataPath>
 				<field>CurrencyMovementType</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>CustomersAdvancesClosing</dataPath>
+				<field>CustomersAdvancesClosing</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R2021B_CustomersTransactions" AS RegisterName, * FROM AccumulationRegister.R2021B_CustomersTransactions</query>
 		</item>
@@ -2162,6 +2684,18 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Recorder</dataPath>
 				<field>Recorder</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Store</dataPath>
+				<field>Store</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R2031B_ShipmentInvoicing" AS RegisterName, * FROM AccumulationRegister.R2031B_ShipmentInvoicing</query>
@@ -2218,6 +2752,14 @@
 					</v8:item>
 				</title>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R2040B_TaxesIncoming" AS RegisterName, * FROM AccumulationRegister.R2040B_TaxesIncoming</query>
 		</item>
@@ -2230,10 +2772,6 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>DeferredCalculation</dataPath>
 				<field>DeferredCalculation</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>MovementType</dataPath>
-				<field>MovementType</field>
 			</field>
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Active</dataPath>
@@ -2276,6 +2814,14 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Recorder</dataPath>
 				<field>Recorder</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R3010B_CashOnHand" AS RegisterName, * FROM AccumulationRegister.R3010B_CashOnHand</query>
@@ -2331,6 +2877,10 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Account</dataPath>
 				<field>Account</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R3011T_CashMovements" AS RegisterName, * FROM AccumulationRegister.R3011T_CashMovements</query>
@@ -2390,6 +2940,14 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>CurrencyMovementType</dataPath>
 				<field>CurrencyMovementType</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R3015B_CashAdvance" AS RegisterName, * FROM AccumulationRegister.R3015B_CashAdvance</query>
@@ -2454,6 +3012,14 @@
 				<dataPath>DeferredCalculation</dataPath>
 				<field>DeferredCalculation</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R3016B_ChequeAndBonds" AS RegisterName, * FROM AccumulationRegister.R3016B_ChequeAndBonds</query>
 		</item>
@@ -2512,6 +3078,14 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>LineNumber</dataPath>
 				<field>LineNumber</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R3021B_CashInTransitIncoming" AS RegisterName, * FROM AccumulationRegister.R3021B_CashInTransitIncoming</query>
@@ -2572,134 +3146,16 @@
 				<dataPath>Company</dataPath>
 				<field>Company</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R3022B_CashInTransitOutgoing" AS RegisterName, * FROM AccumulationRegister.R3022B_CashInTransitOutgoing</query>
-		</item>
-		<item xsi:type="DataSetQuery">
-			<name>R3033B_CashPlanningIncoming</name>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Active</dataPath>
-				<field>Active</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>RegisterName</dataPath>
-				<field>RegisterName</field>
-				<title xsi:type="v8:LocalStringType">
-					<v8:item>
-						<v8:lang>en</v8:lang>
-						<v8:content>Register name</v8:content>
-					</v8:item>
-				</title>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Company</dataPath>
-				<field>Company</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Currency</dataPath>
-				<field>Currency</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>CurrencyMovementType</dataPath>
-				<field>CurrencyMovementType</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Account</dataPath>
-				<field>Account</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>DeferredCalculation</dataPath>
-				<field>DeferredCalculation</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>MovementType</dataPath>
-				<field>MovementType</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>LineNumber</dataPath>
-				<field>LineNumber</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Amount</dataPath>
-				<field>Amount</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Basis</dataPath>
-				<field>Basis</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Period</dataPath>
-				<field>Period</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Recorder</dataPath>
-				<field>Recorder</field>
-			</field>
-			<dataSource>DataSource1</dataSource>
-			<query>SELECT "R3033B_CashPlanningIncoming" AS RegisterName, * FROM AccumulationRegister.R3033B_CashPlanningIncoming</query>
-		</item>
-		<item xsi:type="DataSetQuery">
-			<name>R3034B_CashPlanningOutgoing</name>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Active</dataPath>
-				<field>Active</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Amount</dataPath>
-				<field>Amount</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Basis</dataPath>
-				<field>Basis</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Recorder</dataPath>
-				<field>Recorder</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>LineNumber</dataPath>
-				<field>LineNumber</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Company</dataPath>
-				<field>Company</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>MovementType</dataPath>
-				<field>MovementType</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Currency</dataPath>
-				<field>Currency</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>RegisterName</dataPath>
-				<field>RegisterName</field>
-				<title xsi:type="v8:LocalStringType">
-					<v8:item>
-						<v8:lang>en</v8:lang>
-						<v8:content>Register name</v8:content>
-					</v8:item>
-				</title>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Period</dataPath>
-				<field>Period</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>DeferredCalculation</dataPath>
-				<field>DeferredCalculation</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>CurrencyMovementType</dataPath>
-				<field>CurrencyMovementType</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Account</dataPath>
-				<field>Account</field>
-			</field>
-			<dataSource>DataSource1</dataSource>
-			<query>SELECT "R3034B_CashPlanningOutgoing" AS RegisterName, * FROM AccumulationRegister.R3034B_CashPlanningOutgoing</query>
 		</item>
 		<item xsi:type="DataSetQuery">
 			<name>R4010B_ActualStocks</name>
@@ -2740,6 +3196,10 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Active</dataPath>
 				<field>Active</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4010B_ActualStocks" AS RegisterName, * FROM AccumulationRegister.R4010B_ActualStocks</query>
@@ -2783,6 +3243,10 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Period</dataPath>
 				<field>Period</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4011B_FreeStocks" AS RegisterName, * FROM AccumulationRegister.R4011B_FreeStocks</query>
@@ -2831,55 +3295,12 @@
 				<dataPath>Store</dataPath>
 				<field>Store</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4012B_StockReservation" AS RegisterName, * FROM AccumulationRegister.R4012B_StockReservation</query>
-		</item>
-		<item xsi:type="DataSetQuery">
-			<name>R4013B_StockReservationPlanning</name>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Active</dataPath>
-				<field>Active</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>IncomingDocument</dataPath>
-				<field>IncomingDocument</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Recorder</dataPath>
-				<field>Recorder</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Quantity</dataPath>
-				<field>Quantity</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Order</dataPath>
-				<field>Order</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>LineNumber</dataPath>
-				<field>LineNumber</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>Period</dataPath>
-				<field>Period</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>RegisterName</dataPath>
-				<field>RegisterName</field>
-				<title xsi:type="v8:LocalStringType">
-					<v8:item>
-						<v8:lang>en</v8:lang>
-						<v8:content>Register name</v8:content>
-					</v8:item>
-				</title>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>ItemKey</dataPath>
-				<field>ItemKey</field>
-			</field>
-			<dataSource>DataSource1</dataSource>
-			<query>SELECT "R4013B_StockReservationPlanning" AS RegisterName, * FROM AccumulationRegister.R4013B_StockReservationPlanning</query>
 		</item>
 		<item xsi:type="DataSetQuery">
 			<name>R4014B_SerialLotNumber</name>
@@ -2924,6 +3345,14 @@
 						<v8:content>Register name</v8:content>
 					</v8:item>
 				</title>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4014B_SerialLotNumber" AS RegisterName, * FROM AccumulationRegister.R4014B_SerialLotNumber</query>
@@ -2976,6 +3405,10 @@
 				<dataPath>Quantity</dataPath>
 				<field>Quantity</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4015T_InternalSupplyRequests" AS RegisterName, * FROM AccumulationRegister.R4015T_InternalSupplyRequests</query>
 		</item>
@@ -3027,6 +3460,14 @@
 				<dataPath>Store</dataPath>
 				<field>Store</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4016B_InternalSupplyRequestOrdering" AS RegisterName, * FROM AccumulationRegister.R4016B_InternalSupplyRequestOrdering</query>
 		</item>
@@ -3077,6 +3518,14 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Period</dataPath>
 				<field>Period</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4017B_InternalSupplyRequestProcurement" AS RegisterName, * FROM AccumulationRegister.R4017B_InternalSupplyRequestProcurement</query>
@@ -3184,6 +3633,10 @@
 				<dataPath>Recorder</dataPath>
 				<field>Recorder</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4021B_StockTransferOrdersReceipt" AS RegisterName, * FROM AccumulationRegister.R4021B_StockTransferOrdersReceipt</query>
 		</item>
@@ -3235,6 +3688,10 @@
 				<dataPath>ItemKey</dataPath>
 				<field>ItemKey</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4022B_StockTransferOrdersShipment" AS RegisterName, * FROM AccumulationRegister.R4022B_StockTransferOrdersShipment</query>
 		</item>
@@ -3282,6 +3739,10 @@
 				<dataPath>Store</dataPath>
 				<field>Store</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4031B_GoodsInTransitIncoming" AS RegisterName, * FROM AccumulationRegister.R4031B_GoodsInTransitIncoming</query>
 		</item>
@@ -3328,6 +3789,10 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Period</dataPath>
 				<field>Period</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4032B_GoodsInTransitOutgoing" AS RegisterName, * FROM AccumulationRegister.R4032B_GoodsInTransitOutgoing</query>
@@ -3384,6 +3849,14 @@
 				<dataPath>Quantity</dataPath>
 				<field>Quantity</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4033B_GoodsReceiptSchedule" AS RegisterName, * FROM AccumulationRegister.R4033B_GoodsReceiptSchedule</query>
 		</item>
@@ -3439,6 +3912,14 @@
 					</v8:item>
 				</title>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4034B_GoodsShipmentSchedule" AS RegisterName, * FROM AccumulationRegister.R4034B_GoodsShipmentSchedule</query>
 		</item>
@@ -3485,6 +3966,10 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Quantity</dataPath>
 				<field>Quantity</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4035B_IncomingStocks" AS RegisterName, * FROM AccumulationRegister.R4035B_IncomingStocks</query>
@@ -3541,6 +4026,10 @@
 				<dataPath>Order</dataPath>
 				<field>Order</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4036B_IncomingStocksRequested" AS RegisterName, * FROM AccumulationRegister.R4036B_IncomingStocksRequested</query>
 		</item>
@@ -3587,6 +4076,14 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Company</dataPath>
 				<field>Company</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R4050B_StockInventory" AS RegisterName, * FROM AccumulationRegister.R4050B_StockInventory</query>
@@ -3729,6 +4226,18 @@
 				<dataPath>Company</dataPath>
 				<field>Company</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>LegalNameContract</dataPath>
+				<field>LegalNameContract</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R5010B_ReconciliationStatement" AS RegisterName, * FROM AccumulationRegister.R5010B_ReconciliationStatement</query>
 		</item>
@@ -3788,8 +4297,20 @@
 				<dataPath>PaymentDate</dataPath>
 				<field>PaymentDate</field>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>AgingClosing</dataPath>
+				<field>AgingClosing</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
-			<query>SELECT "R5011B_PartnersAging" AS RegisterName, * FROM AccumulationRegister.R5011B_PartnersAging</query>
+			<query>SELECT "R5011B_PartnersAging" AS RegisterName, * FROM AccumulationRegister.R5011B_CustomersAging</query>
 		</item>
 		<item xsi:type="DataSetQuery">
 			<name>R5021T_Revenues</name>
@@ -3800,10 +4321,6 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>CurrencyMovementType</dataPath>
 				<field>CurrencyMovementType</field>
-			</field>
-			<field xsi:type="DataSetFieldField">
-				<dataPath>BusinessUnit</dataPath>
-				<field>BusinessUnit</field>
 			</field>
 			<field xsi:type="DataSetFieldField">
 				<dataPath>AdditionalAnalytic</dataPath>
@@ -3851,6 +4368,18 @@
 					</v8:item>
 				</title>
 			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>ProfitLossCenter</dataPath>
+				<field>ProfitLossCenter</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>AmountWithTaxes</dataPath>
+				<field>AmountWithTaxes</field>
+			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R5021T_Revenues" AS RegisterName, * FROM AccumulationRegister.R5021T_Revenues</query>
 		</item>
@@ -3865,6 +4394,62 @@
 						<v8:content>Register name</v8:content>
 					</v8:item>
 				</title>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>LineNumber</dataPath>
+				<field>LineNumber</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Active</dataPath>
+				<field>Active</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>ItemKey</dataPath>
+				<field>ItemKey</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Currency</dataPath>
+				<field>Currency</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Amount</dataPath>
+				<field>Amount</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Company</dataPath>
+				<field>Company</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Recorder</dataPath>
+				<field>Recorder</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>ExpenseType</dataPath>
+				<field>ExpenseType</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>CurrencyMovementType</dataPath>
+				<field>CurrencyMovementType</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Period</dataPath>
+				<field>Period</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>AdditionalAnalytic</dataPath>
+				<field>AdditionalAnalytic</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>ProfitLossCenter</dataPath>
+				<field>ProfitLossCenter</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>AmountWithTaxes</dataPath>
+				<field>AmountWithTaxes</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R5022T_Expenses" AS RegisterName, * FROM AccumulationRegister.R5022T_Expenses</query>
@@ -3920,6 +4505,14 @@
 			<field xsi:type="DataSetFieldField">
 				<dataPath>Tax</dataPath>
 				<field>Tax</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>Branch</dataPath>
+				<field>Branch</field>
+			</field>
+			<field xsi:type="DataSetFieldField">
+				<dataPath>RecordType</dataPath>
+				<field>RecordType</field>
 			</field>
 			<dataSource>DataSource1</dataSource>
 			<query>SELECT "R5041B_TaxesPayable" AS RegisterName, * FROM AccumulationRegister.R5041B_TaxesPayable</query>
@@ -4011,7 +4604,7 @@
 					<dcsset:field>Basis</dcsset:field>
 				</dcsset:item>
 				<dcsset:item xsi:type="dcsset:SelectedItemField">
-					<dcsset:field>BusinessUnit</dcsset:field>
+					<dcsset:field>Branch</dcsset:field>
 				</dcsset:item>
 				<dcsset:item xsi:type="dcsset:SelectedItemField">
 					<dcsset:field>CancelReason</dcsset:field>

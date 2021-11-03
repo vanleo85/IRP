@@ -1,7 +1,11 @@
 Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
+	
+	Parameters = CurrenciesClientServer.GetParameters_V3(ThisObject);
+	CurrenciesClientServer.DeleteRowsByKeyFromCurrenciesTable(ThisObject.Currencies);
+	CurrenciesServer.UpdateCurrencyTable(Parameters, ThisObject.Currencies);
 
 	ThisObject.DocumentAmount = CalculationServer.CalculateDocumentAmount(ItemList);
 EndProcedure
@@ -9,7 +13,7 @@ EndProcedure
 Procedure OnWrite(Cancel)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
 EndProcedure
 
 Procedure BeforeDelete(Cancel)
@@ -19,15 +23,19 @@ Procedure BeforeDelete(Cancel)
 EndProcedure
 
 Procedure FillCheckProcessing(Cancel, CheckedAttributes)
-	ClosingOrder = DocSalesOrderServer.GetLastSalesOrderClosingBySalesOrder(Ref);
-	If Not IsNew() AND Not ClosingOrder.IsEmpty() Then
-		Cancel = True;
-		CommonFunctionsClientServer.ShowUsersMessage(StrTemplate(R().InfoMessage_022, ClosingOrder));
+
+	If Not IsNew() And Modified() Then
+		ClosingOrder = DocSalesOrderServer.GetLastSalesOrderClosingBySalesOrder(Ref);
+		If Not ClosingOrder.IsEmpty() Then
+			Cancel = True;
+			CommonFunctionsClientServer.ShowUsersMessage(StrTemplate(R().InfoMessage_022, ClosingOrder));
+		EndIf;
 	EndIf;
-	
+
 	If DocumentsServer.CheckItemListStores(ThisObject) Then
 		Cancel = True;
 	EndIf;
+
 	For RowIndex = 0 To (ThisObject.ItemList.Count() - 1) Do
 		Row = ThisObject.ItemList[RowIndex];
 		If Not ValueIsFilled(Row.ProcurementMethod) And Row.ItemKey.Item.ItemType.Type = Enums.ItemTypes.Product Then
@@ -36,7 +44,7 @@ Procedure FillCheckProcessing(Cancel, CheckedAttributes)
 				+ "].ProcurementMethod", "Object.ItemList");
 			Cancel = True;
 		EndIf;
-		
+
 		If Row.Cancel And Row.CancelReason.IsEmpty() Then
 			CommonFunctionsClientServer.ShowUsersMessage(R().Error_093, "Object.ItemList[" + RowIndex
 				+ "].CancelReason", "Object.ItemList");
@@ -61,12 +69,4 @@ Procedure Filling(FillingData, FillingText, StandardProcessing)
 	FillPropertyValues(ThisObject, FillingData);
 	Number = Undefined;
 	Date = Undefined;
-EndProcedure
-
-Procedure OnCopy(CopiedObject)
-	LinkedTables = New Array();
-	LinkedTables.Add(SpecialOffers);
-	LinkedTables.Add(TaxList);
-	LinkedTables.Add(Currencies);
-	DocumentsServer.SetNewTableUUID(ItemList, LinkedTables);
 EndProcedure

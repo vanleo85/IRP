@@ -49,6 +49,7 @@ Scenario: _051001 preparation (Cash payment)
 		When Create information register CurrencyRates records
 		When Create catalog CashAccounts objects
 		When Create catalog Partners objects
+		When Create catalog ExpenseAndRevenueTypes objects
 		When update ItemKeys
 	* Add plugin for taxes calculation
 		Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
@@ -90,11 +91,15 @@ Scenario: _051001 create Cash payment based on Purchase invoice
 		Then the form attribute named "TransactionType" became equal to "Payment to the vendor"
 		Then the form attribute named "Currency" became equal to "TRY"
 		And "PaymentList" table contains lines
-			| 'Partner'   | 'Payee'             | 'Partner term'          | 'Amount'     | 'Basis document'      |
+			| 'Partner'   | 'Payee'             | 'Partner term'          | 'Total amount'     | 'Basis document'      |
 			| 'Ferron BP' | 'Company Ferron BP' | 'Vendor Ferron, TRY' | '137 000,00' | '$$PurchaseInvoice018001$$' |
-		And "PaymentListCurrencies" table contains lines
-			| 'Movement type'      | 'Amount'    | 'Multiplicity' |
-			| 'Reporting currency' | '23 454,40' | '1'            |
+		And in the table "PaymentList" I click "Edit currencies" button
+		And "CurrenciesTable" table became equal
+			| 'Movement type'      | 'Type'         | 'To'  | 'From' | 'Multiplicity' | 'Rate'   | 'Amount'    |
+			| 'Reporting currency' | 'Reporting'    | 'USD' | 'TRY'  | '1'            | '0,1712' | '23 454,40' |
+			| 'Local currency'     | 'Legal'        | 'TRY' | 'TRY'  | '1'            | '1'      | '137 000'   |
+			| 'TRY'                | 'Partner term' | 'TRY' | 'TRY'  | '1'            | '1'      | '137 000'   |
+		And I close current window
 	* Data overflow check
 		And I click Select button of "Cash account" field
 		And I go to line in "List" table
@@ -105,11 +110,15 @@ Scenario: _051001 create Cash payment based on Purchase invoice
 		Then the form attribute named "CashAccount" became equal to "Cash desk №2"
 		Then the form attribute named "TransactionType" became equal to "Payment to the vendor"
 		And "PaymentList" table contains lines
-			| 'Partner'   | 'Payee'             | 'Partner term'          | 'Amount'     | 'Basis document'      |
+			| 'Partner'   | 'Payee'             | 'Partner term'          | 'Total amount'     | 'Basis document'      |
 			| 'Ferron BP' | 'Company Ferron BP' | 'Vendor Ferron, TRY' | '137 000,00' | '$$PurchaseInvoice018001$$' |
-		And "PaymentListCurrencies" table contains lines
-			| 'Movement type'      | 'Type'      | 'Currency from' | 'Currency' | 'Rate presentation' | 'Amount'    | 'Multiplicity' |
-			| 'Reporting currency' | 'Reporting' | 'TRY'           | 'USD'      | '0,1712'            | '23 454,40' | '1'            |
+		And in the table "PaymentList" I click "Edit currencies" button
+		And "CurrenciesTable" table became equal
+			| 'Movement type'      | 'Type'         | 'To'  | 'From' | 'Multiplicity' | 'Rate'   | 'Amount'    |
+			| 'Reporting currency' | 'Reporting'    | 'USD' | 'TRY'  | '1'            | '0,1712' | '23 454,40' |
+			| 'Local currency'     | 'Legal'        | 'TRY' | 'TRY'  | '1'            | '1'      | '137 000'   |
+			| 'TRY'                | 'Partner term' | 'TRY' | 'TRY'  | '1'            | '1'      | '137 000'   |
+		And I close current window	
 	* Check calculation Document amount
 		Then the form attribute named "DocumentAmount" became equal to "137 000,00"
 	* Change in basis document
@@ -121,12 +130,12 @@ Scenario: _051001 create Cash payment based on Purchase invoice
 		And I click "Select" button
 		And in "PaymentList" table I move to the next cell
 	* Change in payment amount
-		And I activate field named "PaymentListAmount" in "PaymentList" table
+		And I activate field named "PaymentListTotalAmount" in "PaymentList" table
 		And I select current line in "PaymentList" table
-		And I input "20 000,00" text in the field named "PaymentListAmount" of "PaymentList" table
+		And I input "20 000,00" text in the field named "PaymentListTotalAmount" of "PaymentList" table
 		And I finish line editing in "PaymentList" table
 		And "PaymentList" table contains lines
-			| 'Partner'   | 'Payee'             | 'Partner term'          | 'Amount'     | 'Basis document'      |
+			| 'Partner'   | 'Payee'             | 'Partner term'          | 'Total amount'     | 'Basis document'      |
 			| 'Ferron BP' | 'Company Ferron BP' | 'Vendor Ferron, TRY' | '20 000,00' | '$$PurchaseInvoice29604$$' |
 	And I close all client application windows
 
@@ -182,8 +191,17 @@ Scenario: _051001 create Cash payment (independently)
 			| '137 000,00'       | 'Main Company' | 'Company Ferron BP' | 'Ferron BP' |
 			And I click "Select" button
 		* Filling in amount in a tabular part
-			And I activate "Amount" field in "PaymentList" table
-			And I input "1000,00" text in "Amount" field of "PaymentList" table
+			And I activate "Total amount" field in "PaymentList" table
+			And I input "1000,00" text in "Total amount" field of "PaymentList" table
+			And I finish line editing in "PaymentList" table
+		* Select movement type
+			And I activate "Financial movement type" field in "PaymentList" table
+			And I select current line in "PaymentList" table
+			And I click choice button of "Financial movement type" attribute in "PaymentList" table
+			And I go to line in "List" table
+				| 'Description'     |
+				| 'Movement type 1' |
+			And I select current line in "List" table		
 			And I finish line editing in "PaymentList" table
 		And I click the button named "FormPost"
 		And I delete "$$NumberCashPayment0510011$$" variable
@@ -243,8 +261,8 @@ Scenario: _051001 create Cash payment (independently)
 			| '136 000,00'       | 'Main Company' | 'Company Ferron BP' | 'Ferron BP' |
 			And I click "Select" button
 		* Filling in amount in a tabular part
-			And I activate "Amount" field in "PaymentList" table
-			And I input "20,00" text in "Amount" field of "PaymentList" table
+			And I activate "Total amount" field in "PaymentList" table
+			And I input "20,00" text in "Total amount" field of "PaymentList" table
 			And I finish line editing in "PaymentList" table
 		And I click the button named "FormPost"
 		And I delete "$$NumberCashPayment0510012$$" variable
@@ -296,8 +314,8 @@ Scenario: _051001 create Cash payment (independently)
 					| 'Vendor Ferron, USD' |
 			And I select current line in "List" table
 		* Filling in amount in a tabular part
-			And I activate "Amount" field in "PaymentList" table
-			And I input "150,00" text in "Amount" field of "PaymentList" table
+			And I activate "Total amount" field in "PaymentList" table
+			And I input "150,00" text in "Total amount" field of "PaymentList" table
 			And I finish line editing in "PaymentList" table
 		And I click the button named "FormPost"
 		And I delete "$$NumberCashPayment0510013$$" variable
@@ -310,125 +328,7 @@ Scenario: _051001 create Cash payment (independently)
 			| 'Number' |
 			| '$$NumberCashPayment0510013$$'    |	
 	
-Scenario: check Cash payment movements by register Partner Ap Transactions
-		Given I open hyperlink "e1cib/list/AccumulationRegister.PartnerApTransactions"
-		And "List" table contains lines
-		| 'Currency' | 'Recorder'               | 'Legal name'        | 'Basis document'            | 'Company'      | 'Amount'   | 'Partner term'       | 'Partner'   |
-		| 'TRY'      | '$$CashPayment0510011$$' | 'Company Ferron BP' | '$$PurchaseInvoice018001$$' | 'Main Company' | '1 000,00' | 'Vendor Ferron, TRY' | 'Ferron BP' |
-		| 'USD'      | '$$CashPayment0510012$$' | 'Company Ferron BP' | '$$PurchaseInvoice018001$$' | 'Main Company' | '20,00'    | 'Vendor Ferron, TRY' | 'Ferron BP' |
-		| 'EUR'      | '$$CashPayment0510013$$' | 'Company Ferron BP' | ''                          | 'Main Company' | '150,00'   | 'Vendor Ferron, USD' | 'Ferron BP' |
-		And I close all client application windows
-
-Scenario: _050002 check Cash payment movements with transaction type Payment to the vendor
-	* Open Cash payment 1
-		Given I open hyperlink "e1cib/list/Document.CashPayment"
-		And I go to line in "List" table
-			| 'Number' |
-			| '1'      |
-	* Check movements Cash payment 1
-		And I click "Registrations report" button
-		And I select "Accounts statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| '$$CashPayment0510011$$'         | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''          | ''                  | ''                          | ''         |
-		| 'Document registrations records' | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''          | ''                  | ''                          | ''         |
-		| 'Register  "Accounts statement"' | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''          | ''                  | ''                          | ''         |
-		| ''                               | 'Record type' | 'Period' | 'Resources'            | ''               | ''                       | ''               | 'Dimensions'   | ''          | ''                  | ''                          | ''         |
-		| ''                               | ''            | ''       | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner'   | 'Legal name'        | 'Basis document'            | 'Currency' |
-		| ''                               | 'Expense'     | '*'      | ''                     | '1 000'          | ''                       | ''               | 'Main Company' | 'Ferron BP' | 'Company Ferron BP' | '$$PurchaseInvoice018001$$' | 'TRY'      |
-		And I select "Reconciliation statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Reconciliation statement"' | ''            | ''       | ''          | ''             | ''                  | ''         | '' | '' | '' | '' | '' |
-		| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''                  | ''         | '' | '' | '' | '' | '' |
-		| ''                                     | ''            | ''       | 'Amount'    | 'Company'      | 'Legal name'        | 'Currency' | '' | '' | '' | '' | '' |
-		| ''                                     | 'Receipt'     | '*'      | '1 000'     | 'Main Company' | 'Company Ferron BP' | 'TRY'      | '' | '' | '' | '' | '' |
-		And I select "Partner AP transactions" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Partner AP transactions"' | ''            | ''       | ''          | ''             | ''                          | ''          | ''                  | ''                   | ''         | ''                             | ''                     |
-		| ''                                    | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''                          | ''          | ''                  | ''                   | ''         | ''                             | 'Attributes'           |
-		| ''                                    | ''            | ''       | 'Amount'    | 'Company'      | 'Basis document'            | 'Partner'   | 'Legal name'        | 'Partner term'       | 'Currency' | 'Multi currency movement type' | 'Deferred calculation' |
-		| ''                                    | 'Expense'     | '*'      | '171,2'     | 'Main Company' | '$$PurchaseInvoice018001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Vendor Ferron, TRY' | 'USD'      | 'Reporting currency'           | 'No'                   |
-		| ''                                    | 'Expense'     | '*'      | '1 000'     | 'Main Company' | '$$PurchaseInvoice018001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Vendor Ferron, TRY' | 'TRY'      | 'en description is empty'      | 'No'                   |
-		| ''                                    | 'Expense'     | '*'      | '1 000'     | 'Main Company' | '$$PurchaseInvoice018001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Vendor Ferron, TRY' | 'TRY'      | 'Local currency'               | 'No'                   |
-		| ''                                    | 'Expense'     | '*'      | '1 000'     | 'Main Company' | '$$PurchaseInvoice018001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Vendor Ferron, TRY' | 'TRY'      | 'TRY'                          | 'No'                   |
-		And I select "Account balance" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Account balance"'          | ''            | ''       | ''                     | ''               | ''                          | ''               | ''                             | ''                     | ''                  | ''                             | ''                     |
-		| ''                                     | 'Record type' | 'Period' | 'Resources'            | 'Dimensions'     | ''                          | ''               | ''                             | 'Attributes'           | ''                  | ''                             | ''                     |
-		| ''                                     | ''            | ''       | 'Amount'               | 'Company'        | 'Account'                   | 'Currency'       | 'Multi currency movement type' | 'Deferred calculation' | ''                  | ''                             | ''                     |
-		| ''                                     | 'Expense'     | '*'      | '171,2'               | 'Main Company'   | 'Cash desk №1'              | 'USD'            | 'Reporting currency'           | 'No'                   | ''                  | ''                             | ''                     |
-		| ''                                     | 'Expense'     | '*'      | '1 000'                | 'Main Company'   | 'Cash desk №1'              | 'TRY'            | 'en description is empty'      | 'No'                   | ''                  | ''                             | ''                     |
-		| ''                                     | 'Expense'     | '*'      | '1 000'                | 'Main Company'   | 'Cash desk №1'              | 'TRY'            | 'Local currency'               | 'No'                   | ''                  | ''                             | ''                     |
-		And I close all client application windows
-	* Clear movements Cash payment 1 and check that there is no movement on the registers
-		* Clear movements
-			Given I open hyperlink "e1cib/list/Document.CashPayment"
-			And I go to line in "List" table
-				| 'Number' |
-				| '$$NumberCashPayment0510011$$'      |
-			And in the table "List" I click the button named "ListContextMenuUndoPosting"
-		* Check that there is no movement on the registers
-			Given I open hyperlink "e1cib/list/AccumulationRegister.PartnerApTransactions"
-			And "List" table does not contain lines
-				| 'Recorder'           |
-				| '$$CashPayment0510011$$' |
-			Given I open hyperlink "e1cib/list/AccumulationRegister.AccountBalance"
-			And "List" table does not contain lines
-				| 'Recorder'           |
-				| '$$CashPayment0510011$$' |
-			Given I open hyperlink "e1cib/list/AccumulationRegister.ReconciliationStatement"
-			And "List" table does not contain lines
-				| 'Recorder'           |
-				| '$$CashPayment0510011$$' |
-			And I close all client application windows
-	* * Re-posting the document and checking movements on the registers
-		* Posting the document
-			Given I open hyperlink "e1cib/list/Document.CashPayment"
-			And I go to line in "List" table
-				| 'Number' |
-				| '$$NumberCashPayment0510011$$'      |
-			And in the table "List" I click the button named "ListContextMenuPost"
-		* Check movements
-			And I click "Registrations report" button
-			And I select "Accounts statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| '$$CashPayment0510011$$'         | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''          | ''                  | ''                          | ''         |
-		| 'Document registrations records' | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''          | ''                  | ''                          | ''         |
-		| 'Register  "Accounts statement"' | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''          | ''                  | ''                          | ''         |
-		| ''                               | 'Record type' | 'Period' | 'Resources'            | ''               | ''                       | ''               | 'Dimensions'   | ''          | ''                  | ''                          | ''         |
-		| ''                               | ''            | ''       | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner'   | 'Legal name'        | 'Basis document'            | 'Currency' |
-		| ''                               | 'Expense'     | '*'      | ''                     | '1 000'          | ''                       | ''               | 'Main Company' | 'Ferron BP' | 'Company Ferron BP' | '$$PurchaseInvoice018001$$' | 'TRY'      |
-		And I select "Reconciliation statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Reconciliation statement"' | ''            | ''       | ''          | ''             | ''                  | ''         | '' | '' | '' | '' | '' |
-		| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''                  | ''         | '' | '' | '' | '' | '' |
-		| ''                                     | ''            | ''       | 'Amount'    | 'Company'      | 'Legal name'        | 'Currency' | '' | '' | '' | '' | '' |
-		| ''                                     | 'Receipt'     | '*'      | '1 000'     | 'Main Company' | 'Company Ferron BP' | 'TRY'      | '' | '' | '' | '' | '' |
-		And I select "Partner AP transactions" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Partner AP transactions"' | ''            | ''       | ''          | ''             | ''                          | ''          | ''                  | ''                   | ''         | ''                             | ''                     |
-		| ''                                    | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''                          | ''          | ''                  | ''                   | ''         | ''                             | 'Attributes'           |
-		| ''                                    | ''            | ''       | 'Amount'    | 'Company'      | 'Basis document'            | 'Partner'   | 'Legal name'        | 'Partner term'       | 'Currency' | 'Multi currency movement type' | 'Deferred calculation' |
-		| ''                                    | 'Expense'     | '*'      | '171,2'     | 'Main Company' | '$$PurchaseInvoice018001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Vendor Ferron, TRY' | 'USD'      | 'Reporting currency'           | 'No'                   |
-		| ''                                    | 'Expense'     | '*'      | '1 000'     | 'Main Company' | '$$PurchaseInvoice018001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Vendor Ferron, TRY' | 'TRY'      | 'en description is empty'      | 'No'                   |
-		| ''                                    | 'Expense'     | '*'      | '1 000'     | 'Main Company' | '$$PurchaseInvoice018001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Vendor Ferron, TRY' | 'TRY'      | 'Local currency'               | 'No'                   |
-		| ''                                    | 'Expense'     | '*'      | '1 000'     | 'Main Company' | '$$PurchaseInvoice018001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Vendor Ferron, TRY' | 'TRY'      | 'TRY'                          | 'No'                   |
-		And I select "Account balance" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Account balance"'          | ''            | ''       | ''                     | ''               | ''                          | ''               | ''                             | ''                     | ''                  | ''                             | ''                     |
-		| ''                                     | 'Record type' | 'Period' | 'Resources'            | 'Dimensions'     | ''                          | ''               | ''                             | 'Attributes'           | ''                  | ''                             | ''                     |
-		| ''                                     | ''            | ''       | 'Amount'               | 'Company'        | 'Account'                   | 'Currency'       | 'Multi currency movement type' | 'Deferred calculation' | ''                  | ''                             | ''                     |
-		| ''                                     | 'Expense'     | '*'      | '171,2'               | 'Main Company'   | 'Cash desk №1'              | 'USD'            | 'Reporting currency'           | 'No'                   | ''                  | ''                             | ''                     |
-		| ''                                     | 'Expense'     | '*'      | '1 000'                | 'Main Company'   | 'Cash desk №1'              | 'TRY'            | 'en description is empty'      | 'No'                   | ''                  | ''                             | ''                     |
-		| ''                                     | 'Expense'     | '*'      | '1 000'                | 'Main Company'   | 'Cash desk №1'              | 'TRY'            | 'Local currency'               | 'No'                   | ''                  | ''                             | ''                     |
-			And I close all client application windows
+	
 
 # Filters
 
@@ -530,12 +430,13 @@ Scenario: _051012 check the display of details on the form Cash payment with the
 			| Kalipso |
 		And I select current line in "List" table
 		And "PaymentList" table contains lines
-		| # | Partner | Amount | Payee              | Basis document | Planning transaction basis |
+		| # | Partner | Total Amount | Payee              | Basis document | Planning transaction basis |
 		| 1 | Kalipso | ''     | Company Kalipso    | ''             | ''                        |
 
 
 
 Scenario: _051013 check the display of details on the form Cash payment with the type of operation Currency exchange
+	And I close all client application windows
 	Given I open hyperlink "e1cib/list/Document.CashPayment"
 	And I click the button named "FormCreate"
 	And I select "Currency exchange" exact value from "Transaction type" drop-down list
@@ -554,7 +455,7 @@ Scenario: _051013 check the display of details on the form Cash payment with the
 			| Anna Petrova |
 		And I select current line in "List" table
 		And "PaymentList" table contains lines
-		| # | Partner      | Amount| Planning transaction basis |
+		| # | Partner      | Total amount| Planning transaction basis |
 		| 1 | Anna Petrova | ''    | ''                        |
 
 
@@ -571,12 +472,12 @@ Scenario: _051014 check the display of details on the form Cash payment with the
 		And form attribute named "Date" is available
 	* And I check the display of the tabular part
 		And in the table "PaymentList" I click the button named "PaymentListAdd"
-		And I input "100,00" text in "Amount" field of "PaymentList" table
+		And I input "100,00" text in "Total amount" field of "PaymentList" table
 		And I finish line editing in "PaymentList" table
 		If "PaymentList" table does not contain column named "Payee" Then
 		If "PaymentList" table does not contain column named "Partner" Then
 		And "PaymentList" table contains lines
-		| # | 'Amount'    | Planning transaction basis |
+		| # | 'Total amount'    | Planning transaction basis |
 		| 1 | '100,00'    | ''                        |
 
 

@@ -251,67 +251,67 @@ Scenario: _150003 check that the current prices are displayed in the Item
 	* Open price report (tab Price info)
 		And In this window I click command interface button "Price info"
 		Then "Result" spreadsheet document is equal by template
-			| 'Prices on*'       | ''          | ''                  | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| ''                 | ''          | ''                  | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| 'Item'             | 'Item Key'  | 'Basic Price Types' | ''                       | 'Basic Price without VAT' | ''                    | 'Dependent Price New' | ''                       |
-			| ''                 | ''          | 'Price'             | 'Reason'                 | 'Price'                   | 'Reason'              | 'Price'               | 'Reason'                 |
-			| 'Dress'            | 'S/Yellow'  | '550'               | 'Item key = S/Yellow'    | '466,1'                   | 'Item key = S/Yellow' | '605'                 | 'Item key = S/Yellow'    |
-			| 'Dress'            | 'XS/Blue'   | '520'               | 'Item key = XS/Blue'     | '440,68'                  | 'Item key = XS/Blue'  | '572'                 | 'Item key = XS/Blue'     |
-			| 'Dress'            | 'M/White'   | '520'               | 'Item key = M/White'     | '440,68'                  | 'Item key = M/White'  | '572'                 | 'Item key = M/White'     |
-			| 'Dress'            | 'L/Green'   | '550'               | 'Item key = L/Green'     | '466,1'                   | 'Item key = L/Green'  | '605'                 | 'Item key = L/Green'     |
-			| 'Dress'            | 'XL/Green'  | '550'               | 'Item key = XL/Green'    | '466,1'                   | 'Item key = XL/Green' | '605'                 | 'Item key = XL/Green'    |
-			| 'Dress'            | 'Dress/A-8' | '3 000'             | 'SpecificationDress/A-8' | ''                        | ''                    | '3 300'               | 'SpecificationDress/A-8' |
-			| 'Dress'            | 'XXL/Red'   | '700'               | 'Item = Dress'           | ''                        | ''                    | ''                    | ''                      |
-			| 'Dress'            | 'M/Brown'   | '700'               | 'Item = Dress'           | ''                        | ''                    | ''                    | ''                      |
-			| ''                 | ''          | ''                  | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| 'All prices'       | ''          | ''                  | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| ''                 | ''          | ''                  | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| 'Item'             | 'Item Key'  | 'Basic Price Types' | ''                       | 'Basic Price without VAT' | ''                    | 'Dependent Price New' | ''                       |
-			| ''                 | ''          | ''                  | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| '1. By item keys'  | ''          | ''                  | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| 'Dress'            | 'S/Yellow'  | '550'               | ''                       | '466,1'                   | ''                    | '605'                 | ''                       |
-			| 'Dress'            | 'XS/Blue'   | '520'               | ''                       | '440,68'                  | ''                    | '572'                 | ''                       |
-			| 'Dress'            | 'M/White'   | '520'               | ''                       | '440,68'                  | ''                    | '572'                 | ''                       |
-			| 'Dress'            | 'L/Green'   | '550'               | ''                       | '466,1'                   | ''                    | '605'                 | ''                       |
-			| 'Dress'            | 'XL/Green'  | '550'               | ''                       | '466,1'                   | ''                    | '605'                 | ''                       |
-			| '2. By properties' | ''          | ''                  | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| 'Dress'            | 'S/Yellow'  | '300'               | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| 'Dress'            | 'L/Green'   | '350'               | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| '3. By items'      | ''          | ''                  | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| 'Dress'            | 'S/Yellow'  | '700'               | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| 'Dress'            | 'XS/Blue'   | '700'               | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| 'Dress'            | 'M/White'   | '700'               | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| 'Dress'            | 'L/Green'   | '700'               | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| 'Dress'            | 'XL/Green'  | '700'               | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| 'Dress'            | 'XXL/Red'   | '700'               | ''                       | ''                        | ''                    | ''                    | ''                       |
-			| 'Dress'            | 'M/Brown'   | '700'               | ''                       | ''                        | ''                    | ''                    | ''                       |
+			| 'Prices on*'       | ''          | ''                  | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| ''                 | ''          | ''                  | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| 'Item'             | 'Item Key'  | 'Basic Price Types' | ''                          | 'Basic Price without VAT' | ''                    | 'Dependent Price New' | ''                          |
+			| ''                 | ''          | 'Price'             | 'Reason'                    | 'Price'                   | 'Reason'              | 'Price'               | 'Reason'                    |
+			| 'Dress'            | 'S/Yellow'  | '550'               | 'Item key = S/Yellow'       | '466,1'                   | 'Item key = S/Yellow' | '605'                 | 'Item key = S/Yellow'       |
+			| 'Dress'            | 'XS/Blue'   | '520'               | 'Item key = XS/Blue'        | '440,68'                  | 'Item key = XS/Blue'  | '572'                 | 'Item key = XS/Blue'        |
+			| 'Dress'            | 'M/White'   | '520'               | 'Item key = M/White'        | '440,68'                  | 'Item key = M/White'  | '572'                 | 'Item key = M/White'        |
+			| 'Dress'            | 'L/Green'   | '550'               | 'Item key = L/Green'        | '466,1'                   | 'Item key = L/Green'  | '605'                 | 'Item key = L/Green'        |
+			| 'Dress'            | 'XL/Green'  | '550'               | 'Item key = XL/Green'       | '466,1'                   | 'Item key = XL/Green' | '605'                 | 'Item key = XL/Green'       |
+			| 'Dress'            | 'Dress/A-8' | '3 000'             | 'Specification = Dress/A-8' | ''                        | ''                    | '3 300'               | 'Specification = Dress/A-8' |
+			| 'Dress'            | 'XXL/Red'   | '700'               | 'Item = Dress'              | ''                        | ''                    | ''                    | ''                          |
+			| 'Dress'            | 'M/Brown'   | '700'               | 'Item = Dress'              | ''                        | ''                    | ''                    | ''                          |
+			| ''                 | ''          | ''                  | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| 'All prices'       | ''          | ''                  | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| ''                 | ''          | ''                  | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| 'Item'             | 'Item Key'  | 'Basic Price Types' | ''                          | 'Basic Price without VAT' | ''                    | 'Dependent Price New' | ''                          |
+			| ''                 | ''          | ''                  | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| '1. By item keys'  | ''          | ''                  | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| 'Dress'            | 'S/Yellow'  | '550'               | ''                          | '466,1'                   | ''                    | '605'                 | ''                          |
+			| 'Dress'            | 'XS/Blue'   | '520'               | ''                          | '440,68'                  | ''                    | '572'                 | ''                          |
+			| 'Dress'            | 'M/White'   | '520'               | ''                          | '440,68'                  | ''                    | '572'                 | ''                          |
+			| 'Dress'            | 'L/Green'   | '550'               | ''                          | '466,1'                   | ''                    | '605'                 | ''                          |
+			| 'Dress'            | 'XL/Green'  | '550'               | ''                          | '466,1'                   | ''                    | '605'                 | ''                          |
+			| '2. By properties' | ''          | ''                  | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| 'Dress'            | 'S/Yellow'  | '300'               | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| 'Dress'            | 'L/Green'   | '350'               | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| '3. By items'      | ''          | ''                  | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| 'Dress'            | 'S/Yellow'  | '700'               | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| 'Dress'            | 'XS/Blue'   | '700'               | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| 'Dress'            | 'M/White'   | '700'               | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| 'Dress'            | 'L/Green'   | '700'               | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| 'Dress'            | 'XL/Green'  | '700'               | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| 'Dress'            | 'XXL/Red'   | '700'               | ''                          | ''                        | ''                    | ''                    | ''                          |
+			| 'Dress'            | 'M/Brown'   | '700'               | ''                          | ''                        | ''                    | ''                    | ''                          |
 		* Check to display the current prices at an earlier date
 			And I input "12.12.2019" text in "on date" field
 			And I click "Refresh" button
 			Then "Result" spreadsheet document is equal by template
-			| 'Prices on 12.12.2019' | ''          | ''                  | ''                       | ''                        | ''                    |
-			| ''                     | ''          | ''                  | ''                       | ''                        | ''                    |
-			| 'Item'                 | 'Item Key'  | 'Basic Price Types' | ''                       | 'Basic Price without VAT' | ''                    |
-			| ''                     | ''          | 'Price'             | 'Reason'                 | 'Price'                   | 'Reason'              |
-			| 'Dress'                | 'S/Yellow'  | '550'               | 'Item key = S/Yellow'    | '466,1'                   | 'Item key = S/Yellow' |
-			| 'Dress'                | 'XS/Blue'   | '520'               | 'Item key = XS/Blue'     | '440,68'                  | 'Item key = XS/Blue'  |
-			| 'Dress'                | 'M/White'   | '520'               | 'Item key = M/White'     | '440,68'                  | 'Item key = M/White'  |
-			| 'Dress'                | 'L/Green'   | '550'               | 'Item key = L/Green'     | '466,1'                   | 'Item key = L/Green'  |
-			| 'Dress'                | 'XL/Green'  | '550'               | 'Item key = XL/Green'    | '466,1'                   | 'Item key = XL/Green' |
-			| 'Dress'                | 'Dress/A-8' | '3 000'             | 'SpecificationDress/A-8' | ''                        | ''                    |
-			| ''                     | ''          | ''                  | ''                       | ''                        | ''                    |
-			| 'All prices'           | ''          | ''                  | ''                       | ''                        | ''                    |
-			| ''                     | ''          | ''                  | ''                       | ''                        | ''                    |
-			| 'Item'                 | 'Item Key'  | 'Basic Price Types' | ''                       | 'Basic Price without VAT' | ''                    |
-			| ''                     | ''          | ''                  | ''                       | ''                        | ''                    |
-			| '1. By item keys'      | ''          | ''                  | ''                       | ''                        | ''                    |
-			| 'Dress'                | 'S/Yellow'  | '550'               | ''                       | '466,1'                   | ''                    |
-			| 'Dress'                | 'XS/Blue'   | '520'               | ''                       | '440,68'                  | ''                    |
-			| 'Dress'                | 'M/White'   | '520'               | ''                       | '440,68'                  | ''                    |
-			| 'Dress'                | 'L/Green'   | '550'               | ''                       | '466,1'                   | ''                    |
-			| 'Dress'                | 'XL/Green'  | '550'               | ''                       | '466,1'                   | ''                    |
-			| '2. By properties'     | ''          | ''                  | ''                       | ''                        | ''                    |
-			| '3. By items'          | ''          | ''                  | ''                       | ''                        | ''                    |
+			| 'Prices on 12.12.2019' | ''          | ''                  | ''                          | ''                        | ''                    |
+			| ''                     | ''          | ''                  | ''                          | ''                        | ''                    |
+			| 'Item'                 | 'Item Key'  | 'Basic Price Types' | ''                          | 'Basic Price without VAT' | ''                    |
+			| ''                     | ''          | 'Price'             | 'Reason'                    | 'Price'                   | 'Reason'              |
+			| 'Dress'                | 'S/Yellow'  | '550'               | 'Item key = S/Yellow'       | '466,1'                   | 'Item key = S/Yellow' |
+			| 'Dress'                | 'XS/Blue'   | '520'               | 'Item key = XS/Blue'        | '440,68'                  | 'Item key = XS/Blue'  |
+			| 'Dress'                | 'M/White'   | '520'               | 'Item key = M/White'        | '440,68'                  | 'Item key = M/White'  |
+			| 'Dress'                | 'L/Green'   | '550'               | 'Item key = L/Green'        | '466,1'                   | 'Item key = L/Green'  |
+			| 'Dress'                | 'XL/Green'  | '550'               | 'Item key = XL/Green'       | '466,1'                   | 'Item key = XL/Green' |
+			| 'Dress'                | 'Dress/A-8' | '3 000'             | 'Specification = Dress/A-8' | ''                        | ''                    |
+			| ''                     | ''          | ''                  | ''                          | ''                        | ''                    |
+			| 'All prices'           | ''          | ''                  | ''                          | ''                        | ''                    |
+			| ''                     | ''          | ''                  | ''                          | ''                        | ''                    |
+			| 'Item'                 | 'Item Key'  | 'Basic Price Types' | ''                          | 'Basic Price without VAT' | ''                    |
+			| ''                     | ''          | ''                  | ''                          | ''                        | ''                    |
+			| '1. By item keys'      | ''          | ''                  | ''                          | ''                        | ''                    |
+			| 'Dress'                | 'S/Yellow'  | '550'               | ''                          | '466,1'                   | ''                    |
+			| 'Dress'                | 'XS/Blue'   | '520'               | ''                          | '440,68'                  | ''                    |
+			| 'Dress'                | 'M/White'   | '520'               | ''                          | '440,68'                  | ''                    |
+			| 'Dress'                | 'L/Green'   | '550'               | ''                          | '466,1'                   | ''                    |
+			| 'Dress'                | 'XL/Green'  | '550'               | ''                          | '466,1'                   | ''                    |
+			| '2. By properties'     | ''          | ''                  | ''                          | ''                        | ''                    |
+			| '3. By items'          | ''          | ''                  | ''                          | ''                        | ''                    |
 
 
 
@@ -391,7 +391,7 @@ Scenario: _150004 check the price calculation according to the specification (ba
 		Given I open hyperlink "e1cib/list/Document.PurchaseOrder"
 		And I click the button named "FormCreate"
 		* Add item
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| Description |
@@ -422,7 +422,7 @@ Scenario: _150004 check the price calculation according to the specification (ba
 		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
 		And I click the button named "FormCreate"
 		* Add item
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| Description |
@@ -522,7 +522,7 @@ Scenario: _150004 check the price calculation for the bandle (based on the prope
 		Given I open hyperlink "e1cib/list/Document.PurchaseOrder"
 		And I click the button named "FormCreate"
 		* Add item
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| Description |
@@ -552,7 +552,7 @@ Scenario: _150004 check the price calculation for the bandle (based on the prope
 		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
 		And I click the button named "FormCreate"
 		* Add item
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| Description |
@@ -644,7 +644,7 @@ Scenario: _150005 price check by properties
 		Given I open hyperlink "e1cib/list/Document.PurchaseOrder"
 		And I click the button named "FormCreate"
 		* Add item
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| Description |
@@ -674,7 +674,7 @@ Scenario: _150005 price check by properties
 		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
 		And I click the button named "FormCreate"
 		* Add item
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| Description |
@@ -773,5 +773,176 @@ Scenario: _150007 check input by line in the price list for additional propertie
 		| 'Dress' | '36'   | 'Black' |
 	And I close all client application windows
 
-Scenario: _999999 close TestClient session
-	And I close TestClient session
+
+Scenario: _150017 price calculation when change input price in the Price list (by item)	
+	* Opening  price list
+		Given I open hyperlink "e1cib/list/Document.PriceList"
+		And I click the button named "FormCreate"
+	* Filling in the details of the price list by item
+		And I change "Set price" radio button value to "By Items"
+		And I input "Basic price" text in "Description" field
+		And I click Select button of "Price type" field
+		And I go to line in "List" table
+				| 'Description' |
+				| 'Basic Price Types'  |
+		And I select current line in "List" table
+	* Filling in prices by item key by price type Basic Price Types
+		And I click the button named "ItemListAdd"
+		And I click choice button of "Item" attribute in "ItemList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Dress'       |
+		And I select current line in "List" table
+	* Check Input unit
+		And "ItemList" table contains lines
+			| 'Input price' | 'Item'  | 'Input unit' | 'Price' |
+			| ''            | 'Dress' | 'pcs'        | ''      |
+	* Check Price calculation when change input price
+		And I select current line in "ItemList" table
+		And I click choice button of the attribute named "ItemListInputUnit" in "ItemList" table
+		And I go to line in "List" table
+			| 'Description'       |
+			| 'box Dress (8 pcs)' |
+		And I select current line in "List" table
+		And I finish line editing in "ItemList" table
+		And I move to the next attribute
+		And I activate field named "ItemListInputPrice" in "ItemList" table
+		And I select current line in "ItemList" table
+		And I input "500,000" text in the field named "ItemListInputPrice" of "ItemList" table
+		And I finish line editing in "ItemList" table
+		And I move to the next attribute
+		And "ItemList"  table contains lines
+			| '#' | 'Input price' | 'Item'  | 'Input unit'        | 'Price'    |
+			| '1' | '500,000'     | 'Dress' | 'box Dress (8 pcs)' | '62,50' |
+		And I activate field named "ItemListInputPrice" in "ItemList" table
+		And I select current line in "ItemList" table
+		And I input "600,000" text in the field named "ItemListInputPrice" of "ItemList" table
+		And I finish line editing in "ItemList" table
+		And I move to the next attribute
+		And "ItemList" table contains lines
+			| '#' | 'Input price' | 'Item'  | 'Input unit'        | 'Price'    |
+			| '1' | '600,000'     | 'Dress' | 'box Dress (8 pcs)' | '75,00' |
+	* Check Price calculation when change Input unit
+		And I activate field named "ItemListInputUnit" in "ItemList" table
+		And I select current line in "ItemList" table
+		And I click choice button of the attribute named "ItemListInputUnit" in "ItemList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'pcs'         |
+		And I select current line in "List" table
+		And I finish line editing in "ItemList" table
+		And "ItemList" table contains lines
+			| '#' | 'Input price' | 'Item'  | 'Input unit' | 'Price'  |
+			| '1' | '600,000'     | 'Dress' | 'pcs'        | '600,00' |
+	* Change Item
+		And I click choice button of the attribute named "ItemListInputUnit" in "ItemList" table
+		And I go to line in "List" table
+			| 'Description'       |
+			| 'box Dress (8 pcs)' |
+		And I select current line in "List" table
+		And I activate field named "ItemListItem" in "ItemList" table
+		And I click choice button of the attribute named "ItemListItem" in "ItemList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Boots'       |
+		And I select current line in "List" table
+		And "ItemList" table contains lines
+			| '#' | 'Input price' | 'Item'  | 'Input unit' | 'Price'  |
+			| '1' | '600,000'     | 'Boots' | 'pcs'        | '600,00' |		
+		And I close all client application windows
+
+
+Scenario: _150018 price calculation when change input price in the Price list (by properties)	
+	* Opening  price list
+		Given I open hyperlink "e1cib/list/Document.PriceList"
+		And I click the button named "FormCreate"
+	* Filling in the details of the price list by properties
+		And I change "Set price" radio button value to "By properties"
+		And I input "Basic price" text in "Description" field
+		And I click Select button of "Price type" field
+		And I go to line in "List" table
+				| 'Description' |
+				| 'Basic Price Types'  |
+		And I select current line in "List" table
+	* Filling in prices by item key by price type Basic Price Types
+		And I click the button named "PriceKeyListAdd"
+		And I click Select button of "Item type" field
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Clothes'     |
+		And I select current line in "List" table
+		And I click the button named "PriceKeyListAdd"
+		And I click choice button of the attribute named "PriceKeyListItem" in "PriceKeyList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Dress'       |
+		And I select current line in "List" table
+		And I activate "Size" field in "PriceKeyList" table
+		And I click choice button of "Size" attribute in "PriceKeyList" table
+		And I go to line in "List" table
+			| 'Additional attribute' | 'Additional attribute values' | 'Code' | 'Description' |
+			| 'Size'                 | 'XS'                          | '9'    | 'XS'          |
+		And I select current line in "List" table
+		And I activate "Color" field in "PriceKeyList" table
+		And I click choice button of "Color" attribute in "PriceKeyList" table
+		And I go to line in "List" table
+			| 'Additional attribute' | 'Additional attribute values' | 'Code' | 'Description' |
+			| 'Color'                | 'Blue'                        | '20'   | 'Blue'        |
+		And I select current line in "List" table
+	* Check Input unit
+		And "PriceKeyList" table contains lines
+			| 'Item'  | 'Input unit' | 'Size' | 'Color' | 'Input price' | 'Price' |
+			| 'Dress' | 'pcs'        | 'XS'   | 'Blue'  | ''            | ''      |		
+	* Check Price calculation when change input price
+		And I select current line in "PriceKeyList" table
+		And I click choice button of the attribute named "PriceKeyListInputUnit" in "PriceKeyList" table
+		And I go to line in "List" table
+			| 'Description'       |
+			| 'box Dress (8 pcs)' |
+		And I select current line in "List" table
+		And I finish line editing in "PriceKeyList" table
+		And I move to the next attribute
+		And I activate field "Input price" in "PriceKeyList" table
+		And I select current line in "PriceKeyList" table
+		And I input "500,000" text in "Input price" field of "PriceKeyList" table
+		And I finish line editing in "PriceKeyList" table
+		And I move to the next attribute
+		And "PriceKeyList"  table contains lines
+			| 'Item'  | 'Input unit'        | 'Size' | 'Color' | 'Input price' | 'Price'    |
+			| 'Dress' | 'box Dress (8 pcs)' | 'XS'   | 'Blue'  | '500,00'     | '62,50' |
+		And I activate field "Input price" in "PriceKeyList" table
+		And I select current line in "PriceKeyList" table
+		And I input "600,000" text in "Input price" field of "PriceKeyList" table
+		And I finish line editing in "PriceKeyList" table
+		And I move to the next attribute
+		And "PriceKeyList" table contains lines
+			| 'Item'  | 'Input unit'        | 'Size' | 'Color' | 'Input price' | 'Price'    |
+			| 'Dress' | 'box Dress (8 pcs)' | 'XS'   | 'Blue'  | '600,00'     | '75,00' |
+	* Check Price calculation when change Input unit
+		And I activate field named "PriceKeyListInputUnit" in "PriceKeyList" table
+		And I select current line in "PriceKeyList" table
+		And I click choice button of the attribute named "PriceKeyListInputUnit" in "PriceKeyList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'pcs'         |
+		And I select current line in "List" table
+		And I finish line editing in "PriceKeyList" table
+		And "PriceKeyList" table contains lines
+			| 'Item'  | 'Input unit' | 'Size' | 'Color' | 'Input price' | 'Price'  |
+			| 'Dress' | 'pcs'        | 'XS'   | 'Blue'  | '600,00'      | '600,00' |
+	* Change Item
+		And I click choice button of the attribute named "PriceKeyListInputUnit" in "PriceKeyList" table
+		And I go to line in "List" table
+			| 'Description'       |
+			| 'box Dress (8 pcs)' |
+		And I select current line in "List" table
+		And I activate field named "PriceKeyListItem" in "PriceKeyList" table
+		And I click choice button of the attribute named "PriceKeyListItem" in "PriceKeyList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Trousers'       |
+		And I select current line in "List" table
+		And "PriceKeyList" table contains lines
+			| 'Item'     | 'Input unit' | 'Size' | 'Color' | 'Input price' | 'Price'  |
+			| 'Trousers' | 'pcs'        | 'XS'   | 'Blue'  | '600,00'      | '600,00' |
+		And I close all client application windows

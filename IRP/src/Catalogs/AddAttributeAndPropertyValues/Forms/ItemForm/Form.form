@@ -11,10 +11,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Code</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Code</segments>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -92,10 +90,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.UniqueID</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.UniqueID</segments>
     </dataPath>
     <extendedTooltip>
       <name>UniqueIDExtendedTooltip</name>
@@ -144,10 +140,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.AdditionalID</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.AdditionalID</segments>
     </dataPath>
     <extendedTooltip>
       <name>AdditionalIDExtendedTooltip</name>
@@ -196,10 +190,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.Owner</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.Owner</segments>
     </dataPath>
     <extendedTooltip>
       <name>OwnerExtendedTooltip</name>

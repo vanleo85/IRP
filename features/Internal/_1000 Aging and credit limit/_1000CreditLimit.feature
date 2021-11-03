@@ -126,7 +126,6 @@ Scenario: _1000000 preparation (credit limit)
 			And I finish line editing in "ItemList" table
 		* Specify shipping scheme
 			And I move to "Other" tab
-			And I remove checkbox "Shipment confirmations before sales invoice"
 			And I click the button named "FormPost"
 			And I delete "$$SalesOrder20400011$$" variable
 			And I delete "$$NumberSalesOrder20400011$$" variable
@@ -203,7 +202,6 @@ Scenario: _1000000 preparation (credit limit)
 			And I finish line editing in "ItemList" table
 		* Specify shipping scheme and document number
 			And I move to "Other" tab
-			And I set checkbox "Shipment confirmations before sales invoice"
 			And I click the button named "FormPost"
 			And I delete "$$SalesOrder20400012$$" variable
 			And I delete "$$NumberSalesOrder20400012$$" variable
@@ -278,9 +276,6 @@ Scenario: _1000000 preparation (credit limit)
 				| 'Boots (12 pcs)' |
 			And I select current line in "List" table
 			And I finish line editing in "ItemList" table
-		* Specify shipping scheme
-			And I move to "Other" tab
-			And I remove checkbox "Shipment confirmations before sales invoice"
 			And I click the button named "FormPost"
 			And I delete "$$SalesOrder20400014$$" variable
 			And I delete "$$NumberSalesOrder20400014$$" variable
@@ -293,7 +288,8 @@ Scenario: _1000000 preparation (credit limit)
 		And I go to line in "List" table
 			| 'Number'                       |
 			| '$$NumberSalesOrder20400012$$' |
-		And I click the button named "FormDocumentShipmentConfirmationGenerateShipmentConfirmation"
+		And I click the button named "FormDocumentShipmentConfirmationGenerate"
+		And I click "Ok" button	
 		And I move to "Other" tab
 		And I click the button named "FormPost"
 		And I delete "$$ShipmentConfirmation20400018$$" variable
@@ -327,6 +323,19 @@ Scenario: _1000000 preparation (credit limit)
 			And in the table "List" I click the button named "ListContextMenuSetDeletionMark"
 			Then "1C:Enterprise" window is opened
 			And I click "Yes" button
+	* Create CustomersAdvancesClosing
+		Given I open hyperlink "e1cib/list/Document.CustomersAdvancesClosing"
+		And I click the button named "FormCreate"
+		And I click Select button of "Company" field
+		And I go to line in "List" table
+			| 'Description'  |
+			| 'Main Company' |
+		And I select current line in "List" table
+		And I input current date in the field named "EndOfPeriod"
+		And I input current date in the field named "BeginOfPeriod"
+		And I click "Post and close" button
+		And I close all client application windows
+		
 
 			
 						
@@ -368,7 +377,8 @@ Scenario: _1000002 check credit limit when post Sales invoice based on Sales ord
 		And I go to line in "List" table
 			| 'Number'              |
 			| '$$NumberSalesOrder20400011$$' |
-		And I click the button named "FormDocumentSalesInvoiceGenerateSalesInvoice"
+		And I click the button named "FormDocumentSalesInvoiceGenerate"
+		And I click "Ok" button
 		And I click the button named "FormPost"
 		And I delete "$$SalesInvoice20400011$$" variable	
 		And I delete "$$NumberSalesInvoice20400011$$" variable
@@ -381,11 +391,12 @@ Scenario: _1000002 check credit limit when post Sales invoice based on Sales ord
 		And I go to line in "List" table
 			| 'Number'              |
 			| '$$NumberSalesOrder20400014$$' |
-		And I click the button named "FormDocumentSalesInvoiceGenerateSalesInvoice"
+		And I click the button named "FormDocumentSalesInvoiceGenerate"
+		And I click "Ok" button
 		And I click the button named "FormPostAndClose"
 		Then "1C:Enterprise" window is opened
 		And I click "OK" button
-		Then I wait that in user messages the "Credit limit exceeded. Limit: 10 000,00, limit balance: 200,00, transaction: 13 260,00, lack: 13 060,00 TRY" substring will appear in 20 seconds
+		Then I wait that in user messages the "Credit limit exceeded. Limit: 10 000, limit balance: 200, transaction: 13 260, lack: 13 060 TRY" substring will appear in 20 seconds
 		And I click the button named "FormWrite"
 		And I delete "$$SalesInvoice20400014$$" variable
 		And I delete "$$NumberSalesInvoice20400014$$" variable
@@ -403,6 +414,7 @@ Scenario: _1000002 check credit limit when post Sales invoice based on Sales ord
 			| 'Description'              |
 			| 'Bank account, TRY' |
 		And I select current line in "List" table
+		And I input current date in the field named "Date"
 		And I click the button named "FormPost"
 		And I delete "$$BankReceipt20400011$$" variable
 		And I delete "$$NumberBankReceipt20400011$$" variable
@@ -415,7 +427,7 @@ Scenario: _1000002 check credit limit when post Sales invoice based on Sales ord
 		And I click the button named "FormPost"
 		Then "1C:Enterprise" window is opened
 		And I click "OK" button
-		Then I wait that in user messages the "Credit limit exceeded. Limit: 10 000,00, limit balance: 200,00, transaction: 13 260,00, lack: 13 060,00 TRY" substring will appear in 20 seconds
+		Then I wait that in user messages the "Credit limit exceeded. Limit: 10 000, limit balance: 200, transaction: 13 260, lack: 13 060 TRY" substring will appear in 20 seconds
 	* Create payment (3 060 - advance) and try post $$SalesInvoice20400014$$
 		Given I open hyperlink "e1cib/list/Document.CashReceipt"
 		And I click the button named "FormCreate"
@@ -444,12 +456,19 @@ Scenario: _1000002 check credit limit when post Sales invoice based on Sales ord
 			| 'Crystal'     |
 		And I activate "Description" field in "List" table
 		And I select current line in "List" table
-		And I activate field named "PaymentListAmount" in "PaymentList" table
-		And I input "3 500,00" text in the field named "PaymentListAmount" of "PaymentList" table
+		And I activate field named "PaymentListTotalAmount" in "PaymentList" table
+		And I input "3 500,00" text in the field named "PaymentListTotalAmount" of "PaymentList" table
 		And I finish line editing in "PaymentList" table
 		And I click the button named "FormPost"
 		And I input current date in "Date" field
 		And I click the button named "FormPostAndClose"
+	* Post CustomersAdvancesClosing
+		Given I open hyperlink "e1cib/list/Document.CustomersAdvancesClosing"
+		And I go to line in "List" table
+			| 'Number' |
+			| '1'     |
+		And in the table "List" I click the button named "ListContextMenuPost"
+	* Check sales invoice posting		
 		Given I open hyperlink "e1cib/list/Document.SalesInvoice"
 		And I go to line in "List" table
 			| 'Number'              |
@@ -460,7 +479,6 @@ Scenario: _1000002 check credit limit when post Sales invoice based on Sales ord
 				
 		
 				
-	
 		
 Scenario: _1000003 check credit limit when post	Sales invoice based in Shipment confirmation (Ap-Ar posting detail by partner term)
 	* Create Sales invoice, partner term DFC Customer by Partner terms (Kalipso)
@@ -504,7 +522,7 @@ Scenario: _1000003 check credit limit when post	Sales invoice based in Shipment 
 			And I finish line editing in "ItemList" table
 			And I click the button named "FormPost"
 		And I click "OK" button
-		Then I wait that in user messages the "Credit limit exceeded. Limit: 4 000,00, limit balance: 4 000,00, transaction: 6 490,00, lack: 2 490,00 TRY" substring will appear in 20 seconds
+		Then I wait that in user messages the "Credit limit exceeded. Limit: 4 000, limit balance: 4 000, transaction: 6 490, lack: 2 490 TRY" substring will appear in 20 seconds                           
 		And I click choice button of "Item key" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Item key' |
@@ -595,14 +613,20 @@ Scenario: _1000003 check credit limit when post	Sales invoice based in Shipment 
 			| 'Kalipso'     |
 		And I activate "Description" field in "List" table
 		And I select current line in "List" table
-		And I activate field named "PaymentListAmount" in "PaymentList" table
-		And I input "10 000,00" text in the field named "PaymentListAmount" of "PaymentList" table
+		And I activate field named "PaymentListTotalAmount" in "PaymentList" table
+		And I input "10 000,00" text in the field named "PaymentListTotalAmount" of "PaymentList" table
 		And I finish line editing in "PaymentList" table
 		And I finish line editing in "PaymentList" table
 		And I click the button named "FormPostAndClose"
-		Given I open hyperlink "e1cib/list/Document.SalesInvoice"
-		And I click the button named "FormCreate"
-		* Filling in customer information
+		* Post CustomersAdvancesClosing
+			Given I open hyperlink "e1cib/list/Document.CustomersAdvancesClosing"
+			And I go to line in "List" table
+				| 'Number' |
+				| '1'     |
+			And in the table "List" I click the button named "ListContextMenuPost"			
+		* Create SI and filling in customer information
+			Given I open hyperlink "e1cib/list/Document.SalesInvoice"
+			And I click the button named "FormCreate"
 			And I click Select button of "Partner" field
 			And I go to line in "List" table
 				| 'Description' |
@@ -639,12 +663,10 @@ Scenario: _1000003 check credit limit when post	Sales invoice based in Shipment 
 			And I input "10,000" text in "Q" field of "ItemList" table
 			And I finish line editing in "ItemList" table
 			And I click the button named "FormPost"
-			Then user message window does not contain messages
-			And I delete "$$NumberSalesInvoice10000033$$" variable
-			And I delete "$$SalesInvoice10000033$$" variable
-			And I save the value of "Number" field as "$$NumberSalesInvoice10000033$$"
-			And I save the window as "$$SalesInvoice10000033$$"
-			And I click the button named "FormPostAndClose"
+			And I click "OK" button
+			Then I wait that in user messages the "Credit limit exceeded. Limit: 4 000, limit balance: 4 000, transaction: 6 490, lack: 2 490 TRY" substring will appear in 20 seconds
+			And I close all client application windows
+			
 
 Scenario: _999999 close TestClient session
 	* Clear postings

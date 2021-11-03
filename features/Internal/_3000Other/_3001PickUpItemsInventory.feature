@@ -80,7 +80,7 @@ Scenario: _3001000 preparation
 					And I select current line in "List" table
 				* Filling in items table
 					And I move to "Item list" tab
-					And I click the button named "Add"
+					And in the table "ItemList" I click the button named "ItemListAdd"
 					And I click choice button of "Item" attribute in "ItemList" table
 					And I go to line in "List" table
 						| 'Description' |
@@ -96,8 +96,9 @@ Scenario: _3001000 preparation
 					And I input "197,000" text in "Q" field of "ItemList" table
 					And I activate "Price" field in "ItemList" table
 					And I input "100,000" text in "Price" field of "ItemList" table
+					And I set "Use goods receipt" checkbox in "ItemList" table				
 					And I finish line editing in "ItemList" table
-					And I click the button named "Add"
+					And in the table "ItemList" I click the button named "ItemListAdd"
 					And I click choice button of "Item" attribute in "ItemList" table
 					And I go to line in "List" table
 						| 'Description' |
@@ -113,8 +114,9 @@ Scenario: _3001000 preparation
 					And I input "134,000" text in "Q" field of "ItemList" table
 					And I activate "Price" field in "ItemList" table
 					And I input "100,000" text in "Price" field of "ItemList" table
+					And I set "Use goods receipt" checkbox in "ItemList" table	
 					And I finish line editing in "ItemList" table
-					And I click the button named "Add"
+					And in the table "ItemList" I click the button named "ItemListAdd"
 					And I click choice button of "Item" attribute in "ItemList" table
 					And I go to line in "List" table
 						| 'Description' |
@@ -130,8 +132,9 @@ Scenario: _3001000 preparation
 					And I input "7,000" text in "Q" field of "ItemList" table
 					And I activate "Price" field in "ItemList" table
 					And I input "100,000" text in "Price" field of "ItemList" table
+					And I set "Use goods receipt" checkbox in "ItemList" table	
 					And I finish line editing in "ItemList" table
-					And I click the button named "Add"
+					And in the table "ItemList" I click the button named "ItemListAdd"
 					And I click choice button of "Item" attribute in "ItemList" table
 					And I go to line in "List" table
 						| 'Description' |
@@ -147,6 +150,7 @@ Scenario: _3001000 preparation
 					And I input "4,000" text in "Q" field of "ItemList" table
 					And I activate "Price" field in "ItemList" table
 					And I input "100,000" text in "Price" field of "ItemList" table
+					And I set "Use goods receipt" checkbox in "ItemList" table	
 					And I finish line editing in "ItemList" table
 					And I click the button named "FormPost"
 					And I delete "$$NumberPurchaseInvoice30010001$$" variable
@@ -159,7 +163,8 @@ Scenario: _3001000 preparation
 						| 'Number' |
 						| '$$NumberPurchaseInvoice30010001$$'      |
 					And I activate "Date" field in "List" table
-					And I click the button named "FormDocumentGoodsReceiptGenerateGoodsReceipt"
+					And I click the button named "FormDocumentGoodsReceiptGenerate"
+					And I click "Ok" button				
 					And I click the button named "FormPostAndClose"
 					And I wait "Goods receipt (create)" window closing in 20 seconds						
 		* Check or create Purchase invoice 3001002
@@ -202,7 +207,7 @@ Scenario: _3001000 preparation
 					And I select current line in "List" table
 				* Filling in items table
 					And I move to "Item list" tab
-					And I click the button named "Add"
+					And in the table "ItemList" I click the button named "ItemListAdd"
 					And I click choice button of "Item" attribute in "ItemList" table
 					And I go to line in "List" table
 						| 'Description' |
@@ -219,7 +224,7 @@ Scenario: _3001000 preparation
 					And I activate "Price" field in "ItemList" table
 					And I input "100,000" text in "Price" field of "ItemList" table
 					And I finish line editing in "ItemList" table
-					And I click the button named "Add"
+					And in the table "ItemList" I click the button named "ItemListAdd"
 					And I click choice button of "Item" attribute in "ItemList" table
 					And I go to line in "List" table
 						| 'Description' |

@@ -40,10 +40,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.ValueType</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.ValueType</segments>
     </dataPath>
     <extendedTooltip>
       <name>ValueTypeExtendedTooltip</name>
@@ -92,10 +90,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.UniqueID</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.UniqueID</segments>
     </dataPath>
     <extendedTooltip>
       <name>UniqueIDExtendedTooltip</name>
@@ -144,10 +140,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.ShowOnForm</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.ShowOnForm</segments>
     </dataPath>
     <extendedTooltip>
       <name>ShowOnFormExtendedTooltip</name>
@@ -189,10 +183,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.ReadOnly</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.ReadOnly</segments>
     </dataPath>
     <extendedTooltip>
       <name>ReadOnlyExtendedTooltip</name>
@@ -234,10 +226,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.PredefinedDataName</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.PredefinedDataName</segments>
     </dataPath>
     <extendedTooltip>
       <name>PredefinedDataNameExtendedTooltip</name>
@@ -300,10 +290,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.ExternalDataProcess.LineNumber</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.ExternalDataProcess.LineNumber</segments>
           </dataPath>
           <extendedTooltip>
             <name>ExternalDataProcessLineNumberExtendedTooltip</name>
@@ -352,10 +340,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.ExternalDataProcess.Country</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.ExternalDataProcess.Country</segments>
           </dataPath>
           <extendedTooltip>
             <name>ExternalDataProcessCountryExtendedTooltip</name>
@@ -404,10 +390,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.ExternalDataProcess.ExternalDataProc</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.ExternalDataProcess.ExternalDataProc</segments>
           </dataPath>
           <extendedTooltip>
             <name>ExternalDataProcessExternalDataProcExtendedTooltip</name>
@@ -479,6 +463,7 @@
             <autoMaxWidth>true</autoMaxWidth>
             <autoMaxHeight>true</autoMaxHeight>
             <placementArea>UserCmds</placementArea>
+            <toolTipRepresentation>Auto</toolTipRepresentation>
             <representationInContextMenu>Auto</representationInContextMenu>
           </items>
           <visible>true</visible>
@@ -704,10 +689,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.RelatedValues.LineNumber</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.RelatedValues.LineNumber</segments>
           </dataPath>
           <extendedTooltip>
             <name>RelatedValuesLineNumberExtendedTooltip</name>
@@ -756,10 +739,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.RelatedValues.IDInfoType</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.RelatedValues.IDInfoType</segments>
           </dataPath>
           <extendedTooltip>
             <name>RelatedValuesIDInfoTypeExtendedTooltip</name>
@@ -1037,10 +1018,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.Comment</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.Comment</segments>
     </dataPath>
     <extendedTooltip>
       <name>CommentExtendedTooltip</name>

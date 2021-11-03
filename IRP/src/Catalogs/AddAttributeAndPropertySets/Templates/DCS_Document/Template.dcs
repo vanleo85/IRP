@@ -6,10 +6,21 @@
 	</dataSource>
 	<dataSet xsi:type="DataSetQuery">
 		<name>DataSet1</name>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Ref</dataPath>
+			<field>Ref</field>
+			<title xsi:type="v8:LocalStringType">
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Ref</v8:content>
+				</v8:item>
+			</title>
+		</field>
 		<dataSource>DataSource1</dataSource>
-		<query>SELECT Table.*
+		<query>SELECT 
+	Table.Ref AS Ref
 FROM
-	%1 AS Table</query>
+	&amp;TableName AS Table</query>
 	</dataSet>
 	<settingsVariant>
 		<dcsset:name>Default</dcsset:name>

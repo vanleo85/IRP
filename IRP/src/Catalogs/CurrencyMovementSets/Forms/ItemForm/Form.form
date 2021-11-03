@@ -11,10 +11,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Code</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Code</segments>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -104,10 +102,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.CurrencyMovements.LineNumber</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.CurrencyMovements.LineNumber</segments>
       </dataPath>
       <extendedTooltip>
         <name>CurrencyMovementsLineNumberExtendedTooltip</name>
@@ -152,10 +148,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.CurrencyMovements.CurrencyMovementType</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.CurrencyMovements.CurrencyMovementType</segments>
       </dataPath>
       <extendedTooltip>
         <name>CurrencyMovementsCurrencyMovementTypeExtendedTooltip</name>

@@ -9,6 +9,7 @@
     <value>Type object with statuses</value>
   </synonym>
   <type>
+    <types>DocumentRef.IncomingPaymentOrder</types>
     <types>DocumentRef.SalesReturnOrder</types>
     <types>DocumentRef.PurchaseReturnOrder</types>
     <types>DocumentRef.PurchaseOrder</types>

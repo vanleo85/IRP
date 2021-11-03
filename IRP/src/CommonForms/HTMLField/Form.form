@@ -14,10 +14,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>HTML</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>HTML</segments>
         </dataPath>
         <titleLocation>None</titleLocation>
         <extendedTooltip>
@@ -259,10 +257,7 @@
     </title>
     <id>2</id>
     <valueType>
-      <types>String</types>
-      <stringQualifiers>
-        <length>100</length>
-      </stringQualifiers>
+      <types>EnumRef.IntegrationType</types>
     </valueType>
     <view>
       <common>true</common>
@@ -317,10 +312,7 @@
   <parameters>
     <name>Type</name>
     <valueType>
-      <types>String</types>
-      <stringQualifiers>
-        <length>100</length>
-      </stringQualifiers>
+      <types>EnumRef.IntegrationType</types>
     </valueType>
   </parameters>
   <parameters>

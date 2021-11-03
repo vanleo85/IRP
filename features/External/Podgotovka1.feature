@@ -159,7 +159,7 @@ Scenario: creating a Purchase Order document
 		And I select "Approved" exact value from "Status" drop-down list
 	* Filling in items table
 		And I move to "Item list" tab
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -179,7 +179,7 @@ Scenario: creating a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "205,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -199,7 +199,7 @@ Scenario: creating a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "205,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -219,7 +219,7 @@ Scenario: creating a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "205,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -239,7 +239,7 @@ Scenario: creating a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "205,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -259,7 +259,7 @@ Scenario: creating a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "220,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -279,7 +279,7 @@ Scenario: creating a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "220,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -299,7 +299,7 @@ Scenario: creating a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "250,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -319,7 +319,7 @@ Scenario: creating a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "240,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -339,7 +339,7 @@ Scenario: creating a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "190,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -359,7 +359,7 @@ Scenario: creating a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "190,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -379,7 +379,7 @@ Scenario: creating a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "195,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -454,7 +454,7 @@ Scenario: create purchase invoice without order (Vendor Ferron, USD, store 01)
 			And I select current line in "List" table
 	* Filling in items table
 		And I move to "Item list" tab
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -471,7 +471,7 @@ Scenario: create purchase invoice without order (Vendor Ferron, USD, store 01)
 		And I activate "Price" field in "ItemList" table
 		And I input "80,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -530,7 +530,7 @@ Scenario: create purchase invoice without order (Vendor Ferron, USD, store 01)
 			And I select current line in "List" table
 	* Filling in items table
 		And I move to "Item list" tab
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -552,6 +552,59 @@ Scenario: create purchase invoice without order (Vendor Ferron, USD, store 01)
 		And I delete "$$PurchaseInvoice30004$$" variable
 		And I save the value of "Number" field as "$$NumberPurchaseInvoice30004$$"
 		And I save the window as "$$PurchaseInvoice30004$$"
+		And I click the button named "FormPostAndClose"
+
+
+	Scenario: create purchase invoice without order (Vendor Ferron, TRY)
+	* Create Purchase Invoice without order	
+		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
+		And I click the button named "FormCreate"
+	* Filling in vendor's info
+			And I click Select button of "Partner" field
+			And I go to line in "List" table
+				| Description |
+				| Ferron BP   |
+			And I select current line in "List" table
+			And I click Select button of "Legal name" field
+			And I activate "Description" field in "List" table
+			And I go to line in "List" table
+				| Description       |
+				| Company Ferron BP |
+			And I select current line in "List" table
+			And I click Select button of "Partner term" field
+			And I go to line in "List" table
+				| Description        |
+				| Vendor Ferron, TRY |
+			And I select current line in "List" table
+			And I click Select button of "Store" field
+			And I go to line in "List" table
+				| 'Description' |
+				| 'Store 02'  |
+			And I select current line in "List" table
+	* Filling in items table
+		And I move to "Item list" tab
+		And in the table "ItemList" I click the button named "ItemListAdd"
+		And I click choice button of "Item" attribute in "ItemList" table
+		And I go to line in "List" table
+			| 'Description' |
+			| 'Dress'    |
+		And I select current line in "List" table
+		And I activate "Item key" field in "ItemList" table
+		And I click choice button of "Item key" attribute in "ItemList" table
+		And I go to line in "List" table
+			| 'Item key' |
+			| 'Dress/A-8'  |
+		And I select current line in "List" table
+		And I activate "Q" field in "ItemList" table
+		And I input "100,000" text in "Q" field of "ItemList" table
+		And I activate "Price" field in "ItemList" table
+		And I input "40,00" text in "Price" field of "ItemList" table
+		And I finish line editing in "ItemList" table
+		And I click the button named "FormPost"
+		And I delete "$$NumberPurchaseInvoiceAging$$" variable
+		And I delete "$$PurchaseInvoiceAging$$" variable
+		And I save the value of "Number" field as "$$NumberPurchaseInvoiceAging$$"
+		And I save the window as "$$PurchaseInvoiceAging$$"
 		And I click the button named "FormPostAndClose"
 
 	Scenario: create a purchase invoice for the purchase of sets and dimensional grids at the tore 02
@@ -587,7 +640,7 @@ Scenario: create purchase invoice without order (Vendor Ferron, USD, store 01)
 				| 'Store 02'  |
 			And I select current line in "List" table
 		* Filling in items table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| 'Description' |
@@ -604,7 +657,7 @@ Scenario: create purchase invoice without order (Vendor Ferron, USD, store 01)
 			And I activate "Price" field in "ItemList" table
 			And I input "40,00" text in "Price" field of "ItemList" table
 			And I finish line editing in "ItemList" table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| Description |
@@ -627,7 +680,8 @@ Scenario: create purchase invoice without order (Vendor Ferron, USD, store 01)
 			And I save the value of "Number" field as "$$NumberPurchaseInvoice29604$$"
 			And I save the window as "$$PurchaseInvoice29604$$"
 		* Create Goods receipt
-			And I click the button named "FormDocumentGoodsReceiptGenerateGoodsReceipt"
+			And I click the button named "FormDocumentGoodsReceiptGenerate"
+			And I click "Ok" button
 			And I click Select button of "Company" field
 			And I go to line in "List" table
 					| 'Description'  |
@@ -792,7 +846,7 @@ Scenario: create the first test PO for a test on the creation mechanism based on
 			And I select current line in "List" table
 		And I select "Approved" exact value from "Status" drop-down list
 		* Filling in items table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| 'Description' |
@@ -805,7 +859,7 @@ Scenario: create the first test PO for a test on the creation mechanism based on
 				| 'M/White'  |
 			And I select current line in "List" table
 			And I finish line editing in "ItemList" table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| 'Description' |
@@ -818,7 +872,7 @@ Scenario: create the first test PO for a test on the creation mechanism based on
 				| 'L/Green'  |
 			And I select current line in "List" table
 			And I finish line editing in "ItemList" table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| 'Description' |
@@ -886,7 +940,7 @@ Scenario: create the second test PO for a test on the creation mechanism based o
 			And I select current line in "List" table
 		And I select "Approved" exact value from "Status" drop-down list
 		* Filling in items table
-			And I click the button named "Add"
+			And in the table "ItemList" I click the button named "ItemListAdd"
 			And I click choice button of "Item" attribute in "ItemList" table
 			And I go to line in "List" table
 				| 'Description' |
@@ -1154,7 +1208,7 @@ Scenario: create a Purchase Order document
 		And I select "Approved" exact value from "Status" drop-down list
 	* Filling in items table
 		And I move to "Item list" tab
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -1174,7 +1228,7 @@ Scenario: create a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "205,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -1194,7 +1248,7 @@ Scenario: create a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "205,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -1214,7 +1268,7 @@ Scenario: create a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "205,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -1234,7 +1288,7 @@ Scenario: create a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "205,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -1254,7 +1308,7 @@ Scenario: create a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "220,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -1274,7 +1328,7 @@ Scenario: create a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "220,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -1294,7 +1348,7 @@ Scenario: create a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "250,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -1314,7 +1368,7 @@ Scenario: create a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "240,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -1334,7 +1388,7 @@ Scenario: create a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "190,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -1354,7 +1408,7 @@ Scenario: create a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "190,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |
@@ -1374,7 +1428,7 @@ Scenario: create a Purchase Order document
 		And I input "200,000" text in "Q" field of "ItemList" table
 		And I input "195,00" text in "Price" field of "ItemList" table
 		And I finish line editing in "ItemList" table
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| 'Description' |

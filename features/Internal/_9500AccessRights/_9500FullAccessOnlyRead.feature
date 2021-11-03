@@ -19,7 +19,6 @@ Scenario: 950000 preparation (role Full access only read)
 	When Create catalog Agreements objects
 	When Create catalog BusinessUnits objects
 	When Create catalog CashAccounts objects
-	When Create catalog ChequeBonds objects
 	When Create catalog Companies objects (Main company)
 	When Create catalog Companies objects (partners company)
 	When Create catalog Countries objects
@@ -76,7 +75,6 @@ Scenario: 950000 preparation (role Full access only read)
 	When Create catalog IntegrationSettings objects
 	When Create information register CurrencyRates records
 	When Create information register Barcodes records
-	When Create accumulation register StockBalance records
 	When Create information register UserSettings records (Retail document)
 	When Create catalog ItemKeys objects (Table)
 	When Create catalog Items objects (Table)
@@ -108,18 +106,19 @@ Scenario: 950000 preparation (role Full access only read)
 	When Create document InternalSupplyRequest objects
 	When Create document InventoryTransfer objects
 	When Create document InventoryTransferOrder objects
-	When Create document InvoiceMatch objects
+	# When Create document InvoiceMatch objects
 	When Create document OpeningEntry objects
 	When Create document OutgoingPaymentOrder objects
 	When Create document Bundling objects
-	When Create document ChequeBondTransaction objects
-	When Create document ChequeBondTransactionItem objects
 	When Create document PhysicalCountByLocation objects
 	When Create document PhysicalInventory objects
 	When Create document ReconciliationStatement objects
 	When Create document StockAdjustmentAsSurplus objects
 	When Create document StockAdjustmentAsWriteOff objects
 	When Create document Unbundling objects
+	When Create document VendorsAdvancesClosing objects
+	When Create document CustomersAdvancesClosing objects
+	When Create catalog PlanningPeriods objects
 	When add test extension
 	* Set password for Sofia Borisova (Manager 3)
 			Given I open hyperlink "e1cib/list/Catalog.Users"
@@ -146,7 +145,8 @@ Scenario: 950000 preparation (role Full access only read)
 		And I click "Update all user roles" button		
 	And I connect "TestAdmin" TestClient using "SBorisova" login and "F12345" password
 	And Delay 3
-
+	And I execute 1C:Enterprise script at server
+		| "Documents.SalesOrder.FindByNumber(1).GetObject().Write(DocumentWriteMode.Posting);" |
 
 Scenario: 950001 check role Full access only read (Payment types)
 		And In the command interface I select "Master data" "Payment types"	
@@ -450,7 +450,7 @@ Scenario: 950013 check role Full access only read (Items and item key)
 		And I select current line in "List" table
 		If the warning is displayed then 
 			Then I raise "Failed to open" exception			
-		And I close all client application windows	
+	
 
 Scenario: 950014 check role Full access only read (Item units)
 		And I close all client application windows
@@ -607,12 +607,7 @@ Scenario: 950025 check role Full access only read (Plugins)
 			Then I raise "Failed to open" exception
 		And I close all client application windows
 
-Scenario: 950026 check role Full access only read (Integration additional information)
-		And I close all client application windows
-		And In the command interface I select "Settings" "Integration additional information"		
-		If the warning is displayed then 
-			Then I raise "Failed to open" exception
-		And I close all client application windows
+
 
 
 Scenario: 950027 check role Full access only read (Workstations)
@@ -684,16 +679,7 @@ Scenario: 950034 check role Full access only read (Tax rate settings)
 			Then I raise "Failed to open" exception
 		And I close all client application windows	
 
-Scenario: 950035 check role Full access only read (Cheque bonds)
-		And I close all client application windows
-		And In the command interface I select "Treasury" "Cheque bonds"		
-		And I go to line in "List" table
-			| 'Cheque No' |
-			| 'Own cheque 2'     |
-		And I select current line in "List" table
-		If the warning is displayed then 
-			Then I raise "Failed to open" exception
-		And I close all client application windows
+
 
 
 Scenario: 950037 check role Full access only read (Item segments)
@@ -925,21 +911,22 @@ Scenario: 950063 check role Full access only read (Internal supply request)
 			Then I raise "Failed to open" exception
 		And I close all client application windows
 
-Scenario: 950064 check role Full access only read (Invoice matches)
+Scenario: 950065 check role Full access only read (Vendors advances closing)
 		And I close all client application windows
-		And In the command interface I select "Treasury" "Invoice matches"	
+		Given I open hyperlink 'e1cib/list/Document.VendorsAdvancesClosing'	
 		And I select current line in "List" table
 		If the warning is displayed then 
 			Then I raise "Failed to open" exception
 		And I close all client application windows
 
-Scenario: 950065 check role Full access only read (Cheque bond transactions)
-		And I close all client application windows
-		And In the command interface I select "Treasury" "Cheque bond transactions"	
-		And I select current line in "List" table
-		If the warning is displayed then 
-			Then I raise "Failed to open" exception
-		And I close all client application windows
+# Scenario: 950064 check role Full access only read (Invoice matches)
+# 		And I close all client application windows
+# 		And In the command interface I select "Treasury" "Invoice matches"	
+# 		And I select current line in "List" table
+# 		If the warning is displayed then 
+# 			Then I raise "Failed to open" exception
+# 		And I close all client application windows
+
 
 Scenario: 950066 check role Full access only read (Inventory transfers)
 		And I close all client application windows
@@ -1087,6 +1074,15 @@ Scenario: 950081 check role Full access only read (Special offers)
 		If the warning is displayed then 
 			Then I raise "Failed to open" exception
 		And I close all client application windows	
+
+Scenario: 950082 check role Full access only read (Customers advances closing)
+		And I close all client application windows
+		Given I open hyperlink 'e1cib/list/Document.CustomersAdvancesClosing'	
+		And I select current line in "List" table
+		If the warning is displayed then 
+			Then I raise "Failed to open" exception
+		And I close all client application windows
+
 
 Scenario: _999999 close TestClient session
 		And I close TestClient session

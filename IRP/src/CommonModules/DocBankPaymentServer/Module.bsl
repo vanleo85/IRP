@@ -1,81 +1,22 @@
 #Region FormEvents
 
 Procedure OnCreateAtServer(Object, Form, Cancel, StandardProcessing) Export
-	DocumentsServer.OnCreateAtServer(Object, Form, Cancel, StandardProcessing);
-	If Form.Parameters.Key.IsEmpty() Then
-		Form.CurrentCurrency = Object.Currency;
-		Form.CurrentAccount = Object.Account;
-		Form.CurrentTransactionType = Object.TransactionType;
-		SetGroupItemsList(Object, Form);
-		DocumentsClientServer.ChangeTitleGroupTitle(Object, Form);
-	EndIf;
-	DocumentsServer.FillPaymentList(Object);
-EndProcedure
-
-Procedure AfterWriteAtServer(Object, Form, CurrentObject, WriteParameters) Export
-	Form.CurrentCurrency = CurrentObject.Currency;
-	Form.CurrentAccount = CurrentObject.Account;
-	Form.CurrentTransactionType = Object.TransactionType;
-	DocumentsServer.FillPaymentList(Object);
-	
-	DocumentsClientServer.ChangeTitleGroupTitle(CurrentObject, Form);
+	MoneyDocumentsServer.OnCreateAtServer(Object, Form, Cancel, StandardProcessing);
 EndProcedure
 
 Procedure OnReadAtServer(Object, Form, CurrentObject) Export
-	Form.CurrentCurrency = CurrentObject.Currency;
-	Form.CurrentAccount = CurrentObject.Account;
-	Form.CurrentTransactionType = Object.TransactionType;
-	
-	DocumentsServer.FillPaymentList(Object);
-	If Not Form.GroupItems.Count() Then
-		SetGroupItemsList(Object, Form);
-	EndIf;
-	DocumentsClientServer.ChangeTitleGroupTitle(CurrentObject, Form);
+	MoneyDocumentsServer.OnReadAtServer(Object, Form, CurrentObject);
+EndProcedure
+
+Procedure AfterWriteAtServer(Object, Form, CurrentObject, WriteParameters) Export
+	MoneyDocumentsServer.AfterWriteAtServer(Object, Form, CurrentObject, WriteParameters);
 EndProcedure
 
 #EndRegion
 
-Function GetPartnerByLegalName(LegalName, Partner) Export
-	If Not LegalName.IsEmpty() Then
-		ArrayOfFilters = New Array();
-		ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, ComparisonType.NotEqual));
-		If ValueIsFilled(Partner) Then
-			ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("Ref", Partner, ComparisonType.Equal));
-		EndIf;
-		AdditionalParameters = New Structure();
-		If ValueIsFilled(LegalName) Then
-			AdditionalParameters.Insert("Company", LegalName);
-			AdditionalParameters.Insert("FilterPartnersByCompanies", True);
-		EndIf;
-		Parameters = New Structure("CustomSearchFilter, AdditionalParameters",
-				DocumentsServer.SerializeArrayOfFilters(ArrayOfFilters),
-				DocumentsServer.SerializeArrayOfFilters(AdditionalParameters));
-		Return Catalogs.Partners.GetDefaultChoiceRef(Parameters);
-	EndIf;
-	Return Undefined;
-EndFunction
-
-Procedure FillAttributesByType(TransactionType, ArrayAll, ArrayByType) Export
-	Documents.BankPayment.FillAttributesByType(TransactionType, ArrayAll, ArrayByType);
+Procedure FillAttributesByType(Ref, TransactionType, ArrayAll, ArrayByType) Export
+	MoneyDocumentsServer.FillAttributesByType(Ref, TransactionType, ArrayAll, ArrayByType);
 EndProcedure
-
-#Region GroupTitle
-
-Procedure SetGroupItemsList(Object, Form)
-	AttributesArray = New Array;
-	AttributesArray.Add("Company");
-	AttributesArray.Add("Account");
-	AttributesArray.Add("TransactionType");
-	AttributesArray.Add("Currency");
-	DocumentsServer.DeleteUnavailableTitleItemNames(AttributesArray);
-	For Each Atr In AttributesArray Do
-		Form.GroupItems.Add(Atr, ?(ValueIsFilled(Form.Items[Atr].Title),
-				Form.Items[Atr].Title,
-				Object.Ref.Metadata().Attributes[Atr].Synonym + ":" + Chars.NBSp));
-	EndDo;
-EndProcedure
-
-#EndRegion
 
 Function GetDocumentTable_CashTransferOrder(ArrayOfBasisDocuments, EndOfDate = Undefined) Export
 	TempTableManager = New TempTablesManager();
@@ -89,13 +30,14 @@ Function GetDocumentTable_CashTransferOrder(ArrayOfBasisDocuments, EndOfDate = U
 	Else
 		Query.SetParameter("EndOfDate", EndOfDate);
 	EndIf;
-	
+
 	Query.Execute();
-	Query.Text = 
+	Query.Text =
 	"SELECT
 	|	tmp.BasedOn AS BasedOn,
 	|	tmp.TransactionType AS TransactionType,
 	|	tmp.Company AS Company,
+	|	tmp.FinancialMovementType AS FinancialMovementType,
 	|	tmp.Account AS Account,
 	|	tmp.TransitAccount AS TransitAccount,
 	|	tmp.Currency AS Currency,
@@ -108,35 +50,35 @@ Function GetDocumentTable_CashTransferOrder(ArrayOfBasisDocuments, EndOfDate = U
 EndFunction
 
 Function GetDocumentTable_CashTransferOrder_QueryText() Export
-	Return
-	"SELECT ALLOWED
-	|	""CashTransferOrder"" AS BasedOn,
-	|	CASE
-	|		WHEN Doc.SendCurrency = Doc.ReceiveCurrency
-	|			THEN VALUE(Enum.OutgoingPaymentTransactionTypes.CashTransferOrder)
-	|		ELSE VALUE(Enum.OutgoingPaymentTransactionTypes.CurrencyExchange)
-	|	END AS TransactionType,
-	|	PlaningCashTransactionsTurnovers.Company AS Company,
-	|	PlaningCashTransactionsTurnovers.Account AS Account,
-	|	PlaningCashTransactionsTurnovers.Account.TransitAccount AS TransitAccount,
-	|	PlaningCashTransactionsTurnovers.Currency AS Currency,
-	|	PlaningCashTransactionsTurnovers.AmountTurnover AS Amount,
-	|	PlaningCashTransactionsTurnovers.BasisDocument AS PlaningTransactionBasis
-	|INTO tmp_CashTransferOrder
-	|FROM
-	|	AccumulationRegister.PlaningCashTransactions.Turnovers(, &EndOfDate,,
-	|		CashFlowDirection = VALUE(Enum.CashFlowDirections.Outgoing)
-	|	AND CurrencyMovementType = VALUE(ChartOfCharacteristicTypes.CurrencyMovementType.SettlementCurrency)
-	|	AND CASE
-	|		WHEN &UseArrayOfBasisDocuments
-	|			THEN BasisDocument IN (&ArrayOfBasisDocuments)
-	|		ELSE TRUE
-	|	END) AS PlaningCashTransactionsTurnovers
-	|		INNER JOIN Document.CashTransferOrder AS Doc
-	|		ON PlaningCashTransactionsTurnovers.BasisDocument = Doc.Ref
-	|WHERE
-	|	PlaningCashTransactionsTurnovers.Account.Type = VALUE(Enum.CashAccountTypes.Bank)
-	|	AND PlaningCashTransactionsTurnovers.AmountTurnover > 0";
+	Return "SELECT ALLOWED
+		   |	""CashTransferOrder"" AS BasedOn,
+		   |	CASE
+		   |		WHEN Doc.SendCurrency = Doc.ReceiveCurrency
+		   |			THEN VALUE(Enum.OutgoingPaymentTransactionTypes.CashTransferOrder)
+		   |		ELSE VALUE(Enum.OutgoingPaymentTransactionTypes.CurrencyExchange)
+		   |	END AS TransactionType,
+		   |	R3035T_CashPlanningTurnovers.FinancialMovementType AS FinancialMovementType,
+		   |	R3035T_CashPlanningTurnovers.Company AS Company,
+		   |	R3035T_CashPlanningTurnovers.Account AS Account,
+		   |	R3035T_CashPlanningTurnovers.Account.TransitAccount AS TransitAccount,
+		   |	R3035T_CashPlanningTurnovers.Currency AS Currency,
+		   |	R3035T_CashPlanningTurnovers.AmountTurnover AS Amount,
+		   |	R3035T_CashPlanningTurnovers.BasisDocument AS PlaningTransactionBasis
+		   |INTO tmp_CashTransferOrder
+		   |FROM
+		   |	AccumulationRegister.R3035T_CashPlanning.Turnovers(, &EndOfDate,,
+		   |		CashFlowDirection = VALUE(Enum.CashFlowDirections.Outgoing)
+		   |	AND CurrencyMovementType = VALUE(ChartOfCharacteristicTypes.CurrencyMovementType.SettlementCurrency)
+		   |	AND CASE
+		   |		WHEN &UseArrayOfBasisDocuments
+		   |			THEN BasisDocument IN (&ArrayOfBasisDocuments)
+		   |		ELSE TRUE
+		   |	END) AS R3035T_CashPlanningTurnovers
+		   |		INNER JOIN Document.CashTransferOrder AS Doc
+		   |		ON R3035T_CashPlanningTurnovers.BasisDocument = Doc.Ref
+		   |WHERE
+		   |	R3035T_CashPlanningTurnovers.Account.Type = VALUE(Enum.CashAccountTypes.Bank)
+		   |	AND R3035T_CashPlanningTurnovers.AmountTurnover > 0";
 EndFunction
 
 Function GetDocumentTable_CashTransferOrder_ForClient(ArrayOfBasisDocuments, ObjectRef = Undefined) Export
@@ -148,14 +90,14 @@ Function GetDocumentTable_CashTransferOrder_ForClient(ArrayOfBasisDocuments, Obj
 	ValueTable = GetDocumentTable_CashTransferOrder(ArrayOfBasisDocuments, EndOfDate);
 	For Each Row In ValueTable Do
 		NewRow = New Structure();
-		NewRow.Insert("BasedOn" 				, Row.BasedOn);
-		NewRow.Insert("TransactionType" 		, Row.TransactionType);
-		NewRow.Insert("Company" 				, Row.Company);
-		NewRow.Insert("Account" 				, Row.Account);
-		NewRow.Insert("TransitAccount" 			, Row.TransitAccount);
-		NewRow.Insert("Currency" 				, Row.Currency);
-		NewRow.Insert("Amount" 					, Row.Amount);
-		NewRow.Insert("PlaningTransactionBasis" , Row.PlaningTransactionBasis);
+		NewRow.Insert("BasedOn", Row.BasedOn);
+		NewRow.Insert("TransactionType", Row.TransactionType);
+		NewRow.Insert("Company", Row.Company);
+		NewRow.Insert("Account", Row.Account);
+		NewRow.Insert("TransitAccount", Row.TransitAccount);
+		NewRow.Insert("Currency", Row.Currency);
+		NewRow.Insert("Amount", Row.Amount);
+		NewRow.Insert("PlaningTransactionBasis", Row.PlaningTransactionBasis);
 		ArrayOfResults.Add(NewRow);
 	EndDo;
 	Return ArrayOfResults;

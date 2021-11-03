@@ -2,12 +2,48 @@ Procedure OnOpen(Object, Form, Cancel, AddInfo = Undefined) Export
 	DocumentsClient.SetTextOfDescriptionAtForm(Object, Form);
 EndProcedure
 
-Procedure ItemListOnChange(Object, Form, Item = Undefined, CalculationSettings = Undefined) Export
-	For Each Row In Object.ItemList Do
-		If Not ValueIsFilled(Row.Key) Then
-			Row.Key = New UUID();
+Procedure AfterWriteAtClient(Object, Form, WriteParameters, AddInfo = Undefined) Export
+	RowIDInfoClient.AfterWriteAtClient(Object, Form, WriteParameters, AddInfo);
+EndProcedure
+
+Procedure ItemListBeforeDeleteRow(Object, Form, Item, Cancel, AddInfo = Undefined) Export
+	RowIDInfoClient.ItemListBeforeDeleteRow(Object, Form, Item, Cancel, AddInfo);	
+EndProcedure
+
+Procedure ItemListOnChange(Object, Form, Item = Undefined, CurrentRowData = Undefined) Export
+	DocumentsClient.FillRowIDInItemList(Object);
+	RowIDInfoClient.UpdateQuantity(Object, Form);
+EndProcedure
+
+Procedure ItemListSelection(Object, Form, Item, RowSelected, Field, StandardProcessing, AddInfo = Undefined) Export
+	If Upper(Field.Name) = Upper("ItemListPhysicalCountByLocationPresentation") Then
+		CurrentData = Form.Items.ItemList.CurrentData;
+		If CurrentData = Undefined Then
+			Return;
 		EndIf;
-	EndDo;
+		StandardProcessing = False;
+		If ValueIsFilled(CurrentData.PhysicalCountByLocation) Then
+			OpenForm("Document.PhysicalCountByLocation.ObjectForm", New Structure("Key",
+				CurrentData.PhysicalCountByLocation), Form);
+		EndIf;
+	EndIf;
+	
+	RowIDInfoClient.ItemListSelection(Object, Form, Item, RowSelected, Field, StandardProcessing, AddInfo);
+EndProcedure
+
+Procedure ItemListOnStartEdit(Object, Form, Item, NewRow, Clone, AddInfo = Undefined) Export
+	CurrentData = Item.CurrentData;
+	If CurrentData = Undefined Then
+		Return;
+	EndIf;
+	If Clone Then
+		CurrentData.Key = New UUID();
+	EndIf;
+	RowIDInfoClient.ItemListOnStartEdit(Object, Form, Item, NewRow, Clone, AddInfo);
+EndProcedure
+
+Procedure ItemListAfterDeleteRow(Object, Form, Item) Export
+	DocumentsClient.ItemListAfterDeleteRow(Object, Form, Item);
 EndProcedure
 
 Procedure ItemListItemOnChange(Object, Form, Item = Undefined) Export
@@ -16,27 +52,24 @@ Procedure ItemListItemOnChange(Object, Form, Item = Undefined) Export
 		Return;
 	EndIf;
 	CurrentRow.ItemKey = CatItemsServer.GetItemKeyByItem(CurrentRow.Item);
-	If ValueIsFilled(CurrentRow.ItemKey)
-		And ServiceSystemServer.GetObjectAttribute(CurrentRow.ItemKey, "Item") <> CurrentRow.Item Then
+	If ValueIsFilled(CurrentRow.ItemKey) And ServiceSystemServer.GetObjectAttribute(CurrentRow.ItemKey, "Item")
+		<> CurrentRow.Item Then
 		CurrentRow.ItemKey = Undefined;
 	EndIf;
-	
+
 	CalculationSettings = New Structure();
 	CalculationSettings.Insert("UpdateUnit");
-	CalculationStringsClientServer.CalculateItemsRow(Object,
-		CurrentRow,
-		CalculationSettings);
+	CalculationStringsClientServer.CalculateItemsRow(Object, CurrentRow, CalculationSettings);
 EndProcedure
 
 #Region PickUpItems
 
 Procedure PickupItemsEnd(Result, AdditionalParameters) Export
-	If Not ValueIsFilled(Result)
-		Or Not AdditionalParameters.Property("Object")
-		Or Not AdditionalParameters.Property("Form") Then
+	If Not ValueIsFilled(Result) Or Not AdditionalParameters.Property("Object") Or Not AdditionalParameters.Property(
+		"Form") Then
 		Return;
 	EndIf;
-	
+
 	FilterString = "Item, ItemKey, Unit";
 	FilterStructure = New Structure(FilterString);
 	For Each ResultElement In Result Do
@@ -55,19 +88,19 @@ Procedure PickupItemsEnd(Result, AdditionalParameters) Export
 EndProcedure
 
 Procedure OpenPickupItems(Object, Form, Command) Export
-	NotifyParameters = New Structure;
+	NotifyParameters = New Structure();
 	NotifyParameters.Insert("Object", Object);
 	NotifyParameters.Insert("Form", Form);
 	NotifyDescription = New NotifyDescription("PickupItemsEnd", DocPhysicalInventoryClient, NotifyParameters);
-	OpenFormParameters = New Structure;
-	StoreArray = New Array;
+	OpenFormParameters = New Structure();
+	StoreArray = New Array();
 	StoreArray.Add(Object.Store);
-	
+
 	If Command.AssociatedTable <> Undefined Then
 		OpenFormParameters.Insert("AssociatedTableName", Command.AssociatedTable.Name);
 		OpenFormParameters.Insert("Object", Object);
 	EndIf;
-	
+
 	OpenFormParameters.Insert("Stores", StoreArray);
 	OpenFormParameters.Insert("EndPeriod", CommonFunctionsServer.GetCurrentSessionDate());
 	OpenForm("CommonForm.PickUpItems", OpenFormParameters, Form, , , , NotifyDescription);
@@ -76,12 +109,13 @@ EndProcedure
 #EndRegion
 
 Procedure ItemListItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
-	OpenSettings = DocumentsClient.GetOpenSettingsForSelectItemWithNotServiceFilter();
+	OpenSettings = DocumentsClient.GetOpenSettingsForSelectItemWithoutServiceFilter();
 	DocumentsClient.ItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
 
 Procedure ItemListItemEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
-	DocumentsClient.ItemEditTextChange(Object, Form, Item, Text, StandardProcessing);
+	ArrayOfFilters = DocumentsClient.GetArrayOfFiltersForSelectItemWithoutServiceFilter();
+	DocumentsClient.ItemEditTextChange(Object, Form, Item, Text, StandardProcessing, ArrayOfFilters);
 EndProcedure
 
 Procedure StoreOnChange(Object, Form, Item) Export
@@ -106,7 +140,7 @@ EndProcedure
 Procedure DecorationGroupTitleUncollapsedPictureClick(Object, Form, Item) Export
 	DocumentsClientServer.ChangeTitleCollapse(Object, Form, False);
 EndProcedure
- 
+
 Procedure DecorationGroupTitleUncollapsedLabelClick(Object, Form, Item) Export
 	DocumentsClientServer.ChangeTitleCollapse(Object, Form, False);
 EndProcedure
@@ -120,7 +154,7 @@ Procedure CreatePhysicalCount(ObjectRef) Export
 	UseResponsiblePersonByRow = CommonFunctionsServer.GetRefAttribute(ObjectRef, "UseResponsiblePersonByRow");
 	AddInfo.Insert("UseResponsiblePersonByRow", UseResponsiblePersonByRow);
 	AddInfo.Insert("CountDocsToCreate", CountDocsToCreate);
-	
+
 	If UseResponsiblePersonByRow Then
 		DocPhysicalInventoryServer.CreatePhysicalCount(AddInfo.ObjectRef, AddInfo);
 		Notify("CreatedPhysicalCountByLocations", , ObjectRef);
@@ -131,7 +165,7 @@ Procedure CreatePhysicalCount(ObjectRef) Export
 EndProcedure
 
 Procedure CreatePhysicalCountEnd(CountDocsToCreate, AdditionalParameters) Export
-	
+
 	If ValueIsFilled(CountDocsToCreate) Then
 		AdditionalParameters.Insert("CountDocsToCreate", CountDocsToCreate);
 		DocPhysicalInventoryServer.CreatePhysicalCount(AdditionalParameters.ObjectRef, AdditionalParameters);
@@ -146,15 +180,13 @@ Procedure SearchByBarcode(Barcode, Object, Form) Export
 EndProcedure
 
 Procedure FillExpCount(Object, Form) Export
-	
+
 	If DocPhysicalInventoryServer.HavePhysicalCountByLocation(Object.Ref) Then
 		ShowMessageBox(Undefined, R().InfoMessage_006);
 		Return;
 	EndIf;
-	
-	FillItemList(Object, 
-				Form, 
-				DocPhysicalInventoryServer.GetItemListWithFillingExpCount(Object.Ref, Object.Store));
+
+	FillItemList(Object, Form, DocPhysicalInventoryServer.GetItemListWithFillingExpCount(Object.Ref, Object.Store));
 EndProcedure
 
 Procedure UpdateExpCount(Object, Form) Export
@@ -165,15 +197,12 @@ Procedure UpdateExpCount(Object, Form) Export
 		NewRow.Store = Object.Store;
 		ItemList.Add(NewRow);
 	EndDo;
-	FillItemList(Object, 
-				Form, 
-				DocPhysicalInventoryServer.GetItemListWithFillingExpCount(Object.Ref, Object.Store, ItemList));
+	FillItemList(Object, Form, DocPhysicalInventoryServer.GetItemListWithFillingExpCount(Object.Ref, Object.Store,
+		ItemList));
 EndProcedure
 
 Procedure UpdatePhysCount(Object, Form) Export
-	UpdateItemList(Object, 
-					Form, 
-					DocPhysicalInventoryServer.GetItemListWithFillingPhysCount(Object.Ref));
+	UpdateItemList(Object, Form, DocPhysicalInventoryServer.GetItemListWithFillingPhysCount(Object.Ref));
 EndProcedure
 
 Procedure FillItemList(Object, Form, Result)
@@ -190,13 +219,13 @@ Procedure UpdateItemList(Object, Form, Result)
 		ItemListRow.PhysCount = 0;
 		ItemListRow.Difference = ItemListRow.PhysCount - ItemListRow.ExpCount;
 	EndDo;
-	
+
 	For Each Row In Result Do
 		ItemListFoundRows = Object.ItemList.FindRows(New Structure("Unit, ItemKey", Row.Unit, Row.ItemKey));
 		If ItemListFoundRows.Count() Then
 			ItemListRow = ItemListFoundRows[0];
 		Else
-			ItemListRow = Object.ItemList.Add();			
+			ItemListRow = Object.ItemList.Add();
 		EndIf;
 		FillPropertyValues(ItemListRow, Row);
 		ItemListRow.Difference = ItemListRow.PhysCount - ItemListRow.ExpCount;

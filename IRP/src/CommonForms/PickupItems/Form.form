@@ -11,10 +11,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>TitleFilter</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>TitleFilter</segments>
       </dataPath>
       <handlers>
         <event>OnChange</event>
@@ -76,10 +74,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>ItemType</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>ItemType</segments>
       </dataPath>
       <handlers>
         <event>OnChange</event>
@@ -191,10 +187,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemList.Title</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemList.Title</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemListTitleExtendedTooltip</name>
@@ -244,10 +238,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemList.InStock</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemList.InStock</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemListInStockExtendedTooltip</name>
@@ -297,10 +289,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemList.Unit</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemList.Unit</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemListUnitExtendedTooltip</name>
@@ -350,10 +340,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemList.InStockReceiver</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemList.InStockReceiver</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemListInStockReceiverExtendedTooltip</name>
@@ -403,10 +391,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemList.Price</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemList.Price</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemListPriceExtendedTooltip</name>
@@ -457,10 +443,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemList.PickedOut</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemList.PickedOut</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemListPickedOutExtendedTooltip</name>
@@ -532,6 +516,7 @@
           <autoMaxWidth>true</autoMaxWidth>
           <autoMaxHeight>true</autoMaxHeight>
           <placementArea>UserCmds</placementArea>
+          <toolTipRepresentation>Auto</toolTipRepresentation>
           <representationInContextMenu>Auto</representationInContextMenu>
         </items>
         <visible>true</visible>
@@ -788,10 +773,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemKeyList.Title</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemKeyList.Title</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemKeyListTitleExtendedTooltip</name>
@@ -841,10 +824,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemKeyList.InStock</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemKeyList.InStock</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemKeyListInStockExtendedTooltip</name>
@@ -894,10 +875,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemKeyList.Unit</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemKeyList.Unit</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemKeyListUnitExtendedTooltip</name>
@@ -947,10 +926,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemKeyList.InStockReceiver</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemKeyList.InStockReceiver</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemKeyListInStockReceiverExtendedTooltip</name>
@@ -1000,10 +977,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemKeyList.Price</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemKeyList.Price</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemKeyListPriceExtendedTooltip</name>
@@ -1053,10 +1028,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemKeyList.PickedOut</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemKeyList.PickedOut</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemKeyListPickupOutExtendedTooltip</name>
@@ -1129,6 +1102,7 @@
           <autoMaxWidth>true</autoMaxWidth>
           <autoMaxHeight>true</autoMaxHeight>
           <placementArea>UserCmds</placementArea>
+          <toolTipRepresentation>Auto</toolTipRepresentation>
           <representationInContextMenu>Auto</representationInContextMenu>
         </items>
         <visible>true</visible>
@@ -1358,10 +1332,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemTableValue.Item</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemTableValue.Item</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemTableValueItemExtendedTooltip</name>
@@ -1411,10 +1383,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemTableValue.ItemKey</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemTableValue.ItemKey</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemTableValueItemKeyExtendedTooltip</name>
@@ -1464,10 +1434,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemTableValue.Price</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemTableValue.Price</segments>
         </dataPath>
         <handlers>
           <event>OnChange</event>
@@ -1521,10 +1489,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemTableValue.Quantity</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemTableValue.Quantity</segments>
         </dataPath>
         <handlers>
           <event>OnChange</event>
@@ -1577,10 +1543,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemTableValue.Unit</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemTableValue.Unit</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemTableValueUnitExtendedTooltip</name>
@@ -1631,10 +1595,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>ItemTableValue.Amount</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>ItemTableValue.Amount</segments>
         </dataPath>
         <extendedTooltip>
           <name>ItemTableValueAmountExtendedTooltip</name>
@@ -1917,6 +1879,7 @@
       <autoMaxWidth>true</autoMaxWidth>
       <autoMaxHeight>true</autoMaxHeight>
       <placementArea>UserCmds</placementArea>
+      <toolTipRepresentation>Auto</toolTipRepresentation>
       <representationInContextMenu>Auto</representationInContextMenu>
     </items>
     <visible>true</visible>

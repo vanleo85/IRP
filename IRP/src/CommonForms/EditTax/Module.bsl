@@ -12,7 +12,7 @@ EndProcedure
 
 &AtClient
 Procedure OnOpen(Cancel)
-	TaxesClient.ExpandTaxTree(ThisObject.Items.TaxTree, ThisObject.TaxTree.GetItems());
+	ExpandTaxTree(ThisObject.Items.TaxTree, ThisObject.TaxTree.GetItems());
 EndProcedure
 
 &AtClient
@@ -37,7 +37,7 @@ Procedure TaxTreeManualAmountOnChange(Item)
 	If CurrentData = Undefined Then
 		Return;
 	EndIf;
-	Filter = New Structure;
+	Filter = New Structure();
 	Filter.Insert("Key", CurrentData.Key);
 	Filter.Insert("Tax", CurrentData.Tax);
 	Filter.Insert("TaxRate", CurrentData.TaxRate);
@@ -48,11 +48,47 @@ Procedure TaxTreeManualAmountOnChange(Item)
 	For Each ItemOfTaxRows In ArrayOfTaxRows Do
 		ItemOfTaxRows.ManualAmount = CurrentData.ManualAmount;
 	EndDo;
-	
+
 	CreateTaxTree();
-	
-	TaxesClient.ExpandTaxTree(ThisObject.Items.TaxTree, ThisObject.TaxTree.GetItems());
-	ThisObject.Items.TaxTree.CurrentRow = TaxesClient.FindRowInTree(Filter, ThisObject.TaxTree);
+
+	ExpandTaxTree(ThisObject.Items.TaxTree, ThisObject.TaxTree.GetItems());
+	ThisObject.Items.TaxTree.CurrentRow = FindRowInTree(Filter, ThisObject.TaxTree);
+EndProcedure
+
+&AtClient
+Function FindRowInTree(Filter, Tree)
+	RowID = Undefined;
+	FindRowInTreeRecursive(Filter, Tree.GetItems(), RowID);
+	Return RowID;
+EndFunction
+
+&AtClient
+Procedure FindRowInTreeRecursive(Filter, TreeRows, RowID)
+	For Each Row In TreeRows Do
+		If RowID <> Undefined Then
+			Return;
+		EndIf;
+		Founded = True;
+		For Each ItemOfFilter In Filter Do
+			If Row[ItemOfFilter.Key] <> Filter[ItemOfFilter.Key] Then
+				Founded = False;
+				Break;
+			EndIf;
+		EndDo;
+		If Founded Then
+			RowID = Row.GetID();
+		EndIf;
+		If RowID = Undefined Then
+			FindRowInTreeRecursive(Filter, Row.GetItems(), RowID);
+		EndIf;
+	EndDo;
+EndProcedure
+
+&AtClient
+Procedure ExpandTaxTree(Tree, TreeRows) Export
+	For Each ItemTreeRows In TreeRows Do
+		Tree.Expand(ItemTreeRows.GetID());
+	EndDo;
 EndProcedure
 
 &AtClient
@@ -67,7 +103,7 @@ EndProcedure
 
 &AtServer
 Procedure CreateTaxTree()
-	MainTable = New ValueTable;
+	MainTable = New ValueTable();
 	MainTable.Columns.Add("Key", New TypeDescription(Metadata.DefinedTypes.typeRowID.Type));
 	MainTable.Columns.Add("Currency", New TypeDescription("CatalogRef.Currencies"));
 
@@ -75,7 +111,7 @@ Procedure CreateTaxTree()
 	NewRowMainTable.Key      = ThisObject.MainTableKey;
 	NewRowMainTable.Currency = ThisObject.MainTableCurrency;
 
-	Query = New Query;
+	Query = New Query();
 	Query.Text =
 	"SELECT *
 	|INTO MainTable
@@ -152,7 +188,7 @@ Procedure CreateTaxTree()
 				FillPropertyValues(NewRow2, Row1);
 				FillPropertyValues(NewRow2, Row2);
 				NewRow2.RowPresentation = StrTemplate("%1", Row2.Analytics);
-	
+
 				NewRow2.Level = 2;
 			EndIf;
 		EndDo;

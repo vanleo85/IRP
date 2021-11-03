@@ -21,10 +21,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.Amount</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.Amount</segments>
         </dataPath>
         <extendedTooltip>
           <name>AmountExtendedTooltip</name>
@@ -183,6 +181,7 @@
         <font>Style.NormalTextFont</font>
         <height>20.0</height>
       </font>
+      <toolTipRepresentation>Auto</toolTipRepresentation>
       <representationInContextMenu>Auto</representationInContextMenu>
     </items>
     <visible>true</visible>
@@ -281,10 +280,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Payments.PaymentType</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Payments.PaymentType</segments>
             </dataPath>
             <extendedTooltip>
               <name>PaymentsPaymentTypeExtendedTooltip</name>
@@ -336,10 +333,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Payments.Amount</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Payments.Amount</segments>
             </dataPath>
             <extendedTooltip>
               <name>PaymentsAmountExtendedTooltip</name>
@@ -394,10 +389,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Payments.AmountString</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Payments.AmountString</segments>
             </dataPath>
             <extendedTooltip>
               <name>PaymentsAmountStringExtendedTooltip</name>
@@ -431,10 +424,8 @@
             <showInHeader>true</showInHeader>
             <headerHorizontalAlign>Left</headerHorizontalAlign>
             <showInFooter>true</showInFooter>
-            <footerDataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>PaymentsAmountTotal</segments>
-              </paths>
+            <footerDataPath xsi:type="form:DataPath">
+              <segments>PaymentsAmountTotal</segments>
             </footerDataPath>
             <footerFont xsi:type="core:FontDef">
               <height>16.0</height>
@@ -458,10 +449,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>Payments.PaymentTypeEnum</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>Payments.PaymentTypeEnum</segments>
             </dataPath>
             <extendedTooltip>
               <name>PaymentsPaymentTypeEnumExtendedTooltip</name>
@@ -765,6 +754,7 @@
               <font xsi:type="core:FontDef">
                 <height>14.0</height>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Decoration">
@@ -855,6 +845,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Button">
@@ -901,6 +892,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Button">
@@ -947,6 +939,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Button">
@@ -993,6 +986,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <visible>true</visible>
@@ -1068,6 +1062,7 @@
               <font xsi:type="core:FontDef">
                 <height>14.0</height>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Decoration">
@@ -1158,6 +1153,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Button">
@@ -1204,6 +1200,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Button">
@@ -1250,6 +1247,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Button">
@@ -1299,6 +1297,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <visible>true</visible>
@@ -1374,6 +1373,7 @@
               <picture xsi:type="core:PictureRef">
                 <picture>CommonPicture.Finance</picture>
               </picture>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Decoration">
@@ -1464,6 +1464,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Button">
@@ -1510,6 +1511,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Button">
@@ -1556,6 +1558,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Button">
@@ -1605,6 +1608,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <visible>true</visible>
@@ -1680,6 +1684,7 @@
               <picture xsi:type="core:PictureRef">
                 <picture>CommonPicture.Purchase</picture>
               </picture>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Decoration">
@@ -1766,6 +1771,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <items xsi:type="form:Button">
@@ -1815,6 +1821,7 @@
                 <underline>false</underline>
                 <strikeout>false</strikeout>
               </font>
+              <toolTipRepresentation>Auto</toolTipRepresentation>
               <representationInContextMenu>Auto</representationInContextMenu>
             </items>
             <visible>true</visible>
@@ -2008,10 +2015,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Cashback</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Cashback</segments>
       </dataPath>
       <extendedTooltip>
         <name>CashbackExtendedTooltip</name>

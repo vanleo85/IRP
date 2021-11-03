@@ -1,7 +1,6 @@
 &AtServer
 Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	ThisObject.List.QueryText = LocalizationEvents.ReplaceDescriptionLocalizationPrefix(ThisObject.List.QueryText);
-	FillingFromClassifiers.OnCreateAtServer(ThisObject, Cancel, StandardProcessing);
 EndProcedure
 
 &AtClient
@@ -15,16 +14,16 @@ Procedure SelectIntegrationEnd(Result, AdditionalParameters) Export
 	If Result = Undefined Then
 		Return;
 	EndIf;
-	
+
 	ExternalDataProc = ServiceSystemServer.GetObjectAttribute(Result.IntegrationSettings, "ExternalDataProc");
 	Info = AddDataProcServer.AddDataProcInfo(ExternalDataProc);
 	Info.Insert("Settings", PutSettingsToTempStorage(Result.IntegrationSettings));
 	Info.Insert("IntegrationSettingsRef", Result.IntegrationSettings);
-	Info.Insert("IntegrationSettingsName",
-		ServiceSystemServer.GetObjectAttribute(Result.IntegrationSettings, "UniqueID"));
-	
+	Info.Insert("IntegrationSettingsName", ServiceSystemServer.GetObjectAttribute(Result.IntegrationSettings,
+		"UniqueID"));
+
 	CallMethodAddDataProc(Info);
-	
+
 	AddDataProcClient.OpenFormAddDataProc(Info);
 EndProcedure
 

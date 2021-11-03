@@ -1,6 +1,11 @@
-
 Function GetIntegrationSettings(IntegrationSettingName, AddInfo = Undefined) Export
-	IntegrationSettingsRef = UniqueID.UniqueIDByName(Metadata.Catalogs.IntegrationSettings, IntegrationSettingName);
+
+	If TypeOf(IntegrationSettingName) = Type("String") Then
+		IntegrationSettingsRef = UniqueID.UniqueIDByName(Metadata.Catalogs.IntegrationSettings, IntegrationSettingName);
+	Else
+		IntegrationSettingsRef = IntegrationSettingName;
+	EndIf;
+
 	CustomizedSetting = New Structure();
 	For Each Str In IntegrationSettingsRef.ConnectionSetting Do
 		If ValueIsFilled(Str.Value) Then
@@ -12,7 +17,7 @@ Function GetIntegrationSettings(IntegrationSettingName, AddInfo = Undefined) Exp
 	Result.Insert("IntegrationType", IntegrationSettingsRef.IntegrationType);
 	Result.Insert("CustomizedSetting", CustomizedSetting);
 	Return Result;
-EndFunction	
+EndFunction
 
 Function ConnectionSettingTemplate(IntegrationType = Undefined, AddInfo = Undefined) Export
 	ConnectionSetting = New Structure();
@@ -30,15 +35,7 @@ Function ConnectionSettingTemplate(IntegrationType = Undefined, AddInfo = Undefi
 		ConnectionSetting.Insert("SenderName", "IRP Team");
 		ConnectionSetting.Insert("FromAddress", "noreply@irpteam.com");
 		ConnectionSetting.Insert("DisplayName", "IRP NO REPLY");
-	ElsIf IntegrationType = Enums.IntegrationType.GoogleDrive Then
-		ConnectionSetting.Insert("client_id", "xxxxxxxxxxxxxx.apps.googleusercontent.com");
-		ConnectionSetting.Insert("client_secret", "");
-		ConnectionSetting.Insert("key", "");
-		ConnectionSetting.Insert("redirect_uri", "http://localhost");
-		ConnectionSetting.Insert("refresh_token", "");
-		ConnectionSetting.Insert("folderID", "");
-		ConnectionSetting.Insert("LocalGoogleDrivePath", "");
-	Else
+	ElsIf Not ExtensionCall_ConnectionSettingTemplate(IntegrationType, ConnectionSetting, AddInfo) Then
 		ConnectionSetting.Insert("QueryType", "POST");
 		ConnectionSetting.Insert("ResourceAddress", "");
 		ConnectionSetting.Insert("Ip", "localhost");
@@ -54,16 +51,20 @@ Function ConnectionSettingTemplate(IntegrationType = Undefined, AddInfo = Undefi
 	Return ConnectionSetting;
 EndFunction
 
+Function ExtensionCall_ConnectionSettingTemplate(IntegrationType, ConnectionSetting, AddInfo)
+	Return False;
+EndFunction
+
 Function InfoRegSettingsStructure() Export
-	Query = New Query;
+	Query = New Query();
 	Query.Text =
-		"SELECT TOP 1
-		|	*
-		|FROM
-		|	InformationRegister.IntegrationInfo AS IntegrationInfo
-		|WHERE
-		|	FALSE";
-	
+	"SELECT TOP 1
+	|	*
+	|FROM
+	|	InformationRegister.IntegrationInfo AS IntegrationInfo
+	|WHERE
+	|	FALSE";
+
 	Return Query.Execute().Unload();
-	
+
 EndFunction

@@ -64,8 +64,6 @@ EndProcedure
 Procedure DateOnChange(Item)
 	DocumentModuleClient.DateOnChange(Object, ThisObject, Item);
 EndProcedure
-
-
 #EndRegion
 
 #Region FormTableItemsEventHandlers
@@ -86,22 +84,22 @@ EndProcedure
 
 &AtClient
 Procedure DecorationGroupTitleCollapsedPictureClick(Item)
-	DocumentModuleClient.DecorationGroupTitleCollapsedPictureClick(Object, ThisObject, Item);
+	DocManualRegisterEntryClient.DecorationGroupTitleCollapsedPictureClick(Object, ThisObject, Item);
 EndProcedure
 
 &AtClient
 Procedure DecorationGroupTitleCollapsedLabelClick(Item)
-	DocumentModuleClient.DecorationGroupTitleCollapsedLabelClick(Object, ThisObject, Item);
+	DocManualRegisterEntryClient.DecorationGroupTitleCollapsedLabelClick(Object, ThisObject, Item);
 EndProcedure
 
 &AtClient
 Procedure DecorationGroupTitleUncollapsedPictureClick(Item)
-	DocumentModuleClient.DecorationGroupTitleUncollapsedPictureClick(Object, ThisObject, Item);
+	DocManualRegisterEntryClient.DecorationGroupTitleUncollapsedPictureClick(Object, ThisObject, Item);
 EndProcedure
 
 &AtClient
 Procedure DecorationGroupTitleUncollapsedLabelClick(Item)
-	DocumentModuleClient.DecorationGroupTitleUncollapsedLabelClick(Object, ThisObject, Item);
+	DocManualRegisterEntryClient.DecorationGroupTitleUncollapsedLabelClick(Object, ThisObject, Item);
 EndProcedure
 
 #EndRegion
@@ -134,7 +132,7 @@ EndProcedure
 &AtClient
 Procedure GeneratedFormCommandActionByName(Command) Export
 	ExternalCommandsClient.GeneratedFormCommandActionByName(Object, ThisObject, Command.Name);
-	GeneratedFormCommandActionByNameServer(Command.Name);	
+	GeneratedFormCommandActionByNameServer(Command.Name);
 EndProcedure
 
 &AtServer

@@ -11,10 +11,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Code</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Code</segments>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -92,10 +90,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.PredefinedDataName</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.PredefinedDataName</segments>
     </dataPath>
     <extendedTooltip>
       <name>PredefinedDataNameExtendedTooltip</name>
@@ -152,10 +148,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.IDInfoTypes.LineNumber</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.IDInfoTypes.LineNumber</segments>
       </dataPath>
       <extendedTooltip>
         <name>IDInfoTypesLineNumberExtendedTooltip</name>
@@ -204,10 +198,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.IDInfoTypes.IDInfoType</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.IDInfoTypes.IDInfoType</segments>
       </dataPath>
       <extendedTooltip>
         <name>IDInfoTypesIDInfoTypeExtendedTooltip</name>
@@ -256,10 +248,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.IDInfoTypes.IsConditionSet</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.IDInfoTypes.IsConditionSet</segments>
       </dataPath>
       <extendedTooltip>
         <name>IDInfoTypesIsConditionSetExtendedTooltip</name>
@@ -332,6 +322,7 @@
         <autoMaxWidth>true</autoMaxWidth>
         <autoMaxHeight>true</autoMaxHeight>
         <placementArea>UserCmds</placementArea>
+        <toolTipRepresentation>Auto</toolTipRepresentation>
         <representationInContextMenu>Auto</representationInContextMenu>
       </items>
       <visible>true</visible>

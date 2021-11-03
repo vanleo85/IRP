@@ -49,6 +49,7 @@ Scenario:  _052001 preparation (Bank receipt)
 		When Create catalog IntegrationSettings objects
 		When Create information register CurrencyRates records
 		When Create catalog CashAccounts objects
+		When Create catalog ExpenseAndRevenueTypes objects
 		When update ItemKeys
 	* Add plugin for taxes calculation
 		Given I open hyperlink "e1cib/list/Catalog.ExternalDataProc"
@@ -97,11 +98,15 @@ Scenario: _052001 create Bank receipt based on Sales invoice
 		Then the form attribute named "TransactionType" became equal to "Payment from customer"
 		Then the form attribute named "Currency" became equal to "TRY"
 		And "PaymentList" table contains lines
-			| 'Partner'   | 'Partner term'             | 'Amount'   | 'Payer'             | 'Basis document'   | 'Planning transaction basis' |
+			| 'Partner'   | 'Partner term'             | 'Total amount'   | 'Payer'             | 'Basis document'   | 'Planning transaction basis' |
 			| 'Ferron BP' | 'Basic Partner terms, TRY' | '4 250,00' | 'Company Ferron BP' | '$$SalesInvoice024001$$' | ''                          |
-		And "CurrenciesPaymentList" table contains lines
-			| 'Movement type'      | 'Type'      | 'Currency from' | 'Currency' | 'Rate presentation' | 'Amount' | 'Multiplicity' |
-			| 'Reporting currency' | 'Reporting' | 'TRY'           | 'USD'      | '0,1712'            | '727,60' | '1'            |
+		And in the table "PaymentList" I click "Edit currencies" button
+		And "CurrenciesTable" table became equal
+			| 'Movement type'      | 'Type'         | 'To'  | 'From' | 'Multiplicity' | 'Rate'   | 'Amount' |
+			| 'Reporting currency' | 'Reporting'    | 'USD' | 'TRY'  | '1'            | '0,1712' | '727,60' |
+			| 'Local currency'     | 'Legal'        | 'TRY' | 'TRY'  | '1'            | '1'      | '4 250'  |
+			| 'TRY'                | 'Partner term' | 'TRY' | 'TRY'  | '1'            | '1'      | '4 250'  |
+		And I close current window		
 	* Check account selection and saving 
 		And I click Select button of "Account" field
 		And I go to line in "List" table
@@ -112,12 +117,15 @@ Scenario: _052001 create Bank receipt based on Sales invoice
 		Then the form attribute named "TransactionType" became equal to "Payment from customer"
 		Then the form attribute named "Account" became equal to "Bank account, USD"
 		And "PaymentList" table contains lines
-			| 'Partner'   | 'Partner term'             | 'Amount'   | 'Payer'             | 'Basis document'   | 'Planning transaction basis' |
+			| 'Partner'   | 'Partner term'             | 'Total amount'   | 'Payer'             | 'Basis document'   | 'Planning transaction basis' |
 			| 'Ferron BP' | 'Basic Partner terms, TRY' | '4 250,00' | 'Company Ferron BP' | '$$SalesInvoice024001$$' | ''                          |
-		And "CurrenciesPaymentList" table contains lines
-			| 'Movement type'      | 'Type'      | 'Currency from' | 'Currency' | 'Rate presentation' | 'Amount'    | 'Multiplicity' |
-			| 'TRY'                | 'Partner term' | 'USD'           | 'TRY'      | '5,6275'            | '23 916,88' | '1'            |
-			| 'Local currency'     | 'Legal'     | 'USD'           | 'TRY'      | '5,6275'            | '23 916,88' | '1'            |
+		And in the table "PaymentList" I click "Edit currencies" button
+		And "CurrenciesTable" table became equal
+			| 'Movement type'      | 'Type'         | 'To'  | 'From' | 'Multiplicity' | 'Rate'   | 'Amount'    |
+			| 'Local currency'     | 'Legal'        | 'TRY' | 'USD'  | '1'            | '5,6275' | '23 916,88' |
+			| 'Reporting currency' | 'Reporting'    | 'USD' | 'USD'  | '1'            | '1'      | '4 250'     |
+			| 'TRY'                | 'Partner term' | 'TRY' | 'USD'  | '1'            | '5,6275' | '23 916,88' |	
+		And I close current window	
 		Then the form attribute named "DocumentAmount" became equal to "4 250,00"
 	* Change of Partner term and basis document
 		And I select current line in "PaymentList" table
@@ -138,12 +146,12 @@ Scenario: _052001 create Bank receipt based on Sales invoice
 		And I click "Select" button
 		And in "PaymentList" table I move to the next cell
 	* Change in payment amount
-		And I activate field named "PaymentListAmount" in "PaymentList" table
+		And I activate field named "PaymentListTotalAmount" in "PaymentList" table
 		And I select current line in "PaymentList" table
-		And I input "20 000,00" text in the field named "PaymentListAmount" of "PaymentList" table
+		And I input "20 000,00" text in the field named "PaymentListTotalAmount" of "PaymentList" table
 		And I finish line editing in "PaymentList" table
 		And "PaymentList" table contains lines
-			| 'Partner'   | 'Partner term'                     | 'Amount'    | 'Payer'             | 'Basis document'  |
+			| 'Partner'   | 'Partner term'                     | 'Total amount'    | 'Payer'             | 'Basis document'  |
 			| 'Ferron BP' | 'Basic Partner terms, without VAT' | '20 000,00' | 'Company Ferron BP' | '$$SalesInvoice024008$$' |
 	And I close all client application windows
 
@@ -197,12 +205,21 @@ Scenario: _052001 create Bank receipt (independently)
 			# temporarily
 			And I go to line in "List" table
 				| 'Amount' | 'Company'      | 'Legal name'        | 'Partner'   |
-				| '4 250,00'        | 'Main Company' | 'Company Ferron BP' | 'Ferron BP' |
+				| '4 250,00'     | 'Main Company' | 'Company Ferron BP' | 'Ferron BP' |
 			And I click "Select" button
 		# temporarily
 		* Filling in amount in a tabular part
-			And I activate "Amount" field in "PaymentList" table
-			And I input "100,00" text in "Amount" field of "PaymentList" table
+			And I activate "Total amount" field in "PaymentList" table
+			And I input "100,00" text in "Total amount" field of "PaymentList" table
+			And I finish line editing in "PaymentList" table
+		* Select movement type
+			And I activate "Financial movement type" field in "PaymentList" table
+			And I select current line in "PaymentList" table
+			And I click choice button of "Financial movement type" attribute in "PaymentList" table
+			And I go to line in "List" table
+				| 'Description'     |
+				| 'Movement type 1' |
+			And I select current line in "List" table		
 			And I finish line editing in "PaymentList" table
 		And I click the button named "FormPost"
 		And I delete "$$NumberBankReceipt0520011$$" variable
@@ -263,12 +280,12 @@ Scenario: _052001 create Bank receipt (independently)
 			# temporarily
 			And I go to line in "List" table
 				| 'Amount' | 'Company'      | 'Legal name'        | 'Partner'   |
-				| '4 150,00'        | 'Main Company' | 'Company Ferron BP' | 'Ferron BP' |
+				| '4 150,00'     | 'Main Company' | 'Company Ferron BP' | 'Ferron BP' |
 			And I click "Select" button
 		# temporarily
 		* Filling in amount in a tabular part
-			And I activate "Amount" field in "PaymentList" table
-			And I input "100,00" text in "Amount" field of "PaymentList" table
+			And I activate "Total amount" field in "PaymentList" table
+			And I input "100,00" text in "Total amount" field of "PaymentList" table
 			And I finish line editing in "PaymentList" table
 		And I click the button named "FormPost"
 		And I delete "$$NumberBankReceipt0520012$$" variable
@@ -330,12 +347,12 @@ Scenario: _052001 create Bank receipt (independently)
 			# temporarily
 			And I go to line in "List" table
 				| 'Amount' | 'Company'      | 'Legal name'        | 'Partner'   |
-				| '200,00'           | 'Main Company' | 'Company Ferron BP' | 'Ferron BP' |
+				| '200,00'       | 'Main Company' | 'Company Ferron BP' | 'Ferron BP' |
 			And I click "Select" button
 		# temporarily
 		* Filling in amount in a tabular part
-			And I activate "Amount" field in "PaymentList" table
-			And I input "50,00" text in "Amount" field of "PaymentList" table
+			And I activate "Total amount" field in "PaymentList" table
+			And I input "50,00" text in "Total amount" field of "PaymentList" table
 			And I finish line editing in "PaymentList" table
 		And I click the button named "FormPost"
 		And I delete "$$NumberBankReceipt0520013$$" variable
@@ -349,126 +366,9 @@ Scenario: _052001 create Bank receipt (independently)
 			| '$$NumberBankReceipt0520013$$'    |	
 	
 
-Scenario: _052002 check Bank receipt movements by register PartnerArTransactions
-	Given I open hyperlink "e1cib/list/AccumulationRegister.PartnerArTransactions"
-	And "List" table contains lines
-		| 'Currency' | 'Recorder'               | 'Legal name'        | 'Basis document'         | 'Company'      | 'Amount' | 'Partner term'             | 'Partner'   |
-		| 'TRY'      | '$$BankReceipt0520011$$' | 'Company Ferron BP' | '$$SalesInvoice024001$$' | 'Main Company' | '100,00' | 'Basic Partner terms, TRY' | 'Ferron BP' |
-		| 'USD'      | '$$BankReceipt0520012$$' | 'Company Ferron BP' | '$$SalesInvoice024001$$' | 'Main Company' | '100,00' | 'Basic Partner terms, TRY' | 'Ferron BP' |
-		| 'EUR'      | '$$BankReceipt0520013$$' | 'Company Ferron BP' | 'Sales invoice 234*'     | 'Main Company' | '50,00'  | '*'                        | 'Ferron BP' |
-	And I close all client application windows
 
 
-Scenario: _050002  check Bank receipt movements with transaction type Payment from customer
-	* Open Bank receipt 1
-		Given I open hyperlink "e1cib/list/Document.BankReceipt"
-		And I go to line in "List" table
-			| 'Number' |
-			| '$$NumberBankReceipt0520011$$'      |
-	* Check movements Bank receipt 1
-		And I click "Registrations report" button
-		And I select "Partner AR transactions" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| '$$BankReceipt0520011$$'              | ''            | ''       | ''          | ''             | ''                       | ''          | ''                  | ''                         | ''         | ''                             | ''                     |
-		| 'Document registrations records'      | ''            | ''       | ''          | ''             | ''                       | ''          | ''                  | ''                         | ''         | ''                             | ''                     |
-		| 'Register  "Partner AR transactions"' | ''            | ''       | ''          | ''             | ''                       | ''          | ''                  | ''                         | ''         | ''                             | ''                     |
-		| ''                                    | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''                       | ''          | ''                  | ''                         | ''         | ''                             | 'Attributes'           |
-		| ''                                    | ''            | ''       | 'Amount'    | 'Company'      | 'Basis document'         | 'Partner'   | 'Legal name'        | 'Partner term'             | 'Currency' | 'Multi currency movement type' | 'Deferred calculation' |
-		| ''                                    | 'Expense'     | '*'      | '17,12'     | 'Main Company' | '$$SalesInvoice024001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Basic Partner terms, TRY' | 'USD'      | 'Reporting currency'           | 'No'                   |
-		| ''                                    | 'Expense'     | '*'      | '100'       | 'Main Company' | '$$SalesInvoice024001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Basic Partner terms, TRY' | 'TRY'      | 'en description is empty'      | 'No'                   |
-		| ''                                    | 'Expense'     | '*'      | '100'       | 'Main Company' | '$$SalesInvoice024001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Basic Partner terms, TRY' | 'TRY'      | 'Local currency'               | 'No'                   |
-		| ''                                    | 'Expense'     | '*'      | '100'       | 'Main Company' | '$$SalesInvoice024001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Basic Partner terms, TRY' | 'TRY'      | 'TRY'                          | 'No'                   |
-		And I select "Accounts statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Accounts statement"' | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''          | ''                  | ''                       | ''         |
-		| ''                               | 'Record type' | 'Period' | 'Resources'            | ''               | ''                       | ''               | 'Dimensions'   | ''          | ''                  | ''                       | ''         |
-		| ''                               | ''            | ''       | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner'   | 'Legal name'        | 'Basis document'         | 'Currency' |
-		| ''                               | 'Expense'     | '*'      | ''                     | ''               | ''                       | '100'            | 'Main Company' | 'Ferron BP' | 'Company Ferron BP' | '$$SalesInvoice024001$$' | 'TRY'      |
-		And I select "Reconciliation statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Reconciliation statement"' | ''            | ''       | ''          | ''             | ''                  | ''         | '' | '' | '' | '' | '' |
-		| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''                  | ''         | '' | '' | '' | '' | '' |
-		| ''                                     | ''            | ''       | 'Amount'    | 'Company'      | 'Legal name'        | 'Currency' | '' | '' | '' | '' | '' |
-		| ''                                     | 'Expense'     | '*'      | '100'       | 'Main Company' | 'Company Ferron BP' | 'TRY'      | '' | '' | '' | '' | '' |
-		And I select "Account balance" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Account balance"' | ''            | ''       | ''          | ''             | ''                  | ''         | ''                             | ''                     | '' | '' | '' |
-		| ''                            | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''                  | ''         | ''                             | 'Attributes'           | '' | '' | '' |
-		| ''                            | ''            | ''       | 'Amount'    | 'Company'      | 'Account'           | 'Currency' | 'Multi currency movement type' | 'Deferred calculation' | '' | '' | '' |
-		| ''                            | 'Receipt'     | '*'      | '17,12'     | 'Main Company' | 'Bank account, TRY' | 'USD'      | 'Reporting currency'           | 'No'                   | '' | '' | '' |
-		| ''                            | 'Receipt'     | '*'      | '100'       | 'Main Company' | 'Bank account, TRY' | 'TRY'      | 'en description is empty'      | 'No'                   | '' | '' | '' |
-		| ''                            | 'Receipt'     | '*'      | '100'       | 'Main Company' | 'Bank account, TRY' | 'TRY'      | 'Local currency'               | 'No'                   | '' | '' | '' |
-		And I close all client application windows
-	* Clear movements Bank receipt 1 and check that there is no movement on the registers
-		* Clear movements
-			Given I open hyperlink "e1cib/list/Document.BankReceipt"
-			And I go to line in "List" table
-				| 'Number' |
-				| '$$NumberBankReceipt0520011$$'      |
-			And in the table "List" I click the button named "ListContextMenuUndoPosting"
-		* Check that there is no movement on the registers
-			Given I open hyperlink "e1cib/list/AccumulationRegister.PartnerArTransactions"
-			And "List" table does not contain lines
-				| 'Recorder'           |
-				| '$$BankReceipt0520011$$' |
-			Given I open hyperlink "e1cib/list/AccumulationRegister.AccountBalance"
-			And "List" table does not contain lines
-				| 'Recorder'           |
-				| '$$BankReceipt0520011$$' |
-			Given I open hyperlink "e1cib/list/AccumulationRegister.ReconciliationStatement"
-			And "List" table does not contain lines
-				| 'Recorder'           |
-				| '$$BankReceipt0520011$$' |
-			And I close all client application windows
-	* Re-posting the document and checking movements on the registers
-		* Posting the document
-			Given I open hyperlink "e1cib/list/Document.BankReceipt"
-			And I go to line in "List" table
-				| 'Number' |
-				| '$$NumberBankReceipt0520011$$'      |
-			And in the table "List" I click the button named "ListContextMenuPost"
-		* Check movements
-			And I click "Registrations report" button
-			And I select "Partner AR transactions" exact value from "Register" drop-down list
-			And I click "Generate report" button
-			And "ResultTable" spreadsheet document contains lines:
-			| '$$BankReceipt0520011$$'              | ''            | ''       | ''          | ''             | ''                       | ''          | ''                  | ''                         | ''         | ''                             | ''                     |
-			| 'Document registrations records'      | ''            | ''       | ''          | ''             | ''                       | ''          | ''                  | ''                         | ''         | ''                             | ''                     |
-			| 'Register  "Partner AR transactions"' | ''            | ''       | ''          | ''             | ''                       | ''          | ''                  | ''                         | ''         | ''                             | ''                     |
-			| ''                                    | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''                       | ''          | ''                  | ''                         | ''         | ''                             | 'Attributes'           |
-			| ''                                    | ''            | ''       | 'Amount'    | 'Company'      | 'Basis document'         | 'Partner'   | 'Legal name'        | 'Partner term'             | 'Currency' | 'Multi currency movement type' | 'Deferred calculation' |
-			| ''                                    | 'Expense'     | '*'      | '17,12'     | 'Main Company' | '$$SalesInvoice024001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Basic Partner terms, TRY' | 'USD'      | 'Reporting currency'           | 'No'                   |
-			| ''                                    | 'Expense'     | '*'      | '100'       | 'Main Company' | '$$SalesInvoice024001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Basic Partner terms, TRY' | 'TRY'      | 'en description is empty'      | 'No'                   |
-			| ''                                    | 'Expense'     | '*'      | '100'       | 'Main Company' | '$$SalesInvoice024001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Basic Partner terms, TRY' | 'TRY'      | 'Local currency'               | 'No'                   |
-			| ''                                    | 'Expense'     | '*'      | '100'       | 'Main Company' | '$$SalesInvoice024001$$' | 'Ferron BP' | 'Company Ferron BP' | 'Basic Partner terms, TRY' | 'TRY'      | 'TRY'                          | 'No'                   |
-			And I select "Accounts statement" exact value from "Register" drop-down list
-			And I click "Generate report" button
-			And "ResultTable" spreadsheet document contains lines:
-			| 'Register  "Accounts statement"' | ''            | ''       | ''                     | ''               | ''                       | ''               | ''             | ''          | ''                  | ''                       | ''         |
-			| ''                               | 'Record type' | 'Period' | 'Resources'            | ''               | ''                       | ''               | 'Dimensions'   | ''          | ''                  | ''                       | ''         |
-			| ''                               | ''            | ''       | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner'   | 'Legal name'        | 'Basis document'         | 'Currency' |
-			| ''                               | 'Expense'     | '*'      | ''                     | ''               | ''                       | '100'            | 'Main Company' | 'Ferron BP' | 'Company Ferron BP' | '$$SalesInvoice024001$$' | 'TRY'      |
-			And I select "Reconciliation statement" exact value from "Register" drop-down list
-			And I click "Generate report" button
-			And "ResultTable" spreadsheet document contains lines:
-			| 'Register  "Reconciliation statement"' | ''            | ''       | ''          | ''             | ''                  | ''         | '' | '' | '' | '' | '' |
-			| ''                                     | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''                  | ''         | '' | '' | '' | '' | '' |
-			| ''                                     | ''            | ''       | 'Amount'    | 'Company'      | 'Legal name'        | 'Currency' | '' | '' | '' | '' | '' |
-			| ''                                     | 'Expense'     | '*'      | '100'       | 'Main Company' | 'Company Ferron BP' | 'TRY'      | '' | '' | '' | '' | '' |
-			And I select "Account balance" exact value from "Register" drop-down list
-			And I click "Generate report" button
-			And "ResultTable" spreadsheet document contains lines:
-			| 'Register  "Account balance"' | ''            | ''       | ''          | ''             | ''                  | ''         | ''                             | ''                     | '' | '' | '' |
-			| ''                            | 'Record type' | 'Period' | 'Resources' | 'Dimensions'   | ''                  | ''         | ''                             | 'Attributes'           | '' | '' | '' |
-			| ''                            | ''            | ''       | 'Amount'    | 'Company'      | 'Account'           | 'Currency' | 'Multi currency movement type' | 'Deferred calculation' | '' | '' | '' |
-			| ''                            | 'Receipt'     | '*'      | '17,12'     | 'Main Company' | 'Bank account, TRY' | 'USD'      | 'Reporting currency'           | 'No'                   | '' | '' | '' |
-			| ''                            | 'Receipt'     | '*'      | '100'       | 'Main Company' | 'Bank account, TRY' | 'TRY'      | 'en description is empty'      | 'No'                   | '' | '' | '' |
-			| ''                            | 'Receipt'     | '*'      | '100'       | 'Main Company' | 'Bank account, TRY' | 'TRY'      | 'Local currency'               | 'No'                   | '' | '' | '' |
-			And I close all client application windows
+	
 
 # Filters
 
@@ -536,8 +436,8 @@ Scenario: _052013 check the display of details on the form Bank receipt with the
 			| Kalipso |
 		And I select current line in "List" table
 		And "PaymentList" table contains lines
-			| '#' | Partner | Amount | Payer              | Basis document | Planning transaction basis |
-			| '1' | Kalipso | ''     | Company Kalipso    | ''             | ''                        |
+			| '#' | Partner | Total amount | Payer           | Basis document | Planning transaction basis |
+			| '1' | Kalipso | ''           | Company Kalipso | ''             | ''                         |
 
 
 
@@ -555,11 +455,11 @@ Scenario: _052014 check the display of details on the form Bank receipt with the
 		And form attribute named "TransitAccount" is available
 	* And I check the display of the tabular part
 		And in the table "PaymentList" I click the button named "PaymentListAdd"
-		And I input "100,00" text in "Amount" field of "PaymentList" table
+		And I input "100,00" text in "Total amount" field of "PaymentList" table
 		And I activate "Amount exchange" field in "PaymentList" table
 		And I input "2 000,00" text in "Amount exchange" field of "PaymentList" table
 		And "PaymentList" table contains lines
-			| '#' | 'Amount' | 'Amount exchange' | 'Planning transaction basis' |
+			| '#' | 'Total amount' | 'Amount exchange' | 'Planning transaction basis' |
 			| '1' | '100,00' | '2 000,00'        | ''                          |
 
 
@@ -579,12 +479,12 @@ Scenario: _052015 check the display of details on the form Bank receipt with the
 		And form attribute named "TransitAccount" is unavailable
 	* And I check the display of the tabular part
 		And in the table "PaymentList" I click the button named "PaymentListAdd"
-		And I input "100,00" text in "Amount" field of "PaymentList" table
+		And I input "100,00" text in "Total amount" field of "PaymentList" table
 		And I finish line editing in "PaymentList" table
 		If "PaymentList" table does not contain column named "Payer" Then
 		If "PaymentList" table does not contain column named "Partner" Then
 		And "PaymentList" table contains lines
-			| '#' | 'Amount' | 'Planning transaction basis' |
+			| '#' | 'Total amount' | 'Planning transaction basis' |
 			| '1' | '100,00' | ''                          |
 
 

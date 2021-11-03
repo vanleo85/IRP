@@ -46,10 +46,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.Number</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.Number</segments>
         </dataPath>
         <extendedTooltip>
           <name>NumberExtendedTooltip</name>
@@ -99,10 +97,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.Currency</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.Currency</segments>
         </dataPath>
         <titleLocation>None</titleLocation>
         <extendedTooltip>
@@ -190,10 +186,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Partner</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Partner</segments>
       </dataPath>
       <handlers>
         <event>OnChange</event>
@@ -246,10 +240,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.LegalEntity</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.LegalEntity</segments>
       </dataPath>
       <extendedTooltip>
         <name>LegalEntityExtendedTooltip</name>
@@ -302,10 +294,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.BankName</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.BankName</segments>
       </dataPath>
       <extendedTooltip>
         <name>BankNameExtendedTooltip</name>
@@ -347,20 +337,18 @@
       </extInfo>
     </items>
     <items xsi:type="form:FormField">
-      <name>BusinessUnit</name>
+      <name>Branch</name>
       <id>13</id>
       <visible>true</visible>
       <enabled>true</enabled>
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.BusinessUnit</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Branch</segments>
       </dataPath>
       <extendedTooltip>
-        <name>BusinessUnitExtendedTooltip</name>
+        <name>BranchExtendedTooltip</name>
         <id>15</id>
         <visible>true</visible>
         <enabled>true</enabled>
@@ -375,7 +363,7 @@
         </extInfo>
       </extendedTooltip>
       <contextMenu>
-        <name>BusinessUnitContextMenu</name>
+        <name>BranchContextMenu</name>
         <id>14</id>
         <visible>true</visible>
         <enabled>true</enabled>

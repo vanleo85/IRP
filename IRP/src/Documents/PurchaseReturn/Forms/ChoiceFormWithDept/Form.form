@@ -63,10 +63,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Number</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Number</segments>
       </dataPath>
       <defaultItem>true</defaultItem>
       <extendedTooltip>
@@ -116,10 +114,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Date</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Date</segments>
       </dataPath>
       <extendedTooltip>
         <name>DateExtendedTooltip</name>
@@ -168,10 +164,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Partner</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Partner</segments>
       </dataPath>
       <extendedTooltip>
         <name>PartnerExtendedTooltip</name>
@@ -220,10 +214,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.LegalName</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.LegalName</segments>
       </dataPath>
       <extendedTooltip>
         <name>LegalNameExtendedTooltip</name>
@@ -268,10 +260,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.DocumentAmount</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.DocumentAmount</segments>
       </dataPath>
       <extendedTooltip>
         <name>DocumentAmountExtendedTooltip</name>
@@ -324,10 +314,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Debt</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Debt</segments>
       </dataPath>
       <extendedTooltip>
         <name>DebtExtendedTooltip</name>
@@ -381,10 +369,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Currency</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Currency</segments>
       </dataPath>
       <extendedTooltip>
         <name>CurrencyExtendedTooltip</name>

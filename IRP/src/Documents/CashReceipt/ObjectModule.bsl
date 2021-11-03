@@ -1,15 +1,22 @@
 Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
-	
-	ThisObject.DocumentAmount = ThisObject.PaymentList.Total("Amount");
+	EndIf;
+
+	CurrenciesClientServer.DeleteUnusedRowsFromCurrenciesTable(ThisObject.Currencies, ThisObject.PaymentList);
+	For Each Row In ThisObject.PaymentList Do
+		Parameters = CurrenciesClientServer.GetParameters_V8(ThisObject, Row);
+		CurrenciesClientServer.DeleteRowsByKeyFromCurrenciesTable(ThisObject.Currencies, Row.Key);
+		CurrenciesServer.UpdateCurrencyTable(Parameters, ThisObject.Currencies);
+	EndDo;
+
+	ThisObject.DocumentAmount = ThisObject.PaymentList.Total("TotalAmount");
 EndProcedure
 
 Procedure OnWrite(Cancel)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
 EndProcedure
 
 Procedure BeforeDelete(Cancel)
@@ -33,10 +40,9 @@ EndProcedure
 
 Procedure Filling(FillingData, FillingText, StandardProcessing)
 	If TypeOf(FillingData) = Type("Structure") And FillingData.Property("BasedOn") Then
-		If FillingData.BasedOn = "CashTransferOrder" 
-			Or FillingData.BasedOn = "IncomingPaymentOrder" 
+		If FillingData.BasedOn = "CashTransferOrder" Or FillingData.BasedOn = "IncomingPaymentOrder"
 			Or FillingData.BasedOn = "SalesInvoice" Then
-				
+
 			Filling_BasedOn(FillingData);
 		EndIf;
 	EndIf;
@@ -48,11 +54,10 @@ Procedure Filling(FillingData, FillingText, StandardProcessing)
 EndProcedure
 
 Procedure Filling_BasedOn(FillingData)
-	FillPropertyValues(ThisObject, FillingData,
-		"Company, CashAccount, Currency, TransactionType, CurrencyExchange");
+	FillPropertyValues(ThisObject, FillingData, "Company, CashAccount, Currency, TransactionType, CurrencyExchange");
 	For Each Row In FillingData.PaymentList Do
 		NewRow = ThisObject.PaymentList.Add();
 		FillPropertyValues(NewRow, Row);
 	EndDo;
-	ThisObject.DocumentAmount = ThisObject.PaymentList.Total("Amount");
+	ThisObject.DocumentAmount = ThisObject.PaymentList.Total("TotalAmount");
 EndProcedure

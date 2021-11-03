@@ -160,6 +160,20 @@
 		</right>
 	</object>
 	<object>
+		<name>CommonForm.LinkUnlinkDocumentRows</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>CommonForm.EditTax</name>
+		<right>
+			<name>View</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
 		<name>CommonAttribute.Description_ru</name>
 		<right>
 			<name>View</name>
@@ -465,6 +479,13 @@
 		</right>
 	</object>
 	<object>
+		<name>Constant.DefaultFilesStorageVolume</name>
+		<right>
+			<name>Read</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
 		<name>ExchangePlan.ED_ExchangePlan</name>
 		<right>
 			<name>Read</name>
@@ -479,6 +500,13 @@
 		</right>
 		<right>
 			<name>Set</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>CommonCommand.AttachedFiles</name>
+		<right>
+			<name>View</name>
 			<value>true</value>
 		</right>
 	</object>
@@ -565,7 +593,7 @@
 		</right>
 	</object>
 	<object>
-		<name>CommonForm.PickUpDocuments</name>
+		<name>CommonForm.ShareToUsers</name>
 		<right>
 			<name>View</name>
 			<value>true</value>
@@ -586,6 +614,33 @@
 		</right>
 		<right>
 			<name>Set</name>
+			<value>true</value>
+		</right>
+	</object>
+	<object>
+		<name>Configuration.IRP</name>
+		<right>
+			<name>MainWindowModeNormal</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>MainWindowModeWorkplace</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>MainWindowModeEmbeddedWorkplace</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>MainWindowModeFullscreenWorkplace</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>MainWindowModeKiosk</name>
+			<value>true</value>
+		</right>
+		<right>
+			<name>AnalyticsSystemClient</name>
 			<value>true</value>
 		</right>
 	</object>

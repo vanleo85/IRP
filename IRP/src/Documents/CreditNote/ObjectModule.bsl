@@ -1,13 +1,20 @@
 Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
+	
+	CurrenciesClientServer.DeleteUnusedRowsFromCurrenciesTable(ThisObject.Currencies, ThisObject.Transactions);
+	For Each Row In ThisObject.Transactions Do
+		Parameters = CurrenciesClientServer.GetParameters_V4(ThisObject, Row);
+		CurrenciesClientServer.DeleteRowsByKeyFromCurrenciesTable(ThisObject.Currencies, Row.Key);
+		CurrenciesServer.UpdateCurrencyTable(Parameters, ThisObject.Currencies);
+	EndDo;
 EndProcedure
 
 Procedure OnWrite(Cancel)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
 EndProcedure
 
 Procedure BeforeDelete(Cancel)
@@ -25,13 +32,5 @@ Procedure UndoPosting(Cancel)
 EndProcedure
 
 Procedure FillCheckProcessing(Cancel, CheckedAttributes)
-	For Each Row In ThisObject.Transactions Do
-		If Not ValueIsFilled(Row.Agreement) Or (Row.Agreement.ApArPostingDetail = Enums.ApArPostingDetail.ByDocuments 
-			And Not ValueIsFilled(Row.BasisDocument)) Then
-			Cancel = True;
-			CommonFunctionsClientServer.ShowUsersMessage(StrTemplate(R().Error_077, Row.LineNumber), "Transactions["
-				+ Format((Row.LineNumber - 1), "NZ=0; NG=0;") + "].BasisDocument", ThisObject);
-		EndIf;
-	EndDo;
+	Return;
 EndProcedure
-

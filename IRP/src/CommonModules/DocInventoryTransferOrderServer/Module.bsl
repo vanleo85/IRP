@@ -7,11 +7,13 @@ Procedure OnCreateAtServer(Object, Form, Cancel, StandardProcessing) Export
 		SetGroupItemsList(Object, Form);
 		DocumentsClientServer.ChangeTitleGroupTitle(Object, Form);
 	EndIf;
+	RowIDInfoServer.OnCreateAtServer(Object, Form, Cancel, StandardProcessing);
 EndProcedure
 
 Procedure AfterWriteAtServer(Object, Form, CurrentObject, WriteParameters) Export
 	DocumentsServer.FillItemList(Object, Form);
 	DocumentsClientServer.ChangeTitleGroupTitle(CurrentObject, Form);
+	RowIDInfoServer.AfterWriteAtServer(Object, Form, CurrentObject, WriteParameters);
 EndProcedure
 
 Procedure OnReadAtServer(Object, Form, CurrentObject) Export
@@ -20,24 +22,15 @@ Procedure OnReadAtServer(Object, Form, CurrentObject) Export
 		SetGroupItemsList(Object, Form);
 	EndIf;
 	DocumentsClientServer.ChangeTitleGroupTitle(CurrentObject, Form);
+	RowIDInfoServer.OnReadAtServer(Object, Form, CurrentObject);
 EndProcedure
 
 Procedure StoreSenderOnChange(Object) Export
-	Object.UseShipmentConfirmation = Object.StoreSender.UseShipmentConfirmation;
-	CheckAndUpdateUseGR(Object);
+	Return;
 EndProcedure
 
 Procedure StoreReceiverOnChange(Object) Export
-	Object.UseGoodsReceipt = Object.StoreReceiver.UseGoodsReceipt;
-	CheckAndUpdateUseGR(Object);
-EndProcedure
-
-Procedure CheckAndUpdateUseGR(Object) Export
-	If Object.UseShipmentConfirmation And Not Object.UseGoodsReceipt 
-		And Not Object.StoreSender.isEmpty() And Not Object.StoreReceiver.isEmpty() Then
-		Object.UseGoodsReceipt = True;
-		CommonFunctionsClientServer.ShowUsersMessage(R().InfoMessage_023, "Object.UseGoodsReceipt");
-	EndIf;
+	Return;
 EndProcedure
 
 #EndRegion
@@ -45,16 +38,15 @@ EndProcedure
 #Region GroupTitle
 
 Procedure SetGroupItemsList(Object, Form)
-	AttributesArray = New Array;
+	AttributesArray = New Array();
 	AttributesArray.Add("Company");
 	AttributesArray.Add("StoreSender");
 	AttributesArray.Add("StoreReceiver");
 	AttributesArray.Add("Status");
 	DocumentsServer.DeleteUnavailableTitleItemNames(AttributesArray);
 	For Each Atr In AttributesArray Do
-		Form.GroupItems.Add(Atr, ?(ValueIsFilled(Form.Items[Atr].Title),
-				Form.Items[Atr].Title,
-				Object.Ref.Metadata().Attributes[Atr].Synonym + ":" + Chars.NBSp));
+		Form.GroupItems.Add(Atr, ?(ValueIsFilled(Form.Items[Atr].Title), Form.Items[Atr].Title,
+			Object.Ref.Metadata().Attributes[Atr].Synonym + ":" + Chars.NBSp));
 	EndDo;
 EndProcedure
 

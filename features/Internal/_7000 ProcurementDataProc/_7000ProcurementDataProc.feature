@@ -2,6 +2,7 @@
 @tree
 @Positive
 @ProcurementDataProc
+@IgnoreOnCIMainBuild
 
 
 Feature: check procurement data processor
@@ -97,6 +98,7 @@ Scenario:_700000 preparation (procurement data proccessor)
 		And I input "$$$$Date4$$$$" variable value in "Procurement date" field
 		And I move to the next attribute
 		And I click "Post and close" button
+		And Delay 10
 	When Create document PriceList objects (for procurement)
 	When Create document PurchaseInvoice objects (for procurement)
 	* Change PI date
@@ -134,6 +136,8 @@ Scenario:_700000 preparation (procurement data proccessor)
 			And I remove checkbox "Do you want to update filled prices?"		
 			And I click "OK" button	
 		And I click "Post and close" button
+		And Delay 5
+		And I close all client application windows
 	When Create document PurchaseOrder objects (for procurement)
 	* Change PO date
 		Given I open hyperlink "e1cib/list/Document.PurchaseOrder"
@@ -325,6 +329,7 @@ Scenario:_700005 analyze procurement
 				| 'Internal supply request 2 dated 01.12.2020 16:07:11' | '*'      | '50'   | ''         | ''         |
 			And "TableOfBalance" table became equal
 				| 'Store'    | 'Balance' | 'Quantity' |
+				| 'Store 03' | '20'  | ''         |
 				| 'Store 08' | '10'  | ''         |
 			And "TableOfPurchase" table contains lines
 				| 'Partner'          | 'Agreement'                                  | 'Price type'              | 'Price'  | 'Date of relevance' | 'Delivery date'       | 'Quantity' |
@@ -340,6 +345,9 @@ Scenario:_700005 analyze procurement
 				| 'Partner Ferron 2' | 'Vendor Ferron Partner 2'                    | 'Vendor price, TRY'       | '100,00' | '07.12.2020'        | '$$$$CurrentDate$$$$' | ''         |
 		* Select procurement method
 			And I activate field named "TableOfBalanceQuantity" in "TableOfBalance" table
+			And I go to line in "TableOfBalance" table
+				| 'Balance' | 'Store'    |
+				| '10'      | 'Store 08' |
 			And I select current line in "TableOfBalance" table
 			And I input "5" text in the field named "TableOfBalanceQuantity" of "TableOfBalance" table
 			And I finish line editing in "TableOfBalance" table

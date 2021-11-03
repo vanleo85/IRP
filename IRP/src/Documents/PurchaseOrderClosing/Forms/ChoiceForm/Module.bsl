@@ -2,7 +2,7 @@
 
 &AtServer
 Procedure OnCreateAtServer(Cancel, StandardProcessing)
-	DocPurchaseOrderServer.OnCreateAtServerChoiceForm(ThisObject, Cancel, StandardProcessing);
+	DocPurchaseOrderClosingServer.OnCreateAtServerChoiceForm(ThisObject, Cancel, StandardProcessing);
 EndProcedure
 
 #EndRegion
@@ -13,7 +13,7 @@ EndProcedure
 Procedure GeneratedFormCommandActionByName(Command) Export
 	SelectedRows = Items.List.SelectedRows;
 	ExternalCommandsClient.GeneratedListChoiceFormCommandActionByName(SelectedRows, ThisObject, Command.Name);
-	GeneratedFormCommandActionByNameServer(Command.Name, SelectedRows);	
+	GeneratedFormCommandActionByNameServer(Command.Name, SelectedRows);
 EndProcedure
 
 &AtServer

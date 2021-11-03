@@ -19,6 +19,14 @@
   <createOnInput>DontUse</createOnInput>
   <dataLockControlMode>Managed</dataLockControlMode>
   <fullTextSearch>Use</fullTextSearch>
+  <objectPresentation>
+    <key>en</key>
+    <value>Full exchange</value>
+  </objectPresentation>
+  <listPresentation>
+    <key>en</key>
+    <value>Full exchange</value>
+  </listPresentation>
   <codeLength>9</codeLength>
   <codeAllowedLength>Variable</codeAllowedLength>
   <descriptionLength>25</descriptionLength>
@@ -53,9 +61,6 @@
     <mdObject>Document.SalesOrder</mdObject>
   </content>
   <content>
-    <mdObject>Document.ChequeBondTransactionItem</mdObject>
-  </content>
-  <content>
     <mdObject>Document.Labeling</mdObject>
   </content>
   <content>
@@ -63,9 +68,6 @@
   </content>
   <content>
     <mdObject>AccumulationRegister.R2005T_SalesSpecialOffers</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.PartnerArTransactions</mdObject>
   </content>
   <content>
     <mdObject>Catalog.PaymentSchedules</mdObject>
@@ -92,9 +94,6 @@
     <mdObject>InformationRegister.PricesByItems</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.CashAdvance</mdObject>
-  </content>
-  <content>
     <mdObject>InformationRegister.IntegrationInfo</mdObject>
   </content>
   <content>
@@ -116,19 +115,10 @@
     <mdObject>AccumulationRegister.R1001T_Purchases</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.StockAdjustmentAsSurplus</mdObject>
-  </content>
-  <content>
     <mdObject>Catalog.CurrencyMovementSets</mdObject>
   </content>
   <content>
     <mdObject>AccumulationRegister.R1005T_PurchaseSpecialOffers</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.TransferOrderBalance</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.PurchaseReturnTurnovers</mdObject>
   </content>
   <content>
     <mdObject>Catalog.FileStoragesInfo</mdObject>
@@ -155,12 +145,6 @@
     <mdObject>InformationRegister.CurrencyRates</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.InventoryBalance</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.ItemsInStores</mdObject>
-  </content>
-  <content>
     <mdObject>InformationRegister.ItemSegments</mdObject>
   </content>
   <content>
@@ -170,10 +154,7 @@
     <mdObject>AccumulationRegister.R4010B_ActualStocks</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.R4013B_StockReservationPlanning</mdObject>
-  </content>
-  <content>
-    <mdObject>InformationRegister.BusinessUnitBankTerms</mdObject>
+    <mdObject>InformationRegister.BranchBankTerms</mdObject>
   </content>
   <content>
     <mdObject>AccumulationRegister.R4017B_InternalSupplyRequestProcurement</mdObject>
@@ -197,9 +178,6 @@
     <mdObject>Catalog.Workstations</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.R3034B_CashPlanningOutgoing</mdObject>
-  </content>
-  <content>
     <mdObject>InformationRegister.BundleContents</mdObject>
   </content>
   <content>
@@ -207,9 +185,6 @@
   </content>
   <content>
     <mdObject>Catalog.TaxRates</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.GoodsInTransitOutgoing</mdObject>
   </content>
   <content>
     <mdObject>Document.RetailReturnReceipt</mdObject>
@@ -242,16 +217,10 @@
     <mdObject>AccumulationRegister.R4022B_StockTransferOrdersShipment</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.Aging</mdObject>
-  </content>
-  <content>
     <mdObject>Document.PhysicalInventory</mdObject>
   </content>
   <content>
     <mdObject>AccumulationRegister.R2011B_SalesOrdersShipment</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.SalesReturnTurnovers</mdObject>
   </content>
   <content>
     <mdObject>Catalog.ItemSegments</mdObject>
@@ -281,7 +250,7 @@
     <mdObject>AccumulationRegister.R4050B_StockInventory</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.RetailSales</mdObject>
+    <mdObject>AccumulationRegister.R2050T_RetailSales</mdObject>
   </content>
   <content>
     <mdObject>InformationRegister.IDInfo</mdObject>
@@ -305,9 +274,6 @@
     <mdObject>Catalog.UnitsOfMeasurement</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.R3033B_CashPlanningIncoming</mdObject>
-  </content>
-  <content>
     <mdObject>Catalog.Files</mdObject>
   </content>
   <content>
@@ -323,31 +289,16 @@
     <mdObject>Catalog.Stores</mdObject>
   </content>
   <content>
-    <mdObject>Document.ChequeBondTransaction</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.PurchaseTurnovers</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.ExpensesTurnovers</mdObject>
-  </content>
-  <content>
     <mdObject>InformationRegister.BarcodeScanInfoCheck</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.RetailCash</mdObject>
+    <mdObject>AccumulationRegister.R3050T_RetailCash</mdObject>
   </content>
   <content>
     <mdObject>AccumulationRegister.R2001T_Sales</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.OrderReservation</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.PlaningCashTransactions</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.OrderProcurement</mdObject>
+    <mdObject>AccumulationRegister.R3035T_CashPlanning</mdObject>
   </content>
   <content>
     <mdObject>Catalog.AccessProfiles</mdObject>
@@ -404,12 +355,6 @@
     <mdObject>AccumulationRegister.R1040B_TaxesOutgoing</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.TaxesTurnovers</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.GoodsInTransitIncoming</mdObject>
-  </content>
-  <content>
     <mdObject>Catalog.DataAreas</mdObject>
   </content>
   <content>
@@ -420,9 +365,6 @@
   </content>
   <content>
     <mdObject>InformationRegister.DataMappingTable</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.AccountsStatement</mdObject>
   </content>
   <content>
     <mdObject>InformationRegister.PricesByProperties</mdObject>
@@ -446,13 +388,7 @@
     <mdObject>InformationRegister.AddProperties</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.StockReservation</mdObject>
-  </content>
-  <content>
     <mdObject>Document.Unbundling</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.ChequeBondBalance</mdObject>
   </content>
   <content>
     <mdObject>Catalog.BusinessUnits</mdObject>
@@ -470,10 +406,10 @@
     <mdObject>Document.Bundling</mdObject>
   </content>
   <content>
-    <mdObject>Constant.UseLockDataModification</mdObject>
+    <mdObject>Document.PurchaseOrderClosing</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.SalesTurnovers</mdObject>
+    <mdObject>Constant.UseLockDataModification</mdObject>
   </content>
   <content>
     <mdObject>InformationRegister.Taxes</mdObject>
@@ -482,10 +418,7 @@
     <mdObject>AccumulationRegister.R2013T_SalesOrdersProcurement</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.ShipmentOrders</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.R5011B_PartnersAging</mdObject>
+    <mdObject>AccumulationRegister.R5011B_CustomersAging</mdObject>
   </content>
   <content>
     <mdObject>Catalog.ExpenseAndRevenueTypes</mdObject>
@@ -495,9 +428,6 @@
   </content>
   <content>
     <mdObject>Catalog.ExternalDataProc</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.ReconciliationStatement</mdObject>
   </content>
   <content>
     <mdObject>Document.OutgoingPaymentOrder</mdObject>
@@ -519,9 +449,6 @@
   </content>
   <content>
     <mdObject>AccumulationRegister.R5041B_TaxesPayable</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.RevenuesTurnovers</mdObject>
   </content>
   <content>
     <mdObject>AccumulationRegister.R2040B_TaxesIncoming</mdObject>
@@ -560,13 +487,7 @@
     <mdObject>AccumulationRegister.R4016B_InternalSupplyRequestOrdering</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.AdvanceFromCustomers</mdObject>
-  </content>
-  <content>
     <mdObject>Catalog.ChequeBonds</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.ReceiptOrders</mdObject>
   </content>
   <content>
     <mdObject>Catalog.PrintTemplates</mdObject>
@@ -596,9 +517,6 @@
     <mdObject>Document.PurchaseInvoice</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.AdvanceToSuppliers</mdObject>
-  </content>
-  <content>
     <mdObject>Catalog.IDInfoAddresses</mdObject>
   </content>
   <content>
@@ -606,9 +524,6 @@
   </content>
   <content>
     <mdObject>Document.InventoryTransferOrder</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.StockAdjustmentAsWriteOff</mdObject>
   </content>
   <content>
     <mdObject>Catalog.PriceTypes</mdObject>
@@ -623,7 +538,7 @@
     <mdObject>Document.PurchaseOrder</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.GoodsReceiptSchedule</mdObject>
+    <mdObject>Document.PlannedReceiptReservation</mdObject>
   </content>
   <content>
     <mdObject>ChartOfCharacteristicTypes.CurrencyMovementType</mdObject>
@@ -651,15 +566,6 @@
   </content>
   <content>
     <mdObject>AccumulationRegister.R4036B_IncomingStocksRequested</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.PartnerApTransactions</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.AccountBalance</mdObject>
-  </content>
-  <content>
-    <mdObject>InformationRegister.ChequeBondStatuses</mdObject>
   </content>
   <content>
     <mdObject>InformationRegister.UserSettings</mdObject>
@@ -705,34 +611,16 @@
     <mdObject>InformationRegister.TaxSettings</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.SalesOrderTurnovers</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.OrderBalance</mdObject>
-  </content>
-  <content>
     <mdObject>Catalog.Companies</mdObject>
   </content>
   <content>
-    <mdObject>AccumulationRegister.StockBalance</mdObject>
-  </content>
-  <content>
     <mdObject>Catalog.TaxAnalytics</mdObject>
-  </content>
-  <content>
-    <mdObject>AccumulationRegister.ShipmentConfirmationSchedule</mdObject>
   </content>
   <content>
     <mdObject>Document.CashStatement</mdObject>
   </content>
   <content>
     <mdObject>ChartOfCharacteristicTypes.IDInfoTypes</mdObject>
-  </content>
-  <content>
-    <mdObject>Document.PlannedReceiptReservation</mdObject>
-  </content>
-  <content>
-    <mdObject>Document.PurchaseOrderClosing</mdObject>
   </content>
   <defaultPresentation>AsDescription</defaultPresentation>
   <editType>InDialog</editType>

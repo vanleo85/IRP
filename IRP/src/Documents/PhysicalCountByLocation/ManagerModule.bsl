@@ -1,12 +1,19 @@
+#Region PrintForm
+
+Function GetPrintForm(Ref, PrintFormName, AddInfo = Undefined) Export
+	Return Undefined;
+EndFunction
+
+#EndRegion
 
 Procedure GeneratePhysicalCountByLocation(Parameters, AddInfo = Undefined) Export
-	
+
 	BeginTransaction();
 	HaveError = False;
 	Try
-		
+
 		For Each Instance In Parameters.ArrayOfInstance Do
-			
+
 			PhysicalCountByLocationObject = Documents.PhysicalCountByLocation.CreateDocument();
 
 			// try lock for modify
@@ -29,12 +36,12 @@ Procedure GeneratePhysicalCountByLocation(Parameters, AddInfo = Undefined) Expor
 			EndDo;
 			PhysicalCountByLocationObject.Write();
 		EndDo;
-	
+
 	Except
 		HaveError = True;
 		CommonFunctionsClientServer.ShowUsersMessage(StrTemplate(R().Exc_009, ErrorDescription()));
 	EndTry;
-	
+
 	If TransactionActive() Then
 		If HaveError Then
 			// BSLLS:WrongUseOfRollbackTransactionMethod-off
@@ -48,7 +55,7 @@ EndProcedure
 
 Function GetLinkedPhysicalCountByLocation(PhysicalInventoryRef, AddInfo = Undefined) Export
 	Query = New Query();
-	Query.Text = 
+	Query.Text =
 	"SELECT
 	|	PhysicalCountByLocationItemList.Key,
 	|	PhysicalCountByLocationItemList.Ref,
@@ -59,8 +66,7 @@ Function GetLinkedPhysicalCountByLocation(PhysicalInventoryRef, AddInfo = Undefi
 	|	Document.PhysicalCountByLocation.ItemList AS PhysicalCountByLocationItemList
 	|WHERE
 	|	PhysicalCountByLocationItemList.Ref.PhysicalInventory = &PhysicalInventoryRef
-	|	AND
-	|	NOT PhysicalCountByLocationItemList.Ref.DeletionMark";
+	|	AND NOT PhysicalCountByLocationItemList.Ref.DeletionMark";
 	Query.SetParameter("PhysicalInventoryRef", PhysicalInventoryRef);
 	QueryResult = Query.Execute();
 	QuerySelection = QueryResult.Select();
@@ -68,7 +74,7 @@ Function GetLinkedPhysicalCountByLocation(PhysicalInventoryRef, AddInfo = Undefi
 	While QuerySelection.Next() Do
 		Row = New Structure("Key, Ref, Number, Date, ResponsiblePerson");
 		FillPropertyValues(Row, QuerySelection);
-		
+
 		Result.Add(Row);
 	EndDo;
 	Return Result;
@@ -81,22 +87,22 @@ EndFunction
 //	Ref - Arbitrary - contains a reference to the object for which the print command was executed.
 Procedure PrintQR(Spreadsheet, Ref) Export
 	Template = Documents.PhysicalCountByLocation.GetTemplate("PrintQR");
-	Query = New Query;
+	Query = New Query();
 	Query.Text =
-		"SELECT
-		|	PhysicalCountByLocation.Number AS Number
-		|FROM
-		|	Document.PhysicalCountByLocation AS PhysicalCountByLocation
-		|WHERE
-		|	PhysicalCountByLocation.Ref IN (&Ref)
-		|ORDER BY
-		|	Number";
+	"SELECT
+	|	PhysicalCountByLocation.Number AS Number
+	|FROM
+	|	Document.PhysicalCountByLocation AS PhysicalCountByLocation
+	|WHERE
+	|	PhysicalCountByLocation.Ref IN (&Ref)
+	|ORDER BY
+	|	Number";
 	Query.Parameters.Insert("Ref", Ref);
 	VT = Query.Execute().Unload();
 
 	Spreadsheet.Clear();
 	SpreadsheetRight = New SpreadsheetDocument();
-	
+
 	For IndexRow = -1 To VT.Count() - 1 Do
 		For Index = 0 To 4 Do
 			If IndexRow = VT.Count() - 1 Then
@@ -124,27 +130,27 @@ EndProcedure
 
 #Region NewRegistersPosting
 Function GetInformationAboutMovements(Ref) Export
-	Str = New Structure;
-	Str.Insert("QueryParamenters", GetAdditionalQueryParamenters(Ref));
+	Str = New Structure();
+	Str.Insert("QueryParameters", GetAdditionalQueryParameters(Ref));
 	Str.Insert("QueryTextsMasterTables", GetQueryTextsMasterTables());
 	Str.Insert("QueryTextsSecondaryTables", GetQueryTextsSecondaryTables());
 	Return Str;
 EndFunction
 
-Function GetAdditionalQueryParamenters(Ref)
+Function GetAdditionalQueryParameters(Ref)
 	StrParams = New Structure();
 	StrParams.Insert("Ref", Ref);
 	Return StrParams;
 EndFunction
 
 Function GetQueryTextsSecondaryTables()
-	QueryArray = New Array;
+	QueryArray = New Array();
 
 	Return QueryArray;
 EndFunction
 
 Function GetQueryTextsMasterTables()
-	QueryArray = New Array;
+	QueryArray = New Array();
 
 	Return QueryArray;
 EndFunction

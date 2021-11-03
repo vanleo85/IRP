@@ -2,12 +2,8 @@ Procedure OnOpen(Object, Form, Cancel, AddInfo = Undefined) Export
 	DocumentsClient.SetTextOfDescriptionAtForm(Object, Form);
 EndProcedure
 
-Procedure ItemListOnChange(Object, Form, Item = Undefined, CalculationSettings = Undefined) Export
-	For Each Row In Object.ItemList Do
-		If Not ValueIsFilled(Row.Key) Then
-			Row.Key = New UUID();
-		EndIf;
-	EndDo;
+Procedure ItemListOnChange(Object, Form, Item = Undefined, CurrentRowData = Undefined) Export
+	DocumentsClient.FillRowIDInItemList(Object);
 EndProcedure
 
 Procedure ItemListItemOnChange(Object, Form, Item = Undefined) Export
@@ -16,27 +12,24 @@ Procedure ItemListItemOnChange(Object, Form, Item = Undefined) Export
 		Return;
 	EndIf;
 	CurrentRow.ItemKey = CatItemsServer.GetItemKeyByItem(CurrentRow.Item);
-	If ValueIsFilled(CurrentRow.ItemKey)
-		And ServiceSystemServer.GetObjectAttribute(CurrentRow.ItemKey, "Item") <> CurrentRow.Item Then
+	If ValueIsFilled(CurrentRow.ItemKey) And ServiceSystemServer.GetObjectAttribute(CurrentRow.ItemKey, "Item")
+		<> CurrentRow.Item Then
 		CurrentRow.ItemKey = Undefined;
 	EndIf;
-	
+
 	CalculationSettings = New Structure();
 	CalculationSettings.Insert("UpdateUnit");
-	CalculationStringsClientServer.CalculateItemsRow(Object,
-		CurrentRow,
-		CalculationSettings);
+	CalculationStringsClientServer.CalculateItemsRow(Object, CurrentRow, CalculationSettings);
 EndProcedure
 
 #Region PickUpItems
 
 Procedure PickupItemsEnd(Result, AdditionalParameters) Export
-	If Not ValueIsFilled(Result)
-		Or Not AdditionalParameters.Property("Object")
-		Or Not AdditionalParameters.Property("Form") Then
+	If Not ValueIsFilled(Result) Or Not AdditionalParameters.Property("Object") Or Not AdditionalParameters.Property(
+		"Form") Then
 		Return;
 	EndIf;
-	
+
 	FilterString = "Item, ItemKey, Unit";
 	FilterStructure = New Structure(FilterString);
 	For Each ResultElement In Result Do
@@ -55,19 +48,19 @@ Procedure PickupItemsEnd(Result, AdditionalParameters) Export
 EndProcedure
 
 Procedure OpenPickupItems(Object, Form, Command) Export
-	NotifyParameters = New Structure;
+	NotifyParameters = New Structure();
 	NotifyParameters.Insert("Object", Object);
 	NotifyParameters.Insert("Form", Form);
-	NotifyDescription = New NotifyDescription("PickupItemsEnd", DocPhysicalInventoryClient, NotifyParameters);
-	OpenFormParameters = New Structure;
-	StoreArray = New Array;
+	NotifyDescription = New NotifyDescription("PickupItemsEnd", DocPhysicalCountByLocationClient, NotifyParameters);
+	OpenFormParameters = New Structure();
+	StoreArray = New Array();
 	StoreArray.Add(Object.Store);
-	
+
 	If Command.AssociatedTable <> Undefined Then
 		OpenFormParameters.Insert("AssociatedTableName", Command.AssociatedTable.Name);
 		OpenFormParameters.Insert("Object", Object);
 	EndIf;
-	
+
 	OpenFormParameters.Insert("Stores", StoreArray);
 	OpenFormParameters.Insert("EndPeriod", CommonFunctionsServer.GetCurrentSessionDate());
 	OpenForm("CommonForm.PickUpItems", OpenFormParameters, Form, , , , NotifyDescription);
@@ -76,12 +69,13 @@ EndProcedure
 #EndRegion
 
 Procedure ItemListItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
-	OpenSettings = DocumentsClient.GetOpenSettingsForSelectItemWithNotServiceFilter();
+	OpenSettings = DocumentsClient.GetOpenSettingsForSelectItemWithoutServiceFilter();
 	DocumentsClient.ItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
 
 Procedure ItemListItemEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
-	DocumentsClient.ItemEditTextChange(Object, Form, Item, Text, StandardProcessing);
+	ArrayOfFilters = DocumentsClient.GetArrayOfFiltersForSelectItemWithoutServiceFilter();
+	DocumentsClient.ItemEditTextChange(Object, Form, Item, Text, StandardProcessing, ArrayOfFilters);
 EndProcedure
 
 Procedure StoreOnChange(Object, Form, Item) Export
@@ -116,4 +110,3 @@ EndProcedure
 Procedure SearchByBarcode(Barcode, Object, Form) Export
 	DocumentsClient.SearchByBarcode(Barcode, Object, Form);
 EndProcedure
-

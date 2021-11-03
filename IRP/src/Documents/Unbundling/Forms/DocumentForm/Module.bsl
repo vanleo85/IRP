@@ -16,7 +16,7 @@ Procedure NotificationProcessing(EventName, Parameter, Source, AddInfo = Undefin
 	If EventName = "UpdateAddAttributeAndPropertySets" Then
 		AddAttributesCreateFormControl();
 	EndIf;
-	
+
 	If EventName = "NewBarcode" And IsInputAvailable() Then
 		SearchByBarcode(Undefined, Parameter);
 	EndIf;
@@ -62,12 +62,10 @@ EndProcedure
 Procedure FillItemListBySpecificationAtServer()
 	Object.ItemList.Clear();
 	TableOfItemKeys = Catalogs.ItemKeys.GetTableBySpecification(Object.ItemKeyBundle);
-	For Each TableOfItemKeysRow In TableOfItemKeys Do
-		NewRowItemKey = Object.ItemList.Add();
-		NewRowItemKey.Key = New UUID();
-		NewRowItemKey.ItemKey = TableOfItemKeysRow.ItemKey;
-		NewRowItemKey.Unit = TableOfItemKeysRow.Unit;
-		NewRowItemKey.Quantity = TableOfItemKeysRow.Quantity;
+	For Each Row In TableOfItemKeys Do
+		NewRow = Object.ItemList.Add();
+		NewRow.Key = New UUID();
+		FillPropertyValues(NewRow, Row);
 	EndDo;
 	DocumentsServer.FillItemList(Object, ThisObject);
 EndProcedure
@@ -81,12 +79,10 @@ EndProcedure
 Procedure FillItemListByBundleContentAtServer()
 	Object.ItemList.Clear();
 	TableOfItemKeys = Catalogs.ItemKeys.GetTableByBundleContent(Object.ItemKeyBundle);
-	For Each TableOfItemKeysRow In TableOfItemKeys Do
-		NewRowItemKey = Object.ItemList.Add();
-		NewRowItemKey.Key = New UUID();
-		NewRowItemKey.ItemKey = TableOfItemKeysRow.ItemKey;
-		NewRowItemKey.Unit = TableOfItemKeysRow.Unit;
-		NewRowItemKey.Quantity = TableOfItemKeysRow.Quantity;
+	For Each Row In TableOfItemKeys Do
+		NewRow = Object.ItemList.Add();
+		NewRow.Key = New UUID();
+		FillPropertyValues(NewRow, Row);
 	EndDo;
 	DocumentsServer.FillItemList(Object, ThisObject);
 EndProcedure
@@ -116,12 +112,10 @@ Procedure ItemListItemKeyOnChange(Item)
 	If CurrentRow = Undefined Then
 		Return;
 	EndIf;
-	
+
 	CalculationSettings = New Structure();
 	CalculationSettings.Insert("UpdateUnit");
-	CalculationStringsClientServer.CalculateItemsRow(Object,
-		CurrentRow,
-		CalculationSettings);
+	CalculationStringsClientServer.CalculateItemsRow(Object, CurrentRow, CalculationSettings);
 EndProcedure
 
 &AtClient
@@ -164,7 +158,7 @@ EndProcedure
 &AtServer
 Procedure SetEnableWaysToFillItemListByBundle()
 	WaysToFilling = Catalogs.ItemKeys.GetWaysToFillItemListByBundle(Object.ItemKeyBundle);
-	
+
 	Items.FillItemListBySpecification.Enabled = WaysToFilling.BySpecification;
 	Items.FillItemListByBundling.Enabled = WaysToFilling.ByBundling;
 EndProcedure
@@ -204,6 +198,16 @@ Procedure UnitOnChange(Item)
 EndProcedure
 
 &AtClient
+Procedure ItemListQuantityOnChange(Item)
+	DocUnbundlingClient.ItemListQuantityOnChange(Object, ThisObject, Item);
+EndProcedure
+
+&AtClient
+Procedure ItemListUnitOnChange(Item)
+	DocUnbundlingClient.ItemListUnitOnChange(Object, ThisObject, Item);
+EndProcedure
+
+&AtClient
 Procedure DateOnChange(Item)
 	DocUnbundlingClient.DateOnChange(Object, ThisObject, Item);
 EndProcedure
@@ -211,6 +215,16 @@ EndProcedure
 &AtClient
 Procedure SearchByBarcode(Command, Barcode = "")
 	DocUnbundlingClient.SearchByBarcode(Barcode, Object, ThisObject);
+EndProcedure
+
+&AtClient
+Procedure OpenScanForm(Command)
+	DocumentsClient.OpenScanForm(Object, ThisObject, Command);
+EndProcedure
+
+&AtClient
+Procedure ShowRowKey(Command)
+	DocumentsClient.ShowRowKey(ThisObject);
 EndProcedure
 
 #Region GroupTitleDecorations
@@ -265,12 +279,29 @@ EndProcedure
 &AtClient
 Procedure GeneratedFormCommandActionByName(Command) Export
 	ExternalCommandsClient.GeneratedFormCommandActionByName(Object, ThisObject, Command.Name);
-	GeneratedFormCommandActionByNameServer(Command.Name);	
+	GeneratedFormCommandActionByNameServer(Command.Name);
 EndProcedure
 
 &AtServer
 Procedure GeneratedFormCommandActionByNameServer(CommandName) Export
 	ExternalCommandsServer.GeneratedFormCommandActionByName(Object, ThisObject, CommandName);
+EndProcedure
+
+#EndRegion
+
+#Region Service
+
+&AtClient
+Function GetProcessingModule() Export
+	Str = New Structure;
+	Str.Insert("Client", DocUnbundlingClient);
+	Str.Insert("Server", DocUnbundlingServer);
+	Return Str;
+EndFunction
+
+&AtClient
+Procedure ShowHiddenTables(Command)
+	DocumentsClient.ShowHiddenTables(Object, ThisObject);
 EndProcedure
 
 #EndRegion

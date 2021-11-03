@@ -17,10 +17,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>DocumentRef</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>DocumentRef</segments>
           </dataPath>
           <titleLocation>None</titleLocation>
           <handlers>
@@ -106,6 +104,7 @@
           <height>1</height>
           <autoMaxHeight>true</autoMaxHeight>
           <placementArea>UserCmds</placementArea>
+          <toolTipRepresentation>Auto</toolTipRepresentation>
           <representationInContextMenu>Auto</representationInContextMenu>
         </items>
         <visible>true</visible>
@@ -190,10 +189,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>DocumentObject.ItemList.ItemKey.Item</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>DocumentObject.ItemList.ItemKey.Item</segments>
           </dataPath>
           <extendedTooltip>
             <name>DocumentObjectItemListItemKeyItemExtendedTooltip</name>
@@ -243,10 +240,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>DocumentObject.ItemList.ItemKey</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>DocumentObject.ItemList.ItemKey</segments>
           </dataPath>
           <extendedTooltip>
             <name>DocumentObjectItemListItemKeyExtendedTooltip</name>
@@ -296,10 +291,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>DocumentObject.ItemList.PhysCount</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>DocumentObject.ItemList.PhysCount</segments>
           </dataPath>
           <extendedTooltip>
             <name>ItemListPhysCountExtendedTooltip</name>
@@ -348,10 +341,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>DocumentObject.ItemList.Unit</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>DocumentObject.ItemList.Unit</segments>
           </dataPath>
           <extendedTooltip>
             <name>DocumentObjectItemListUnitExtendedTooltip</name>
@@ -596,6 +587,7 @@
         <autoMaxHeight>true</autoMaxHeight>
         <horizontalStretch>true</horizontalStretch>
         <placementArea>UserCmds</placementArea>
+        <toolTipRepresentation>Auto</toolTipRepresentation>
         <representationInContextMenu>Auto</representationInContextMenu>
       </items>
       <visible>true</visible>
@@ -639,10 +631,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>RuleEditQuantity</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>RuleEditQuantity</segments>
         </dataPath>
         <extendedTooltip>
           <name>RuleEditQuantityExtendedTooltip</name>
@@ -767,6 +757,7 @@
       <autoMaxWidth>true</autoMaxWidth>
       <autoMaxHeight>true</autoMaxHeight>
       <placementArea>UserCmds</placementArea>
+      <toolTipRepresentation>Auto</toolTipRepresentation>
       <representationInContextMenu>Auto</representationInContextMenu>
     </items>
     <items xsi:type="form:Button">
@@ -797,6 +788,7 @@
       <autoMaxWidth>true</autoMaxWidth>
       <autoMaxHeight>true</autoMaxHeight>
       <placementArea>UserCmds</placementArea>
+      <toolTipRepresentation>Auto</toolTipRepresentation>
       <representationInContextMenu>Auto</representationInContextMenu>
     </items>
     <visible>true</visible>

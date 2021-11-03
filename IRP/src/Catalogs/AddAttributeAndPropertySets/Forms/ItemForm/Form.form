@@ -11,10 +11,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Code</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Code</segments>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -92,10 +90,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.PredefinedDataName</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.PredefinedDataName</segments>
     </dataPath>
     <extendedTooltip>
       <name>PredefinedDataNameExtendedTooltip</name>
@@ -161,10 +157,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>AttributesTree.Picture</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>AttributesTree.Picture</segments>
             </dataPath>
             <extendedTooltip>
               <name>AttributesTreeItemPictureExtendedTooltip</name>
@@ -215,10 +209,8 @@
             <userVisible>
               <common>true</common>
             </userVisible>
-            <dataPath xsi:type="form:MultiLanguageDataPath">
-              <paths xsi:type="form:DataPath">
-                <segments>AttributesTree.Presentation</segments>
-              </paths>
+            <dataPath xsi:type="form:DataPath">
+              <segments>AttributesTree.Presentation</segments>
             </dataPath>
             <extendedTooltip>
               <name>AttributesTreePresentationExtendedTooltip</name>
@@ -320,6 +312,7 @@
             <autoMaxWidth>true</autoMaxWidth>
             <autoMaxHeight>true</autoMaxHeight>
             <placementArea>UserCmds</placementArea>
+            <toolTipRepresentation>Auto</toolTipRepresentation>
             <representationInContextMenu>Auto</representationInContextMenu>
           </items>
           <items xsi:type="form:Button">
@@ -353,6 +346,7 @@
             <picture xsi:type="core:PictureRef">
               <picture>StdPicture.Change</picture>
             </picture>
+            <toolTipRepresentation>Auto</toolTipRepresentation>
             <representationInContextMenu>Auto</representationInContextMenu>
           </items>
           <items xsi:type="form:Button">
@@ -383,6 +377,7 @@
             <autoMaxWidth>true</autoMaxWidth>
             <autoMaxHeight>true</autoMaxHeight>
             <placementArea>UserCmds</placementArea>
+            <toolTipRepresentation>Auto</toolTipRepresentation>
             <representationInContextMenu>Auto</representationInContextMenu>
           </items>
           <items xsi:type="form:Button">
@@ -413,6 +408,7 @@
             <autoMaxWidth>true</autoMaxWidth>
             <autoMaxHeight>true</autoMaxHeight>
             <placementArea>UserCmds</placementArea>
+            <toolTipRepresentation>Auto</toolTipRepresentation>
             <representationInContextMenu>Auto</representationInContextMenu>
           </items>
           <items xsi:type="form:Button">
@@ -443,6 +439,7 @@
             <autoMaxWidth>true</autoMaxWidth>
             <autoMaxHeight>true</autoMaxHeight>
             <placementArea>UserCmds</placementArea>
+            <toolTipRepresentation>Auto</toolTipRepresentation>
             <representationInContextMenu>Auto</representationInContextMenu>
           </items>
           <items xsi:type="form:Button">
@@ -473,6 +470,7 @@
             <autoMaxWidth>true</autoMaxWidth>
             <autoMaxHeight>true</autoMaxHeight>
             <placementArea>UserCmds</placementArea>
+            <toolTipRepresentation>Auto</toolTipRepresentation>
             <representationInContextMenu>Auto</representationInContextMenu>
           </items>
           <items xsi:type="form:Button">
@@ -503,6 +501,7 @@
             <autoMaxWidth>true</autoMaxWidth>
             <autoMaxHeight>true</autoMaxHeight>
             <placementArea>UserCmds</placementArea>
+            <toolTipRepresentation>Auto</toolTipRepresentation>
             <representationInContextMenu>Auto</representationInContextMenu>
           </items>
           <visible>true</visible>
@@ -728,10 +727,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Attributes.LineNumber</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Attributes.LineNumber</segments>
           </dataPath>
           <extendedTooltip>
             <name>AttributesLineNumberExtendedTooltip</name>
@@ -776,10 +773,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Attributes.Attribute</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Attributes.Attribute</segments>
           </dataPath>
           <extendedTooltip>
             <name>AttributesAttributeExtendedTooltip</name>
@@ -828,10 +823,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Attributes.InterfaceGroup</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Attributes.InterfaceGroup</segments>
           </dataPath>
           <extendedTooltip>
             <name>AttributesInterfaceGroupExtendedTooltip</name>
@@ -880,10 +873,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Attributes.IsConditionSet</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Attributes.IsConditionSet</segments>
           </dataPath>
           <extendedTooltip>
             <name>AttributesIsConditionSetExtendedTooltip</name>
@@ -933,10 +924,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Attributes.Required</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Attributes.Required</segments>
           </dataPath>
           <extendedTooltip>
             <name>AttributesRequiredExtendedTooltip</name>
@@ -978,10 +967,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Attributes.ShowInHTML</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Attributes.ShowInHTML</segments>
           </dataPath>
           <extendedTooltip>
             <name>AttributesShowInHTMLExtendedTooltip</name>
@@ -1050,6 +1037,7 @@
             <autoMaxWidth>true</autoMaxWidth>
             <autoMaxHeight>true</autoMaxHeight>
             <placementArea>UserCmds</placementArea>
+            <toolTipRepresentation>Auto</toolTipRepresentation>
           </items>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -1276,10 +1264,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Properties.LineNumber</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Properties.LineNumber</segments>
           </dataPath>
           <extendedTooltip>
             <name>PropertiesLineNumberExtendedTooltip</name>
@@ -1324,10 +1310,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Properties.Property</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Properties.Property</segments>
           </dataPath>
           <extendedTooltip>
             <name>PropertiesPropertyExtendedTooltip</name>
@@ -1376,10 +1360,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Properties.IsConditionSet</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Properties.IsConditionSet</segments>
           </dataPath>
           <extendedTooltip>
             <name>PropertiesIsConditionSetExtendedTooltip</name>
@@ -1429,10 +1411,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Properties.ShowInHTML</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Properties.ShowInHTML</segments>
           </dataPath>
           <extendedTooltip>
             <name>PropertiesShowInHTMLExtendedTooltip</name>
@@ -1501,6 +1481,7 @@
             <autoMaxWidth>true</autoMaxWidth>
             <autoMaxHeight>true</autoMaxHeight>
             <placementArea>UserCmds</placementArea>
+            <toolTipRepresentation>Auto</toolTipRepresentation>
           </items>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -1728,10 +1709,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.ExtensionAttributes.LineNumber</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.ExtensionAttributes.LineNumber</segments>
           </dataPath>
           <extendedTooltip>
             <name>ExtensionAttributesLineNumberExtendedTooltip</name>
@@ -1780,10 +1759,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.ExtensionAttributes.Attribute</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.ExtensionAttributes.Attribute</segments>
           </dataPath>
           <extendedTooltip>
             <name>ExtensionAttributesAttributeExtendedTooltip</name>
@@ -1825,6 +1802,58 @@
           </extInfo>
         </items>
         <items xsi:type="form:FormField">
+          <name>ExtensionAttributesIsConditionSet</name>
+          <id>199</id>
+          <visible>true</visible>
+          <enabled>true</enabled>
+          <userVisible>
+            <common>true</common>
+          </userVisible>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.ExtensionAttributes.IsConditionSet</segments>
+          </dataPath>
+          <extendedTooltip>
+            <name>ExtensionAttributesIsConditionSetExtendedTooltip</name>
+            <id>201</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <type>Label</type>
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <extInfo xsi:type="form:LabelDecorationExtInfo">
+              <horizontalAlign>Left</horizontalAlign>
+            </extInfo>
+          </extendedTooltip>
+          <contextMenu>
+            <name>ExtensionAttributesIsConditionSetContextMenu</name>
+            <id>200</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <autoFill>true</autoFill>
+          </contextMenu>
+          <type>PictureField</type>
+          <editMode>Enter</editMode>
+          <showInHeader>true</showInHeader>
+          <headerHorizontalAlign>Left</headerHorizontalAlign>
+          <showInFooter>true</showInFooter>
+          <extInfo xsi:type="form:ImageFieldExtInfo">
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <horizontalStretch>true</horizontalStretch>
+            <verticalStretch>true</verticalStretch>
+            <valuesPicture xsi:type="core:PictureRef">
+              <picture>CommonPicture.RadioButton</picture>
+            </valuesPicture>
+            <fileDragMode>AsFileRef</fileDragMode>
+          </extInfo>
+        </items>
+        <items xsi:type="form:FormField">
           <name>ExtensionAttributesShow</name>
           <id>192</id>
           <visible>true</visible>
@@ -1832,10 +1861,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.ExtensionAttributes.Show</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.ExtensionAttributes.Show</segments>
           </dataPath>
           <extendedTooltip>
             <name>ExtensionAttributesShowExtendedTooltip</name>
@@ -1877,10 +1904,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.ExtensionAttributes.InterfaceGroup</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.ExtensionAttributes.InterfaceGroup</segments>
           </dataPath>
           <extendedTooltip>
             <name>ExtensionAttributesInterfaceGroupExtendedTooltip</name>
@@ -1929,10 +1954,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.ExtensionAttributes.Required</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.ExtensionAttributes.Required</segments>
           </dataPath>
           <extendedTooltip>
             <name>ExtensionAttributesRequiredExtendedTooltip</name>
@@ -1974,10 +1997,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.ExtensionAttributes.ShowInHTML</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.ExtensionAttributes.ShowInHTML</segments>
           </dataPath>
           <extendedTooltip>
             <name>ExtensionAttributesShowInHTMLExtendedTooltip</name>
@@ -2042,6 +2063,37 @@
             <autoMaxWidth>true</autoMaxWidth>
             <autoMaxHeight>true</autoMaxHeight>
             <placementArea>UserCmds</placementArea>
+            <toolTipRepresentation>Auto</toolTipRepresentation>
+            <representationInContextMenu>Auto</representationInContextMenu>
+          </items>
+          <items xsi:type="form:Button">
+            <name>ExtensionAttributesSetConditionExtensionAttribute</name>
+            <id>197</id>
+            <visible>true</visible>
+            <enabled>true</enabled>
+            <userVisible>
+              <common>true</common>
+            </userVisible>
+            <extendedTooltip>
+              <name>ExtensionAttributesSetConditionExtensionAttributeExtendedTooltip</name>
+              <id>198</id>
+              <visible>true</visible>
+              <enabled>true</enabled>
+              <userVisible>
+                <common>true</common>
+              </userVisible>
+              <type>Label</type>
+              <autoMaxWidth>true</autoMaxWidth>
+              <autoMaxHeight>true</autoMaxHeight>
+              <extInfo xsi:type="form:LabelDecorationExtInfo">
+                <horizontalAlign>Left</horizontalAlign>
+              </extInfo>
+            </extendedTooltip>
+            <commandName>Form.Command.SetConditionExtensionAttribute</commandName>
+            <representation>Auto</representation>
+            <autoMaxWidth>true</autoMaxWidth>
+            <autoMaxHeight>true</autoMaxHeight>
+            <placementArea>UserCmds</placementArea>
             <representationInContextMenu>Auto</representationInContextMenu>
           </items>
           <visible>true</visible>
@@ -2052,6 +2104,10 @@
           <horizontalAlign>Left</horizontalAlign>
           <autoFill>true</autoFill>
         </autoCommandBar>
+        <handlers>
+          <event>BeforeAddRow</event>
+          <name>ExtensionAttributesBeforeAddRow</name>
+        </handlers>
         <searchStringAddition>
           <visible>true</visible>
           <enabled>true</enabled>
@@ -2394,6 +2450,46 @@
         </edit>
       </columns>
     </additionalColumns>
+    <additionalColumns>
+      <tablePath xsi:type="form:DataPath">
+        <segments>Object.ExtensionAttributes</segments>
+      </tablePath>
+      <columns>
+        <name>ConditionData</name>
+        <title>
+          <key>en</key>
+          <value>Condition data</value>
+        </title>
+        <id>14</id>
+        <valueType>
+          <types>String</types>
+          <stringQualifiers/>
+        </valueType>
+        <view>
+          <common>true</common>
+        </view>
+        <edit>
+          <common>true</common>
+        </edit>
+      </columns>
+      <columns>
+        <name>Unprocessed</name>
+        <title>
+          <key>en</key>
+          <value>Unprocessed</value>
+        </title>
+        <id>15</id>
+        <valueType>
+          <types>Boolean</types>
+        </valueType>
+        <view>
+          <common>true</common>
+        </view>
+        <edit>
+          <common>true</common>
+        </edit>
+      </columns>
+    </additionalColumns>
   </attributes>
   <attributes>
     <name>AttributesTree</name>
@@ -2586,6 +2682,23 @@
     <action xsi:type="form:FormCommandHandlerContainer">
       <handler>
         <name>FillExtensionAttributesList</name>
+      </handler>
+    </action>
+    <currentRowUse>Auto</currentRowUse>
+  </formCommands>
+  <formCommands>
+    <name>SetConditionExtensionAttribute</name>
+    <title>
+      <key>en</key>
+      <value>Set condition</value>
+    </title>
+    <id>8</id>
+    <use>
+      <common>true</common>
+    </use>
+    <action xsi:type="form:FormCommandHandlerContainer">
+      <handler>
+        <name>SetConditionExtensionAttribute</name>
       </handler>
     </action>
     <currentRowUse>Auto</currentRowUse>

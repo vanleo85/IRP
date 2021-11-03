@@ -25,43 +25,27 @@ EndProcedure
 
 &AtClient
 Procedure NotificationProcessing(EventName, Parameter, Source, AddInfo = Undefined) Export
-	If EventName = "GoogleDriveToken" AND Source = UUID Then
-		
-		TestRow = Object.ConnectionSetting.FindRows(New Structure("Key", "AddressPath"));
-		If TestRow.Count() Then
-			Object.ConnectionSetting.Delete(TestRow[0]);
-		EndIf;
-		FindRows = Object.ConnectionSetting.FindRows(New Structure("Key", "refresh_token"));
-		If FindRows.Count() Then
-			Row = FindRows[0];
-		Else
-			Row = Object.ConnectionSetting.Add();
-		EndIf;
-		Row.Key = "refresh_token";
-		Row.Value = Parameter.refresh_token;
-		
-		Modified = True;
-	EndIf;
+	Return;
 EndProcedure
 
 &AtClient
 Procedure TestConnection(Command)
+	TestConnectionCall();
+EndProcedure
+
+&AtClient
+Procedure TestConnectionCall()
 	If Object.IntegrationType = PredefinedValue("Enum.IntegrationType.LocalFileStorage") Then
 		TestRow = Object.ConnectionSetting.FindRows(New Structure("Key", "AddressPath"));
-		IntegrationServer.SaveFileToFileStorage(TestRow[0].Value, "Test.png", PictureLib.DataHistory.GetBinaryData());	
+		IntegrationServer.SaveFileToFileStorage(TestRow[0].Value, "Test.png", PictureLib.DataHistory.GetBinaryData());
 		CommonFunctionsClientServer.ShowUsersMessage(R().InfoMessage_005);
-	ElsIf Object.IntegrationType = PredefinedValue("Enum.IntegrationType.GoogleDrive") Then 
-		CurrentActiveToken = GoogleDriveServer.CurrentActiveToken(Object.Ref);
-		If ValueIsFilled(CurrentActiveToken) Then
-			CommonFunctionsClientServer.ShowUsersMessage(R().InfoMessage_005);
-		EndIf;	
-	ElsIf Object.IntegrationType = PredefinedValue("Enum.IntegrationType.Email") Then 
+	ElsIf Object.IntegrationType = PredefinedValue("Enum.IntegrationType.Email") Then
 		ConnectionSetting = IntegrationServer.ConnectionSettingTemplate(Object.IntegrationType);
 		For Each Str In Object.ConnectionSetting Do
 			FillPropertyValues(ConnectionSetting, New Structure(Str.Key, Str.Value));
 		EndDo;
-		#If Not WebClient Then
-		eMail = New InternetMailMessage;
+#If Not WebClient Then
+		eMail = New InternetMailMessage();
 		eMail.Texts.Add("<h1> Test </h1>", InternetMailTextType.HTML);
 		eMail.Subject = "Test";
 		eMail.SenderName = ConnectionSetting.SenderName;
@@ -72,10 +56,11 @@ Procedure TestConnection(Command)
 		Else
 			CommonFunctionsClientServer.ShowUsersMessage(R().S_028);
 		EndIf;
-		#Else
-		CommonFunctionsClientServer.ShowUsersMessage(R().S_029);
-		#EndIf
-	Else
+#Else
+			CommonFunctionsClientServer.ShowUsersMessage(R().S_029);
+#EndIf
+	ElsIf
+	Not ExtensionCall_TestConnectionCall() Then
 		ConnectionSetting = IntegrationServer.ConnectionSettingTemplate();
 		For Each Str In Object.ConnectionSetting Do
 			FillPropertyValues(ConnectionSetting, New Structure(Str.Key, Str.Value));
@@ -84,18 +69,24 @@ Procedure TestConnection(Command)
 		ResourceParameters = New Structure();
 		ResourceParameters.Insert("MetadataName", "TestConnection");
 		ServerResponse = IntegrationClientServer.SendRequest(ConnectionSetting, ResourceParameters);
-		CommonFunctionsClientServer.ShowUsersMessage(StrTemplate(R().S_016,
-				ServerResponse.Message,
-				ServerResponse.StatusCode,
-				ServerResponse.ResponseBody));
+		CommonFunctionsClientServer.ShowUsersMessage(StrTemplate(R().S_016, ServerResponse.Message,
+			ServerResponse.StatusCode, ServerResponse.ResponseBody));
 	EndIf;
 EndProcedure
 
 &AtClient
+Function ExtensionCall_TestConnectionCall()
+	Return False;
+EndFunction
+
+&AtClient
 Procedure Login(Command)
-	If Object.IntegrationType = PredefinedValue("Enum.IntegrationType.GoogleDrive") Then
-		GoogleDriveClient.Auth(ThisObject);
-	EndIf;
+	ExtensionCall_Login();
+EndProcedure
+
+&AtClient
+Procedure ExtensionCall_Login()
+	Return;
 EndProcedure
 
 &AtServer
@@ -126,7 +117,6 @@ Procedure SetVisible()
 	EndIf;
 	Items.ExternalDataProc.Visible = VisibleExternalDataProc;
 	Items.ExternalDataProcSettings.Visible = VisibleExternalDataProc;
-	Items.ConnectionSettingLogin.Visible = Object.IntegrationType = Enums.IntegrationType.GoogleDrive;
 EndProcedure
 
 &AtClient
@@ -167,15 +157,15 @@ Procedure ExternalDataProcSettings(Command)
 	Info = AddDataProcServer.AddDataProcInfo(Object.ExternalDataProc);
 	Info.Insert("Settings", ThisObject.AddressResult);
 	CallMethodAddDataProc(Info);
-	
+
 	NotifyDescription = New NotifyDescription("OpenFormProcSettingsEnd", ThisObject);
 	AddDataProcClient.OpenFormAddDataProc(Info, NotifyDescription, "Settings");
 EndProcedure
 
 &AtServer
 Procedure PutSettingsToTempStorage()
-	ThisObject.AddressResult = PutToTempStorage(FormAttributeToValue("Object").ExternalDataProcSettings.Get()
-			, ThisObject.UUID);
+	ThisObject.AddressResult = PutToTempStorage(FormAttributeToValue("Object").ExternalDataProcSettings.Get(),
+		ThisObject.UUID);
 EndProcedure
 
 &AtServerNoContext

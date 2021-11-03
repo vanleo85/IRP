@@ -25,13 +25,24 @@ Procedure OnOpen(Cancel)
 EndProcedure
 
 &AtClient
+Procedure AfterWrite(WriteParameters)
+	DocShipmentConfirmationClient.AfterWriteAtClient(Object, ThisObject, WriteParameters);	
+EndProcedure
+
+&AtClient
 Procedure NotificationProcessing(EventName, Parameter, Source, AddInfo = Undefined) Export
 	If EventName = "UpdateAddAttributeAndPropertySets" Then
 		AddAttributesCreateFormControl();
 	EndIf;
-	
+
 	If EventName = "NewBarcode" And IsInputAvailable() Then
 		SearchByBarcode(Undefined, Parameter);
+	EndIf;
+	
+	If EventName = "LockLinkedRows" Then
+		If Source <> ThisObject Then
+			LockLinkedRows();
+		EndIf;
 	EndIf;
 EndProcedure
 
@@ -41,11 +52,20 @@ Procedure OnReadAtServer(CurrentObject)
 	SetVisibilityAvailability(CurrentObject, ThisObject);
 EndProcedure
 
+&AtClient
+Procedure FormSetVisibilityAvailability() Export
+	SetVisibilityAvailability(Object, ThisObject);
+EndProcedure
+
 &AtClientAtServerNoContext
-Procedure SetVisibilityAvailability(Object, Form) Export
-	PartnerVisible = (Object.TransactionType = PredefinedValue("Enum.ShipmentConfirmationTransactionTypes.ReturnToVendor")
-			OR Object.TransactionType = PredefinedValue("Enum.ShipmentConfirmationTransactionTypes.Sales"));
-	Form.Items.LegalName.Enabled = PartnerVisible AND ValueIsFilled(Object.Partner);
+Procedure SetVisibilityAvailability(Object, Form)
+	Form.Items.AddBasisDocuments.Enabled = Not Form.ReadOnly;
+	Form.Items.LinkUnlinkBasisDocuments.Enabled = Not Form.ReadOnly;
+
+	PartnerVisible = (Object.TransactionType = PredefinedValue(
+		"Enum.ShipmentConfirmationTransactionTypes.ReturnToVendor") Or Object.TransactionType = PredefinedValue(
+		"Enum.ShipmentConfirmationTransactionTypes.Sales"));
+	Form.Items.LegalName.Enabled = PartnerVisible And ValueIsFilled(Object.Partner);
 	Form.Items.Partner.Visible   = PartnerVisible;
 	Form.Items.LegalName.Visible = PartnerVisible;
 EndProcedure
@@ -77,15 +97,29 @@ Procedure ItemListOnChange(Item, AddInfo = Undefined) Export
 EndProcedure
 
 &AtClient
+Procedure ItemListSelection(Item, RowSelected, Field, StandardProcessing)
+	DocShipmentConfirmationClient.ItemListSelection(Object, ThisObject, Item, RowSelected, Field, StandardProcessing);
+EndProcedure
+
+&AtClient
+Procedure ItemListAfterDeleteRow(Item)
+	DocShipmentConfirmationClient.ItemListAfterDeleteRow(Object, ThisObject, Item);
+	LockLinkedRows();
+EndProcedure
+
+&AtClient
 Procedure ItemListOnActivateRow(Item)
 	DocShipmentConfirmationClient.ItemListOnActivateRow(Object, ThisObject, Item);
 EndProcedure
 
 &AtClient
+Procedure ItemListBeforeDeleteRow(Item, Cancel)
+	DocShipmentConfirmationClient.ItemListBeforeDeleteRow(Object, ThisObject, Item, Cancel);
+EndProcedure
+
+&AtClient
 Procedure ItemListOnStartEdit(Item, NewRow, Clone)
-	If Clone Then
-		Item.CurrentData.Key = New UUID();
-	EndIf;
+	DocShipmentConfirmationClient.ItemListOnStartEdit(Object, ThisObject, Item, NewRow, Clone);
 EndProcedure
 
 &AtClient
@@ -99,12 +133,10 @@ Procedure ItemListItemKeyOnChange(Item)
 	If CurrentRow = Undefined Then
 		Return;
 	EndIf;
-	
+
 	CalculationSettings = New Structure();
 	CalculationSettings.Insert("UpdateUnit");
-	CalculationStringsClientServer.CalculateItemsRow(Object,
-		CurrentRow,
-		CalculationSettings);
+	CalculationStringsClientServer.CalculateItemsRow(Object, CurrentRow, CalculationSettings);
 EndProcedure
 
 &AtClient
@@ -115,12 +147,6 @@ EndProcedure
 &AtClient
 Procedure ItemListUnitOnChange(Item)
 	DocShipmentConfirmationClient.ItemListUnitOnChange(Object, ThisObject, Item);
-EndProcedure
-
-&AtClient
-Procedure ItemListShipmentBasisStartChoice(Item, ChoiceData, StandardProcessing)
-	DocShipmentConfirmationClient.ItemListReceiptBasisStartChoice(
-													Object, ThisObject, Item, ChoiceData, StandardProcessing);
 EndProcedure
 
 #Region ItemCompany
@@ -228,6 +254,11 @@ Procedure SearchByBarcode(Command, Barcode = "")
 EndProcedure
 
 &AtClient
+Procedure OpenScanForm(Command)
+	DocumentsClient.OpenScanForm(Object, ThisObject, Command);
+EndProcedure
+
+&AtClient
 Procedure ShowRowKey(Command)
 	DocumentsClient.ShowRowKey(ThisObject);
 EndProcedure
@@ -252,12 +283,92 @@ EndProcedure
 &AtClient
 Procedure GeneratedFormCommandActionByName(Command) Export
 	ExternalCommandsClient.GeneratedFormCommandActionByName(Object, ThisObject, Command.Name);
-	GeneratedFormCommandActionByNameServer(Command.Name);	
+	GeneratedFormCommandActionByNameServer(Command.Name);
 EndProcedure
 
 &AtServer
 Procedure GeneratedFormCommandActionByNameServer(CommandName) Export
 	ExternalCommandsServer.GeneratedFormCommandActionByName(Object, ThisObject, CommandName);
+EndProcedure
+
+#EndRegion
+
+#Region LinkedDocuments
+
+&AtClient
+Procedure LinkUnlinkBasisDocuments(Command)
+	FormParameters = New Structure();
+	FormParameters.Insert("Filter", RowIDInfoClientServer.GetLinkedDocumentsFilter_SC(Object));
+	FormParameters.Insert("SelectedRowInfo", RowIDInfoClient.GetSelectedRowInfo(Items.ItemList.CurrentData));
+	FormParameters.Insert("TablesInfo", RowIDInfoClient.GetTablesInfo(Object));
+	OpenForm("CommonForm.LinkUnlinkDocumentRows", FormParameters, , , , ,
+		New NotifyDescription("AddOrLinkUnlinkDocumentRowsContinue", ThisObject), FormWindowOpeningMode.LockOwnerWindow);
+EndProcedure
+
+&AtClient
+Procedure AddBasisDocuments(Command)
+	FormParameters = New Structure();
+	FormParameters.Insert("Filter", RowIDInfoClientServer.GetLinkedDocumentsFilter_SC(Object));
+	FormParameters.Insert("TablesInfo", RowIDInfoClient.GetTablesInfo(Object));
+	OpenForm("CommonForm.AddLinkedDocumentRows", FormParameters, , , , ,
+		New NotifyDescription("AddOrLinkUnlinkDocumentRowsContinue", ThisObject), FormWindowOpeningMode.LockOwnerWindow);
+EndProcedure
+
+&AtClient
+Procedure AddOrLinkUnlinkDocumentRowsContinue(Result, AdditionalParameters) Export
+	If Result = Undefined Then
+		Return;
+	EndIf;
+	ThisObject.Modified = True;
+	AddOrLinkUnlinkDocumentRowsContinueAtServer(Result);
+EndProcedure
+
+&AtServer
+Procedure AddOrLinkUnlinkDocumentRowsContinueAtServer(Result)
+	If Result.Operation = "LinkUnlinkDocumentRows" Then
+		RowIDInfoServer.LinkUnlinkDocumentRows(Object, Result.FillingValues);
+	ElsIf Result.Operation = "AddLinkedDocumentRows" Then
+		RowIDInfoServer.AddLinkedDocumentRows(Object, Result.FillingValues);
+	EndIf;
+	LockLinkedRows();
+EndProcedure
+
+&AtServer
+Procedure LockLinkedRows()
+	RowIDInfoServer.LockLinkedRows(Object, ThisObject);
+	RowIDInfoServer.SetAppearance(Object, ThisObject);
+EndProcedure
+
+&AtServer
+Procedure UnlockLockLinkedRows()
+	RowIDInfoServer.UnlockLinkedRows(Object, ThisObject);
+EndProcedure
+
+&AtClient
+Procedure FromUnlockLinkedRows(Command)
+	Items.FormUnlockLinkedRows.Check = Not Items.FormUnlockLinkedRows.Check;
+	If Items.FormUnlockLinkedRows.Check Then
+		UnlockLockLinkedRows();
+	Else
+		LockLinkedRows();
+	EndIf;
+EndProcedure
+
+#EndRegion
+
+#Region Service
+
+&AtClient
+Function GetProcessingModule() Export
+	Str = New Structure;
+	Str.Insert("Client", DocShipmentConfirmationClient);
+	Str.Insert("Server", DocShipmentConfirmationServer);
+	Return Str;
+EndFunction
+
+&AtClient
+Procedure ShowHiddenTables(Command)
+	DocumentsClient.ShowHiddenTables(Object, ThisObject);
 EndProcedure
 
 #EndRegion

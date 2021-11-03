@@ -304,6 +304,7 @@ Scenario: _008007 adding employees to the Region 1 and to the Region 2 segment f
 		When Create catalog Partners objects (Employee)
 		When Create catalog PartnerSegments objects
 	* Opening Partners catalog
+		And I close all client application windows
 		Given I open hyperlink "e1cib/list/Catalog.Partners"
 	* Adding employees to the Region 1 segment from the form
 		* Adding "Olivia Williams" to the segment Region 1
@@ -403,7 +404,7 @@ Scenario: _008007 adding employees to the Region 1 and to the Region 2 segment f
 				| 'Description' |
 				| 'Region 1'  |
 			And I select current line in "List" table
-			Then "Partner segments content (create) *" window is opened
+			Then "Partner segment content (create) *" window is opened
 			And I click Select button of "Partner" field
 			And Delay 5
 			And I go to line in "List" table
@@ -412,7 +413,7 @@ Scenario: _008007 adding employees to the Region 1 and to the Region 2 segment f
 			And I select current line in "List" table
 			And I click the button named "FormWriteAndClose"
 			And "List" table contains lines
-				| Segment | Partner |
-				| Region 1 | Sofia Borisova |
+				| 'Segment' | 'Partner' |
+				| 'Region 1' | 'Sofia Borisova' |
 
 

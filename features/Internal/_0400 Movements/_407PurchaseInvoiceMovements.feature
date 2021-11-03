@@ -61,13 +61,14 @@ Scenario: _04096 preparation (Purchase invoice)
 				| "Description" |
 				| "DocumentDiscount" |
 			When add Plugin for document discount
+	When Create catalog LegalNameContracts objects
 	When Create catalog CancelReturnReasons objects
 	When Create catalog CashAccounts objects
 	When Create catalog SerialLotNumbers objects
 	* Load Bank payment
 	When Create document BankPayment objects (check movements, advance)
 	And I execute 1C:Enterprise script at server
-			| "Documents.BankPayment.FindByNumber(1).GetObject().Write(DocumentWriteMode.Posting);" |	
+			| "Documents.BankPayment.FindByNumber(10).GetObject().Write(DocumentWriteMode.Posting);" |	
 	* Load PO
 	When Create document PurchaseOrder objects (check movements, GR before PI, Use receipt sheduling)
 	When Create document PurchaseOrder objects (check movements, GR before PI, not Use receipt sheduling)
@@ -78,7 +79,11 @@ Scenario: _04096 preparation (Purchase invoice)
 	And I execute 1C:Enterprise script at server
 			| "Documents.PurchaseOrder.FindByNumber(115).GetObject().Write(DocumentWriteMode.Posting);" |	
 			| "Documents.PurchaseOrder.FindByNumber(116).GetObject().Write(DocumentWriteMode.Posting);" |
-			| "Documents.PurchaseOrder.FindByNumber(117).GetObject().Write(DocumentWriteMode.Posting);" |	
+			| "Documents.PurchaseOrder.FindByNumber(117).GetObject().Write(DocumentWriteMode.Posting);" |
+	When Create document PurchaseOrder objects (with aging, prepaid, post-shipment credit)	
+	And I execute 1C:Enterprise script at server
+			| "Documents.PurchaseOrder.FindByNumber(323).GetObject().Write(DocumentWriteMode.Posting);" |	
+			| "Documents.PurchaseOrder.FindByNumber(324).GetObject().Write(DocumentWriteMode.Posting);" |	
 	* Load GR
 	When Create document GoodsReceipt objects (check movements)
 	And I execute 1C:Enterprise script at server
@@ -90,11 +95,16 @@ Scenario: _04096 preparation (Purchase invoice)
 	* Load PI
 	When Create document PurchaseInvoice objects (check movements)
 	And I execute 1C:Enterprise script at server
-			| "Documents.PurchaseInvoice.FindByNumber(115).GetObject().Write(DocumentWriteMode.Posting);" |	
-			| "Documents.PurchaseInvoice.FindByNumber(116).GetObject().Write(DocumentWriteMode.Posting);" |
-			| "Documents.PurchaseInvoice.FindByNumber(117).GetObject().Write(DocumentWriteMode.Posting);" |	
-			| "Documents.PurchaseInvoice.FindByNumber(118).GetObject().Write(DocumentWriteMode.Posting);" |	
-			| "Documents.PurchaseInvoice.FindByNumber(119).GetObject().Write(DocumentWriteMode.Posting);" |	
+		| "Documents.PurchaseInvoice.FindByNumber(115).GetObject().Write(DocumentWriteMode.Posting);" |	
+		| "Documents.PurchaseInvoice.FindByNumber(116).GetObject().Write(DocumentWriteMode.Posting);" |
+		| "Documents.PurchaseInvoice.FindByNumber(117).GetObject().Write(DocumentWriteMode.Posting);" |	
+		| "Documents.PurchaseInvoice.FindByNumber(118).GetObject().Write(DocumentWriteMode.Posting);" |	
+		| "Documents.PurchaseInvoice.FindByNumber(119).GetObject().Write(DocumentWriteMode.Posting);" |	
+	When Create document PurchaseInvoice objects (with aging, prepaid, post-shipment credit)
+	And I execute 1C:Enterprise script at server
+		| "Documents.PurchaseInvoice.FindByNumber(323).GetObject().Write(DocumentWriteMode.Posting);" |	
+		| "Documents.PurchaseInvoice.FindByNumber(324).GetObject().Write(DocumentWriteMode.Posting);" |	
+	And I close all client application windows
 
 // 115
 Scenario: _04097 check Purchase invoice movements by the Register  "R1021 Vendors transactions"
@@ -108,19 +118,15 @@ Scenario: _04097 check Purchase invoice movements by the Register  "R1021 Vendor
 		And I select "R1021 Vendors transactions" exact value from "Register" drop-down list
 		And I click "Generate report" button
 		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''            | ''                    | ''          | ''             | ''                             | ''         | ''                  | ''          | ''                   | ''                                               | ''                     |
-			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''                             | ''         | ''                  | ''          | ''                   | ''                                               | ''                     |
-			| 'Register  "R1021 Vendors transactions"'         | ''            | ''                    | ''          | ''             | ''                             | ''         | ''                  | ''          | ''                   | ''                                               | ''                     |
-			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''                             | ''         | ''                  | ''          | ''                   | ''                                               | 'Attributes'           |
-			| ''                                               | ''            | ''                    | 'Amount'    | 'Company'      | 'Multi currency movement type' | 'Currency' | 'Legal name'        | 'Partner'   | 'Agreement'          | 'Basis'                                          | 'Deferred calculation' |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '393,76'    | 'Main Company' | 'Reporting currency'           | 'USD'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'No'                   |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '2 300'     | 'Main Company' | 'Local currency'               | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'No'                   |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '2 300'     | 'Main Company' | 'TRY'                          | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'No'                   |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '2 300'     | 'Main Company' | 'en description is empty'      | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'No'                   |
-			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '342,4'     | 'Main Company' | 'Reporting currency'           | 'USD'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'No'                   |
-			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '2 000'     | 'Main Company' | 'Local currency'               | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'No'                   |
-			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '2 000'     | 'Main Company' | 'TRY'                          | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'No'                   |
-			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '2 000'     | 'Main Company' | 'en description is empty'      | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'No'                   |
+			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''            | ''                    | ''          | ''             | ''             | ''                             | ''         | ''                  | ''          | ''                   | ''                                               | ''                     | ''                         |
+			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''             | ''                             | ''         | ''                  | ''          | ''                   | ''                                               | ''                     | ''                         |
+			| 'Register  "R1021 Vendors transactions"'         | ''            | ''                    | ''          | ''             | ''             | ''                             | ''         | ''                  | ''          | ''                   | ''                                               | ''                     | ''                         |
+			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''             | ''                             | ''         | ''                  | ''          | ''                   | ''                                               | 'Attributes'           | ''                         |
+			| ''                                               | ''            | ''                    | 'Amount'    | 'Company'      | 'Branch'       | 'Multi currency movement type' | 'Currency' | 'Legal name'        | 'Partner'   | 'Agreement'          | 'Basis'                                          | 'Deferred calculation' | 'Vendors advances closing' |
+			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '393,76'    | 'Main Company' | 'Front office' | 'Reporting currency'           | 'USD'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'No'                   | ''                         |
+			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '2 300'     | 'Main Company' | 'Front office' | 'Local currency'               | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'No'                   | ''                         |
+			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '2 300'     | 'Main Company' | 'Front office' | 'TRY'                          | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'No'                   | ''                         |
+			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '2 300'     | 'Main Company' | 'Front office' | 'en description is empty'      | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'No'                   | ''                         |
 		And I close all client application windows
 		
 Scenario: _04098 check Purchase invoice movements by the Register  "R1001 Purchases"
@@ -134,23 +140,23 @@ Scenario: _04098 check Purchase invoice movements by the Register  "R1001 Purcha
 		And I select "R1001 Purchases" exact value from "Register" drop-down list
 		And I click "Generate report" button
 		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''                    | ''          | ''       | ''           | ''              | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | ''                     |
-			| 'Document registrations records'                 | ''                    | ''          | ''       | ''           | ''              | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | ''                     |
-			| 'Register  "R1001 Purchases"'                    | ''                    | ''          | ''       | ''           | ''              | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | ''                     |
-			| ''                                               | 'Period'              | 'Resources' | ''       | ''           | ''              | 'Dimensions'   | ''                             | ''         | ''                                               | ''          | ''                                     | 'Attributes'           |
-			| ''                                               | ''                    | 'Quantity'  | 'Amount' | 'Net amount' | 'Offers amount' | 'Company'      | 'Multi currency movement type' | 'Currency' | 'Invoice'                                        | 'Item key'  | 'Row key'                              | 'Deferred calculation' |
-			| ''                                               | '12.02.2021 15:13:56' | '2'         | '51,36'  | '43,53'      | ''              | 'Main Company' | 'Reporting currency'           | 'USD'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'Interner'  | '9db770ce-c5f9-4f4c-a8a9-7adc10793d77' | 'No'                   |
-			| ''                                               | '12.02.2021 15:13:56' | '2'         | '300'    | '254,24'     | ''              | 'Main Company' | 'Local currency'               | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'Interner'  | '9db770ce-c5f9-4f4c-a8a9-7adc10793d77' | 'No'                   |
-			| ''                                               | '12.02.2021 15:13:56' | '2'         | '300'    | '254,24'     | ''              | 'Main Company' | 'TRY'                          | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'Interner'  | '9db770ce-c5f9-4f4c-a8a9-7adc10793d77' | 'No'                   |
-			| ''                                               | '12.02.2021 15:13:56' | '2'         | '300'    | '254,24'     | ''              | 'Main Company' | 'en description is empty'      | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'Interner'  | '9db770ce-c5f9-4f4c-a8a9-7adc10793d77' | 'No'                   |
-			| ''                                               | '12.02.2021 15:13:56' | '5'         | '171,2'  | '145,09'     | ''              | 'Main Company' | 'Reporting currency'           | 'USD'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | '36/Yellow' | '18d36228-af88-4ba5-a17a-f3ab3ddb6816' | 'No'                   |
-			| ''                                               | '12.02.2021 15:13:56' | '5'         | '1 000'  | '847,46'     | ''              | 'Main Company' | 'Local currency'               | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | '36/Yellow' | '18d36228-af88-4ba5-a17a-f3ab3ddb6816' | 'No'                   |
-			| ''                                               | '12.02.2021 15:13:56' | '5'         | '1 000'  | '847,46'     | ''              | 'Main Company' | 'TRY'                          | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | '36/Yellow' | '18d36228-af88-4ba5-a17a-f3ab3ddb6816' | 'No'                   |
-			| ''                                               | '12.02.2021 15:13:56' | '5'         | '1 000'  | '847,46'     | ''              | 'Main Company' | 'en description is empty'      | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | '36/Yellow' | '18d36228-af88-4ba5-a17a-f3ab3ddb6816' | 'No'                   |
-			| ''                                               | '12.02.2021 15:13:56' | '10'        | '171,2'  | '145,09'     | ''              | 'Main Company' | 'Reporting currency'           | 'USD'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'S/Yellow'  | '3e2661d8-cf3b-4695-8cf7-a14ecc9f32ce' | 'No'                   |
-			| ''                                               | '12.02.2021 15:13:56' | '10'        | '1 000'  | '847,46'     | ''              | 'Main Company' | 'Local currency'               | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'S/Yellow'  | '3e2661d8-cf3b-4695-8cf7-a14ecc9f32ce' | 'No'                   |
-			| ''                                               | '12.02.2021 15:13:56' | '10'        | '1 000'  | '847,46'     | ''              | 'Main Company' | 'TRY'                          | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'S/Yellow'  | '3e2661d8-cf3b-4695-8cf7-a14ecc9f32ce' | 'No'                   |
-			| ''                                               | '12.02.2021 15:13:56' | '10'        | '1 000'  | '847,46'     | ''              | 'Main Company' | 'en description is empty'      | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'S/Yellow'  | '3e2661d8-cf3b-4695-8cf7-a14ecc9f32ce' | 'No'                   |
+			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''                    | ''          | ''       | ''           | ''              | ''             | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | ''                     |
+			| 'Document registrations records'                 | ''                    | ''          | ''       | ''           | ''              | ''             | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | ''                     |
+			| 'Register  "R1001 Purchases"'                    | ''                    | ''          | ''       | ''           | ''              | ''             | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | ''                     |
+			| ''                                               | 'Period'              | 'Resources' | ''       | ''           | ''              | 'Dimensions'   | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | 'Attributes'           |
+			| ''                                               | ''                    | 'Quantity'  | 'Amount' | 'Net amount' | 'Offers amount' | 'Company'      | 'Branch'       | 'Multi currency movement type' | 'Currency' | 'Invoice'                                        | 'Item key'  | 'Row key'                              | 'Deferred calculation' |
+			| ''                                               | '12.02.2021 15:13:56' | '2'         | '51,36'  | '43,53'      | ''              | 'Main Company' | 'Front office' | 'Reporting currency'           | 'USD'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'Interner'  | '9db770ce-c5f9-4f4c-a8a9-7adc10793d77' | 'No'                   |
+			| ''                                               | '12.02.2021 15:13:56' | '2'         | '300'    | '254,24'     | ''              | 'Main Company' | 'Front office' | 'Local currency'               | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'Interner'  | '9db770ce-c5f9-4f4c-a8a9-7adc10793d77' | 'No'                   |
+			| ''                                               | '12.02.2021 15:13:56' | '2'         | '300'    | '254,24'     | ''              | 'Main Company' | 'Front office' | 'TRY'                          | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'Interner'  | '9db770ce-c5f9-4f4c-a8a9-7adc10793d77' | 'No'                   |
+			| ''                                               | '12.02.2021 15:13:56' | '2'         | '300'    | '254,24'     | ''              | 'Main Company' | 'Front office' | 'en description is empty'      | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'Interner'  | '9db770ce-c5f9-4f4c-a8a9-7adc10793d77' | 'No'                   |
+			| ''                                               | '12.02.2021 15:13:56' | '5'         | '171,2'  | '145,09'     | ''              | 'Main Company' | 'Front office' | 'Reporting currency'           | 'USD'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | '36/Yellow' | '18d36228-af88-4ba5-a17a-f3ab3ddb6816' | 'No'                   |
+			| ''                                               | '12.02.2021 15:13:56' | '5'         | '1 000'  | '847,46'     | ''              | 'Main Company' | 'Front office' | 'Local currency'               | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | '36/Yellow' | '18d36228-af88-4ba5-a17a-f3ab3ddb6816' | 'No'                   |
+			| ''                                               | '12.02.2021 15:13:56' | '5'         | '1 000'  | '847,46'     | ''              | 'Main Company' | 'Front office' | 'TRY'                          | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | '36/Yellow' | '18d36228-af88-4ba5-a17a-f3ab3ddb6816' | 'No'                   |
+			| ''                                               | '12.02.2021 15:13:56' | '5'         | '1 000'  | '847,46'     | ''              | 'Main Company' | 'Front office' | 'en description is empty'      | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | '36/Yellow' | '18d36228-af88-4ba5-a17a-f3ab3ddb6816' | 'No'                   |
+			| ''                                               | '12.02.2021 15:13:56' | '10'        | '171,2'  | '145,09'     | ''              | 'Main Company' | 'Front office' | 'Reporting currency'           | 'USD'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'S/Yellow'  | '3e2661d8-cf3b-4695-8cf7-a14ecc9f32ce' | 'No'                   |
+			| ''                                               | '12.02.2021 15:13:56' | '10'        | '1 000'  | '847,46'     | ''              | 'Main Company' | 'Front office' | 'Local currency'               | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'S/Yellow'  | '3e2661d8-cf3b-4695-8cf7-a14ecc9f32ce' | 'No'                   |
+			| ''                                               | '12.02.2021 15:13:56' | '10'        | '1 000'  | '847,46'     | ''              | 'Main Company' | 'Front office' | 'TRY'                          | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'S/Yellow'  | '3e2661d8-cf3b-4695-8cf7-a14ecc9f32ce' | 'No'                   |
+			| ''                                               | '12.02.2021 15:13:56' | '10'        | '1 000'  | '847,46'     | ''              | 'Main Company' | 'Front office' | 'en description is empty'      | 'TRY'      | 'Purchase invoice 115 dated 12.02.2021 15:13:56' | 'S/Yellow'  | '3e2661d8-cf3b-4695-8cf7-a14ecc9f32ce' | 'No'                   |
 			
 		And I close all client application windows
 		
@@ -180,12 +186,12 @@ Scenario: _040100 check Purchase invoice movements by the Register  "R5010 Recon
 		And I select "R5010 Reconciliation statement" exact value from "Register" drop-down list
 		And I click "Generate report" button
 		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''            | ''                    | ''          | ''           | ''             | ''                  |
-			| 'Document registrations records'                 | ''            | ''                    | ''          | ''           | ''             | ''                  |
-			| 'Register  "R5010 Reconciliation statement"'     | ''            | ''                    | ''          | ''           | ''             | ''                  |
-			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions' | ''             | ''                  |
-			| ''                                               | ''            | ''                    | 'Amount'    | 'Currency'   | 'Company'      | 'Legal name'        |
-			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '2 300'     | 'TRY'        | 'Main Company' | 'Company Ferron BP' |	
+			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''            | ''                    | ''          | ''             | ''             | ''         | ''                  | ''                    |
+			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''             | ''         | ''                  | ''                    |
+			| 'Register  "R5010 Reconciliation statement"'     | ''            | ''                    | ''          | ''             | ''             | ''         | ''                  | ''                    |
+			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''             | ''         | ''                  | ''                    |
+			| ''                                               | ''            | ''                    | 'Amount'    | 'Company'      | 'Branch'       | 'Currency' | 'Legal name'        | 'Legal name contract' |
+			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '2 300'     | 'Main Company' | 'Front office' | 'TRY'      | 'Company Ferron BP' | 'Contract Ferron BP'  |
 		And I close all client application windows
 		
 Scenario: _040101 check Purchase invoice movements by the Register  "R4010 Actual stocks" (use GR)
@@ -218,26 +224,26 @@ Scenario: _040102 check Purchase invoice movements by the Register  "R4017 Procu
 			
 		And I close all client application windows
 		
-Scenario: _040103 check Purchase invoice movements by the Register  "R1020 Advances to vendors" (with advance)
-	* Select Purchase invoice
-		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
-		And I go to line in "List" table
-			| 'Number'  |
-			| '115' |
-	* Check movements by the Register  "R1020 Advances to vendors"
-		And I click "Registrations report" button
-		And I select "R1020 Advances to vendors" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''            | ''                    | ''          | ''             | ''                             | ''         | ''                  | ''          | ''                                         | ''                     |
-			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''                             | ''         | ''                  | ''          | ''                                         | ''                     |
-			| 'Register  "R1020 Advances to vendors"'          | ''            | ''                    | ''          | ''             | ''                             | ''         | ''                  | ''          | ''                                         | ''                     |
-			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''                             | ''         | ''                  | ''          | ''                                         | 'Attributes'           |
-			| ''                                               | ''            | ''                    | 'Amount'    | 'Company'      | 'Multi currency movement type' | 'Currency' | 'Legal name'        | 'Partner'   | 'Basis'                                    | 'Deferred calculation' |
-			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '342,4'     | 'Main Company' | 'Reporting currency'           | 'USD'      | 'Company Ferron BP' | 'Ferron BP' | 'Bank payment 1 dated 12.02.2021 11:24:13' | 'No'                   |
-			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '2 000'     | 'Main Company' | 'Local currency'               | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Bank payment 1 dated 12.02.2021 11:24:13' | 'No'                   |
-			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '2 000'     | 'Main Company' | 'en description is empty'      | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Bank payment 1 dated 12.02.2021 11:24:13' | 'No'                   |	
-		And I close all client application windows
+// Scenario: _040103 check Purchase invoice movements by the Register  "R1020 Advances to vendors" (with advance)
+// 	* Select Purchase invoice
+// 		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
+// 		And I go to line in "List" table
+// 			| 'Number'  |
+// 			| '115' |
+// 	* Check movements by the Register  "R1020 Advances to vendors"
+// 		And I click "Registrations report" button
+// 		And I select "R1020 Advances to vendors" exact value from "Register" drop-down list
+// 		And I click "Generate report" button
+// 		Then "ResultTable" spreadsheet document is equal
+// 			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''            | ''                    | ''          | ''             | ''                             | ''         | ''                  | ''          | ''                                         | ''                     |
+// 			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''                             | ''         | ''                  | ''          | ''                                         | ''                     |
+// 			| 'Register  "R1020 Advances to vendors"'          | ''            | ''                    | ''          | ''             | ''                             | ''         | ''                  | ''          | ''                                         | ''                     |
+// 			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''                             | ''         | ''                  | ''          | ''                                         | 'Attributes'           |
+// 			| ''                                               | ''            | ''                    | 'Amount'    | 'Company'      | 'Multi currency movement type' | 'Currency' | 'Legal name'        | 'Partner'   | 'Basis'                                    | 'Deferred calculation' |
+// 			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '342,4'     | 'Main Company' | 'Reporting currency'           | 'USD'      | 'Company Ferron BP' | 'Ferron BP' | 'Bank payment 1 dated 12.02.2021 11:24:13' | 'No'                   |
+// 			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '2 000'     | 'Main Company' | 'Local currency'               | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Bank payment 1 dated 12.02.2021 11:24:13' | 'No'                   |
+// 			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '2 000'     | 'Main Company' | 'en description is empty'      | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Bank payment 1 dated 12.02.2021 11:24:13' | 'No'                   |	
+// 		And I close all client application windows
 		
 Scenario: _040104 check Purchase invoice movements by the Register  "R4050 Stock inventory"
 	* Select Purchase invoice
@@ -250,13 +256,13 @@ Scenario: _040104 check Purchase invoice movements by the Register  "R4050 Stock
 		And I select "R4050 Stock inventory" exact value from "Register" drop-down list
 		And I click "Generate report" button
 		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''            | ''                    | ''          | ''             | ''         | ''          |
-			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''         | ''          |
-			| 'Register  "R4050 Stock inventory"'              | ''            | ''                    | ''          | ''             | ''         | ''          |
-			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''         | ''          |
-			| ''                                               | ''            | ''                    | 'Quantity'  | 'Company'      | 'Store'    | 'Item key'  |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '5'         | 'Main Company' | 'Store 02' | '36/Yellow' |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '10'        | 'Main Company' | 'Store 02' | 'S/Yellow'  |	
+			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''            | ''                    | ''          | ''             | ''             | ''         | ''          |
+			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''             | ''         | ''          |
+			| 'Register  "R4050 Stock inventory"'              | ''            | ''                    | ''          | ''             | ''             | ''         | ''          |
+			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''             | ''         | ''          |
+			| ''                                               | ''            | ''                    | 'Quantity'  | 'Company'      | 'Branch'       | 'Store'    | 'Item key'  |
+			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '5'         | 'Main Company' | 'Front office' | 'Store 02' | '36/Yellow' |
+			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '10'        | 'Main Company' | 'Front office' | 'Store 02' | 'S/Yellow'  |
 		And I close all client application windows
 		
 Scenario: _040105 check Purchase invoice movements by the Register  "R4011 Free stocks"  (use GR)
@@ -285,13 +291,13 @@ Scenario: _040106 check Purchase invoice movements by the Register  "R1031 Recei
 		And I select "R1031 Receipt invoicing" exact value from "Register" drop-down list
 		And I click "Generate report" button
 		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''            | ''                    | ''          | ''             | ''         | ''                                            | ''          |
-			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''         | ''                                            | ''          |
-			| 'Register  "R1031 Receipt invoicing"'            | ''            | ''                    | ''          | ''             | ''         | ''                                            | ''          |
-			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''         | ''                                            | ''          |
-			| ''                                               | ''            | ''                    | 'Quantity'  | 'Company'      | 'Store'    | 'Basis'                                       | 'Item key'  |
-			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '5'         | 'Main Company' | 'Store 02' | 'Goods receipt 115 dated 12.02.2021 15:10:35' | '36/Yellow' |
-			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '10'        | 'Main Company' | 'Store 02' | 'Goods receipt 115 dated 12.02.2021 15:10:35' | 'S/Yellow'  |
+			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''            | ''                    | ''          | ''             | ''             | ''         | ''                                            | ''          |
+			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''             | ''         | ''                                            | ''          |
+			| 'Register  "R1031 Receipt invoicing"'            | ''            | ''                    | ''          | ''             | ''             | ''         | ''                                            | ''          |
+			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''             | ''         | ''                                            | ''          |
+			| ''                                               | ''            | ''                    | 'Quantity'  | 'Company'      | 'Branch'       | 'Store'    | 'Basis'                                       | 'Item key'  |
+			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '5'         | 'Main Company' | 'Front office' | 'Store 02' | 'Goods receipt 115 dated 12.02.2021 15:10:35' | '36/Yellow' |
+			| ''                                               | 'Expense'     | '12.02.2021 15:13:56' | '10'        | 'Main Company' | 'Front office' | 'Store 02' | 'Goods receipt 115 dated 12.02.2021 15:10:35' | 'S/Yellow'  |
 
 		And I close all client application windows
 		
@@ -306,14 +312,14 @@ Scenario: _040107 check Purchase invoice movements by the Register  "R1040 Taxes
 		And I select "R1040 Taxes outgoing" exact value from "Register" drop-down list
 		And I click "Generate report" button
 		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''            | ''                    | ''               | ''           | ''             | ''    | ''         | ''                  |
-			| 'Document registrations records'                 | ''            | ''                    | ''               | ''           | ''             | ''    | ''         | ''                  |
-			| 'Register  "R1040 Taxes outgoing"'               | ''            | ''                    | ''               | ''           | ''             | ''    | ''         | ''                  |
-			| ''                                               | 'Record type' | 'Period'              | 'Resources'      | ''           | 'Dimensions'   | ''    | ''         | ''                  |
-			| ''                                               | ''            | ''                    | 'Taxable amount' | 'Tax amount' | 'Company'      | 'Tax' | 'Tax rate' | 'Tax movement type' |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '254,24'         | '45,76'      | 'Main Company' | 'VAT' | '18%'      | ''                  |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '847,46'         | '152,54'     | 'Main Company' | 'VAT' | '18%'      | ''                  |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '847,46'         | '152,54'     | 'Main Company' | 'VAT' | '18%'      | ''                  |	
+			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' | ''            | ''                    | ''               | ''           | ''             | ''             | ''    | ''         | ''                  |
+			| 'Document registrations records'                 | ''            | ''                    | ''               | ''           | ''             | ''             | ''    | ''         | ''                  |
+			| 'Register  "R1040 Taxes outgoing"'               | ''            | ''                    | ''               | ''           | ''             | ''             | ''    | ''         | ''                  |
+			| ''                                               | 'Record type' | 'Period'              | 'Resources'      | ''           | 'Dimensions'   | ''             | ''    | ''         | ''                  |
+			| ''                                               | ''            | ''                    | 'Taxable amount' | 'Tax amount' | 'Company'      | 'Branch'       | 'Tax' | 'Tax rate' | 'Tax movement type' |
+			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '254,24'         | '45,76'      | 'Main Company' | 'Front office' | 'VAT' | '18%'      | ''                  |
+			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '847,46'         | '152,54'     | 'Main Company' | 'Front office' | 'VAT' | '18%'      | ''                  |
+			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '847,46'         | '152,54'     | 'Main Company' | 'Front office' | 'VAT' | '18%'      | ''                  |
 		And I close all client application windows
 		
 Scenario: _040108 check Purchase invoice movements by the Register  "R1012 Invoice closing of purchase orders" (PO exists)
@@ -327,14 +333,14 @@ Scenario: _040108 check Purchase invoice movements by the Register  "R1012 Invoi
 		And I select "R1012 Invoice closing of purchase orders" exact value from "Register" drop-down list
 		And I click "Generate report" button
 		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 115 dated 12.02.2021 15:13:56'       | ''            | ''                    | ''          | ''       | ''           | ''             | ''                                             | ''         | ''          | ''                                     |
-			| 'Document registrations records'                       | ''            | ''                    | ''          | ''       | ''           | ''             | ''                                             | ''         | ''          | ''                                     |
-			| 'Register  "R1012 Invoice closing of purchase orders"' | ''            | ''                    | ''          | ''       | ''           | ''             | ''                                             | ''         | ''          | ''                                     |
-			| ''                                                     | 'Record type' | 'Period'              | 'Resources' | ''       | ''           | 'Dimensions'   | ''                                             | ''         | ''          | ''                                     |
-			| ''                                                     | ''            | ''                    | 'Quantity'  | 'Amount' | 'Net amount' | 'Company'      | 'Order'                                        | 'Currency' | 'Item key'  | 'Row key'                              |
-			| ''                                                     | 'Expense'     | '12.02.2021 15:13:56' | '2'         | '300'    | '254,24'     | 'Main Company' | 'Purchase order 115 dated 12.02.2021 12:44:43' | 'TRY'      | 'Interner'  | '9db770ce-c5f9-4f4c-a8a9-7adc10793d77' |
-			| ''                                                     | 'Expense'     | '12.02.2021 15:13:56' | '5'         | '1 000'  | '847,46'     | 'Main Company' | 'Purchase order 115 dated 12.02.2021 12:44:43' | 'TRY'      | '36/Yellow' | '18d36228-af88-4ba5-a17a-f3ab3ddb6816' |
-			| ''                                                     | 'Expense'     | '12.02.2021 15:13:56' | '10'        | '1 000'  | '847,46'     | 'Main Company' | 'Purchase order 115 dated 12.02.2021 12:44:43' | 'TRY'      | 'S/Yellow'  | '3e2661d8-cf3b-4695-8cf7-a14ecc9f32ce' |	
+			| 'Purchase invoice 115 dated 12.02.2021 15:13:56'       | ''            | ''                    | ''          | ''       | ''           | ''             | ''             | ''                                             | ''         | ''          | ''                                     |
+			| 'Document registrations records'                       | ''            | ''                    | ''          | ''       | ''           | ''             | ''             | ''                                             | ''         | ''          | ''                                     |
+			| 'Register  "R1012 Invoice closing of purchase orders"' | ''            | ''                    | ''          | ''       | ''           | ''             | ''             | ''                                             | ''         | ''          | ''                                     |
+			| ''                                                     | 'Record type' | 'Period'              | 'Resources' | ''       | ''           | 'Dimensions'   | ''             | ''                                             | ''         | ''          | ''                                     |
+			| ''                                                     | ''            | ''                    | 'Quantity'  | 'Amount' | 'Net amount' | 'Company'      | 'Branch'       | 'Order'                                        | 'Currency' | 'Item key'  | 'Row key'                              |
+			| ''                                                     | 'Expense'     | '12.02.2021 15:13:56' | '2'         | '300'    | '254,24'     | 'Main Company' | 'Front office' | 'Purchase order 115 dated 12.02.2021 12:44:43' | 'TRY'      | 'Interner'  | '9db770ce-c5f9-4f4c-a8a9-7adc10793d77' |
+			| ''                                                     | 'Expense'     | '12.02.2021 15:13:56' | '5'         | '1 000'  | '847,46'     | 'Main Company' | 'Front office' | 'Purchase order 115 dated 12.02.2021 12:44:43' | 'TRY'      | '36/Yellow' | '18d36228-af88-4ba5-a17a-f3ab3ddb6816' |
+			| ''                                                     | 'Expense'     | '12.02.2021 15:13:56' | '10'        | '1 000'  | '847,46'     | 'Main Company' | 'Front office' | 'Purchase order 115 dated 12.02.2021 12:44:43' | 'TRY'      | 'S/Yellow'  | '3e2661d8-cf3b-4695-8cf7-a14ecc9f32ce' |
 		And I close all client application windows
 		
 Scenario: _040109 check Purchase invoice movements by the Register  "R4035 Incoming stocks"
@@ -447,23 +453,23 @@ Scenario: _040993 check Purchase invoice movements by the Register  "R1005 Speci
 		And I select "R1005 Special offers of purchases" exact value from "Register" drop-down list
 		And I click "Generate report" button
 		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 117 dated 12.02.2021 15:12:15' | ''                    | ''              | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | ''                 | ''                     |
-			| 'Document registrations records'                 | ''                    | ''              | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | ''                 | ''                     |
-			| 'Register  "R1005 Special offers of purchases"'  | ''                    | ''              | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | ''                 | ''                     |
-			| ''                                               | 'Period'              | 'Resources'     | 'Dimensions'   | ''                             | ''         | ''                                               | ''          | ''                                     | ''                 | 'Attributes'           |
-			| ''                                               | ''                    | 'Offers amount' | 'Company'      | 'Multi currency movement type' | 'Currency' | 'Invoice'                                        | 'Item key'  | 'Row key'                              | 'Special offer'    | 'Deferred calculation' |
-			| ''                                               | '12.02.2021 15:12:15' | '5,14'          | 'Main Company' | 'Reporting currency'           | 'USD'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'Interner'  | '1b90516b-b3ac-4ca5-bb47-44477975f242' | 'DocumentDiscount' | 'No'                   |
-			| ''                                               | '12.02.2021 15:12:15' | '17,12'         | 'Main Company' | 'Reporting currency'           | 'USD'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'S/Yellow'  | '4fcbb4cf-3824-47fb-89b5-50d151315d4d' | 'DocumentDiscount' | 'No'                   |
-			| ''                                               | '12.02.2021 15:12:15' | '17,12'         | 'Main Company' | 'Reporting currency'           | 'USD'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | '36/Yellow' | '923e7825-c20f-4a3e-a983-2b85d80e475a' | 'DocumentDiscount' | 'No'                   |
-			| ''                                               | '12.02.2021 15:12:15' | '30'            | 'Main Company' | 'Local currency'               | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'Interner'  | '1b90516b-b3ac-4ca5-bb47-44477975f242' | 'DocumentDiscount' | 'No'                   |
-			| ''                                               | '12.02.2021 15:12:15' | '30'            | 'Main Company' | 'TRY'                          | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'Interner'  | '1b90516b-b3ac-4ca5-bb47-44477975f242' | 'DocumentDiscount' | 'No'                   |
-			| ''                                               | '12.02.2021 15:12:15' | '30'            | 'Main Company' | 'en description is empty'      | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'Interner'  | '1b90516b-b3ac-4ca5-bb47-44477975f242' | 'DocumentDiscount' | 'No'                   |
-			| ''                                               | '12.02.2021 15:12:15' | '100'           | 'Main Company' | 'Local currency'               | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'S/Yellow'  | '4fcbb4cf-3824-47fb-89b5-50d151315d4d' | 'DocumentDiscount' | 'No'                   |
-			| ''                                               | '12.02.2021 15:12:15' | '100'           | 'Main Company' | 'Local currency'               | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | '36/Yellow' | '923e7825-c20f-4a3e-a983-2b85d80e475a' | 'DocumentDiscount' | 'No'                   |
-			| ''                                               | '12.02.2021 15:12:15' | '100'           | 'Main Company' | 'TRY'                          | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'S/Yellow'  | '4fcbb4cf-3824-47fb-89b5-50d151315d4d' | 'DocumentDiscount' | 'No'                   |
-			| ''                                               | '12.02.2021 15:12:15' | '100'           | 'Main Company' | 'TRY'                          | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | '36/Yellow' | '923e7825-c20f-4a3e-a983-2b85d80e475a' | 'DocumentDiscount' | 'No'                   |
-			| ''                                               | '12.02.2021 15:12:15' | '100'           | 'Main Company' | 'en description is empty'      | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'S/Yellow'  | '4fcbb4cf-3824-47fb-89b5-50d151315d4d' | 'DocumentDiscount' | 'No'                   |
-			| ''                                               | '12.02.2021 15:12:15' | '100'           | 'Main Company' | 'en description is empty'      | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | '36/Yellow' | '923e7825-c20f-4a3e-a983-2b85d80e475a' | 'DocumentDiscount' | 'No'                   |
+			| 'Purchase invoice 117 dated 12.02.2021 15:12:15' | ''                    | ''              | ''             | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | ''                 | ''                     |
+			| 'Document registrations records'                 | ''                    | ''              | ''             | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | ''                 | ''                     |
+			| 'Register  "R1005 Special offers of purchases"'  | ''                    | ''              | ''             | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | ''                 | ''                     |
+			| ''                                               | 'Period'              | 'Resources'     | 'Dimensions'   | ''             | ''                             | ''         | ''                                               | ''          | ''                                     | ''                 | 'Attributes'           |
+			| ''                                               | ''                    | 'Offers amount' | 'Company'      | 'Branch'       | 'Multi currency movement type' | 'Currency' | 'Invoice'                                        | 'Item key'  | 'Row key'                              | 'Special offer'    | 'Deferred calculation' |
+			| ''                                               | '12.02.2021 15:12:15' | '5,14'          | 'Main Company' | 'Front office' | 'Reporting currency'           | 'USD'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'Interner'  | '1b90516b-b3ac-4ca5-bb47-44477975f242' | 'DocumentDiscount' | 'No'                   |
+			| ''                                               | '12.02.2021 15:12:15' | '17,12'         | 'Main Company' | 'Front office' | 'Reporting currency'           | 'USD'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'S/Yellow'  | '4fcbb4cf-3824-47fb-89b5-50d151315d4d' | 'DocumentDiscount' | 'No'                   |
+			| ''                                               | '12.02.2021 15:12:15' | '17,12'         | 'Main Company' | 'Front office' | 'Reporting currency'           | 'USD'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | '36/Yellow' | '923e7825-c20f-4a3e-a983-2b85d80e475a' | 'DocumentDiscount' | 'No'                   |
+			| ''                                               | '12.02.2021 15:12:15' | '30'            | 'Main Company' | 'Front office' | 'Local currency'               | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'Interner'  | '1b90516b-b3ac-4ca5-bb47-44477975f242' | 'DocumentDiscount' | 'No'                   |
+			| ''                                               | '12.02.2021 15:12:15' | '30'            | 'Main Company' | 'Front office' | 'TRY'                          | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'Interner'  | '1b90516b-b3ac-4ca5-bb47-44477975f242' | 'DocumentDiscount' | 'No'                   |
+			| ''                                               | '12.02.2021 15:12:15' | '30'            | 'Main Company' | 'Front office' | 'en description is empty'      | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'Interner'  | '1b90516b-b3ac-4ca5-bb47-44477975f242' | 'DocumentDiscount' | 'No'                   |
+			| ''                                               | '12.02.2021 15:12:15' | '100'           | 'Main Company' | 'Front office' | 'Local currency'               | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'S/Yellow'  | '4fcbb4cf-3824-47fb-89b5-50d151315d4d' | 'DocumentDiscount' | 'No'                   |
+			| ''                                               | '12.02.2021 15:12:15' | '100'           | 'Main Company' | 'Front office' | 'Local currency'               | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | '36/Yellow' | '923e7825-c20f-4a3e-a983-2b85d80e475a' | 'DocumentDiscount' | 'No'                   |
+			| ''                                               | '12.02.2021 15:12:15' | '100'           | 'Main Company' | 'Front office' | 'TRY'                          | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'S/Yellow'  | '4fcbb4cf-3824-47fb-89b5-50d151315d4d' | 'DocumentDiscount' | 'No'                   |
+			| ''                                               | '12.02.2021 15:12:15' | '100'           | 'Main Company' | 'Front office' | 'TRY'                          | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | '36/Yellow' | '923e7825-c20f-4a3e-a983-2b85d80e475a' | 'DocumentDiscount' | 'No'                   |
+			| ''                                               | '12.02.2021 15:12:15' | '100'           | 'Main Company' | 'Front office' | 'en description is empty'      | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'S/Yellow'  | '4fcbb4cf-3824-47fb-89b5-50d151315d4d' | 'DocumentDiscount' | 'No'                   |
+			| ''                                               | '12.02.2021 15:12:15' | '100'           | 'Main Company' | 'Front office' | 'en description is empty'      | 'TRY'      | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | '36/Yellow' | '923e7825-c20f-4a3e-a983-2b85d80e475a' | 'DocumentDiscount' | 'No'                   |
 			
 		And I close all client application windows
 		
@@ -482,43 +488,17 @@ Scenario: _0401063 check Purchase invoice movements by the Register  "R1031 Rece
 		And I select "R1031 Receipt invoicing" exact value from "Register" drop-down list
 		And I click "Generate report" button
 		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 117 dated 12.02.2021 15:12:15' | ''            | ''                    | ''          | ''             | ''         | ''                                            | ''          |
-			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''         | ''                                            | ''          |
-			| 'Register  "R1031 Receipt invoicing"'            | ''            | ''                    | ''          | ''             | ''         | ''                                            | ''          |
-			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''         | ''                                            | ''          |
-			| ''                                               | ''            | ''                    | 'Quantity'  | 'Company'      | 'Store'    | 'Basis'                                       | 'Item key'  |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:12:15' | '5'         | 'Main Company' | 'Store 02' | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | '36/Yellow' |
+			| 'Purchase invoice 117 dated 12.02.2021 15:12:15' | ''            | ''                    | ''          | ''             | ''             | ''         | ''                                               | ''          |
+			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''             | ''         | ''                                               | ''          |
+			| 'Register  "R1031 Receipt invoicing"'            | ''            | ''                    | ''          | ''             | ''             | ''         | ''                                               | ''          |
+			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''             | ''         | ''                                               | ''          |
+			| ''                                               | ''            | ''                    | 'Quantity'  | 'Company'      | 'Branch'       | 'Store'    | 'Basis'                                          | 'Item key'  |
+			| ''                                               | 'Receipt'     | '12.02.2021 15:12:15' | '5'         | 'Main Company' | 'Front office' | 'Store 02' | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | '36/Yellow' |
 
 
 		And I close all client application windows
 		
 
-Scenario: _0401064 check Purchase invoice movements by the Register  "R1021 Vendors transactions" (with advance)
-	* Select Purchase invoice
-		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
-		And I go to line in "List" table
-			| 'Number'  |
-			| '117' |
-	* Check movements by the Register  "R1021 Vendors transactions"
-		And I click "Registrations report" button
-		And I select "R1021 Vendors transactions" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 117 dated 12.02.2021 15:12:15' | ''            | ''                    | ''          | ''             | ''                             | ''         | ''                  | ''          | ''                   | ''                                               | ''                     |
-			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''                             | ''         | ''                  | ''          | ''                   | ''                                               | ''                     |
-			| 'Register  "R1021 Vendors transactions"'         | ''            | ''                    | ''          | ''             | ''                             | ''         | ''                  | ''          | ''                   | ''                                               | ''                     |
-			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''                             | ''         | ''                  | ''          | ''                   | ''                                               | 'Attributes'           |
-			| ''                                               | ''            | ''                    | 'Amount'    | 'Company'      | 'Multi currency movement type' | 'Currency' | 'Legal name'        | 'Partner'   | 'Agreement'          | 'Basis'                                          | 'Deferred calculation' |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:12:15' | '765,26'    | 'Main Company' | 'Reporting currency'           | 'USD'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'No'                   |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:12:15' | '4 470'     | 'Main Company' | 'Local currency'               | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'No'                   |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:12:15' | '4 470'     | 'Main Company' | 'TRY'                          | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'No'                   |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:12:15' | '4 470'     | 'Main Company' | 'en description is empty'      | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'No'                   |
-			| ''                                               | 'Expense'     | '12.02.2021 15:12:15' | '342,4'     | 'Main Company' | 'Reporting currency'           | 'USD'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'No'                   |
-			| ''                                               | 'Expense'     | '12.02.2021 15:12:15' | '2 000'     | 'Main Company' | 'Local currency'               | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'No'                   |
-			| ''                                               | 'Expense'     | '12.02.2021 15:12:15' | '2 000'     | 'Main Company' | 'TRY'                          | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'No'                   |
-			| ''                                               | 'Expense'     | '12.02.2021 15:12:15' | '2 000'     | 'Main Company' | 'en description is empty'      | 'TRY'      | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' | 'Purchase invoice 117 dated 12.02.2021 15:12:15' | 'No'                   |
-
-		And I close all client application windows
 
 Scenario: _0401066 check Purchase invoice movements by the Register  "R4017 Procurement of internal supply requests" (ISR exists)
 	* Select Purchase invoice
@@ -531,12 +511,12 @@ Scenario: _0401066 check Purchase invoice movements by the Register  "R4017 Proc
 		And I select "R4017 Procurement of internal supply requests" exact value from "Register" drop-down list
 		And I click "Generate report" button
 		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 117 dated 12.02.2021 15:12:15'            | ''            | ''                    | ''          | ''             | ''         | ''                                                      | ''         |
-			| 'Document registrations records'                            | ''            | ''                    | ''          | ''             | ''         | ''                                                      | ''         |
-			| 'Register  "R4017 Procurement of internal supply requests"' | ''            | ''                    | ''          | ''             | ''         | ''                                                      | ''         |
-			| ''                                                          | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''         | ''                                                      | ''         |
-			| ''                                                          | ''            | ''                    | 'Quantity'  | 'Company'      | 'Store'    | 'Internal supply request'                               | 'Item key' |
-			| ''                                                          | 'Expense'     | '12.02.2021 15:12:15' | '10'        | 'Main Company' | 'Store 02' | 'Internal supply request 117 dated 12.02.2021 14:39:38' | 'S/Yellow' |
+			| 'Purchase invoice 117 dated 12.02.2021 15:12:15'            | ''            | ''                    | ''          | ''             | ''             | ''         | ''                                                      | ''         |
+			| 'Document registrations records'                            | ''            | ''                    | ''          | ''             | ''             | ''         | ''                                                      | ''         |
+			| 'Register  "R4017 Procurement of internal supply requests"' | ''            | ''                    | ''          | ''             | ''             | ''         | ''                                                      | ''         |
+			| ''                                                          | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''             | ''         | ''                                                      | ''         |
+			| ''                                                          | ''            | ''                    | 'Quantity'  | 'Company'      | 'Branch'       | 'Store'    | 'Internal supply request'                               | 'Item key' |
+			| ''                                                          | 'Expense'     | '12.02.2021 15:12:15' | '10'        | 'Main Company' | 'Front office' | 'Store 02' | 'Internal supply request 117 dated 12.02.2021 14:39:38' | 'S/Yellow' |
 
 		And I close all client application windows
 
@@ -571,12 +551,12 @@ Scenario: _0401068 check Purchase invoice movements by the Register  "R1011 Rece
 		And I select "R1011 Receipt of purchase orders" exact value from "Register" drop-down list
 		And I click "Generate report" button
 		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 117 dated 12.02.2021 15:12:15' | ''            | ''                    | ''          | ''             | ''                                             | ''          |
-			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''                                             | ''          |
-			| 'Register  "R1011 Receipt of purchase orders"'   | ''            | ''                    | ''          | ''             | ''                                             | ''          |
-			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''                                             | ''          |
-			| ''                                               | ''            | ''                    | 'Quantity'  | 'Company'      | 'Order'                                        | 'Item key'  |
-			| ''                                               | 'Expense'     | '12.02.2021 15:12:15' | '10'        | 'Main Company' | 'Purchase order 117 dated 12.02.2021 12:45:05' | 'S/Yellow'  |
+			| 'Purchase invoice 117 dated 12.02.2021 15:12:15' | ''            | ''                    | ''          | ''             | ''             | ''                                             | ''         |
+			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''             | ''                                             | ''         |
+			| 'Register  "R1011 Receipt of purchase orders"'   | ''            | ''                    | ''          | ''             | ''             | ''                                             | ''         |
+			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''             | ''                                             | ''         |
+			| ''                                               | ''            | ''                    | 'Quantity'  | 'Company'      | 'Branch'       | 'Order'                                        | 'Item key' |
+			| ''                                               | 'Expense'     | '12.02.2021 15:12:15' | '10'        | 'Main Company' | 'Front office' | 'Purchase order 117 dated 12.02.2021 12:45:05' | 'S/Yellow' |
 
 		And I close all client application windows
 
@@ -591,12 +571,34 @@ Scenario: _0401069 check Purchase invoice movements by the Register  "R4014 Seri
 		And I select "R4014 Serial lot numbers" exact value from "Register" drop-down list
 		And I click "Generate report" button
 		Then "ResultTable" spreadsheet document is equal
-			| 'Purchase invoice 117 dated 12.02.2021 15:12:15' | ''            | ''                    | ''          | ''             | ''         | ''                  |
-			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''         | ''                  |
-			| 'Register  "R4014 Serial lot numbers"'           | ''            | ''                    | ''          | ''             | ''         | ''                  |
-			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''         | ''                  |
-			| ''                                               | ''            | ''                    | 'Quantity'  | 'Company'      | 'Item key' | 'Serial lot number' |
-			| ''                                               | 'Receipt'     | '12.02.2021 15:12:15' | '10'        | 'Main Company' | 'S/Yellow' | '0512'              |
+			| 'Purchase invoice 117 dated 12.02.2021 15:12:15' | ''            | ''                    | ''          | ''             | ''             | ''         | ''                  |
+			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''             | ''         | ''                  |
+			| 'Register  "R4014 Serial lot numbers"'           | ''            | ''                    | ''          | ''             | ''             | ''         | ''                  |
+			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''             | ''         | ''                  |
+			| ''                                               | ''            | ''                    | 'Quantity'  | 'Company'      | 'Branch'       | 'Item key' | 'Serial lot number' |
+			| ''                                               | 'Receipt'     | '12.02.2021 15:12:15' | '10'        | 'Main Company' | 'Front office' | 'S/Yellow' | '0512'              |
+		And I close all client application windows
+
+Scenario: _0401070 check Purchase invoice movements by the Register  "R5022 Expenses" (PO-PI)
+	* Select Purchase invoice
+		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
+		And I go to line in "List" table
+			| 'Number'  |
+			| '117' |
+	* Check movements by the Register  "R5022 Expenses"
+		And I click "Registrations report" button
+		And I select "R5022 Expenses" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		Then "ResultTable" spreadsheet document is equal
+			| 'Purchase invoice 117 dated 12.02.2021 15:12:15' | ''                    | ''          | ''                  | ''             | ''             | ''                   | ''             | ''         | ''         | ''                    | ''                             |
+			| 'Document registrations records'                 | ''                    | ''          | ''                  | ''             | ''             | ''                   | ''             | ''         | ''         | ''                    | ''                             |
+			| 'Register  "R5022 Expenses"'                     | ''                    | ''          | ''                  | ''             | ''             | ''                   | ''             | ''         | ''         | ''                    | ''                             |
+			| ''                                               | 'Period'              | 'Resources' | ''                  | 'Dimensions'   | ''             | ''                   | ''             | ''         | ''         | ''                    | ''                             |
+			| ''                                               | ''                    | 'Amount'    | 'Amount with taxes' | 'Company'      | 'Branch'       | 'Profit loss center' | 'Expense type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' |
+			| ''                                               | '12.02.2021 15:12:15' | '39,17'     | '46,22'             | 'Main Company' | 'Front office' | 'Front office'       | 'Expense'      | 'Interner' | 'USD'      | ''                    | 'Reporting currency'           |
+			| ''                                               | '12.02.2021 15:12:15' | '228,81'    | '270'               | 'Main Company' | 'Front office' | 'Front office'       | 'Expense'      | 'Interner' | 'TRY'      | ''                    | 'Local currency'               |
+			| ''                                               | '12.02.2021 15:12:15' | '228,81'    | '270'               | 'Main Company' | 'Front office' | 'Front office'       | 'Expense'      | 'Interner' | 'TRY'      | ''                    | 'TRY'                          |
+			| ''                                               | '12.02.2021 15:12:15' | '228,81'    | '270'               | 'Main Company' | 'Front office' | 'Front office'       | 'Expense'      | 'Interner' | 'TRY'      | ''                    | 'en description is empty'      |		
 		And I close all client application windows
 
 //PI (without GR)
@@ -723,4 +725,153 @@ Scenario: _0401017 check Purchase invoice movements by the Register  "R4031 Good
 			| ''                                               | 'Receipt'     | '12.02.2021 15:13:56' | '10'        | 'Store 02'   | 'Goods receipt 115 dated 12.02.2021 15:10:35' | 'S/Yellow'  |
 		And I close all client application windows
 
+Scenario: _0401020 check there is no Purchase invoice movements by the Register  "R1022 Vendors payment planning" (with aging, Prepaid)
+	* Select Purchase invoice
+		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
+		And I go to line in "List" table
+			| 'Number'  |
+			| '323' |
+	* Check movements by the Register  "R1022 Vendors payment planning" 
+		And I click "Registrations report" button
+		And I select "R1022 Vendors payment planning" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		Then "ResultTable" spreadsheet document is equal
+			| 'Purchase invoice 323 dated 30.05.2021 15:08:40' |
+			| 'Document registrations records'                 |
+		And I close all client application windows
+
+Scenario: _0401021 check Purchase invoice movements by the Register  "R1022 Vendors payment planning" (with aging, Post-shipment credit)
+	* Select Purchase invoice
+		And I close all client application windows
+		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
+		And I go to line in "List" table
+			| 'Number'  |
+			| '324' |
+	* Check movements by the Register  "R1022 Vendors payment planning" 
+		And I click "Registrations report" button
+		And I select "R1022 Vendors payment planning" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		Then "ResultTable" spreadsheet document is equal
+			| 'Purchase invoice 324 dated 30.05.2021 15:09:00' | ''            | ''                    | ''          | ''             | ''             | ''                                               | ''                  | ''          | ''                   |
+			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''             | ''                                               | ''                  | ''          | ''                   |
+			| 'Register  "R1022 Vendors payment planning"'     | ''            | ''                    | ''          | ''             | ''             | ''                                               | ''                  | ''          | ''                   |
+			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''             | ''                                               | ''                  | ''          | ''                   |
+			| ''                                               | ''            | ''                    | 'Amount'    | 'Company'      | 'Branch'       | 'Basis'                                          | 'Legal name'        | 'Partner'   | 'Agreement'          |
+			| ''                                               | 'Receipt'     | '30.05.2021 15:09:00' | '1 170'     | 'Main Company' | 'Front office' | 'Purchase invoice 324 dated 30.05.2021 15:09:00' | 'Company Ferron BP' | 'Ferron BP' | 'Vendor Ferron, TRY' |
+		And I close all client application windows
+
+Scenario: _0401022 check there is no Purchase invoice movements by the Register  "R1022 Vendors payment planning" (without aging)
+	* Select Purchase invoice
+		And I close all client application windows
+		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
+		And I go to line in "List" table
+			| 'Number'  |
+			| '117' |
+	* Check movements by the Register  "R1022 Vendors payment planning" 
+		And I click "Registrations report" button
+		And I select "R1022 Vendors payment planning" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		Then "ResultTable" spreadsheet document is equal
+			| 'Purchase invoice 117 dated 12.02.2021 15:12:15' |
+			| 'Document registrations records'                 |
+		And I close all client application windows
+
+Scenario: _0401023 check there is no Purchase invoice movements by the Register  "R5012 Vendors aging" (without aging)
+	* Select Purchase invoice
+		And I close all client application windows
+		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
+		And I go to line in "List" table
+			| 'Number'  |
+			| '117' |
+	* Check movements by the Register  "R5012 Vendors aging" 
+		And I click "Registrations report" button
+		And I select "R5012 Vendors aging" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		Then "ResultTable" spreadsheet document is equal
+			| 'Purchase invoice 117 dated 12.02.2021 15:12:15' |
+			| 'Document registrations records'                 |
+		And I close all client application windows
+
+Scenario: _0401024 check Purchase invoice movements by the Register  "R5012 Vendors aging" (with aging)
+	* Select Purchase invoice
+		And I close all client application windows
+		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
+		And I go to line in "List" table
+			| 'Number'  |
+			| '324' |
+	* Check movements by the Register  "R5012 Vendors aging" 
+		And I click "Registrations report" button
+		And I select "R5012 Vendors aging" exact value from "Register" drop-down list
+		And I click "Generate report" button
+		Then "ResultTable" spreadsheet document is equal
+			| 'Purchase invoice 324 dated 30.05.2021 15:09:00' | ''            | ''                    | ''          | ''             | ''             | ''         | ''                   | ''          | ''                                               | ''                    | ''              |
+			| 'Document registrations records'                 | ''            | ''                    | ''          | ''             | ''             | ''         | ''                   | ''          | ''                                               | ''                    | ''              |
+			| 'Register  "R5012 Vendors aging"'                | ''            | ''                    | ''          | ''             | ''             | ''         | ''                   | ''          | ''                                               | ''                    | ''              |
+			| ''                                               | 'Record type' | 'Period'              | 'Resources' | 'Dimensions'   | ''             | ''         | ''                   | ''          | ''                                               | ''                    | 'Attributes'    |
+			| ''                                               | ''            | ''                    | 'Amount'    | 'Company'      | 'Branch'       | 'Currency' | 'Agreement'          | 'Partner'   | 'Invoice'                                        | 'Payment date'        | 'Aging closing' |
+			| ''                                               | 'Receipt'     | '30.05.2021 15:09:00' | '1 170'     | 'Main Company' | 'Front office' | 'TRY'      | 'Vendor Ferron, TRY' | 'Ferron BP' | 'Purchase invoice 324 dated 30.05.2021 15:09:00' | '07.06.2021 00:00:00' | ''              |
+		And I close all client application windows
+
+Scenario: _0401019 Purchase invoice clear posting/mark for deletion
+	* Select Purchase invoice
+		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
+		And I go to line in "List" table
+			| 'Number'  |
+			| '115' |
+	* Clear posting
+		And in the table "List" I click the button named "ListContextMenuUndoPosting"
+		Then user message window does not contain messages
+		And I click "Registrations report" button
+		And I click "Generate report" button
+		Then "ResultTable" spreadsheet document is equal
+			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' |
+			| 'Document registrations records'                    |
+		And I close current window
+	* Post Purchase invoice
+		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
+		And I go to line in "List" table
+			| 'Number'  |
+			| '115' |
+		And in the table "List" I click the button named "ListContextMenuPost"		
+		Then user message window does not contain messages
+		And I click "Registrations report" button
+		And I click "Generate report" button
+		Then "ResultTable" spreadsheet document contains values
+			| 'R1001 Purchases' |
+			| 'R1021 Vendors transactions' |
+			| 'R4050 Stock inventory' |
+		And I close all client application windows
+	* Mark for deletion
+		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
+		And I go to line in "List" table
+			| 'Number'  |
+			| '115' |
+		And in the table "List" I click the button named "ListContextMenuSetDeletionMark"
+		Then "1C:Enterprise" window is opened
+		And I click "Yes" button
+		Then user message window does not contain messages
+		And I click "Registrations report" button
+		And I click "Generate report" button
+		Then "ResultTable" spreadsheet document is equal
+			| 'Purchase invoice 115 dated 12.02.2021 15:13:56' |
+			| 'Document registrations records'                    |
+		And I close current window
+	* Unmark for deletion and post document
+		Given I open hyperlink "e1cib/list/Document.PurchaseInvoice"
+		And I go to line in "List" table
+			| 'Number'  |
+			| '115' |
+		And in the table "List" I click the button named "ListContextMenuSetDeletionMark"
+		Then "1C:Enterprise" window is opened
+		And I click "Yes" button				
+		Then user message window does not contain messages
+		And in the table "List" I click the button named "ListContextMenuPost"	
+		Then user message window does not contain messages
+		And I click "Registrations report" button
+		And I click "Generate report" button
+		Then "ResultTable" spreadsheet document contains values
+			| 'R1001 Purchases' |
+			| 'R1021 Vendors transactions' |
+			| 'R4050 Stock inventory' |
+		And I close all client application windows
 

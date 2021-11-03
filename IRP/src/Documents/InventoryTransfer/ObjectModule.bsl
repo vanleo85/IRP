@@ -2,17 +2,12 @@ Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 	If DataExchange.Load Then
 		Return;
 	EndIf;
-		
-	If UseShipmentConfirmation And Not UseGoodsReceipt Then
-		CommonFunctionsClientServer.ShowUsersMessage(R().Error_094, "UseGoodsReceipt");
-		Cancel = True;
-	EndIf;
 EndProcedure
 
 Procedure OnWrite(Cancel)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
 EndProcedure
 
 Procedure BeforeDelete(Cancel)
@@ -30,24 +25,22 @@ Procedure UndoPosting(Cancel)
 EndProcedure
 
 Procedure Filling(FillingData, FillingText, StandardProcessing)
-	
-	If FillingData = Undefined Then
-		Return;
-	EndIf;
-	
-	If TypeOf(FillingData) = Type("Structure") Then
-		If FillingData.Property("BasedOn") And FillingData.BasedOn = "InventoryTransferOrder" Then
-			Filling_BasedOnInventoryTransferOrder(FillingData);
-		EndIf;
+	If TypeOf(FillingData) = Type("Structure") And FillingData.Property("BasedOn") Then
+		FillPropertyValues(ThisObject, FillingData, RowIDInfoServer.GetSeperatorColumns(ThisObject.Metadata()));
+		RowIDInfoServer.AddLinkedDocumentRows(ThisObject, FillingData);
 	EndIf;
 EndProcedure
 
-Procedure Filling_BasedOnInventoryTransferOrder(FillingData)
-	FillPropertyValues(ThisObject, FillingData,
-		"StoreSender, StoreReceiver, Company");
-	
-	For Each Row In FillingData.ItemList Do
-		NewRow = ThisObject.ItemList.Add();
-		FillPropertyValues(NewRow, Row);
-	EndDo;
+Procedure FillCheckProcessing(Cancel, CheckedAttributes)
+	If ThisObject.UseShipmentConfirmation And Not ThisObject.UseGoodsReceipt Then
+		CommonFunctionsClientServer.ShowUsersMessage(R().Error_094, "UseGoodsReceipt");
+		Cancel = True;
+	EndIf;
+	If Not Cancel = True Then
+		LinkedFilter = RowIDInfoClientServer.GetLinkedDocumentsFilter_IT(ThisObject);
+		RowIDInfoTable = ThisObject.RowIDInfo.Unload();
+		ItemListTable = ThisObject.ItemList.Unload(,"Key, LineNumber, ItemKey");
+		ItemListTable.Columns.Add("Store", New TypeDescription("CatalogRef.Stores"));
+		RowIDInfoServer.FillCheckProcessing(ThisObject, Cancel, LinkedFilter, RowIDInfoTable, ItemListTable);
+	EndIf;
 EndProcedure

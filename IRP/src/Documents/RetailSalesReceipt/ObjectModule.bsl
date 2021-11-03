@@ -1,16 +1,30 @@
-
 Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
 
-	ThisObject.DocumentAmount = ThisObject.ItemList.Total("TotalAmount");	
+	Payments_Amount = ThisObject.Payments.Total("Amount");
+	ItemList_Amount = ThisObject.ItemList.Total("TotalAmount");
+	If ItemList_Amount <> Payments_Amount Then
+		Cancel = True;
+		CommonFunctionsClientServer.ShowUsersMessage(StrTemplate(R().Error_095, Payments_Amount, ItemList_Amount));
+	EndIf;
+	
+	If Cancel Then
+		Return;
+	EndIf;
+	
+	Parameters = CurrenciesClientServer.GetParameters_V3(ThisObject);
+	CurrenciesClientServer.DeleteRowsByKeyFromCurrenciesTable(ThisObject.Currencies);
+	CurrenciesServer.UpdateCurrencyTable(Parameters, ThisObject.Currencies);
+
+	ThisObject.DocumentAmount = ThisObject.ItemList.Total("TotalAmount");
 EndProcedure
 
 Procedure OnWrite(Cancel)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
 EndProcedure
 
 Procedure BeforeDelete(Cancel)

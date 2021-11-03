@@ -1,26 +1,36 @@
 Procedure TableOnStartEdit(Object, Form, DataPath, Item, NewRow, Clone) Export
 	CurrentData = Item.CurrentData;
-	
+
 	If CurrentData = Undefined Then
 		Return;
 	EndIf;
-	
+
 	If Not NewRow Then
 		Return;
 	ElsIf Clone Then
 		Return;
 	EndIf;
-	
+
 	FillingRowFromSettings(Object, DataPath, CurrentData, True);
-	
+
 	StructureStore = New Structure("CurrentStore", Undefined);
 	FillPropertyValues(StructureStore, Form);
-	
+
 	If Not StructureStore.CurrentStore = Undefined And ValueIsFilled(Form.CurrentStore) Then
-		CurrentData.Store = Form.CurrentStore; 
+		CurrentData.Store = Form.CurrentStore;
+		If ValueIsFilled(CurrentData.Store) And CommonFunctionsClientServer.ObjectHasProperty(CurrentData, "UseShipmentConfirmation") Then
+			StoreInfo = DocumentsServer.GetStoreInfo(CurrentData.Store, CurrentData.ItemKey);
+			If Not StoreInfo.IsService Then
+				CurrentData.UseShipmentConfirmation = StoreInfo.UseShipmentConfirmation;
+			EndIf;
+		EndIf;
+		If ValueIsFilled(CurrentData.Store) And CommonFunctionsClientServer.ObjectHasProperty(CurrentData, "UseGoodsReceipt") Then
+			StoreInfo = DocumentsServer.GetStoreInfo(CurrentData.Store, CurrentData.ItemKey);
+			If Not StoreInfo.IsService Then
+				CurrentData.UseGoodsReceipt = StoreInfo.UseGoodsReceipt;
+			EndIf;
+		EndIf;
 	EndIf;
-		
-	
 EndProcedure
 
 Procedure FillingRowFromSettings(Object, DataPath, Row, OnlyNotFilled = False) Export
@@ -29,13 +39,13 @@ Procedure FillingRowFromSettings(Object, DataPath, Row, OnlyNotFilled = False) E
 		If ArrayItem.KindOfAttribute <> PredefinedValue("Enum.KindsOfAttributes.Column") Then
 			Continue;
 		EndIf;
-		
+
 		TableNameDataPath = "";
 		SegmentsDataPath = StrSplit(DataPath, ".");
 		If SegmentsDataPath.Count() > 1 Then
 			TableNameDataPath = SegmentsDataPath[1];
 		EndIf;
-		
+
 		TableName = "";
 		ColumnName = "";
 		SegmentsAttributeName = StrSplit(ArrayItem.AttributeName, ".");
@@ -43,7 +53,7 @@ Procedure FillingRowFromSettings(Object, DataPath, Row, OnlyNotFilled = False) E
 			TableName = SegmentsAttributeName[0];
 			ColumnName = SegmentsAttributeName[1];
 		EndIf;
-		
+
 		If TableNameEqualToDataPath(TableName, TableNameDataPath, ColumnName) Then
 			If Row.Property(ColumnName) Then
 				If Not OnlyNotFilled Or (OnlyNotFilled And Not ValueIsFilled(Row[ColumnName])) Then
@@ -55,8 +65,6 @@ Procedure FillingRowFromSettings(Object, DataPath, Row, OnlyNotFilled = False) E
 EndProcedure
 
 Function TableNameEqualToDataPath(TableName, TableNameDataPath, ColumnName)
-	Return ValueIsFilled(TableNameDataPath) 
-	       And ValueIsFilled(TableName) 
-	       And ValueIsFilled(ColumnName)
-           And Upper(TrimAll(TableNameDataPath)) = Upper(TrimAll(TableName));
+	Return ValueIsFilled(TableNameDataPath) And ValueIsFilled(TableName) And ValueIsFilled(ColumnName) And Upper(
+		TrimAll(TableNameDataPath)) = Upper(TrimAll(TableName));
 EndFunction

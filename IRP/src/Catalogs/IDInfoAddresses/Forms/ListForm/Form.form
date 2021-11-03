@@ -59,10 +59,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Code</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Code</segments>
       </dataPath>
       <defaultItem>true</defaultItem>
       <extendedTooltip>
@@ -108,10 +106,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Description</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Description</segments>
       </dataPath>
       <extendedTooltip>
         <name>DescriptionExtendedTooltip</name>
@@ -156,10 +152,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Owner</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Owner</segments>
       </dataPath>
       <extendedTooltip>
         <name>OwnerExtendedTooltip</name>
@@ -204,10 +198,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Parent</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Parent</segments>
       </dataPath>
       <extendedTooltip>
         <name>ParentExtendedTooltip</name>
@@ -252,10 +244,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Level</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Level</segments>
       </dataPath>
       <extendedTooltip>
         <name>LevelExtendedTooltip</name>
@@ -300,10 +290,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Country</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Country</segments>
       </dataPath>
       <extendedTooltip>
         <name>CountryExtendedTooltip</name>
@@ -348,10 +336,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.FullDescription</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.FullDescription</segments>
       </dataPath>
       <extendedTooltip>
         <name>FullDescriptionExtendedTooltip</name>
@@ -400,10 +386,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Ref</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Ref</segments>
       </dataPath>
       <extendedTooltip>
         <name>RefExtendedTooltip</name>

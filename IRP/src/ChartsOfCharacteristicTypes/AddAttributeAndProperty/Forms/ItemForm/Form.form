@@ -43,10 +43,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Icon</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Icon</segments>
       </dataPath>
       <titleLocation>None</titleLocation>
       <toolTip>
@@ -109,10 +107,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.ValueType</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.ValueType</segments>
         </dataPath>
         <extendedTooltip>
           <name>ValueTypeExtendedTooltip</name>
@@ -161,10 +157,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.UniqueID</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.UniqueID</segments>
         </dataPath>
         <extendedTooltip>
           <name>UniqueIDExtendedTooltip</name>
@@ -294,6 +288,7 @@
       <autoMaxWidth>true</autoMaxWidth>
       <autoMaxHeight>true</autoMaxHeight>
       <placementArea>UserCmds</placementArea>
+      <toolTipRepresentation>Auto</toolTipRepresentation>
       <representationInContextMenu>Auto</representationInContextMenu>
     </items>
     <visible>true</visible>

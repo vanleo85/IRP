@@ -11,10 +11,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Code</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Code</segments>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -104,10 +102,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Users.Description</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Users.Description</segments>
       </dataPath>
       <extendedTooltip>
         <name>UsersDescriptionExtendedTooltip</name>
@@ -156,10 +152,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Users.Login</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Users.Login</segments>
       </dataPath>
       <extendedTooltip>
         <name>UsersLoginExtendedTooltip</name>
@@ -208,10 +202,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Users.Partner</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Users.Partner</segments>
       </dataPath>
       <extendedTooltip>
         <name>UsersPartnerExtendedTooltip</name>
@@ -465,6 +457,7 @@
       <autoMaxWidth>true</autoMaxWidth>
       <autoMaxHeight>true</autoMaxHeight>
       <placementArea>UserCmds</placementArea>
+      <toolTipRepresentation>Auto</toolTipRepresentation>
       <representationInContextMenu>Auto</representationInContextMenu>
     </items>
     <visible>true</visible>

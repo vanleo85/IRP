@@ -59,10 +59,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Number</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Number</segments>
       </dataPath>
       <defaultItem>true</defaultItem>
       <extendedTooltip>
@@ -108,10 +106,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Date</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Date</segments>
       </dataPath>
       <extendedTooltip>
         <name>DateExtendedTooltip</name>
@@ -156,10 +152,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Company</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Company</segments>
       </dataPath>
       <extendedTooltip>
         <name>CompanyExtendedTooltip</name>
@@ -254,10 +248,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Author</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Author</segments>
       </dataPath>
       <extendedTooltip>
         <name>AuthorExtendedTooltip</name>
@@ -302,10 +294,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Ref</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Ref</segments>
       </dataPath>
       <extendedTooltip>
         <name>RefExtendedTooltip</name>
@@ -577,7 +567,7 @@
 	OpeningEntry.Posted,
 	OpeningEntry.Company,
 	OpeningEntry.Author,
-	OpeningEntry.BusinessUnit,
+	OpeningEntry.Branch,
 	OpeningEntry.Description,
 	CASE WHEN COUNT(DISTINCT OpeningEntryInventory.Store) = 1 THEN
 		MAX(OpeningEntryInventory.Store)
@@ -594,7 +584,7 @@ GROUP BY
 	OpeningEntry.Posted,
 	OpeningEntry.Company,
 	OpeningEntry.Author,
-	OpeningEntry.BusinessUnit,
+	OpeningEntry.Branch,
 	OpeningEntry.Description</queryText>
       <mainTable>Document.OpeningEntry</mainTable>
       <dynamicDataRead>true</dynamicDataRead>

@@ -165,23 +165,6 @@ Scenario: Open object form "CashTransferOrder"
 
 
 
-	
-	
-Scenario: Open list form "ChequeBondTransaction" 
-	And I close all client application windows
-	Given I open "ChequeBondTransaction" document default form
-	If the warning is displayed then
-		Then I raise "Failed to open document form ChequeBondTransaction" exception
-	And I close current window
-
-Scenario: Open object form "ChequeBondTransaction"
-	And I close all client application windows
-	Given I open "ChequeBondTransaction" document main form
-	If the warning is displayed then
-		Then I raise "Failed to open document form ChequeBondTransaction" exception
-	And I close current window
-
-
 
 
 	
@@ -499,10 +482,6 @@ Scenario: Open object form "PurchaseReturnOrder"
 	And I close current window
 
 
-
-
-	
-	
 Scenario: Open list form "ReconciliationStatement" 
 	And I close all client application windows
 	Given I open "ReconciliationStatement" document default form
@@ -517,7 +496,7 @@ Scenario: Open object form "ReconciliationStatement"
 		Then I raise "Failed to open document form ReconciliationStatement" exception
 	And I close current window
 
-
+	
 
 
 	
@@ -757,4 +736,32 @@ Scenario: Open object form "SalesOrderClosing"
 	Given I open "SalesOrderClosing" document main form
 	If the warning is displayed then
 		Then I raise "Failed to open document form SalesOrderClosing" exception
+	And I close current window
+
+Scenario: Open list form "VendorsAdvancesClosing" 
+	And I close all client application windows
+	Given I open "VendorsAdvancesClosing" document default form
+	If the warning is displayed then
+		Then I raise "Failed to open document form VendorsAdvancesClosing" exception
+	And I close current window
+
+Scenario: Open object form "VendorsAdvancesClosing"
+	And I close all client application windows
+	Given I open "VendorsAdvancesClosing" document main form
+	If the warning is displayed then
+		Then I raise "Failed to open document form VendorsAdvancesClosing" exception
+	And I close current window
+
+Scenario: Open list form "CustomersAdvancesClosing" 
+	And I close all client application windows
+	Given I open "CustomersAdvancesClosing" document default form
+	If the warning is displayed then
+		Then I raise "Failed to open document form CustomersAdvancesClosing" exception
+	And I close current window
+
+Scenario: Open object form "CustomersAdvancesClosing"
+	And I close all client application windows
+	Given I open "CustomersAdvancesClosing" document main form
+	If the warning is displayed then
+		Then I raise "Failed to open document form CustomersAdvancesClosing" exception
 	And I close current window

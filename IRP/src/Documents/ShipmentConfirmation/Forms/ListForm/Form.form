@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form:Form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://g5.1c.ru/v8/dt/mcore" xmlns:form="http://g5.1c.ru/v8/dt/form">
+<form:Form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:core="http://g5.1c.ru/v8/dt/mcore" xmlns:form="http://g5.1c.ru/v8/dt/form" xmlns:schema="http://g5.1c.ru/v8/dt/data-composition-system/schema">
   <items xsi:type="form:FormGroup">
     <name>ListSettingsComposerUserSettings</name>
     <id>1</id>
@@ -59,10 +59,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Number</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Number</segments>
       </dataPath>
       <defaultItem>true</defaultItem>
       <extendedTooltip>
@@ -108,10 +106,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Date</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Date</segments>
       </dataPath>
       <extendedTooltip>
         <name>DateExtendedTooltip</name>
@@ -156,10 +152,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Company</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Company</segments>
       </dataPath>
       <extendedTooltip>
         <name>CompanyExtendedTooltip</name>
@@ -258,10 +252,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.TransactionType</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.TransactionType</segments>
       </dataPath>
       <extendedTooltip>
         <name>TransactionTypeExtendedTooltip</name>
@@ -303,6 +295,60 @@
       </extInfo>
     </items>
     <items xsi:type="form:FormField">
+      <name>Status</name>
+      <id>40</id>
+      <title>
+        <key>en</key>
+        <value>Status</value>
+      </title>
+      <visible>true</visible>
+      <enabled>true</enabled>
+      <userVisible>
+        <common>true</common>
+      </userVisible>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Status</segments>
+      </dataPath>
+      <extendedTooltip>
+        <name>StatusExtendedTooltip</name>
+        <id>42</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <type>Label</type>
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <extInfo xsi:type="form:LabelDecorationExtInfo">
+          <horizontalAlign>Left</horizontalAlign>
+        </extInfo>
+      </extendedTooltip>
+      <contextMenu>
+        <name>StatusContextMenu</name>
+        <id>41</id>
+        <visible>true</visible>
+        <enabled>true</enabled>
+        <userVisible>
+          <common>true</common>
+        </userVisible>
+        <autoFill>true</autoFill>
+      </contextMenu>
+      <type>InputField</type>
+      <editMode>Enter</editMode>
+      <showInHeader>true</showInHeader>
+      <headerHorizontalAlign>Left</headerHorizontalAlign>
+      <showInFooter>true</showInFooter>
+      <extInfo xsi:type="form:InputFieldExtInfo">
+        <autoMaxWidth>true</autoMaxWidth>
+        <autoMaxHeight>true</autoMaxHeight>
+        <wrap>true</wrap>
+        <chooseType>true</chooseType>
+        <typeDomainEnabled>true</typeDomainEnabled>
+        <textEdit>true</textEdit>
+      </extInfo>
+    </items>
+    <items xsi:type="form:FormField">
       <name>Partner</name>
       <id>31</id>
       <visible>true</visible>
@@ -310,10 +356,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Partner</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Partner</segments>
       </dataPath>
       <extendedTooltip>
         <name>PartnerExtendedTooltip</name>
@@ -362,10 +406,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Author</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Author</segments>
       </dataPath>
       <extendedTooltip>
         <name>AuthorExtendedTooltip</name>
@@ -414,10 +456,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Ref</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Ref</segments>
       </dataPath>
       <extendedTooltip>
         <name>RefExtendedTooltip</name>
@@ -681,25 +721,53 @@
     <main>true</main>
     <extInfo xsi:type="form:DynamicListExtInfo">
       <queryText>SELECT
-	ShipmentConfirmation.Ref,
-	ShipmentConfirmation.DeletionMark,
-	ShipmentConfirmation.Number,
-	ShipmentConfirmation.Date,
-	ShipmentConfirmation.Posted,
-	ShipmentConfirmation.Company,
-	ShipmentConfirmation.LegalName,
-	ShipmentConfirmation.Partner,
-	ShipmentConfirmation.TransactionType,
-	ShipmentConfirmation.Author,
-	ShipmentConfirmation.BusinessUnit,
-	ShipmentConfirmation.Description,
-	CASE WHEN COUNT(DISTINCT ShipmentConfirmationItemList.Store) = 1 THEN
-		MAX(ShipmentConfirmationItemList.Store)
-	ELSE UNDEFINED END AS Store
+	ShipmentConfirmationItemList.Ref AS Ref,
+	COUNT(DISTINCT ShipmentConfirmationItemList.Store) AS StoreCount,
+	MAX(ShipmentConfirmationItemList.Store) AS Store,
+	SUM(ISNULL(ShipmentConfirmationItemList.QuantityInBaseUnit, 0)) AS QuantityInBaseUnit
+INTO ItemListTable
+FROM
+	Document.ShipmentConfirmation.ItemList AS ShipmentConfirmationItemList
+GROUP BY
+	ShipmentConfirmationItemList.Ref
+
+INDEX BY
+	Ref
+;
+
+////////////////////////////////////////////////////////////////////////////////
+ SELECT
+	ShipmentConfirmation.Ref AS Ref,
+	CASE
+		WHEN ISNULL(R2031B_ShipmentInvoicingBalance.QuantityBalance, 0) = 0
+			THEN VALUE(Enum.InvoicingStatuses.Closed)
+		WHEN ItemListTable.QuantityInBaseUnit = ISNULL(R2031B_ShipmentInvoicingBalance.QuantityBalance, 0)
+			THEN VALUE(Enum.InvoicingStatuses.Awaiting)
+		WHEN ItemListTable.QuantityInBaseUnit &lt;> ISNULL(R2031B_ShipmentInvoicingBalance.QuantityBalance, 0)
+			THEN VALUE(Enum.InvoicingStatuses.Invoicing)
+	END AS Status,
+	ShipmentConfirmation.DeletionMark AS DeletionMark,
+	ShipmentConfirmation.Number AS Number,
+	ShipmentConfirmation.Date AS Date,
+	ShipmentConfirmation.Posted AS Posted,
+	ShipmentConfirmation.Company AS Company,
+	ShipmentConfirmation.LegalName AS LegalName,
+	ShipmentConfirmation.Partner AS Partner,
+	ShipmentConfirmation.TransactionType AS TransactionType,
+	ShipmentConfirmation.Author AS Author,
+	ShipmentConfirmation.Branch AS Branch,
+	ShipmentConfirmation.Description AS Description,
+	CASE
+		WHEN ItemListTable.StoreCount = 1
+			THEN ItemListTable.Store
+		ELSE VALUE(Catalog.Stores.EmptyRef)
+	END AS Store
 FROM
 	Document.ShipmentConfirmation AS ShipmentConfirmation
-		LEFT JOIN Document.ShipmentConfirmation.ItemList AS ShipmentConfirmationItemList
-		ON ShipmentConfirmationItemList.Ref = ShipmentConfirmation.Ref
+		LEFT JOIN ItemListTable AS ItemListTable
+		ON ItemListTable.Ref = ShipmentConfirmation.Ref
+		LEFT JOIN AccumulationRegister.R2031B_ShipmentInvoicing.Balance AS R2031B_ShipmentInvoicingBalance
+		ON ShipmentConfirmation.Ref = CAST(R2031B_ShipmentInvoicingBalance.Basis AS Document.ShipmentConfirmation)
 GROUP BY
 	ShipmentConfirmation.Ref,
 	ShipmentConfirmation.DeletionMark,
@@ -711,14 +779,108 @@ GROUP BY
 	ShipmentConfirmation.Partner,
 	ShipmentConfirmation.TransactionType,
 	ShipmentConfirmation.Author,
-	ShipmentConfirmation.BusinessUnit,
-	ShipmentConfirmation.Description</queryText>
+	ShipmentConfirmation.Branch,
+	ShipmentConfirmation.Description,
+	CASE
+		WHEN ItemListTable.StoreCount = 1
+			THEN ItemListTable.Store
+		ELSE VALUE(Catalog.Stores.EmptyRef)
+	END,
+	R2031B_ShipmentInvoicingBalance.QuantityBalance,
+	CASE
+		WHEN ISNULL(R2031B_ShipmentInvoicingBalance.QuantityBalance, 0) = 0
+			THEN VALUE(Enum.InvoicingStatuses.Closed)
+		WHEN ItemListTable.QuantityInBaseUnit = ISNULL(R2031B_ShipmentInvoicingBalance.QuantityBalance, 0)
+			THEN VALUE(Enum.InvoicingStatuses.Awaiting)
+		WHEN ItemListTable.QuantityInBaseUnit &lt;> ISNULL(R2031B_ShipmentInvoicingBalance.QuantityBalance, 0)
+			THEN VALUE(Enum.InvoicingStatuses.Invoicing)
+	END</queryText>
       <mainTable>Document.ShipmentConfirmation</mainTable>
       <dynamicDataRead>true</dynamicDataRead>
       <autoFillAvailableFields>true</autoFillAvailableFields>
       <customQuery>true</customQuery>
       <autoSaveUserSettings>true</autoSaveUserSettings>
       <getInvisibleFieldPresentations>true</getInvisibleFieldPresentations>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>Ref</dataPath>
+        <field>Ref</field>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>Status</dataPath>
+        <field>Status</field>
+        <title>
+          <localValue>
+            <content>
+              <key>en</key>
+              <value>Status</value>
+            </content>
+          </localValue>
+        </title>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>DeletionMark</dataPath>
+        <field>DeletionMark</field>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>Number</dataPath>
+        <field>Number</field>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>Date</dataPath>
+        <field>Date</field>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>Posted</dataPath>
+        <field>Posted</field>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>Company</dataPath>
+        <field>Company</field>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>LegalName</dataPath>
+        <field>LegalName</field>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>Partner</dataPath>
+        <field>Partner</field>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>TransactionType</dataPath>
+        <field>TransactionType</field>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>Author</dataPath>
+        <field>Author</field>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>Branch</dataPath>
+        <field>Branch</field>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>Description</dataPath>
+        <field>Description</field>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>Store</dataPath>
+        <field>Store</field>
+        <title>
+          <localValue>
+            <content>
+              <key>en</key>
+              <value>Store</value>
+            </content>
+          </localValue>
+        </title>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>Basis</dataPath>
+        <field>Basis</field>
+      </fields>
+      <fields xsi:type="schema:DataCompositionSchemaDataSetField">
+        <dataPath>ItemKey</dataPath>
+        <field>ItemKey</field>
+      </fields>
     </extInfo>
   </attributes>
   <commandInterface>

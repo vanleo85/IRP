@@ -11,10 +11,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Code</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Code</segments>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -92,10 +90,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.Parent</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.Parent</segments>
     </dataPath>
     <extendedTooltip>
       <name>ParentExtendedTooltip</name>
@@ -144,10 +140,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.UniqueID</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.UniqueID</segments>
     </dataPath>
     <extendedTooltip>
       <name>UniqueIDExtendedTooltip</name>
@@ -196,10 +190,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.Type</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.Type</segments>
     </dataPath>
     <extendedTooltip>
       <name>TypeExtendedTooltip</name>
@@ -253,10 +245,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.UseSerialLotNumber</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.UseSerialLotNumber</segments>
     </dataPath>
     <extendedTooltip>
       <name>UseSerialLotNumberExtendedTooltip</name>
@@ -316,10 +306,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.AvailableAttributes.LineNumber</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.AvailableAttributes.LineNumber</segments>
           </dataPath>
           <extendedTooltip>
             <name>AvailableAttributesLineNumberExtendedTooltip</name>
@@ -368,10 +356,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.AvailableAttributes.Attribute</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.AvailableAttributes.Attribute</segments>
           </dataPath>
           <extendedTooltip>
             <name>AvailableAttributesPropertyExtendedTooltip</name>
@@ -420,10 +406,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.AvailableAttributes.AffectPricing</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.AvailableAttributes.AffectPricing</segments>
           </dataPath>
           <extendedTooltip>
             <name>AvailableAttributesAffectPricingExtendedTooltip</name>
@@ -465,10 +449,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.AvailableAttributes.Required</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.AvailableAttributes.Required</segments>
           </dataPath>
           <extendedTooltip>
             <name>AvailableAttributesRequiredExtendedTooltip</name>
@@ -510,10 +492,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.AvailableAttributes.ShowInHTML</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.AvailableAttributes.ShowInHTML</segments>
           </dataPath>
           <extendedTooltip>
             <name>AvailableAttributesShowInHTMLExtendedTooltip</name>

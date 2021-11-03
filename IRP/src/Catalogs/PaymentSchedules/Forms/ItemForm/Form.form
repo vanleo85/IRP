@@ -11,10 +11,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.Code</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.Code</segments>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -104,10 +102,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.StagesOfPayment.LineNumber</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.StagesOfPayment.LineNumber</segments>
       </dataPath>
       <extendedTooltip>
         <name>StagesOfPaymentLineNumberExtendedTooltip</name>
@@ -152,10 +148,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.StagesOfPayment.CalculationType</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.StagesOfPayment.CalculationType</segments>
       </dataPath>
       <extendedTooltip>
         <name>StagesOfPaymentCalculationTypeExtendedTooltip</name>
@@ -204,10 +198,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.StagesOfPayment.ProportionOfPayment</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.StagesOfPayment.ProportionOfPayment</segments>
       </dataPath>
       <extendedTooltip>
         <name>StagesOfPaymentProportionOfPaymentExtendedTooltip</name>
@@ -256,10 +248,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.StagesOfPayment.DuePeriod</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.StagesOfPayment.DuePeriod</segments>
       </dataPath>
       <extendedTooltip>
         <name>StagesOfPaymentDuePeriodExtendedTooltip</name>

@@ -1,7 +1,11 @@
 Procedure BeforeWrite(Cancel, WriteMode, PostingMode)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
+
+	Parameters = CurrenciesClientServer.GetParameters_V3(ThisObject);
+	CurrenciesClientServer.DeleteRowsByKeyFromCurrenciesTable(ThisObject.Currencies);
+	CurrenciesServer.UpdateCurrencyTable(Parameters, ThisObject.Currencies);
 
 	ThisObject.DocumentAmount = CalculationServer.CalculateDocumentAmount(ItemList);
 EndProcedure
@@ -9,7 +13,7 @@ EndProcedure
 Procedure OnWrite(Cancel)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
 EndProcedure
 
 Procedure BeforeDelete(Cancel)
@@ -52,7 +56,7 @@ Procedure Filling(FillingData, FillingText, StandardProcessing)
 	EndIf;
 	If FillingData.Property("SalesOrder") Then
 		CloseOrder = True;
-		SalesOrder = FillingData.SalesOrder; 
+		SalesOrder = FillingData.SalesOrder;
 		If CloseOrder Then
 			SalesOrderData = DocSalesOrderServer.GetSalesOrderForClosing(FillingData.SalesOrder);
 		Else
@@ -70,7 +74,7 @@ Procedure Filling(FillingData, FillingText, StandardProcessing)
 		Number = Undefined;
 		Date = Undefined;
 	EndIf;
-	
+
 EndProcedure
 
 Procedure OnCopy(CopiedObject)

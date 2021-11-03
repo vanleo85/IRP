@@ -19,29 +19,21 @@ Procedure NotificationProcessing(EventName, Parameter, Source, AddInfo = Undefin
 	If EventName = "UpdateAddAttributeAndPropertySets" Then
 		AddAttributesCreateFormControl();
 	EndIf;
-	
+
+	If EventName = "LockLinkedRows" Then
+		If Source <> ThisObject Then
+			LockLinkedRows();
+		EndIf;
+	EndIf;
+
 	If Not Source = ThisObject Then
 		Return;
 	EndIf;
-	
+
 	DocRetailSalesReceiptClient.NotificationProcessing(Object, ThisObject, EventName, Parameter, Source);
-	
-	ServerData = Undefined;		
-	If TypeOf(Parameter) = Type("Structure") And Parameter.Property("AddInfo") Then
-		ServerData = CommonFunctionsClientServer.GetFromAddInfo(Parameter.AddInfo, "ServerData");
-	EndIf;
-	
+
 	If EventName = "NewBarcode" And IsInputAvailable() Then
 		SearchByBarcode(Undefined, Parameter);
-	EndIf;
-	
-	If Upper(EventName) = Upper("CallbackHandler") Then
-		CurrenciesClient.CalculateAmount(Object, ThisObject);
-		CurrenciesClient.SetRatePresentation(Object, ThisObject);
-				
-		If ServerData <> Undefined Then
-			CurrenciesClient.SetVisibleRows(Object, ThisObject, Parameter.AddInfo);
-		EndIf;
 	EndIf;
 EndProcedure
 
@@ -60,10 +52,15 @@ Procedure AfterWrite(WriteParameters, AddInfo = Undefined) Export
 	DocRetailSalesReceiptClient.AfterWriteAtClient(Object, ThisObject, WriteParameters);
 EndProcedure
 
+&AtClient
+Procedure ItemListBeforeDeleteRow(Item, Cancel)
+	DocRetailSalesReceiptClient.ItemListBeforeDeleteRow(Object, ThisObject, Item, Cancel);
+EndProcedure
+
 &AtServer
 Procedure AfterWriteAtServer(CurrentObject, WriteParameters, AddInfo = Undefined) Export
 	DocRetailSalesReceiptServer.AfterWriteAtServer(Object, ThisObject, CurrentObject, WriteParameters);
-	SetVisibilityAvailability(Object, ThisObject);
+	SetVisibilityAvailability(CurrentObject, ThisObject);
 EndProcedure
 
 &AtServer
@@ -77,9 +74,15 @@ Procedure BeforeWriteAtServer(Cancel, CurrentObject, WriteParameters)
 	AddAttributesAndPropertiesServer.BeforeWriteAtServer(ThisObject, Cancel, CurrentObject, WriteParameters);
 EndProcedure
 
+&AtClient
+Procedure FormSetVisibilityAvailability() Export
+	SetVisibilityAvailability(Object, ThisObject);
+EndProcedure
+
 &AtClientAtServerNoContext
-Procedure SetVisibilityAvailability(Object, Form) Export
+Procedure SetVisibilityAvailability(Object, Form)
 	Form.Items.LegalName.Enabled = ValueIsFilled(Object.Partner);
+	Form.Items.EditCurrencies.Enabled = Not Form.ReadOnly;
 EndProcedure
 
 #EndRegion
@@ -107,6 +110,11 @@ Procedure LegalNameOnChange(Item, AddInfo = Undefined) Export
 EndProcedure
 
 &AtClient
+Procedure LegalNameContractOnChange(Item)
+	DocRetailSalesReceiptClient.LegalNameContractOnChange(Object, ThisObject, Item);
+EndProcedure
+
+&AtClient
 Procedure AgreementOnChange(Item, AddInfo = Undefined) Export
 	DocRetailSalesReceiptClient.AgreementOnChange(Object, ThisObject, Item);
 EndProcedure
@@ -131,6 +139,11 @@ Procedure ManagerOnChange(Item)
 	Return;
 EndProcedure
 
+&AtClient
+Procedure RetailCustomerOnChange(Item)
+	DocRetailSalesReceiptClient.RetailCustomerOnChange(Object, ThisObject, Item);
+EndProcedure
+
 #EndRegion
 
 #Region ItemListEvents
@@ -138,6 +151,7 @@ EndProcedure
 &AtClient
 Procedure ItemListAfterDeleteRow(Item)
 	DocRetailSalesReceiptClient.ItemListAfterDeleteRow(Object, ThisObject, Item);
+	LockLinkedRows();
 EndProcedure
 
 &AtClient
@@ -147,10 +161,7 @@ EndProcedure
 
 &AtClient
 Procedure ItemListOnStartEdit(Item, NewRow, Clone)
-	If Clone Then
-		Item.CurrentData.Key = New UUID();
-	EndIf;
-	DocumentsClient.TableOnStartEdit(Object, ThisObject, "Object.ItemList", Item, NewRow, Clone);
+	DocRetailSalesReceiptClient.ItemListOnStartEdit(Object, ThisObject, Item, NewRow, Clone);
 EndProcedure
 
 &AtClient
@@ -160,7 +171,7 @@ EndProcedure
 
 &AtClient
 Procedure ItemListSelection(Item, RowSelected, Field, StandardProcessing)
-	DocRetailSalesReceiptClient.ItemListSelection(Object, ThisObject, Item, RowSelected, Field, StandardProcessing);	
+	DocRetailSalesReceiptClient.ItemListSelection(Object, ThisObject, Item, RowSelected, Field, StandardProcessing);
 EndProcedure
 
 #EndRegion
@@ -229,12 +240,14 @@ EndProcedure
 
 &AtClient
 Procedure ItemListSerialLotNumbersPresentationStartChoice(Item, ChoiceData, StandardProcessing, AddInfo = Undefined) Export
-	DocRetailSalesReceiptClient.ItemListSerialLotNumbersPresentationStartChoice(Object, ThisObject, Item, ChoiceData, StandardProcessing);
+	DocRetailSalesReceiptClient.ItemListSerialLotNumbersPresentationStartChoice(Object, ThisObject, Item, ChoiceData,
+		StandardProcessing);
 EndProcedure
 
 &AtClient
 Procedure ItemListSerialLotNumbersPresentationClearing(Item, StandardProcessing)
-	DocRetailSalesReceiptClient.ItemListSerialLotNumbersPresentationClearing(Object, ThisObject, Item, StandardProcessing);
+	DocRetailSalesReceiptClient.ItemListSerialLotNumbersPresentationClearing(Object, ThisObject, Item,
+		StandardProcessing);
 EndProcedure
 
 &AtClient
@@ -320,15 +333,13 @@ EndProcedure
 
 &AtClient
 Procedure SetSpecialOffers(Command)
-	OffersClient.OpenFormPickupSpecialOffers_ForDocument(Object,
-		ThisObject,
-		"SpecialOffersEditFinish_ForDocument");
+	OffersClient.OpenFormPickupSpecialOffers_ForDocument(Object, ThisObject, "SpecialOffersEditFinish_ForDocument");
 EndProcedure
 
 &AtClient
 Procedure SpecialOffersEditFinish_ForDocument(Result, AdditionalParameters) Export
 	OffersClient.SpecialOffersEditFinish_ForDocument(Result, Object, ThisObject, AdditionalParameters);
-	
+
 EndProcedure
 
 #EndRegion
@@ -337,9 +348,7 @@ EndProcedure
 
 &AtClient
 Procedure SetSpecialOffersAtRow(Command)
-	OffersClient.OpenFormPickupSpecialOffers_ForRow(Object,
-		Items.ItemList.CurrentData,
-		ThisObject,
+	OffersClient.OpenFormPickupSpecialOffers_ForRow(Object, Items.ItemList.CurrentData, ThisObject,
 		"SpecialOffersEditFinish_ForRow");
 EndProcedure
 
@@ -389,6 +398,11 @@ Procedure SearchByBarcode(Command, Barcode = "")
 EndProcedure
 
 &AtClient
+Procedure OpenScanForm(Command)
+	DocumentsClient.OpenScanForm(Object, ThisObject, Command);
+EndProcedure
+
+&AtClient
 Procedure ShowRowKey(Command)
 	DocumentsClient.ShowRowKey(ThisObject);
 EndProcedure
@@ -404,47 +418,9 @@ EndProcedure
 
 &AtServer
 Function Taxes_CreateFormControls(AddInfo = Undefined) Export
-	Return TaxesServer.CreateFormControls_RetailDocuments(Object, ThisObject, AddInfo);
+	Return TaxesServer.CreateFormControls_ItemList(Object, ThisObject, AddInfo);
 EndFunction
 
-#EndRegion
-
-#Region Currencies
-
-&AtClient
-Procedure CurrenciesSelection(Item, RowSelected, Field, StandardProcessing, AddInfo = Undefined)
-	CommonFunctionsClientServer.PutToAddInfo(AddInfo, "ExecuteAtClient", True);
-	CurrenciesClient.CurrenciesTable_Selection(Object, ThisObject, Item, RowSelected, Field, StandardProcessing, AddInfo);
-EndProcedure
-
-&AtClient
-Procedure CurrenciesRatePresentationOnChange(Item, AddInfo = Undefined)
-	CommonFunctionsClientServer.PutToAddInfo(AddInfo, "ExecuteAtClient", True);
-	CurrenciesClient.CurrenciesTable_RatePresentationOnChange(Object, ThisObject, Item, AddInfo);
-EndProcedure
-
-&AtClient
-Procedure CurrenciesMultiplicityOnChange(Item, AddInfo = Undefined)
-	CommonFunctionsClientServer.PutToAddInfo(AddInfo, "ExecuteAtClient", True);
-	CurrenciesClient.CurrenciesTable_MultiplicityOnChange(Object, ThisObject, Item, AddInfo);
-EndProcedure
-
-&AtClient
-Procedure CurrenciesAmountOnChange(Item, AddInfo = Undefined)
-	CommonFunctionsClientServer.PutToAddInfo(AddInfo, "ExecuteAtClient", True);
-	CurrenciesClient.CurrenciesTable_AmountOnChange(Object, ThisObject, Item, AddInfo);
-EndProcedure
-
-&AtClient
-Procedure CurrenciesBeforeAddRow(Item, Cancel, Clone, Parent, IsFolder, Parameter)
-	Cancel = True;
-EndProcedure
-
-&AtClient
-Procedure CurrenciesBeforeDeleteRow(Item, Cancel)
-	Cancel = True;
-EndProcedure
-	
 #EndRegion
 
 #Region AddAttributes
@@ -466,7 +442,7 @@ EndProcedure
 &AtClient
 Procedure GeneratedFormCommandActionByName(Command) Export
 	ExternalCommandsClient.GeneratedFormCommandActionByName(Object, ThisObject, Command.Name);
-	GeneratedFormCommandActionByNameServer(Command.Name);	
+	GeneratedFormCommandActionByNameServer(Command.Name);
 EndProcedure
 
 &AtServer
@@ -475,3 +451,51 @@ Procedure GeneratedFormCommandActionByNameServer(CommandName) Export
 EndProcedure
 
 #EndRegion
+
+&AtServer
+Procedure LockLinkedRows()
+	RowIDInfoServer.LockLinkedRows(Object, ThisObject);
+	RowIDInfoServer.SetAppearance(Object, ThisObject);
+EndProcedure
+
+&AtServer
+Procedure UnlockLockLinkedRows()
+	RowIDInfoServer.UnlockLinkedRows(Object, ThisObject);
+EndProcedure
+
+&AtClient
+Procedure FromUnlockLinkedRows(Command)
+	Items.FormUnlockLinkedRows.Check = Not Items.FormUnlockLinkedRows.Check;
+	If Items.FormUnlockLinkedRows.Check Then
+		UnlockLockLinkedRows();
+	Else
+		LockLinkedRows();
+	EndIf;
+EndProcedure
+
+#Region Service
+
+&AtClient
+Function GetProcessingModule() Export
+	Str = New Structure;
+	Str.Insert("Client", DocRetailSalesReceiptClient);
+	Str.Insert("Server", DocRetailSalesReceiptServer);
+	Return Str;
+EndFunction
+
+#EndRegion
+
+&AtClient
+Procedure EditCurrencies(Command)
+	FormParameters = CurrenciesClientServer.GetParameters_V3(Object);
+	NotifyParameters = New Structure();
+	NotifyParameters.Insert("Object", Object);
+	NotifyParameters.Insert("Form"  , ThisObject);
+	Notify = New NotifyDescription("EditCurrenciesContinue", CurrenciesClient, NotifyParameters);
+	OpenForm("CommonForm.EditCurrencies", FormParameters, , , , , Notify, FormWindowOpeningMode.LockOwnerWindow);
+EndProcedure
+
+&AtClient
+Procedure ShowHiddenTables(Command)
+	DocumentsClient.ShowHiddenTables(Object, ThisObject);
+EndProcedure

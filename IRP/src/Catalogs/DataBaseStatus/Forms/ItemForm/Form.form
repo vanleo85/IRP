@@ -40,10 +40,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.isProduction</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.isProduction</segments>
     </dataPath>
     <extendedTooltip>
       <name>isProductionExtendedTooltip</name>
@@ -85,10 +83,8 @@
     <userVisible>
       <common>true</common>
     </userVisible>
-    <dataPath xsi:type="form:MultiLanguageDataPath">
-      <paths xsi:type="form:DataPath">
-        <segments>Object.SelectedStyle</segments>
-      </paths>
+    <dataPath xsi:type="form:DataPath">
+      <segments>Object.SelectedStyle</segments>
     </dataPath>
     <extendedTooltip>
       <name>SelectedStyleExtendedTooltip</name>
@@ -149,10 +145,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.ConnectionSettings.LineNumber</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.ConnectionSettings.LineNumber</segments>
       </dataPath>
       <extendedTooltip>
         <name>ConnectionSettingsLineNumberExtendedTooltip</name>
@@ -201,10 +195,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.ConnectionSettings.Computer</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.ConnectionSettings.Computer</segments>
       </dataPath>
       <extendedTooltip>
         <name>ConnectionSettingsComputerExtendedTooltip</name>
@@ -253,10 +245,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>Object.ConnectionSettings.ConnectionString</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>Object.ConnectionSettings.ConnectionString</segments>
       </dataPath>
       <extendedTooltip>
         <name>ConnectionSettingsConnectionStringExtendedTooltip</name>

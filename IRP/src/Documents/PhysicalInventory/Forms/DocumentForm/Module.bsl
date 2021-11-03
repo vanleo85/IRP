@@ -10,11 +10,19 @@ Procedure NotificationProcessing(EventName, Parameter, Source, AddInfo = Undefin
 	If EventName = "UpdateAddAttributeAndPropertySets" Then
 		AddAttributesCreateFormControl();
 	EndIf;
+	
 	If EventName = "NewBarcode" And IsInputAvailable() Then
 		SearchByBarcode(Undefined, Parameter);
 	EndIf;
-	If EventName = "CreatedPhysicalCountByLocations" AND Source = Object.Ref Then
+	
+	If EventName = "CreatedPhysicalCountByLocations" And Source = Object.Ref Then
 		UpdatePhysicalCountByLocationsAtServer();
+	EndIf;
+	
+	If EventName = "LockLinkedRows" Then
+		If Source <> ThisObject Then
+			LockLinkedRows();
+		EndIf;
 	EndIf;
 EndProcedure
 
@@ -22,6 +30,12 @@ EndProcedure
 Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	DocPhysicalInventoryServer.OnCreateAtServer(Object, ThisObject, Cancel, StandardProcessing);
 EndProcedure
+
+&AtClient
+Procedure AfterWrite(WriteParameters)
+	DocPhysicalInventoryClient.AfterWriteAtClient(Object, ThisObject, WriteParameters);
+EndProcedure
+
 
 &AtServer
 Procedure OnReadAtServer(CurrentObject)
@@ -47,16 +61,21 @@ EndProcedure
 #EndRegion
 
 #Region ItemsFormEvents
+
 &AtClient
 Procedure ItemListOnChange(Item, AddInfo = Undefined) Export
 	DocPhysicalInventoryClient.ItemListOnChange(Object, ThisObject, Item);
 EndProcedure
 
 &AtClient
+Procedure ItemListAfterDeleteRow(Item)
+	DocPhysicalInventoryClient.ItemListAfterDeleteRow(Object, ThisObject, Item);
+	LockLinkedRows();
+EndProcedure
+
+&AtClient
 Procedure ItemListOnStartEdit(Item, NewRow, Clone)
-	If Clone Then
-		Item.CurrentData.Key = New UUID();
-	EndIf;
+	DocPhysicalInventoryClient.ItemListOnStartEdit(Object, ThisObject, Item, NewRow, Clone);
 EndProcedure
 
 &AtClient
@@ -70,12 +89,10 @@ Procedure ItemListItemKeyOnChange(Item)
 	If CurrentRow = Undefined Then
 		Return;
 	EndIf;
-	
+
 	CalculationSettings = New Structure();
 	CalculationSettings.Insert("UpdateUnit");
-	CalculationStringsClientServer.CalculateItemsRow(Object,
-		CurrentRow,
-		CalculationSettings);
+	CalculationStringsClientServer.CalculateItemsRow(Object, CurrentRow, CalculationSettings);
 EndProcedure
 
 &AtClient
@@ -109,7 +126,7 @@ Procedure ItemListPhysCountOnChange(Item)
 	If CurrentRow = Undefined Then
 		Return;
 	EndIf;
-	
+
 	CurrentRow.Difference = CurrentRow.PhysCount - CurrentRow.ExpCount;
 EndProcedure
 
@@ -127,6 +144,7 @@ Procedure ItemListBeforeDeleteRow(Item, Cancel)
 	If CurrentData.Locked Then
 		Cancel = True;
 	EndIf;
+	DocPhysicalInventoryClient.ItemListBeforeDeleteRow(Object, ThisObject, Item, Cancel);
 EndProcedure
 
 &AtClient
@@ -148,18 +166,7 @@ EndProcedure
 
 &AtClient
 Procedure ItemListSelection(Item, RowSelected, Field, StandardProcessing)
-	If Upper(Field.Name) = Upper("ItemListPhysicalCountByLocationPresentation") Then
-		CurrentData = Items.ItemList.CurrentData;
-		If CurrentData  = Undefined Then
-			Return;
-		EndIf;
-		StandardProcessing = False;
-		If ValueIsFilled(CurrentData.PhysicalCountByLocation) Then
-			OpenForm("Document.PhysicalCountByLocation.ObjectForm", 
-					New Structure("Key", CurrentData.PhysicalCountByLocation), 
-					ThisObject);
-		EndIf;
-	EndIf;
+	DocPhysicalInventoryClient.ItemListSelection(Object, ThisObject, Item, RowSelected, Field, StandardProcessing);
 EndProcedure
 
 &AtClient
@@ -168,14 +175,14 @@ Procedure SetResponsiblePerson(Command)
 	If Not SelectedRows.Count() Then
 		Return;
 	EndIf;
-	
+
 	Filter = New Structure("Employee", True);
-	
+
 	OpenFormParameters = New Structure("ChoiceMode, CloseOnChoice, Filter", True, True, Filter);
-	
-	OnChoiceNotify = New NotifyDescription("OnChoiceResponsiblePerson", ThisObject, 
-	New Structure("SelectedRows", SelectedRows));
-	
+
+	OnChoiceNotify = New NotifyDescription("OnChoiceResponsiblePerson", ThisObject, New Structure("SelectedRows",
+		SelectedRows));
+
 	OpenForm("Catalog.Partners.ChoiceForm", OpenFormParameters, ThisObject, , , , OnChoiceNotify);
 EndProcedure
 
@@ -184,7 +191,7 @@ Procedure OnChoiceResponsiblePerson(Result, AdditionalsParameters) Export
 	If Result = Undefined Then
 		Return;
 	EndIf;
-	
+
 	For Each RowID In AdditionalsParameters.SelectedRows Do
 		Row = Object.ItemList.FindByID(RowID);
 		If Not ValueIsFilled(Row.ResponsiblePerson) Then
@@ -280,7 +287,7 @@ EndProcedure
 &AtClient
 Procedure GeneratedFormCommandActionByName(Command) Export
 	ExternalCommandsClient.GeneratedFormCommandActionByName(Object, ThisObject, Command.Name);
-	GeneratedFormCommandActionByNameServer(Command.Name);	
+	GeneratedFormCommandActionByNameServer(Command.Name);
 EndProcedure
 
 &AtServer
@@ -289,3 +296,34 @@ Procedure GeneratedFormCommandActionByNameServer(CommandName) Export
 EndProcedure
 
 #EndRegion
+
+&AtServer
+Procedure LockLinkedRows()
+	RowIDInfoServer.LockLinkedRows(Object, ThisObject);
+	RowIDInfoServer.SetAppearance(Object, ThisObject);
+EndProcedure
+
+&AtServer
+Procedure UnlockLockLinkedRows()
+	RowIDInfoServer.UnlockLinkedRows(Object, ThisObject);
+EndProcedure
+
+&AtClient
+Procedure FromUnlockLinkedRows(Command)
+	Items.FormUnlockLinkedRows.Check = Not Items.FormUnlockLinkedRows.Check;
+	If Items.FormUnlockLinkedRows.Check Then
+		UnlockLockLinkedRows();
+	Else
+		LockLinkedRows();
+	EndIf;
+EndProcedure
+
+&AtClient
+Procedure ShowRowKey(Command)
+	DocumentsClient.ShowRowKey(ThisObject);
+EndProcedure
+
+&AtClient
+Procedure ShowHiddenTables(Command)
+	DocumentsClient.ShowHiddenTables(Object, ThisObject);
+EndProcedure

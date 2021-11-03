@@ -1,4 +1,3 @@
-
 Procedure BeforeWrite(Cancel)
 	If DataExchange.Load Then
 		Return;
@@ -9,11 +8,19 @@ EndProcedure
 Procedure OnWrite(Cancel)
 	If DataExchange.Load Then
 		Return;
-	EndIf;	
+	EndIf;
 EndProcedure
 
 Procedure BeforeDelete(Cancel)
 	If DataExchange.Load Then
 		Return;
+	EndIf;
+EndProcedure
+
+Procedure FillCheckProcessing(Cancel, CheckedAttributes)
+	If Not ThisObject.UsePartnerTransactions Or Not ThisObject.UsePartnerInfo Then
+		CheckedAttributes.Delete(CheckedAttributes.Find("Partner"));
+		CheckedAttributes.Delete(CheckedAttributes.Find("LegalName"));
+		CheckedAttributes.Delete(CheckedAttributes.Find("Agreement"));
 	EndIf;
 EndProcedure

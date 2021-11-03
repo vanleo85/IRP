@@ -11,10 +11,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>IsSpecificationFilter</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>IsSpecificationFilter</segments>
       </dataPath>
       <titleLocation>None</titleLocation>
       <handlers>
@@ -90,10 +88,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>SearchString</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>SearchString</segments>
       </dataPath>
       <titleLocation>None</titleLocation>
       <extendedTooltip>
@@ -268,10 +264,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Code</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Code</segments>
       </dataPath>
       <extendedTooltip>
         <name>CodeExtendedTooltip</name>
@@ -320,10 +314,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Ref</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Ref</segments>
       </dataPath>
       <extendedTooltip>
         <name>RefExtendedTooltip</name>
@@ -368,10 +360,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Item</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Item</segments>
       </dataPath>
       <extendedTooltip>
         <name>ItemExtendedTooltip</name>
@@ -420,10 +410,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.ItemKey</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.ItemKey</segments>
       </dataPath>
       <extendedTooltip>
         <name>ItemKeyExtendedTooltip</name>
@@ -472,10 +460,8 @@
       <userVisible>
         <common>true</common>
       </userVisible>
-      <dataPath xsi:type="form:MultiLanguageDataPath">
-        <paths xsi:type="form:DataPath">
-          <segments>List.Specification</segments>
-        </paths>
+      <dataPath xsi:type="form:DataPath">
+        <segments>List.Specification</segments>
       </dataPath>
       <extendedTooltip>
         <name>SpecificationExtendedTooltip</name>
@@ -742,6 +728,7 @@
       <picture xsi:type="core:PictureRef">
         <picture>StdPicture.CreateListItem</picture>
       </picture>
+      <toolTipRepresentation>Auto</toolTipRepresentation>
       <representationInContextMenu>Auto</representationInContextMenu>
     </items>
     <visible>true</visible>

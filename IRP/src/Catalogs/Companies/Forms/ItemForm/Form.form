@@ -17,10 +17,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Code</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Code</segments>
           </dataPath>
           <extendedTooltip>
             <name>CodeExtendedTooltip</name>
@@ -98,10 +96,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.Country</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.Country</segments>
         </dataPath>
         <extendedTooltip>
           <name>CountryExtendedTooltip</name>
@@ -150,10 +146,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.MainCompany</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.MainCompany</segments>
         </dataPath>
         <extendedTooltip>
           <name>MainCompanyExtendedTooltip</name>
@@ -202,10 +196,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.Partner</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.Partner</segments>
         </dataPath>
         <extendedTooltip>
           <name>PartnerExtendedTooltip</name>
@@ -254,10 +246,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.Type</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.Type</segments>
         </dataPath>
         <extendedTooltip>
           <name>TypeExtendedTooltip</name>
@@ -310,10 +300,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.OurCompany</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.OurCompany</segments>
         </dataPath>
         <handlers>
           <event>OnChange</event>
@@ -404,10 +392,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Currencies.LineNumber</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Currencies.LineNumber</segments>
           </dataPath>
           <extendedTooltip>
             <name>CurrenciesLineNumberExtendedTooltip</name>
@@ -456,10 +442,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Currencies.MovementType</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Currencies.MovementType</segments>
           </dataPath>
           <extendedTooltip>
             <name>CurrenciesMovementTypeExtendedTooltip</name>
@@ -516,10 +500,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Currencies.MovementType.Type</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Currencies.MovementType.Type</segments>
           </dataPath>
           <extendedTooltip>
             <name>CurrenciesMovementTypeTypeExtendedTooltip</name>
@@ -568,10 +550,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Currencies.MovementType.Currency</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Currencies.MovementType.Currency</segments>
           </dataPath>
           <extendedTooltip>
             <name>CurrenciesMovementTypeCurrencyExtendedTooltip</name>
@@ -620,10 +600,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Currencies.MovementType.Source</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Currencies.MovementType.Source</segments>
           </dataPath>
           <extendedTooltip>
             <name>CurrenciesMovementTypeSourceExtendedTooltip</name>
@@ -920,10 +898,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>CompanyTaxes.Period</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>CompanyTaxes.Period</segments>
           </dataPath>
           <extendedTooltip>
             <name>CompanyTaxesPeriodExtendedTooltip</name>
@@ -972,10 +948,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>CompanyTaxes.Use</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>CompanyTaxes.Use</segments>
           </dataPath>
           <extendedTooltip>
             <name>CompanyTaxesUseExtendedTooltip</name>
@@ -1017,10 +991,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>CompanyTaxes.Tax</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>CompanyTaxes.Tax</segments>
           </dataPath>
           <extendedTooltip>
             <name>CompanyTaxesTaxExtendedTooltip</name>
@@ -1069,10 +1041,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>CompanyTaxes.Priority</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>CompanyTaxes.Priority</segments>
           </dataPath>
           <extendedTooltip>
             <name>CompanyTaxesPriorityExtendedTooltip</name>

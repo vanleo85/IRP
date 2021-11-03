@@ -87,8 +87,6 @@ Scenario: _095001 preparation
 			And I input "15,000" text in "Q" field of "ItemList" table
 			And I finish line editing in "ItemList" table
 			And I move to "Other" tab
-			And I expand "Currencies" group
-			And I move to the tab named "GroupCurrencies"
 			And I expand "More" group
 			And I input "01.01.2020  10:00:00" text in "Date" field
 			And Delay 1
@@ -118,7 +116,7 @@ Scenario: _095001 preparation
 				And I select current line in "List" table
 			* Adding items to Purchase Invoice
 				And I move to "Item list" tab
-				And I click the button named "Add"
+				And in the table "ItemList" I click the button named "ItemListAdd"
 				And I click choice button of "Item" attribute in "ItemList" table
 				And I go to line in "List" table
 				| 'Description' |
@@ -169,7 +167,7 @@ Scenario: _095001 preparation
 				And I select current line in "List" table
 			* Adding items to Purchase Invoice
 				And I move to "Item list" tab
-				And I click the button named "Add"
+				And in the table "ItemList" I click the button named "ItemListAdd"
 				And I click choice button of "Item" attribute in "ItemList" table
 				And I go to line in "List" table
 					| 'Description' |
@@ -203,7 +201,7 @@ Scenario: _095001 preparation
 				And I click the button named "FormPostAndClose"
 	
 
-Scenario: _095002 check movements of the document Dedit Note (write off debts to the vendor)
+Scenario: _095002 create document Dedit Note (write off debts to the vendor)
 	* Create document
 		Given I open hyperlink "e1cib/list/Document.DebitNote"
 		And I click the button named "FormCreate"
@@ -213,8 +211,6 @@ Scenario: _095002 check movements of the document Dedit Note (write off debts to
 			| 'Description'  |
 			| 'Main Company' |
 		And I select current line in "List" table
-	* Filling in the basis document for debt write-offs
-		* Filling in the basis document for debt write-offs
 		And in the table "Transactions" I click the button named "TransactionsAdd"
 		And I click choice button of "Partner" attribute in "Transactions" table
 		And I go to line in "List" table
@@ -231,23 +227,12 @@ Scenario: _095002 check movements of the document Dedit Note (write off debts to
 			| 'Description'   |
 			| 'Partner term Maxim' |
 		And I select current line in "List" table
-		And in "Transactions" table I move to the next cell
-		* Check the selection of basis documents for the specified partner
-		And "List" table contains lines
-			| 'Document'                        | 'Legal name'    | 'Partner' | 'Amount' |
-			| '$$PurchaseInvoice095001$$'  | 'Company Maxim' | 'Maxim'   | '11 000,00'       |
-			| '$$PurchaseInvoice0950011$$' | 'Company Maxim' | 'Maxim'   | '10 000,00'       |
-		And I go to line in "List" table
-			| 'Document' |
-			| '$$PurchaseInvoice095001$$'  |
-		And I select current line in "List" table
-		And I click the button named "FormCommandSelect" 
-		And I activate field named "TransactionsAmount" in "Transactions" table
+		And I select current line in "Transactions" table
 		And I input "1 000,00" text in the field named "TransactionsAmount" of "Transactions" table
 		And I finish line editing in "Transactions" table
-		And I activate "Business unit" field in "Transactions" table
+		And I activate "Profit loss center" field in "Transactions" table
 		And I select current line in "Transactions" table
-		And I click choice button of "Business unit" attribute in "Transactions" table
+		And I click choice button of "Profit loss center" attribute in "Transactions" table
 		And I go to line in "List" table
 			| 'Description'             |
 			| 'Distribution department' |
@@ -274,53 +259,22 @@ Scenario: _095002 check movements of the document Dedit Note (write off debts to
 			| 'Maxim'    |
 		And I select current line in "List" table
 		And I finish line editing in "Transactions" table
-	* Check movements
+	* Check creation
 		And I click the button named "FormPost"
 		And I delete "$$DeditNote095002$$" variable
 		And I delete "$$DeditNoteDate095002$$" variable
 		And I save the window as "$$DeditNote095002$$"
-		And I save the value of "Date" field as "$$DeditNoteDate095002$$"
-		And I click "Registrations report" button
-		And I select "Accounts statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-			| '$$DeditNote095002$$'            | ''            | ''                        | ''                     | ''               | ''                       | ''               | ''             | ''        | ''              | ''                          | ''         |
-			| 'Document registrations records' | ''            | ''                        | ''                     | ''               | ''                       | ''               | ''             | ''        | ''              | ''                          | ''         |
-			| 'Register  "Accounts statement"' | ''            | ''                        | ''                     | ''               | ''                       | ''               | ''             | ''        | ''              | ''                          | ''         |
-			| ''                               | 'Record type' | 'Period'                  | 'Resources'            | ''               | ''                       | ''               | 'Dimensions'   | ''        | ''              | ''                          | ''         |
-			| ''                               | ''            | ''                        | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner' | 'Legal name'    | 'Basis document'            | 'Currency' |
-			| ''                               | 'Receipt'     | '$$DeditNoteDate095002$$' | ''                     | '-1 000'         | ''                       | ''               | 'Main Company' | 'Maxim'   | 'Company Maxim' | '$$PurchaseInvoice095001$$' | 'TRY'      |
-		And I select "Reconciliation statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-			| 'Register  "Reconciliation statement"' | ''            | ''                        | ''          | ''             | ''              | ''         | '' | '' | '' | '' | '' |
-			| ''                                     | 'Record type' | 'Period'                  | 'Resources' | 'Dimensions'   | ''              | ''         | '' | '' | '' | '' | '' |
-			| ''                                     | ''            | ''                        | 'Amount'    | 'Company'      | 'Legal name'    | 'Currency' | '' | '' | '' | '' | '' |
-			| ''                                     | 'Receipt'     | '$$DeditNoteDate095002$$' | '1 000'     | 'Main Company' | 'Company Maxim' | 'TRY'      | '' | '' | '' | '' | '' |
-		And I select "Revenues turnovers" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-			| 'Register  "Revenues turnovers"' | ''                        | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                             | ''                     | '' |
-			| ''                               | 'Period'                  | 'Resources' | 'Dimensions'   | ''                        | ''             | ''         | ''         | ''                    | ''                             | 'Attributes'           | '' |
-			| ''                               | ''                        | 'Amount'    | 'Company'      | 'Business unit'           | 'Revenue type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' | '' |
-			| ''                               | '$$DeditNoteDate095002$$' | '171,2'     | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'USD'      | ''                    | 'Reporting currency'           | 'No'                   | '' |
-			| ''                               | '$$DeditNoteDate095002$$' | '1 000'     | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'TRY'      | ''                    | 'en description is empty'      | 'No'                   | '' |
-			| ''                               | '$$DeditNoteDate095002$$' | '1 000'     | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'TRY'      | ''                    | 'Local currency'               | 'No'                   | '' |
-			| ''                               | '$$DeditNoteDate095002$$' | '1 000'     | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'TRY'      | ''                    | 'TRY'                          | 'No'                   | '' |
-		And I select "Partner AP transactions" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-			| 'Register  "Partner AP transactions"' | ''            | ''                        | ''          | ''             | ''                          | ''        | ''              | ''                   | ''         | ''                             | ''                     |
-			| ''                                    | 'Record type' | 'Period'                  | 'Resources' | 'Dimensions'   | ''                          | ''        | ''              | ''                   | ''         | ''                             | 'Attributes'           |
-			| ''                                    | ''            | ''                        | 'Amount'    | 'Company'      | 'Basis document'            | 'Partner' | 'Legal name'    | 'Partner term'       | 'Currency' | 'Multi currency movement type' | 'Deferred calculation' |
-			| ''                                    | 'Receipt'     | '$$DeditNoteDate095002$$' | '-1 000'    | 'Main Company' | '$$PurchaseInvoice095001$$' | 'Maxim'   | 'Company Maxim' | 'Partner term Maxim' | 'TRY'      | 'en description is empty'      | 'No'                   |
-			| ''                                    | 'Receipt'     | '$$DeditNoteDate095002$$' | '-1 000'    | 'Main Company' | '$$PurchaseInvoice095001$$' | 'Maxim'   | 'Company Maxim' | 'Partner term Maxim' | 'TRY'      | 'Local currency'               | 'No'                   |
-			| ''                                    | 'Receipt'     | '$$DeditNoteDate095002$$' | '-1 000'    | 'Main Company' | '$$PurchaseInvoice095001$$' | 'Maxim'   | 'Company Maxim' | 'Partner term Maxim' | 'TRY'      | 'TRY'                          | 'No'                   |
-			| ''                                    | 'Receipt'     | '$$DeditNoteDate095002$$' | '-171,2'    | 'Main Company' | '$$PurchaseInvoice095001$$' | 'Maxim'   | 'Company Maxim' | 'Partner term Maxim' | 'USD'      | 'Reporting currency'           | 'No'                   |
+		And I save the value of the field named "Date" as  "$$DeditNoteDate095002$$"
+		And I save the value of "Number" field as "$$NumberDeditNote095002$$"
+		And I close all client application windows
+		Given I open hyperlink "e1cib/list/Document.DebitNote"
+		And "List" table contains lines
+			| 'Number'                |'Date'                |
+			| '$$NumberDeditNote095002$$' | '$$DeditNoteDate095002$$' |
 		And I close all client application windows
 
 
-Scenario: _095003 check movements of the document Credit Note (increase in debt to the vendor)
+Scenario: _095003 create document Credit Note (increase in debt to the vendor)
 	* Create document
 		Given I open hyperlink "e1cib/list/Document.CreditNote"
 		And I click the button named "FormCreate"
@@ -330,7 +284,7 @@ Scenario: _095003 check movements of the document Credit Note (increase in debt 
 			| 'Description'  |
 			| 'Main Company' |
 		And I select current line in "List" table
-	* Filling in the basis document for debt write-offs
+	* Filling in document
 		And in the table "Transactions" I click the button named "TransactionsAdd"
 		And I click choice button of "Partner" attribute in "Transactions" table
 		And I go to line in "List" table
@@ -348,22 +302,12 @@ Scenario: _095003 check movements of the document Credit Note (increase in debt 
 			| 'Partner term Maxim' |
 		And I select current line in "List" table
 		And in "Transactions" table I move to the next cell
-	* Check the selection of basis documents for the specified partner
-		And "List" table contains lines
-			| 'Document'                  | 'Legal name'    | 'Partner' | 'Amount' |
-			| '$$PurchaseInvoice095001$$'  | 'Company Maxim' | 'Maxim'   | '10 000,00'       |
-			| '$$PurchaseInvoice0950011$$' | 'Company Maxim' | 'Maxim'   | '10 000,00'       |
-		And I go to line in "List" table
-			| 'Document' |
-			| '$$PurchaseInvoice095001$$'  |
-		And I select current line in "List" table
-		And I click the button named "FormCommandSelect" 
 		And I activate field named "TransactionsAmount" in "Transactions" table
 		And I input "100,00" text in the field named "TransactionsAmount" of "Transactions" table
 		And I finish line editing in "Transactions" table
-		And I activate "Business unit" field in "Transactions" table
+		And I activate "Profit loss center" field in "Transactions" table
 		And I select current line in "Transactions" table
-		And I click choice button of "Business unit" attribute in "Transactions" table
+		And I click choice button of "Profit loss center" attribute in "Transactions" table
 		And I go to line in "List" table
 			| 'Description'             |
 			| 'Distribution department' |
@@ -390,55 +334,23 @@ Scenario: _095003 check movements of the document Credit Note (increase in debt 
 			| 'Maxim'    |
 		And I select current line in "List" table
 		And I finish line editing in "Transactions" table
-	* Check movements
+	* Check creation
 		And I click the button named "FormPost"
 		And I delete "$$CreditNote095003$$" variable
 		And I delete "$$CreditNoteDate095003$$" variable
 		And I save the window as "$$CreditNote095003$$"
-		And I save the value of "Date" field as "$$CreditNoteDate095003$$"
-		And I click "Registrations report" button
-		And I select "Expenses turnovers" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-			| '$$CreditNote095003$$'           | ''                         | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                             | ''                     | '' |
-			| 'Document registrations records' | ''                         | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                             | ''                     | '' |
-			| 'Register  "Expenses turnovers"' | ''                         | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                             | ''                     | '' |
-			| ''                               | 'Period'                   | 'Resources' | 'Dimensions'   | ''                        | ''             | ''         | ''         | ''                    | ''                             | 'Attributes'           | '' |
-			| ''                               | ''                         | 'Amount'    | 'Company'      | 'Business unit'           | 'Expense type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' | '' |
-			| ''                               | '$$CreditNoteDate095003$$' | '17,12'     | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'USD'      | ''                    | 'Reporting currency'           | 'No'                   | '' |
-			| ''                               | '$$CreditNoteDate095003$$' | '100'       | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'TRY'      | ''                    | 'en description is empty'      | 'No'                   | '' |
-			| ''                               | '$$CreditNoteDate095003$$' | '100'       | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'TRY'      | ''                    | 'Local currency'               | 'No'                   | '' |
-			| ''                               | '$$CreditNoteDate095003$$' | '100'       | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'TRY'      | ''                    | 'TRY'                          | 'No'                   | '' |
-		And I select "Accounts statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-			| 'Register  "Accounts statement"' | ''            | ''                         | ''                     | ''               | ''                       | ''               | ''             | ''        | ''              | ''                          | ''         |
-			| ''                               | 'Record type' | 'Period'                   | 'Resources'            | ''               | ''                       | ''               | 'Dimensions'   | ''        | ''              | ''                          | ''         |
-			| ''                               | ''            | ''                         | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner' | 'Legal name'    | 'Basis document'            | 'Currency' |
-			| ''                               | 'Receipt'     | '$$CreditNoteDate095003$$' | ''                     | '100'            | ''                       | ''               | 'Main Company' | 'Maxim'   | 'Company Maxim' | '$$PurchaseInvoice095001$$' | 'TRY'      |
-		And I select "Reconciliation statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-			| 'Register  "Reconciliation statement"' | ''            | ''                         | ''          | ''             | ''              | ''         | '' | '' | '' | '' | '' |
-			| ''                                     | 'Record type' | 'Period'                   | 'Resources' | 'Dimensions'   | ''              | ''         | '' | '' | '' | '' | '' |
-			| ''                                     | ''            | ''                         | 'Amount'    | 'Company'      | 'Legal name'    | 'Currency' | '' | '' | '' | '' | '' |
-			| ''                                     | 'Expense'     | '$$CreditNoteDate095003$$' | '100'       | 'Main Company' | 'Company Maxim' | 'TRY'      | '' | '' | '' | '' | '' |
-		And I select "Partner AP transactions" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-			| 'Register  "Partner AP transactions"'  | ''                         | ''                         | ''                     | ''                        | ''                          | ''               | ''              | ''                    | ''                             | ''                             | ''                     |
-			| ''                                     | 'Record type'              | 'Period'                   | 'Resources'            | 'Dimensions'              | ''                          | ''               | ''              | ''                    | ''                             | ''                             | 'Attributes'           |
-			| ''                                     | ''                         | ''                         | 'Amount'               | 'Company'                 | 'Basis document'            | 'Partner'        | 'Legal name'    | 'Partner term'        | 'Currency'                     | 'Multi currency movement type' | 'Deferred calculation' |
-			| ''                                     | 'Receipt'                  | '$$CreditNoteDate095003$$' | '17,12'                | 'Main Company'            | '$$PurchaseInvoice095001$$' | 'Maxim'          | 'Company Maxim' | 'Partner term Maxim'  | 'USD'                          | 'Reporting currency'           | 'No'                   |
-			| ''                                     | 'Receipt'                  | '$$CreditNoteDate095003$$' | '100'                  | 'Main Company'            | '$$PurchaseInvoice095001$$' | 'Maxim'          | 'Company Maxim' | 'Partner term Maxim'  | 'TRY'                          | 'en description is empty'      | 'No'                   |
-			| ''                                     | 'Receipt'                  | '$$CreditNoteDate095003$$' | '100'                  | 'Main Company'            | '$$PurchaseInvoice095001$$' | 'Maxim'          | 'Company Maxim' | 'Partner term Maxim'  | 'TRY'                          | 'Local currency'               | 'No'                   |
-			| ''                                     | 'Receipt'                  | '$$CreditNoteDate095003$$' | '100'                  | 'Main Company'            | '$$PurchaseInvoice095001$$' | 'Maxim'          | 'Company Maxim' | 'Partner term Maxim'  | 'TRY'                          | 'TRY'                          | 'No'                   |
+		And I save the value of the field named "Date" as  "$$CreditNoteDate095003$$"
+		And I save the value of "Number" field as "$$NumberCreditNote095003$$"
+		And I close all client application windows
+		Given I open hyperlink "e1cib/list/Document.CreditNote"
+		And "List" table contains lines
+			| 'Number'                         |'Date'                |
+			| '$$NumberCreditNote095003$$' | '$$CreditNoteDate095003$$' |
 		And I close all client application windows
 
 
 
-
-Scenario: _095004 check movements of the document Credit Note (write off customers debts)
+Scenario: _095004 create document Credit Note (write off customers debts)
 	* Create document
 		Given I open hyperlink "e1cib/list/Document.CreditNote"
 		And I click the button named "FormCreate"
@@ -448,7 +360,7 @@ Scenario: _095004 check movements of the document Credit Note (write off custome
 			| 'Description'  |
 			| 'Main Company' |
 		And I select current line in "List" table
-	* Filling in the basis document for debt write-offs
+	* Filling in document 
 		And in the table "Transactions" I click the button named "TransactionsAdd"
 		And I click choice button of "Partner" attribute in "Transactions" table
 		And I go to line in "List" table
@@ -465,20 +377,12 @@ Scenario: _095004 check movements of the document Credit Note (write off custome
 			| 'Description'   |
 			| 'Basic Partner terms, TRY' |
 		And I select current line in "List" table
-		And in "Transactions" table I move to the next cell
-		* Check the selection of basis documents for the specified partner
-		And delay 2
-		And I go to line in "List" table
-			| 'Document' |
-			| '$$SalesInvoice095001$$'  |
-		And I select current line in "List" table
-		And I click the button named "FormCommandSelect" 
 		And I activate field named "TransactionsAmount" in "Transactions" table
 		And I input "1 000,00" text in the field named "TransactionsAmount" of "Transactions" table
 		And I finish line editing in "Transactions" table
-		And I activate "Business unit" field in "Transactions" table
+		And I activate "Profit loss center" field in "Transactions" table
 		And I select current line in "Transactions" table
-		And I click choice button of "Business unit" attribute in "Transactions" table
+		And I click choice button of "Profit loss center" attribute in "Transactions" table
 		And I go to line in "List" table
 			| 'Description'             |
 			| 'Distribution department' |
@@ -505,53 +409,22 @@ Scenario: _095004 check movements of the document Credit Note (write off custome
 			| 'Lunch'    |
 		And I select current line in "List" table
 		And I finish line editing in "Transactions" table
-	* Check movements
+	* Check creation
 		And I click the button named "FormPost"
 		And I delete "$$CreditNote095004$$" variable
 		And I delete "$$CreditNoteDate095004$$" variable
 		And I save the window as "$$CreditNote095004$$"
-		And I save the value of "Date" field as "$$CreditNoteDate095004$$"
-		And I click "Registrations report" button
-		And I select "Partner AR transactions" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| '$$CreditNote095004$$'                | ''            | ''                         | ''          | ''             | ''                       | ''        | ''              | ''                         | ''         | ''                             | ''                     |
-		| 'Document registrations records'      | ''            | ''                         | ''          | ''             | ''                       | ''        | ''              | ''                         | ''         | ''                             | ''                     |
-		| 'Register  "Partner AR transactions"' | ''            | ''                         | ''          | ''             | ''                       | ''        | ''              | ''                         | ''         | ''                             | ''                     |
-		| ''                                    | 'Record type' | 'Period'                   | 'Resources' | 'Dimensions'   | ''                       | ''        | ''              | ''                         | ''         | ''                             | 'Attributes'           |
-		| ''                                    | ''            | ''                         | 'Amount'    | 'Company'      | 'Basis document'         | 'Partner' | 'Legal name'    | 'Partner term'             | 'Currency' | 'Multi currency movement type' | 'Deferred calculation' |
-		| ''                                    | 'Receipt'     | '$$CreditNoteDate095004$$' | '-1 000'    | 'Main Company' | '$$SalesInvoice095001$$' | 'Lunch'   | 'Company Lunch' | 'Basic Partner terms, TRY' | 'TRY'      | 'en description is empty'      | 'No'                   |
-		| ''                                    | 'Receipt'     | '$$CreditNoteDate095004$$' | '-1 000'    | 'Main Company' | '$$SalesInvoice095001$$' | 'Lunch'   | 'Company Lunch' | 'Basic Partner terms, TRY' | 'TRY'      | 'Local currency'               | 'No'                   |
-		| ''                                    | 'Receipt'     | '$$CreditNoteDate095004$$' | '-1 000'    | 'Main Company' | '$$SalesInvoice095001$$' | 'Lunch'   | 'Company Lunch' | 'Basic Partner terms, TRY' | 'TRY'      | 'TRY'                          | 'No'                   |
-		| ''                                    | 'Receipt'     | '$$CreditNoteDate095004$$' | '-171,2'    | 'Main Company' | '$$SalesInvoice095001$$' | 'Lunch'   | 'Company Lunch' | 'Basic Partner terms, TRY' | 'USD'      | 'Reporting currency'           | 'No'                   |
-		And I select "Expenses turnovers" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Expenses turnovers"' | ''                         | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                             | ''                     | '' |
-		| ''                               | 'Period'                   | 'Resources' | 'Dimensions'   | ''                        | ''             | ''         | ''         | ''                    | ''                             | 'Attributes'           | '' |
-		| ''                               | ''                         | 'Amount'    | 'Company'      | 'Business unit'           | 'Expense type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' | '' |
-		| ''                               | '$$CreditNoteDate095004$$' | '171,2'     | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'USD'      | ''                    | 'Reporting currency'           | 'No'                   | '' |
-		| ''                               | '$$CreditNoteDate095004$$' | '1 000'     | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'TRY'      | ''                    | 'en description is empty'      | 'No'                   | '' |
-		| ''                               | '$$CreditNoteDate095004$$' | '1 000'     | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'TRY'      | ''                    | 'Local currency'               | 'No'                   | '' |
-		| ''                               | '$$CreditNoteDate095004$$' | '1 000'     | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'TRY'      | ''                    | 'TRY'                          | 'No'                   | '' |
-		And I select "Accounts statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Accounts statement"' | ''            | ''                         | ''                     | ''               | ''                       | ''               | ''             | ''        | ''              | ''                       | ''         |
-		| ''                               | 'Record type' | 'Period'                   | 'Resources'            | ''               | ''                       | ''               | 'Dimensions'   | ''        | ''              | ''                       | ''         |
-		| ''                               | ''            | ''                         | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner' | 'Legal name'    | 'Basis document'         | 'Currency' |
-		| ''                               | 'Receipt'     | '$$CreditNoteDate095004$$' | ''                     | ''               | ''                       | '-1 000'         | 'Main Company' | 'Lunch'   | 'Company Lunch' | '$$SalesInvoice095001$$' | 'TRY'      |
-		And I select "Reconciliation statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Reconciliation statement"' | ''            | ''                         | ''          | ''             | ''              | ''         | '' | '' | '' | '' | '' |
-		| ''                                     | 'Record type' | 'Period'                   | 'Resources' | 'Dimensions'   | ''              | ''         | '' | '' | '' | '' | '' |
-		| ''                                     | ''            | ''                         | 'Amount'    | 'Company'      | 'Legal name'    | 'Currency' | '' | '' | '' | '' | '' |
-		| ''                                     | 'Expense'     | '$$CreditNoteDate095004$$' | '1 000'     | 'Main Company' | 'Company Lunch' | 'TRY'      | '' | '' | '' | '' | '' |
-	And I close all client application windows
+		And I save the value of the field named "Date" as  "$$CreditNoteDate095004$$"
+		And I save the value of "Number" field as "$$NumberCreditNote095004$$"
+		And I close all client application windows
+		Given I open hyperlink "e1cib/list/Document.CreditNote"
+		And "List" table contains lines
+			| 'Number'                     |'Date'                |
+			| '$$NumberCreditNote095004$$' | '$$CreditNoteDate095004$$' |
+		And I close all client application windows
 
 
-Scenario: _095005 check movements of the document Debit Note (increase in customers debt)
+Scenario: _095005 create document Debit Note (increase in customers debt)
 	* Create document
 		Given I open hyperlink "e1cib/list/Document.DebitNote"
 		And I click the button named "FormCreate"
@@ -561,7 +434,7 @@ Scenario: _095005 check movements of the document Debit Note (increase in custom
 			| 'Description'  |
 			| 'Main Company' |
 		And I select current line in "List" table
-	* Filling in the basis document for debt write-offs
+	* Filling in document
 		And in the table "Transactions" I click the button named "TransactionsAdd"
 		And I click choice button of "Partner" attribute in "Transactions" table
 		And I go to line in "List" table
@@ -578,23 +451,12 @@ Scenario: _095005 check movements of the document Debit Note (increase in custom
 			| 'Description'   |
 			| 'Basic Partner terms, TRY' |
 		And I select current line in "List" table
-		And in "Transactions" table I move to the next cell
-		* Check the selection of basis documents for the specified partner
-		And delay 2
-		And "List" table contains lines
-			| 'Document' |
-			| '$$SalesInvoice095001$$'  |
-		And I go to line in "List" table
-			| 'Document' |
-			| '$$SalesInvoice095001$$'  |
-		And I select current line in "List" table
-		And I click the button named "FormCommandSelect" 
 		And I activate field named "TransactionsAmount" in "Transactions" table
 		And I input "100,00" text in the field named "TransactionsAmount" of "Transactions" table
 		And I finish line editing in "Transactions" table
-		And I activate "Business unit" field in "Transactions" table
+		And I activate "Profit loss center" field in "Transactions" table
 		And I select current line in "Transactions" table
-		And I click choice button of "Business unit" attribute in "Transactions" table
+		And I click choice button of "Profit loss center" attribute in "Transactions" table
 		And I go to line in "List" table
 			| 'Description'             |
 			| 'Distribution department' |
@@ -621,49 +483,19 @@ Scenario: _095005 check movements of the document Debit Note (increase in custom
 			| 'Lunch'    |
 		And I select current line in "List" table
 		And I finish line editing in "Transactions" table
-	* Check movements
+	* Check creation
 		And I click the button named "FormPost"
 		And I delete "$$DeditNote095005$$" variable
 		And I delete "$$DeditNoteDate095005$$" variable
+		And I delete "$$DeditNoteDate095005$$" variable
 		And I save the window as "$$DeditNote095005$$"
-		And I save the value of "Date" field as "$$DeditNoteDate095005$$"
-		And I click "Registrations report" button
-		And I select "Partner AR transactions" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| '$$DeditNote095005$$'                 | ''            | ''                        | ''          | ''             | ''                       | ''        | ''              | ''                         | ''         | ''                             | ''                     |
-		| 'Document registrations records'      | ''            | ''                        | ''          | ''             | ''                       | ''        | ''              | ''                         | ''         | ''                             | ''                     |
-		| 'Register  "Partner AR transactions"' | ''            | ''                        | ''          | ''             | ''                       | ''        | ''              | ''                         | ''         | ''                             | ''                     |
-		| ''                                    | 'Record type' | 'Period'                  | 'Resources' | 'Dimensions'   | ''                       | ''        | ''              | ''                         | ''         | ''                             | 'Attributes'           |
-		| ''                                    | ''            | ''                        | 'Amount'    | 'Company'      | 'Basis document'         | 'Partner' | 'Legal name'    | 'Partner term'             | 'Currency' | 'Multi currency movement type' | 'Deferred calculation' |
-		| ''                                    | 'Receipt'     | '$$DeditNoteDate095005$$' | '17,12'     | 'Main Company' | '$$SalesInvoice095001$$' | 'Lunch'   | 'Company Lunch' | 'Basic Partner terms, TRY' | 'USD'      | 'Reporting currency'           | 'No'                   |
-		| ''                                    | 'Receipt'     | '$$DeditNoteDate095005$$' | '100'       | 'Main Company' | '$$SalesInvoice095001$$' | 'Lunch'   | 'Company Lunch' | 'Basic Partner terms, TRY' | 'TRY'      | 'en description is empty'      | 'No'                   |
-		| ''                                    | 'Receipt'     | '$$DeditNoteDate095005$$' | '100'       | 'Main Company' | '$$SalesInvoice095001$$' | 'Lunch'   | 'Company Lunch' | 'Basic Partner terms, TRY' | 'TRY'      | 'Local currency'               | 'No'                   |
-		| ''                                    | 'Receipt'     | '$$DeditNoteDate095005$$' | '100'       | 'Main Company' | '$$SalesInvoice095001$$' | 'Lunch'   | 'Company Lunch' | 'Basic Partner terms, TRY' | 'TRY'      | 'TRY'                          | 'No'                   |
-		And I select "Accounts statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Accounts statement"' | ''            | ''                        | ''                     | ''               | ''                       | ''               | ''             | ''        | ''              | ''                       | ''         |
-		| ''                               | 'Record type' | 'Period'                  | 'Resources'            | ''               | ''                       | ''               | 'Dimensions'   | ''        | ''              | ''                       | ''         |
-		| ''                               | ''            | ''                        | 'Advance to suppliers' | 'Transaction AP' | 'Advance from customers' | 'Transaction AR' | 'Company'      | 'Partner' | 'Legal name'    | 'Basis document'         | 'Currency' |
-		| ''                               | 'Receipt'     | '$$DeditNoteDate095005$$' | ''                     | ''               | ''                       | '100'            | 'Main Company' | 'Lunch'   | 'Company Lunch' | '$$SalesInvoice095001$$' | 'TRY'      |
-		And I select "Reconciliation statement" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Reconciliation statement"' | ''            | ''                        | ''          | ''             | ''              | ''         | '' | '' | '' | '' | '' |
-		| ''                                     | 'Record type' | 'Period'                  | 'Resources' | 'Dimensions'   | ''              | ''         | '' | '' | '' | '' | '' |
-		| ''                                     | ''            | ''                        | 'Amount'    | 'Company'      | 'Legal name'    | 'Currency' | '' | '' | '' | '' | '' |
-		| ''                                     | 'Receipt'     | '$$DeditNoteDate095005$$' | '100'       | 'Main Company' | 'Company Lunch' | 'TRY'      | '' | '' | '' | '' | '' |
-		And I select "Revenues turnovers" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Revenues turnovers"' | ''                        | ''          | ''             | ''                        | ''             | ''         | ''         | ''                    | ''                             | ''                     | '' |
-		| ''                               | 'Period'                  | 'Resources' | 'Dimensions'   | ''                        | ''             | ''         | ''         | ''                    | ''                             | 'Attributes'           | '' |
-		| ''                               | ''                        | 'Amount'    | 'Company'      | 'Business unit'           | 'Revenue type' | 'Item key' | 'Currency' | 'Additional analytic' | 'Multi currency movement type' | 'Deferred calculation' | '' |
-		| ''                               | '$$DeditNoteDate095005$$' | '17,12'     | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'USD'      | ''                    | 'Reporting currency'           | 'No'                   | '' |
-		| ''                               | '$$DeditNoteDate095005$$' | '100'       | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'TRY'      | ''                    | 'en description is empty'      | 'No'                   | '' |
-		| ''                               | '$$DeditNoteDate095005$$' | '100'       | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'TRY'      | ''                    | 'Local currency'               | 'No'                   | '' |
-		| ''                               | '$$DeditNoteDate095005$$' | '100'       | 'Main Company' | 'Distribution department' | 'Software'     | ''         | 'TRY'      | ''                    | 'TRY'                          | 'No'                   | '' |
+		And I save the value of the field named "Date" as  "$$DeditNoteDate095005$$"
+		And I save the value of "Number" field as "$$DeditNoteNumber095005$$"
+		And I close all client application windows
+		Given I open hyperlink "e1cib/list/Document.DebitNote"
+		And "List" table contains lines
+			| 'Number'                |'Date'                |
+			| '$$DeditNoteNumber095005$$' | '$$DeditNoteDate095005$$' |
 		And I close all client application windows
 
 

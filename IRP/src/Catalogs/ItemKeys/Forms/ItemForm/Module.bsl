@@ -4,11 +4,11 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 		Object.Item = Parameters.Item;
 		Items.Item.ReadOnly = True;
 	EndIf;
-	
+
 	If Not ValueIsFilled(Object.Specification) Then
 		AddAttributesAndPropertiesServer.OnCreateAtServer(ThisObject, "GroupAttributes");
 	EndIf;
-	
+
 	If Parameters.Property("SelectedFilters") Then
 		For Each Row In Parameters.SelectedFilters Do
 			ThisObject[Row.Name] = Row.Value;
@@ -32,8 +32,7 @@ EndProcedure
 &AtClient
 Procedure AddAttributesHTMLDocumentComplete(Item)
 	HTMLWindow = PictureViewerClient.InfoDocumentComplete(Item);
-	AddAttributeInfo = AddAttributesAndPropertiesClient.AddAttributeInfoForHTML(Object.Ref, UUID);
-	JSON = CommonFunctionsServer.SerializeJSON(AddAttributeInfo);
+	JSON = AddAttributesAndPropertiesClient.AddAttributeInfoForHTML(Object.Ref, UUID);
 	HTMLWindow.fillData(JSON);
 EndProcedure
 
@@ -42,12 +41,12 @@ EndProcedure
 #Region PictureViewer
 
 &AtClient
-Procedure PictureViewHTMLDocumentComplete(Item)
+Async Procedure PictureViewHTMLDocumentComplete(Item)
 	PictureViewerClient.UpdateHTMLPicture(Item, ThisObject);
 EndProcedure
 
 &AtClient
-Procedure PictureViewHTMLOnClick(Item, EventData, StandardProcessing)
+Async Procedure PictureViewHTMLOnClick(Item, EventData, StandardProcessing)
 	PictureViewerClient.PictureViewHTMLOnClick(ThisObject, Item, EventData, StandardProcessing);
 EndProcedure
 
@@ -73,7 +72,7 @@ Procedure NotificationProcessing(EventName, Parameter, Source, AddInfo = Undefin
 	If EventName = "UpdateAddAttributeAndPropertySets" Then
 		AddAttributesCreateFormControl();
 	EndIf;
-	
+
 	PictureViewerClient.HTMLEventAction(EventName, Parameter, Source, ThisObject);
 EndProcedure
 
@@ -88,8 +87,7 @@ EndProcedure
 
 &AtServerNoContext
 Function GetTypeOfItemType(Item)
-	If Not ValueIsFilled(Item)
-		Or Not ValueIsFilled(Item.ItemType) Then
+	If Not ValueIsFilled(Item) Or Not ValueIsFilled(Item.ItemType) Then
 		Return Enums.ItemTypes.EmptyRef();
 	EndIf;
 	Return Item.ItemType.Type;
@@ -131,7 +129,7 @@ EndProcedure
 
 &AtClient
 Procedure SpecificationOnChange(Item)
-	SetVisible(); 
+	SetVisible();
 EndProcedure
 
 &AtServer
@@ -141,7 +139,7 @@ Procedure SetVisible()
 	Items.Specification.Visible = ThisObject.SpecificationMode;
 	Items.GroupAttributes.Visible = Not ThisObject.SpecificationMode;
 	Items.SpecificationMode.Visible = Not GetTypeOfItemType(Object.Item) = PredefinedValue("Enum.ItemTypes.Service");
-	
+
 	ThisObject.InheritUnit = ?(ValueIsFilled(Object.Item), Object.Item.Unit, Undefined);
 	ThisObject.ItemType = ?(ValueIsFilled(Object.Item), Object.Item.ItemType, Undefined);
 EndProcedure

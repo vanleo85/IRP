@@ -27,6 +27,7 @@ Scenario: _029500 preparation (Bundling)
 		When Create chart of characteristic types AddAttributeAndProperty objects
 		When Create catalog AddAttributeAndPropertySets objects
 		When Create catalog AddAttributeAndPropertyValues objects
+		When Create catalog Stores objects
 		When Create catalog Companies objects (Main company)
 		When update ItemKeys
 	
@@ -101,38 +102,7 @@ Scenario: _029502 check the automatic creation of the Bundle specification
 		| 'XS'   | 'Blue'  | '1,000'    |
 	And I close current window
 
-Scenario: _029503 check Bundling posting (store does not use Shipment confirmation and Goods receipt) by register StockBalance
-# In this case a Bandle is received by register and the goods from the Bandle are written off
-	Given I open hyperlink "e1cib/list/AccumulationRegister.StockBalance"
-	And "List" table contains lines
-	| 'Quantity' | 'Recorder'            | 'Store'    | 'Item key'                      |
-	| '10,000'   | '$$Bundling0029501$$' | 'Store 01' | 'Scarf + Dress/Dress+Scarf' |
-	| '10,000'   | '$$Bundling0029501$$' | 'Store 01' | 'XS/Blue'                       |
-	| '10,000'   | '$$Bundling0029501$$' | 'Store 01' | 'XS/Red'                        |
-	And I close all client application windows
 
-Scenario: _029504 check Bundling posting (store does not use Shipment confirmation and Goods receipt) by register StockReservation
-	Given I open hyperlink "e1cib/list/AccumulationRegister.StockReservation"
-	And "List" table contains lines
-	| 'Quantity' | 'Recorder'            | 'Store'    | 'Item key'                      |
-	| '10,000'   | '$$Bundling0029501$$' | 'Store 01' | 'Scarf + Dress/Dress+Scarf' |
-	| '10,000'   | '$$Bundling0029501$$' | 'Store 01' | 'XS/Blue'                       |
-	| '10,000'   | '$$Bundling0029501$$' | 'Store 01' | 'XS/Red'                        |
-	And I close all client application windows
-
-Scenario: _029505 check the absence posting of Bundling (store does not use Shipment confirmation and Goods receipt) by register GoodsInTransitIncoming
-	Given I open hyperlink "e1cib/list/AccumulationRegister.GoodsInTransitIncoming"
-	And "List" table does not contain lines
-		| 'Recorder'                 |
-		| '$$Bundling0029501$$'              |
-	And I close all client application windows
-
-Scenario: _029506 check the absence posting of Bundling (store does not use Shipment confirmation and Goods receipt) by register GoodsInTransitOutgoing
-	Given I open hyperlink "e1cib/list/AccumulationRegister.GoodsInTransitOutgoing"
-	And "List" table does not contain lines
-		| 'Recorder'                 |
-		| '$$Bundling0029501$$'              |
-	And I close all client application windows
 
 Scenario: _029507 create Bundling ( Store use Shipment confirmation and Goods receipt)
 	And I close all client application windows
@@ -212,91 +182,8 @@ Scenario: _029508 check the automatic creation of an additional specification fo
 
 
 
-Scenario: _029509 check the absence posting of Bundling (store use Shipment confirmation and Goods receipt) by register StockBalance
-	Given I open hyperlink "e1cib/list/AccumulationRegister.StockBalance"
-	And "List" table does not contain lines
-		| 'Quantity' | 'Recorder'            | 'Store'    | 'Item key'             |
-		| '7,000'    | '$$Bundling0029507$$' | 'Store 02' | 'Scarf + Dress' |
-		| '14,000'   | '$$Bundling0029507$$' | 'Store 02' | 'XS/Blue'              |
-		| '14,000'   | '$$Bundling0029507$$' | 'Store 02' | '36/Yellow'           |
-	And I close all client application windows
 
-Scenario: _029510 check Bundling posting (store use Shipment confirmation and Goods receipt) by register StockReservation
-	Given I open hyperlink "e1cib/list/AccumulationRegister.StockReservation"
-	And "List" table contains lines
-		| 'Quantity' | 'Recorder'            | 'Store'    | 'Item key'  |
-		| '14,000'   | '$$Bundling0029507$$' | 'Store 02' | 'XS/Blue'   |
-		| '14,000'   | '$$Bundling0029507$$' | 'Store 02' | '36/Yellow' |
-	And "List" table does not contain lines
-		| 'Quantity' | 'Recorder'            | 'Store'    | 'Item key'             |
-		| '7,000'    | '$$Bundling0029507$$' | 'Store 02' | 'Scarf + Dress'' |
-	And I close all client application windows
 
-Scenario: _029511 check Bundling posting (store use Shipment confirmation and Goods receipt) by register GoodsInTransitIncoming
-	Given I open hyperlink "e1cib/list/AccumulationRegister.GoodsInTransitIncoming"
-	And "List" table contains lines
-		| 'Quantity' | 'Recorder'            | 'Receipt basis'       | 'Store'    | 'Item key'                            |
-		| '7,000'    | '$$Bundling0029507$$' | '$$Bundling0029507$$' | 'Store 02' | 'Scarf + Dress/Dress+Trousers' |
-	And I close all client application windows
-
-Scenario: _029512 check Bundling posting (store use Shipment confirmation and Goods receipt) by register GoodsInTransitOutgoing
-	Given I open hyperlink "e1cib/list/AccumulationRegister.GoodsInTransitOutgoing"
-	And "List" table contains lines
-	| 'Quantity' | 'Recorder'            | 'Shipment basis'      | 'Store'    | 'Item key'  |
-	| '14,000'   | '$$Bundling0029507$$' | '$$Bundling0029507$$' | 'Store 02' | 'XS/Blue'   |
-	| '14,000'   | '$$Bundling0029507$$' | '$$Bundling0029507$$' | 'Store 02' | '36/Yellow' |
-	And I close all client application windows
-
-Scenario: _029513 create Shipment confirmation and Goods receipt based on Bundling
-	Given I open hyperlink "e1cib/list/Document.Bundling"
-	And I go to line in "List" table
-		| 'Item bundle'          | 'Number' |
-		| 'Scarf + Dress' | '$$NumberBundling0029507$$'      |
-	And I select current line in "List" table
-	And I click the button named "FormDocumentGoodsReceiptGenerateGoodsReceipt"
-	Then the form attribute named "Company" became equal to "Main Company"
-	And I click the button named "FormPost"
-	And I delete "$$NumberGoodsReceipt0029513$$" variable
-	And I delete "$$GoodsReceipt0029513$$" variable
-	And I save the value of "Number" field as "$$NumberGoodsReceipt0029513$$"
-	And I save the window as "$$GoodsReceipt0029513$$"
-	And I click the button named "FormPostAndClose"
-	And Delay 5
-	And I click the button named "FormDocumentShipmentConfirmationGenerateShipmentConfirmation"
-	Then the form attribute named "Company" became equal to "Main Company"
-	And I click the button named "FormPost"
-	And I delete "$$NumberShipmentConfirmation0029513$$" variable
-	And I delete "$$ShipmentConfirmation0029513$$" variable
-	And I save the value of "Number" field as "$$NumberShipmentConfirmation0029513$$"
-	And I save the window as "$$ShipmentConfirmation0029513$$"
-	And I click the button named "FormPostAndClose"
-	And Delay 5
-	And I close current window
-
-Scenario: _029514 check Shipment confirmation and Goods receipt movements based on document Bundling
-	Given I open hyperlink "e1cib/list/AccumulationRegister.StockBalance"
-	And "List" table contains lines
-		| 'Quantity' | 'Recorder'                        | 'Store'    | 'Item key'                            |
-		| '7,000'    | '$$GoodsReceipt0029513$$'         | 'Store 02' | 'Scarf + Dress/Dress+Trousers' |
-		| '14,000'   | '$$ShipmentConfirmation0029513$$' | 'Store 02' | 'XS/Blue'                             |
-		| '14,000'   | '$$ShipmentConfirmation0029513$$' | 'Store 02' | '36/Yellow'                           |
-	And I close all client application windows
-	Given I open hyperlink "e1cib/list/AccumulationRegister.StockReservation"
-	And "List" table contains lines
-		| 'Quantity' | 'Recorder'                | 'Store'    | 'Item key'                            |
-		| '7,000'    | '$$GoodsReceipt0029513$$' | 'Store 02' | 'Scarf + Dress/Dress+Trousers' |
-	And I close all client application windows
-	Given I open hyperlink "e1cib/list/AccumulationRegister.GoodsInTransitIncoming"
-	And "List" table contains lines
-		| 'Quantity' | 'Recorder'                | 'Receipt basis'       | 'Store'    | 'Item key'                            |
-		| '7,000'    | '$$GoodsReceipt0029513$$' | '$$Bundling0029507$$' | 'Store 02' | 'Scarf + Dress/Dress+Trousers' |
-	And I close all client application windows
-	Given I open hyperlink "e1cib/list/AccumulationRegister.GoodsInTransitOutgoing"
-	And "List" table contains lines
-		| 'Quantity' | 'Recorder'                        | 'Shipment basis'      | 'Store'    | 'Item key'  |
-		| '14,000'   | '$$ShipmentConfirmation0029513$$' | '$$Bundling0029507$$' | 'Store 02' | 'XS/Blue'   |
-		| '14,000'   | '$$ShipmentConfirmation0029513$$' | '$$Bundling0029507$$' | 'Store 02' | '36/Yellow' |
-	And I close all client application windows
 
 Scenario: _029515 check automatic creation of ItemKey by bundles
 	Given I open hyperlink "e1cib/list/Catalog.Items"
@@ -496,24 +383,8 @@ Scenario: _029518 creating a bundle of 2 different properties + one repeating of
 			| 'XS'   | 'Blue'  | '2,000'    |
 			| 'L'    | 'Green' | '2,000'    |
 		And I close all client application windows
-	* Check movements
-		Given I open hyperlink "e1cib/list/AccumulationRegister.StockBalance"
-		And "List" table contains lines
-			| 'Quantity' | 'Recorder'            | 'Store'    | 'Item key'                      |
-			| '2,000'    | '$$Bundling0029518$$' | 'Store 01' | 'Scarf + Dress/Dress+Scarf' |
-			| '4,000'    | '$$Bundling0029518$$' | 'Store 01' | 'XS/Blue'                       |
-			| '4,000'    | '$$Bundling0029518$$' | 'Store 01' | 'XS/Blue'                       |
-			| '4,000'    | '$$Bundling0029518$$' | 'Store 01' | 'L/Green'                       |
-			| '4,000'    | '$$Bundling0029518$$' | 'Store 01' | 'XS/Red'                        |
-		And I close all client application windows
-		Given I open hyperlink "e1cib/list/AccumulationRegister.StockReservation"
-		And "List" table contains lines
-			| 'Quantity' | 'Recorder'            | 'Store'    | 'Item key'                      |
-			| '2,000'    | '$$Bundling0029518$$' | 'Store 01' | 'Scarf + Dress/Dress+Scarf' |
-			| '8,000'    | '$$Bundling0029518$$' | 'Store 01' | 'XS/Blue'                       |
-			| '4,000'    | '$$Bundling0029518$$' | 'Store 01' | 'L/Green'                       |
-			| '4,000'    | '$$Bundling0029518$$' | 'Store 01' | 'XS/Red'                        |
-		And I close all client application windows
+	
+		
 
 Scenario: _029519 create Bundling (Store use Goods receipt, does not use Shipment confirmation)
 	* Opening form for creating Bundle
@@ -584,29 +455,6 @@ Scenario: _029519 create Bundling (Store use Goods receipt, does not use Shipmen
 		| ''                               | ''       | 'Quantity'  | 'Item key bundle'                             | 'Item key'   | '' | '' | '' |
 		| ''                               | '*'      | '2'         | 'Skittles + Chewing gum/Skittles+Chewing gum' | 'Mint/Mango' | '' | '' | '' |
 		| ''                               | '*'      | '2'         | 'Skittles + Chewing gum/Skittles+Chewing gum' | 'Fruit'      | '' | '' | '' |
-		And I select "Goods in transit incoming" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Goods in transit incoming"' | ''            | ''       | ''          | ''           | ''                    | ''                                            | ''        |
-		| ''                                      | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                    | ''                                            | ''        |
-		| ''                                      | ''            | ''       | 'Quantity'  | 'Store'      | 'Receipt basis'       | 'Item key'                                    | 'Row key' |
-		| ''                                      | 'Receipt'     | '*'      | '7'         | 'Store 07'   | '$$Bundling0029519$$' | 'Skittles + Chewing gum/Skittles+Chewing gum' | '*'       |
-		And I select "Stock reservation" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Stock reservation"' | ''            | ''       | ''          | ''           | ''           | '' | '' |
-		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''           | '' | '' |
-		| ''                              | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'   | '' | '' |
-		| ''                              | 'Expense'     | '*'      | '14'        | 'Store 07'   | 'Mint/Mango' | '' | '' |
-		| ''                              | 'Expense'     | '*'      | '14'        | 'Store 07'   | 'Fruit'      | '' | '' |
-		And I select "Stock balance" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Stock balance"'             | ''            | ''          | ''                                            | ''           | ''                    | ''                                            | ''        |
-		| ''                                      | 'Record type' | 'Period'    | 'Resources'                                   | 'Dimensions' | ''                    | ''                                            | ''        |
-		| ''                                      | ''            | ''          | 'Quantity'                                    | 'Store'      | 'Item key'            | ''                                            | ''        |
-		| ''                                      | 'Expense'     | '*'         | '14'                                          | 'Store 07'   | 'Mint/Mango'          | ''                                            | ''        |
-		| ''                                      | 'Expense'     | '*'         | '14'                                          | 'Store 07'   | 'Fruit'               | ''                                            | ''        |
 		And I close all client application windows
 
 Scenario: _029520 create Bundling (Store use Shipment confirmation, does not use Goods receipt)
@@ -684,30 +532,7 @@ Scenario: _029520 create Bundling (Store use Shipment confirmation, does not use
 			| ''                               | ''       | 'Quantity'  | 'Item key bundle'                             | 'Item key'   | '' | '' | '' |
 			| ''                               | '*'      | '2'         | 'Skittles + Chewing gum/Skittles+Chewing gum' | 'Mint/Mango' | '' | '' | '' |
 			| ''                               | '*'      | '2'         | 'Skittles + Chewing gum/Skittles+Chewing gum' | 'Fruit'      | '' | '' | '' |
-		And I select "Goods in transit outgoing" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-			| 'Register  "Goods in transit outgoing"' | ''            | ''       | ''          | ''           | ''                    | ''           | ''        |
-			| ''                                      | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                    | ''           | ''        |
-			| ''                                      | ''            | ''       | 'Quantity'  | 'Store'      | 'Shipment basis'      | 'Item key'   | 'Row key' |
-			| ''                                      | 'Receipt'     | '*'      | '14'        | 'Store 08'   | '$$Bundling0029520$$' | 'Mint/Mango' | '*'       |
-			| ''                                      | 'Receipt'     | '*'      | '14'        | 'Store 08'   | '$$Bundling0029520$$' | 'Fruit'      | '*'       |
-		And I select "Stock reservation" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-			| 'Register  "Stock reservation"' | ''            | ''       | ''          | ''           | ''                                            | '' | '' |
-			| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                                            | '' | '' |
-			| ''                              | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'                                    | '' | '' |
-			| ''                              | 'Receipt'     | '*'      | '7'         | 'Store 08'   | 'Skittles + Chewing gum/Skittles+Chewing gum' | '' | '' |
-			| ''                              | 'Expense'     | '*'      | '14'        | 'Store 08'   | 'Mint/Mango'                                  | '' | '' |
-			| ''                              | 'Expense'     | '*'      | '14'        | 'Store 08'   | 'Fruit'                                       | '' | '' |
-		And I select "Stock balance" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-			| 'Register  "Stock balance"'             | ''            | ''          | ''                                    | ''           | ''                                    | ''          | ''        |
-			| ''                                      | 'Record type' | 'Period'    | 'Resources'                           | 'Dimensions' | ''                                    | ''          | ''        |
-			| ''                                      | ''            | ''          | 'Quantity'                            | 'Store'      | 'Item key'                            | ''          | ''        |
-			| ''                                      | 'Receipt'     | '*'         | '7'                                   | 'Store 08'   | 'Skittles + Chewing gum/Skittles+Chewing gum' | ''          | ''        |
+	
 		And I close all client application windows
 
 
@@ -731,24 +556,6 @@ Scenario: _029521 check the output of the document movement report for Bundling
 		| ''                               | ''       | 'Quantity'  | 'Item key bundle'           | 'Item key' | '' |
 		| ''                               | '*'      | '1'         | 'Scarf + Dress/Dress+Scarf' | 'XS/Blue'  | '' |
 		| ''                               | '*'      | '1'         | 'Scarf + Dress/Dress+Scarf' | 'XS/Red'   | '' |
-		And I select "Stock reservation" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Stock reservation"' | ''            | ''       | ''          | ''           | ''                          |
-		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                          |
-		| ''                              | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'                  |
-		| ''                              | 'Receipt'     | '*'      | '10'        | 'Store 01'   | 'Scarf + Dress/Dress+Scarf' |
-		| ''                              | 'Expense'     | '*'      | '10'        | 'Store 01'   | 'XS/Blue'                   |
-		| ''                              | 'Expense'     | '*'      | '10'        | 'Store 01'   | 'XS/Red'                    |
-		And I select "Stock balance" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Stock balance"'      | ''            | ''          | ''                          | ''           | ''                          |
-		| ''                               | 'Record type' | 'Period'    | 'Resources'                 | 'Dimensions' | ''                          |
-		| ''                               | ''            | ''          | 'Quantity'                  | 'Store'      | 'Item key'                  |
-		| ''                               | 'Receipt'     | '*'         | '10'                        | 'Store 01'   | 'Scarf + Dress/Dress+Scarf' |
-		| ''                               | 'Expense'     | '*'         | '10'                        | 'Store 01'   | 'XS/Blue'                   |
-		| ''                               | 'Expense'     | '*'         | '10'                        | 'Store 01'   | 'XS/Red'                    |
 
 	And I close all client application windows
 	Given I open hyperlink "e1cib/list/Document.Bundling"
@@ -767,24 +574,6 @@ Scenario: _029521 check the output of the document movement report for Bundling
 		| ''                               | ''       | 'Quantity'  | 'Item key bundle'           | 'Item key' | '' |
 		| ''                               | '*'      | '1'         | 'Scarf + Dress/Dress+Scarf' | 'XS/Blue'  | '' |
 		| ''                               | '*'      | '1'         | 'Scarf + Dress/Dress+Scarf' | 'XS/Red'   | '' |
-		And I select "Stock reservation" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Stock reservation"' | ''            | ''       | ''          | ''           | ''                          |
-		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                          |
-		| ''                              | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'                  |
-		| ''                              | 'Receipt'     | '*'      | '10'        | 'Store 01'   | 'Scarf + Dress/Dress+Scarf' |
-		| ''                              | 'Expense'     | '*'      | '10'        | 'Store 01'   | 'XS/Blue'                   |
-		| ''                              | 'Expense'     | '*'      | '10'        | 'Store 01'   | 'XS/Red'                    |
-		And I select "Stock balance" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Stock balance"'      | ''            | ''          | ''                          | ''           | ''                          |
-		| ''                               | 'Record type' | 'Period'    | 'Resources'                 | 'Dimensions' | ''                          |
-		| ''                               | ''            | ''          | 'Quantity'                  | 'Store'      | 'Item key'                  |
-		| ''                               | 'Receipt'     | '*'         | '10'                        | 'Store 01'   | 'Scarf + Dress/Dress+Scarf' |
-		| ''                               | 'Expense'     | '*'         | '10'                        | 'Store 01'   | 'XS/Blue'                   |
-		| ''                               | 'Expense'     | '*'         | '10'                        | 'Store 01'   | 'XS/Red'                    |
 
 	And I close all client application windows
 
@@ -820,24 +609,7 @@ Scenario: _02951901 clear movements Bundling and check that there is no movement
 		| ''                               | ''       | 'Quantity'  | 'Item key bundle'           | 'Item key' | '' |
 		| ''                               | '*'      | '1'         | 'Scarf + Dress/Dress+Scarf' | 'XS/Blue'  | '' |
 		| ''                               | '*'      | '1'         | 'Scarf + Dress/Dress+Scarf' | 'XS/Red'   | '' |
-		And I select "Stock reservation" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Stock reservation"' | ''            | ''       | ''          | ''           | ''                          |
-		| ''                              | 'Record type' | 'Period' | 'Resources' | 'Dimensions' | ''                          |
-		| ''                              | ''            | ''       | 'Quantity'  | 'Store'      | 'Item key'                  |
-		| ''                              | 'Receipt'     | '*'      | '10'        | 'Store 01'   | 'Scarf + Dress/Dress+Scarf' |
-		| ''                              | 'Expense'     | '*'      | '10'        | 'Store 01'   | 'XS/Blue'                   |
-		| ''                              | 'Expense'     | '*'      | '10'        | 'Store 01'   | 'XS/Red'                    |
-		And I select "Stock balance" exact value from "Register" drop-down list
-		And I click "Generate report" button
-		And "ResultTable" spreadsheet document contains lines:
-		| 'Register  "Stock balance"'      | ''            | ''          | ''                          | ''           | ''                          |
-		| ''                               | 'Record type' | 'Period'    | 'Resources'                 | 'Dimensions' | ''                          |
-		| ''                               | ''            | ''          | 'Quantity'                  | 'Store'      | 'Item key'                  |
-		| ''                               | 'Receipt'     | '*'         | '10'                        | 'Store 01'   | 'Scarf + Dress/Dress+Scarf' |
-		| ''                               | 'Expense'     | '*'         | '10'                        | 'Store 01'   | 'XS/Blue'                   |
-		| ''                               | 'Expense'     | '*'         | '10'                        | 'Store 01'   | 'XS/Red'                    |
+		
 		And I close all client application windows
 
 

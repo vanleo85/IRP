@@ -17,10 +17,8 @@
           <userVisible>
             <common>true</common>
           </userVisible>
-          <dataPath xsi:type="form:MultiLanguageDataPath">
-            <paths xsi:type="form:DataPath">
-              <segments>Object.Code</segments>
-            </paths>
+          <dataPath xsi:type="form:DataPath">
+            <segments>Object.Code</segments>
           </dataPath>
           <extendedTooltip>
             <name>CodeExtendedTooltip</name>
@@ -98,10 +96,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.UseGoodsReceipt</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.UseGoodsReceipt</segments>
         </dataPath>
         <handlers>
           <event>OnChange</event>
@@ -147,10 +143,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.UseShipmentConfirmation</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.UseShipmentConfirmation</segments>
         </dataPath>
         <handlers>
           <event>OnChange</event>
@@ -196,10 +190,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.Transit</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.Transit</segments>
         </dataPath>
         <extendedTooltip>
           <name>TransitExtendedTooltip</name>
@@ -241,10 +233,8 @@
         <userVisible>
           <common>true</common>
         </userVisible>
-        <dataPath xsi:type="form:MultiLanguageDataPath">
-          <paths xsi:type="form:DataPath">
-            <segments>Object.NegativeStockControl</segments>
-          </paths>
+        <dataPath xsi:type="form:DataPath">
+          <segments>Object.NegativeStockControl</segments>
         </dataPath>
         <extendedTooltip>
           <name>NegativeStockControlExtendedTooltip</name>

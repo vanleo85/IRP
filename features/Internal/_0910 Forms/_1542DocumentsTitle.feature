@@ -96,7 +96,7 @@ Scenario: _018021 check the display of the header of the collapsible group in Pu
 Scenario: _022017 check the display of the header of the collapsible group in Purchase Return Order
 	Given I open hyperlink "e1cib/list/Document.PurchaseReturnOrder"
 	When check the display of the header of the collapsible group in sales, purchase and return documents
-	Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Company: Main Company   Partner: Ferron BP   Legal name: Company Ferron BP   Status: Wait" text
+	Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Company: Main Company   Partner: Ferron BP   Legal name: Company Ferron BP " text
 	And I click the hyperlink named "DecorationGroupTitleUncollapsedLabel"
 	When I Check the steps for Exception
         |'And I click Select button of  "Partner" field'|
@@ -290,7 +290,7 @@ Scenario: _051011 check the display of the header of the collapsible group in Ca
 Scenario: _052012 check the display of the header of the collapsible group in Bank Receipt
 	Given I open hyperlink "e1cib/list/Document.BankReceipt"
 	When check the display of the header of the collapsible group in bank payments documents
-	Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Company: Main Company   Account: Bank account, USD   Transaction type: Payment from customer   Currency: USD   " text
+	Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Company: Main Company   Account: Bank account, USD   Currency: USD   Transaction type: Payment from customer   " text	
 	And I click the hyperlink named "DecorationGroupTitleUncollapsedLabel"
 	When I Check the steps for Exception
         |'And I click Select button of  "Company" field'|
@@ -301,7 +301,7 @@ Scenario: _052012 check the display of the header of the collapsible group in Ba
 Scenario: _053012 check the display of the header of the collapsible group in Bank payment
 	Given I open hyperlink "e1cib/list/Document.BankPayment"
 	When check the display of the header of the collapsible group in bank payments documents
-	Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Company: Main Company   Account: Bank account, USD   Transaction type: Payment to the vendor   Currency: USD   " text
+	Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Company: Main Company   Account: Bank account, USD   Currency: USD   Transaction type: Payment to the vendor   " text
 	And I click the hyperlink named "DecorationGroupTitleUncollapsedLabel"
 	When I Check the steps for Exception
         |'And I click Select button of  "Company" field'|
@@ -311,15 +311,15 @@ Scenario: _053012 check the display of the header of the collapsible group in Ba
 
 
 
-Scenario: _056006 check the display of the header of the collapsible group in Invoice Match
-	Given I open hyperlink "e1cib/list/Document.InvoiceMatch"
-	When check the display of the header of the collapsible group in invoice match
-	Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Operation type: With customer   Company: Main Company   Partner: Kalipso   Legal name: Company Kalipso   Partner term: Basic Partner terms, without VAT   " text
-	And I click the hyperlink named "DecorationGroupTitleUncollapsedLabel"
-	When I Check the steps for Exception
-        |'And I click Select button of  "Company" field'|
-	And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
-	And I close all client application windows
+# Scenario: _056006 check the display of the header of the collapsible group in Invoice Match
+# 	Given I open hyperlink "e1cib/list/Document.InvoiceMatch"
+# 	When check the display of the header of the collapsible group in invoice match
+# 	Then the field named "DecorationGroupTitleUncollapsedLabel" value contains "Operation type: With customer   Company: Main Company   Partner: Kalipso   Legal name: Company Kalipso   Partner term: Basic Partner terms, without VAT   " text
+# 	And I click the hyperlink named "DecorationGroupTitleUncollapsedLabel"
+# 	When I Check the steps for Exception
+#         |'And I click Select button of  "Company" field'|
+# 	And I click the hyperlink named "DecorationGroupTitleCollapsedPicture"
+# 	And I close all client application windows
 
 
 Scenario: _02013 check the display of the header of the collapsible group in Reconcilation statement

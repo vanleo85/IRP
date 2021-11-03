@@ -1,12 +1,16 @@
+
 Procedure OnOpen(Object, Form, Cancel, AddInfo = Undefined) Export
-	
+
 	DocumentsClient.SetTextOfDescriptionAtForm(Object, Form);
-	
-	#If MobileClient Then
+
+#If MobileClient Then
 	ItemListOnChange(Object, Form);
-	SerialLotNumberListOnChange(Object, Form);
-	#EndIf
-	
+#EndIf
+
+EndProcedure
+
+Procedure AfterWriteAtClient(Object, Form, WriteParameters, AddInfo = Undefined) Export
+	RowIDInfoClient.AfterWriteAtClient(Object, Form, WriteParameters, AddInfo);
 EndProcedure
 
 #Region ItemCompany
@@ -19,12 +23,12 @@ Procedure CompanyStartChoice(Object, Form, Item, ChoiceData, StandardProcessing)
 	OpenSettings = DocumentsClient.GetOpenSettingsStructure();
 
 	OpenSettings.ArrayOfFilters = New Array();
-	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", 
-																		True, DataCompositionComparisonType.NotEqual));
-	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("OurCompany", 
-																		True, DataCompositionComparisonType.Equal));
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True,
+		DataCompositionComparisonType.NotEqual));
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("OurCompany", True,
+		DataCompositionComparisonType.Equal));
 	OpenSettings.FillingData = New Structure("OurCompany", True);
-	
+
 	DocumentsClient.CompanyStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
 
@@ -46,11 +50,12 @@ EndProcedure
 
 Procedure PartnerStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
 	OpenSettings = DocumentsClient.GetOpenSettingsStructure();
-	
+
 	OpenSettings.ArrayOfFilters = New Array();
-	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, DataCompositionComparisonType.NotEqual));
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True,
+		DataCompositionComparisonType.NotEqual));
 	OpenSettings.FormParameters = New Structure();
-	
+
 	FilterPartnerType = "";
 	If Object.TransactionType = PredefinedValue("Enum.GoodsReceiptTransactionTypes.Purchase") Then
 		FilterPartnerType = "Vendor";
@@ -58,30 +63,31 @@ Procedure PartnerStartChoice(Object, Form, Item, ChoiceData, StandardProcessing)
 		FilterPartnerType = "Customer";
 	EndIf;
 	If Not IsBlankString(FilterPartnerType) Then
-		OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem(FilterPartnerType, True, DataCompositionComparisonType.Equal));
-		OpenSettings.FormParameters.Insert("Filter", New Structure(FilterPartnerType , True));
+		OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem(FilterPartnerType, True,
+			DataCompositionComparisonType.Equal));
+		OpenSettings.FormParameters.Insert("Filter", New Structure(FilterPartnerType, True));
 		OpenSettings.FillingData = New Structure(FilterPartnerType, True);
 	EndIf;
-	
+
 	DocumentsClient.PartnerStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
 
 Procedure PartnerTextChange(Object, Form, Item, Text, StandardProcessing) Export
 	ArrayOfFilters = New Array();
 	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True, ComparisonType.NotEqual));
-	
+
 	FilterPartnerType = "";
 	If Object.TransactionType = PredefinedValue("Enum.GoodsReceiptTransactionTypes.Purchase") Then
 		FilterPartnerType = "Vendor";
 	ElsIf Object.TransactionType = PredefinedValue("Enum.GoodsReceiptTransactionTypes.ReturnFromCustomer") Then
 		FilterPartnerType = "Customer";
 	EndIf;
-	
+
 	ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem(FilterPartnerType, True, ComparisonType.Equal));
-	
+
 	AdditionalParameters = New Structure();
-	DocumentsClient.PartnerEditTextChange(Object, Form, Item, Text, StandardProcessing,
-				ArrayOfFilters, AdditionalParameters);
+	DocumentsClient.PartnerEditTextChange(Object, Form, Item, Text, StandardProcessing, ArrayOfFilters,
+		AdditionalParameters);
 EndProcedure
 
 #EndRegion
@@ -94,10 +100,10 @@ EndProcedure
 
 Procedure LegalNameStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
 	OpenSettings = DocumentsClient.GetOpenSettingsStructure();
-	
+
 	OpenSettings.ArrayOfFilters = New Array();
-	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", 
-																	True, DataCompositionComparisonType.NotEqual));
+	OpenSettings.ArrayOfFilters.Add(DocumentsClientServer.CreateFilterItem("DeletionMark", True,
+		DataCompositionComparisonType.NotEqual));
 	OpenSettings.FormParameters = New Structure();
 	If ValueIsFilled(Object.Partner) Then
 		OpenSettings.FormParameters.Insert("Partner", Object.Partner);
@@ -115,8 +121,8 @@ Procedure LegalNameTextChange(Object, Form, Item, Text, StandardProcessing) Expo
 		AdditionalParameters.Insert("Partner", Object.Partner);
 		AdditionalParameters.Insert("FilterByPartnerHierarchy", True);
 	EndIf;
-	DocumentsClient.CompanyEditTextChange(Object, Form, Item, Text, StandardProcessing,
-		ArrayOfFilters, AdditionalParameters);
+	DocumentsClient.CompanyEditTextChange(Object, Form, Item, Text, StandardProcessing, ArrayOfFilters,
+		AdditionalParameters);
 EndProcedure
 
 #EndRegion
@@ -125,8 +131,8 @@ EndProcedure
 
 #Region Unit
 
-Procedure ItemListUnitOnChange(Object, Form, Item, AddInfo = Undefined) Export
-	CurrentData = Form.Items.ItemList.CurrentData;
+Procedure ItemListUnitOnChange(Object, Form, Item = Undefined, CurrentRowData = Undefined) Export
+	CurrentData = DocumentsClient.GetCurrentRowDataList(Form.Items.ItemList, CurrentRowData);
 	If CurrentData = Undefined Then
 		Return;
 	EndIf;
@@ -138,8 +144,8 @@ EndProcedure
 
 #Region Quantity
 
-Procedure ItemListQuantityOnChange(Object, Form, Item, AddInfo = Undefined) Export
-	CurrentData = Form.Items.ItemList.CurrentData;
+Procedure ItemListQuantityOnChange(Object, Form, Item = Undefined, CurrentRowData = Undefined) Export
+	CurrentData = DocumentsClient.GetCurrentRowDataList(Form.Items.ItemList, CurrentRowData);
 	If CurrentData = Undefined Then
 		Return;
 	EndIf;
@@ -151,110 +157,69 @@ EndProcedure
 
 #EndRegion
 
-Procedure ItemListItemOnChange(Object, Form, Item = Undefined) Export
-	CurrentRow = Form.Items.ItemList.CurrentData;
-	If CurrentRow = Undefined Then
+Procedure ItemListItemOnChange(Object, Form, Item = Undefined, CurrentRowData = Undefined) Export
+	CurrentData = DocumentsClient.GetCurrentRowDataList(Form.Items.ItemList, CurrentRowData);
+	If CurrentData = Undefined Then
 		Return;
 	EndIf;
-	CurrentRow.ItemKey = CatItemsServer.GetItemKeyByItem(CurrentRow.Item);
-	If ValueIsFilled(CurrentRow.ItemKey)
-		And ServiceSystemServer.GetObjectAttribute(CurrentRow.ItemKey, "Item") <> CurrentRow.Item Then
-		CurrentRow.ItemKey = Undefined;
+	CurrentData.ItemKey = CatItemsServer.GetItemKeyByItem(CurrentData.Item);
+	If ValueIsFilled(CurrentData.ItemKey) 
+		And ServiceSystemServer.GetObjectAttribute(CurrentData.ItemKey, "Item")	<> CurrentData.Item Then
+		CurrentData.ItemKey = Undefined;
 	EndIf;
-	
+
 	CalculationSettings = New Structure();
 	CalculationSettings.Insert("UpdateUnit");
-	CalculationStringsClientServer.CalculateItemsRow(Object,
-		CurrentRow,
-		CalculationSettings);
+	CalculationStringsClientServer.CalculateItemsRow(Object, CurrentData, CalculationSettings);
 EndProcedure
 
-Procedure ItemListOnChange(Object, Form, Item = Undefined, CalculationSettings = Undefined) Export
-	For Each Row In Object.ItemList Do
-		If Not ValueIsFilled(Row.Key) Then
-			Row.Key = New UUID();
-		EndIf;
-		#If MobileClient Then
-		Row.Item = ServiceSystemServer.GetObjectAttribute(Row.ItemKey, "Item");
-		Row.Title = "" + Row.Item + " " + Row.ItemKey;
-		#EndIf
-	EndDo;
+Procedure ItemListOnChange(Object, Form, Item = Undefined, CurrentRowData = Undefined) Export
+	DocumentsClient.FillRowIDInItemList(Object);
+	CurrentData = DocumentsClient.GetCurrentRowDataList(Form.Items.ItemList, CurrentRowData);
 	
-	If Form.Items.ItemList.CurrentData <> Undefined Then
-		If Form.Items.ItemList.CurrentItem <> Undefined
-			AND Form.Items.ItemList.CurrentItem.Name = "ItemListStore" Then
-			DocumentsClient.SetCurrentStore(Object, Form, Form.Items.ItemList.CurrentData.Store);
-		EndIf;
-		DocumentsClient.FillUnfilledStoreInRow(Object, Form.Items.ItemList, Form.CurrentStore);
+	If Form.Items.ItemList.CurrentItem <> Undefined And Form.Items.ItemList.CurrentItem.Name = "ItemListStore" Then
+		DocumentsClient.SetCurrentStore(Object, Form, Form.Items.ItemList.CurrentData.Store);
 	EndIf;
-	
+
+	If Not CurrentData = Undefined Then
+		DocumentsClient.FillUnfilledStoreInRow(Object, CurrentData, Form.CurrentStore);
+	EndIf;
+
 	ObjectData = DocumentsClientServer.GetStructureFillStores();
 	FillPropertyValues(ObjectData, Object);
 	DocumentsClientServer.FillStores(ObjectData, Form);
+	RowIDInfoClient.UpdateQuantity(Object, Form);
 EndProcedure
 
-Procedure ItemListOnActivateRow(Object, Form, Item) Export
-	If Form.Items.ItemList.CurrentData = Undefined Then
+Procedure ItemListSelection(Object, Form, Item, RowSelected, Field, StandardProcessing, AddInfo = Undefined) Export
+	RowIDInfoClient.ItemListSelection(Object, Form, Item, RowSelected, Field, StandardProcessing, AddInfo);
+EndProcedure
+
+Procedure ItemListOnStartEdit(Object, Form, Item, NewRow, Clone, AddInfo = Undefined) Export
+	CurrentData = Item.CurrentData;
+	If CurrentData = Undefined Then
 		Return;
 	EndIf;
-	
-	CurrentRow = Form.Items.ItemList.CurrentData;
-	
-	If ValueIsFilled(CurrentRow.Store)
-		And CurrentRow.Store <> Form.CurrentStore Then
-		DocumentsClient.SetCurrentStore(Object, Form, CurrentRow.Store);
+	If Clone Then
+		CurrentData.Key = New UUID();
 	EndIf;
+	RowIDInfoClient.ItemListOnStartEdit(Object, Form, Item, NewRow, Clone, AddInfo);
 EndProcedure
 
-Procedure ItemListReceiptBasisStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
-	StandardProcessing = False;
-	
-	FilterValues = New Structure();
-	FilterValues.Insert("Company"  , Object.Company);
-	FilterValues.Insert("Partner"  , ?(Form.Items.Partner.Visible, Object.Partner, Undefined));
-	FilterValues.Insert("LegalName", ?(Form.Items.LegalName.Visible, Object.LegalName, Undefined));
-	FilterValues.Insert("ItemKey"  , Form.Items.ItemList.CurrentData.ItemKey);
-	
-	ExistingRows = New Array;
-	For Each Row In Object.ItemList Do
-		If Row.GetID() = Form.Items.ItemList.CurrentRow Then
-			Continue;
-		EndIf;
-		RowStructure = New Structure("Key, Unit, Quantity");
-		FillPropertyValues(RowStructure, Row);
-		ExistingRows.Add(RowStructure);
-	EndDo;
-	
-	FormParameters = New Structure();
-	FormParameters.Insert("SelectReceiptBasisMode", True);
-	FormParameters.Insert("FilterValues"          , FilterValues);
-	FormParameters.Insert("ExistingRows"          , ExistingRows);
-	FormParameters.Insert("Ref"                   , Object.Ref);
-	
-	NotifyParameters = New Structure;
-	NotifyParameters.Insert("Object"    , Object);
-	NotifyParameters.Insert("Form"      , Form);
-	NotifyParameters.Insert("CurrentRow", Form.Items.ItemList.CurrentRow);
-	OpenForm("Document.GoodsReceipt.Form.SelectReceiptBasisesForm"
-		, FormParameters, , , ,
-		, New NotifyDescription("SelectReceiptBasisInRowContinue", ThisObject, NotifyParameters));
-	
+Procedure ItemListAfterDeleteRow(Object, Form, Item) Export
+	DocumentsClient.ItemListAfterDeleteRow(Object, Form, Item);
 EndProcedure
 
-Procedure SerialLotNumberListOnChange(Object, Form, Item = Undefined) Export
-	For Each Row In Object.SerialLotNumbers Do
-		#If MobileClient Then
-		ItemListFilterStructure = New Structure;
-		ItemListFilterStructure.Insert("Key", Row.KeyRef);
-		ItemListExistingRows = Object.ItemList.FindRows(ItemListFilterStructure);
-		If ItemListExistingRows.Count() Then
-			ItemListExistingRow = ItemListExistingRows[0];
-			Row.ItemKey = ItemListExistingRow.ItemKey;
-			Row.Item = ItemListExistingRow.Item;
-			Row.Title = "" + Row.Item + " " + Row.ItemKey + " " + Row.SerialLotNumber;
-		EndIf;
-		#EndIf
-	EndDo;
+Procedure ItemListOnActivateRow(Object, Form, Item, CurrentRowData = Undefined) Export
+	CurrentData = DocumentsClient.GetCurrentRowDataList(Form.Items.ItemList, CurrentRowData);
+	
+	If CurrentData = Undefined Then
+		Return;
+	EndIf;
+
+	If ValueIsFilled(CurrentData.Store) And CurrentData.Store <> Form.CurrentStore Then
+		DocumentsClient.SetCurrentStore(Object, Form, CurrentData.Store);
+	EndIf;
 EndProcedure
 
 Procedure DescriptionClick(Object, Form, Item, StandardProcessing) Export
@@ -273,21 +238,18 @@ Procedure ChangeItemListStore(ItemList, Store) Export
 EndProcedure
 
 Procedure StoreOnChange(Object, Form, Item) Export
-	
+
 	If Not ValueIsFilled(Form.Store) Then
-		
+
 		ObjectData = DocumentsClientServer.GetStructureFillStores();
 		FillPropertyValues(ObjectData, Object);
 		Form.Store = DocumentsServer.GetCurrentStore(ObjectData);
-		
+
 	EndIf;
-	
-	If Form.Store <> Form.StoreBeforeChange
-		And Object.ItemList.Count() Then
-		ShowQueryBox(New NotifyDescription("StoreOnChangeContinue", 
-											ThisObject, 
-											New Structure("Form, Object", Form, Object)),
-					R().QuestionToUser_005,	QuestionDialogMode.YesNoCancel);
+
+	If Form.Store <> Form.StoreBeforeChange And Object.ItemList.Count() Then
+		ShowQueryBox(New NotifyDescription("StoreOnChangeContinue", ThisObject, New Structure("Form, Object", Form,
+			Object)), R().QuestionToUser_005, QuestionDialogMode.YesNoCancel);
 		Return;
 	EndIf;
 	DocumentsClient.SetCurrentStore(Object, Form, Form.Store);
@@ -295,8 +257,7 @@ Procedure StoreOnChange(Object, Form, Item) Export
 EndProcedure
 
 Procedure StoreOnChangeContinue(Answer, AdditionalParameters) Export
-	If Answer = DialogReturnCode.Yes
-		And AdditionalParameters.Property("Form") Then
+	If Answer = DialogReturnCode.Yes And AdditionalParameters.Property("Form") Then
 		Form = AdditionalParameters.Form;
 		For Each Row In Form.Object.ItemList Do
 			Row.Store = Form.Store;
@@ -340,182 +301,32 @@ EndProcedure
 #EndRegion
 
 Procedure ItemListItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing) Export
-	OpenSettings = DocumentsClient.GetOpenSettingsForSelectItemWithNotServiceFilter();
+	OpenSettings = DocumentsClient.GetOpenSettingsForSelectItemWithoutServiceFilter();
 	DocumentsClient.ItemStartChoice(Object, Form, Item, ChoiceData, StandardProcessing, OpenSettings);
 EndProcedure
 
 Procedure ItemListItemEditTextChange(Object, Form, Item, Text, StandardProcessing) Export
-	DocumentsClient.ItemEditTextChange(Object, Form, Item, Text, StandardProcessing);
+	ArrayOfFilters = DocumentsClient.GetArrayOfFiltersForSelectItemWithoutServiceFilter();
+	DocumentsClient.ItemEditTextChange(Object, Form, Item, Text, StandardProcessing, ArrayOfFilters);
 EndProcedure
 
-Procedure PickupItemsEnd(Result, AdditionalParameters) Export
-	If NOT ValueIsFilled(Result)
-		OR Not AdditionalParameters.Property("Object")
-		OR Not AdditionalParameters.Property("Form") Then
-		Return;
-	EndIf;
-	
-	Object = AdditionalParameters.Object;
-	Form = AdditionalParameters.Form;
-	
-	ItemListFilterString = "Item, ItemKey, Unit, Barcode";
-	ItemListFilterStructure = New Structure(ItemListFilterString);
-	
-	SerialLotNumberListString = "SerialLotNumber";
-	SerialLotNumberListFilterStructure = New Structure(SerialLotNumberListString);
-	
-	For Each ResultElement In Result Do
-		
-		FillPropertyValues(ItemListFilterStructure, ResultElement);
-		ExistingRows = Object.ItemList.FindRows(ItemListFilterStructure);
-		If ExistingRows.Count() Then
-			Row = ExistingRows[0];
-		Else
-			Row = Object.ItemList.Add();
-			FillPropertyValues(Row, ResultElement, ItemListFilterString);
-			Row.Store = Form.Store;
-			Row.Key = New UUID();
-		EndIf;
-		Row.Quantity = Row.Quantity + ResultElement.Quantity;
-		
-		FillPropertyValues(SerialLotNumberListFilterStructure, ResultElement);
-		SerialLotNumberListExistingRows = Object.SerialLotNumbers.FindRows(SerialLotNumberListFilterStructure);
-		If SerialLotNumberListExistingRows.Count() Then
-			SerialLotNumberListRow = SerialLotNumberListExistingRows[0];
-		Else
-			SerialLotNumberListRow = Object.SerialLotNumbers.Add();
-			FillPropertyValues(SerialLotNumberListRow, ResultElement, SerialLotNumberListString);
-		EndIf;
-		SerialLotNumberListRow.KeyRef = Row.Key;
-		SerialLotNumberListRow.Quantity = SerialLotNumberListRow.Quantity + ResultElement.Quantity;
-		
-	EndDo;
-	ItemListOnChange(Object, Form, Undefined, Undefined);
-	SerialLotNumberListOnChange(Object, Form, Undefined);
-EndProcedure
-
-Procedure ItemListBeforeDeleteRow(Object, Form, Item, Cancel) Export
-	
-	CurrentData = Form.Items.ItemList.CurrentData;
-	
+Procedure ItemListBeforeDeleteRow(Object, Form, Item, Cancel, CurrentRowData = Undefined) Export
+	CurrentData = DocumentsClient.GetCurrentRowDataList(Form.Items.ItemList, CurrentRowData);
 	If CurrentData = Undefined Then
 		Return;
 	EndIf;
-	
-	SerialLotNumberListFilterStructure = New Structure;
-	SerialLotNumberListFilterStructure.Insert("KeyRef", CurrentData.Key);
-	SerialLotNumberListExistingRows = Object.SerialLotNumbers.FindRows(SerialLotNumberListFilterStructure);
-	For Each Row In SerialLotNumberListExistingRows Do
-		Object.SerialLotNumbers.Delete(Row);
-	EndDo;
-	
+
+	RowIDInfoClient.ItemListBeforeDeleteRow(Object, Form, Item, Cancel);
 EndProcedure
 
 Procedure SearchByBarcode(Barcode, Object, Form) Export
 	DocumentsClient.SearchByBarcode(Barcode, Object, Form);
 EndProcedure
 
-Procedure SelectReceiptBasises(Object, Form, Command) Export
-	FilterValues = New Structure("Company, Partner, LegalName");
-	FilterValues.Company = Object.Company;
-	FilterValues.Partner = ?(Form.Items.Partner.Visible, Object.Partner, Undefined);
-	FilterValues.LegalName = ?(Form.Items.LegalName.Visible, Object.LegalName, Undefined);
-	
-	ExistingRows = New Array;
-	For Each Row In Object.ItemList Do
-		RowStructure = New Structure("Key, Unit, Quantity");
-		FillPropertyValues(RowStructure, Row);
-		ExistingRows.Add(RowStructure);
-	EndDo;
-	
-	FormParameters = New Structure("FilterValues, ExistingRows, Ref", FilterValues, ExistingRows, Object.Ref);
-	NotifyParameters = New Structure;
-	NotifyParameters.Insert("Object", Object);
-	NotifyParameters.Insert("Form", Form);
-	NotifyParameters.Insert("Command", Command);
-	OpenForm("Document.GoodsReceipt.Form.SelectReceiptBasisesForm"
-		, FormParameters, , , ,
-		, New NotifyDescription("SelectReceiptBasisesContinue", ThisObject, NotifyParameters));
-EndProcedure
-
-Procedure SelectReceiptBasisesContinue(Result, AdditionalParameters) Export
-	
-	Object = AdditionalParameters.Object;
-	Form = AdditionalParameters.Form;
-	
-	If Result = Undefined Then
-		Return;
-	EndIf;
-	
-	For Each ResultRow In Result Do
-		RowsByKey = Object.ItemList.FindRows(New Structure("Key", ResultRow.Key));
-		If RowsByKey.Count() Then
-			RowByKey = RowsByKey[0];
-			ItemKeyUnit = CatItemsServer.GetItemKeyUnit(ResultRow.ItemKey);
-			UnitFactorFrom = DocGoodsReceiptServer.GetUnitFactor(RowByKey.Unit, ItemKeyUnit);
-			UnitFactorTo = DocGoodsReceiptServer.GetUnitFactor(ResultRow.Unit, ItemKeyUnit);
-			FillPropertyValues(RowByKey, ResultRow, , "Quantity");
-			RowByKey.Quantity = ?(UnitFactorTo = 0,
-					0,
-					RowByKey.Quantity * UnitFactorFrom / UnitFactorTo) + ResultRow.Quantity;
-		Else
-			NewRow = Object.ItemList.Add();
-			FillPropertyValues(NewRow, ResultRow);
-		EndIf;
-	EndDo;
-	
-	DocGoodsReceiptClient.ItemListOnChange(Object, Form, Form.Items.ItemList);
-	
-	Notify("ChoiceReceiptBasis", New Structure(), Result);
-EndProcedure
-
-Procedure SelectReceiptBasisInRowContinue(Result, AdditionalParameters) Export
-	
-	Object = AdditionalParameters.Object;
-	Form = AdditionalParameters.Form;
-	
-	If Result = Undefined OR Not Result.Count() Then
-		Return;
-	EndIf;
-	
-	Row = Object.ItemList.FindByID(AdditionalParameters.CurrentRow);
-	If Row = Undefined Then
-		Return;
-	EndIf;
-	FillPropertyValues(Row, Result[0], "Key, ReceiptBasis, SalesOrder");
-	
-	DocGoodsReceiptClient.ItemListOnChange(Object, Form, Form.Items.ItemList);
-	
-	Notify("ChoiceReceiptBasis", New Structure(), Result);
-EndProcedure
-
-Procedure FillReceiptBasises(Object, Form, Command) Export
-	
-	FilterValues = New Structure("Company, Partner, LegalName");
-	FillPropertyValues(FilterValues, Object);
-	
-	ExistingRows = New Array;
-	For Each Row In Object.ItemList Do
-		RowStructure = New Structure("ItemKey, Unit, Quantity, Store");
-		FillPropertyValues(RowStructure, Row);
-		ExistingRows.Add(RowStructure);
-	EndDo;
-	
-	Object.ItemList.Clear();
-	Result = DocGoodsReceiptServer.InfoReceiptBasisesFilling(FilterValues, ExistingRows, Object.Ref);
-	For Each ResultRow In Result Do
-		Row = Object.ItemList.Add();
-		FillPropertyValues(Row, ResultRow);
-	EndDo;
-	
-	DocGoodsReceiptClient.ItemListOnChange(Object, Form, Form.Items.ItemList);
-EndProcedure
-
 #Region PickUpItems
 
 Procedure OpenPickupItems(Object, Form, Command) Export
-	DocumentsClient.OpenPickupItems(Object, Form, Command); 
+	DocumentsClient.OpenPickupItems(Object, Form, Command);
 EndProcedure
 
 #EndRegion
-

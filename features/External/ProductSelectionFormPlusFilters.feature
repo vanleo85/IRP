@@ -398,7 +398,7 @@ Scenario: check the product selection form with price information in Purchase in
 			| 'Dress'    | '*'      | 'S/Yellow'  | 'Store 01' | '1,000' | '*'             | '*'          | 'pcs' | '*'           | '*'            |
 			| 'Trousers' | '*'      | '38/Yellow' | 'Store 01' | '2,000' | '*'             | '*'          | 'pcs' | '*'           | '*'            |
 	* Add one more line to the order through the Add button
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| Description |
@@ -532,7 +532,7 @@ Scenario: check the product selection form with price information in Purchase or
 			| 'Dress'    | '*'      | 'S/Yellow'  | 'Store 01' | '1,000' | '*'             | '*'          | 'pcs' | '*'           | '*'            |
 			| 'Trousers' | '*'      | '38/Yellow' | 'Store 01' | '2,000' | '*'             | '*'          | 'pcs' | '*'           | '*'            |
 	* Add one more line to the order through the Add button
-		And I click the button named "Add"
+		And in the table "ItemList" I click the button named "ItemListAdd"
 		And I click choice button of "Item" attribute in "ItemList" table
 		And I go to line in "List" table
 			| Description |
@@ -855,7 +855,7 @@ Scenario: check the filter by Company
 			| Company Kalipso |
 		And I click the button named "FormChoose"
 		When I Check the steps for Exception
-			|'Then the form attribute named "LegalName" became equal to 'Company Kalipso''|
+			|'Then the form attribute named "Company" became equal to 'Company Kalipso''|
 	And I close all client application windows
 
 Scenario: check the filter by Company  in the inventory transfer
@@ -878,7 +878,7 @@ Scenario: check the filter by Company  in the inventory transfer
 			| Company Kalipso |
 		And I click the button named "FormChoose"
 		When I Check the steps for Exception
-			|'Then the form attribute named "LegalName" became equal to 'Company Kalipso''|
+			|'Then the form attribute named "Company" became equal to 'Company Kalipso''|
 	And I close all client application windows
 
 Scenario: check the filter by Company  in the Shipment cinfirmation and Goods receipt
@@ -901,7 +901,7 @@ Scenario: check the filter by Company  in the Shipment cinfirmation and Goods re
 			| Company Kalipso |
 		And I click the button named "FormChoose"
 		When I Check the steps for Exception
-			|'Then the form attribute named "LegalName" became equal to 'Company Kalipso''|
+			|'Then the form attribute named "Company" became equal to 'Company Kalipso''|
 		And I close all client application windows
 
 Scenario: check the filter by Company (Ferron)
@@ -929,7 +929,7 @@ Scenario: check the filter by Company (Ferron)
 			| Company Kalipso |
 		And I click the button named "FormChoose"
 		When I Check the steps for Exception
-			|'Then the form attribute named "LegalName" became equal to 'Company Kalipso''|
+			|'Then the form attribute named "Company" became equal to 'Company Kalipso''|
 	And I close all client application windows
 
 
@@ -1002,27 +1002,7 @@ Scenario: check the filter by my own company in Reconcilation statement
 			|'Then the form attribute named "LegalName" became equal to 'Company Kalipso''|
 	And I close all client application windows
 
-Scenario: check the filter by my own company in Cheque bond transaction
-	* Check visual filter
-		And I click Select button of "Company" field
-		And "List" table became equal
-			| 'Description'    |
-			| 'Main Company'   |
-			| 'Second Company' |
-		And I select current line in "List" table
-		Then the form attribute named "Company" became equal to "Main Company"
-	* Check the filter by string input
-		And Delay 2
-		And I input "Company Kalipso" text in "Company" field
-		And Delay 2
-		And I click Select button of "Currency" field
-		And "List" table does not contain lines
-			| Description  |
-			| Company Kalipso |
-		And I click the button named "FormChoose"
-		When I Check the steps for Exception
-			|'Then the form attribute named "LegalName" became equal to 'Company Kalipso''|
-	And I close all client application windows
+
 
 Scenario: check the filter by my own company in Opening entry/Item stock adjustment
 	And I click the button named "FormCreate"
@@ -1636,9 +1616,16 @@ Scenario: check the barcode search in the sales documents + price and tax fillin
 	And I input "2202283705" text in "InputFld" field
 	And I click "OK" button
 	* Check adding an items and filling in the price in the tabular part
+		And I click "Show row key" button		
 		And "ItemList" table contains lines
-			| 'Item'  | 'Price'  | 'Item key' |'Q'     | 'Unit' | 'Total amount' |
-			|'Dress' |'520,00' | 'XS/Blue'  |'1,000' | 'pcs'  | '520,00'       |
+			| 'Item'  | 'Price'  | 'Item key' | 'Q'     | 'Unit' | 'Total amount' | 'Quantity in base unit' |
+			| 'Dress' | '520,00' | 'XS/Blue'  | '1,000' | 'pcs'  | '520,00'       | '1,000'                |
+		And in the table "ItemList" I click "SearchByBarcode" button
+		And I input "2202283705" text in "InputFld" field
+		And I click "OK" button
+		And "ItemList" table contains lines
+			| 'Item'  | 'Price'  | 'Item key' | 'Q'     | 'Unit' | 'Total amount' | 'Quantity in base unit' |
+			| 'Dress' | '520,00' | 'XS/Blue'  | '2,000' | 'pcs'  | '1 040,00'       | '2,000'                |
 	And I close all client application windows
 
 Scenario: check the barcode search on the return documents
@@ -1652,9 +1639,16 @@ Scenario: check the barcode search on the return documents
 	And I input "2202283705" text in "InputFld" field
 	And I click "OK" button
 	* Check the items adding
+		And I click "Show row key" button
 		And "ItemList" table contains lines
-			| 'Item'  | 'Item key' |'Q'     | 'Unit' |
-			|'Dress' | 'XS/Blue' |'1,000' | 'pcs'  |
+			| 'Item'  | 'Item key' | 'Q'     | 'Unit' | 'Quantity in base unit' |
+			| 'Dress' | 'XS/Blue'  | '1,000' | 'pcs'  | '1,000'                 |
+		And I click "SearchByBarcode" button
+		And I input "2202283705" text in "InputFld" field
+		And I click "OK" button
+		And "ItemList" table contains lines
+			| 'Item'  | 'Item key' | 'Q'     | 'Unit' | 'Quantity in base unit' |
+			| 'Dress' | 'XS/Blue'  | '2,000' | 'pcs'  | '2,000'                 |
 	And I close all client application windows
 
 
@@ -1665,26 +1659,42 @@ Scenario: check the barcode search in the purchase/purchase returns
 		| Description |
 		| Ferron BP     |
 	And I select current line in "List" table
-	And I click the button named "ItemListSearchByBarcode"
+	And I click the button named "SearchByBarcode"
 	And I input "2202283713" text in "InputFld" field
 	And I click "OK" button
 	* Check adding an items and filling in the price in the tabular part
+		And I click "Show row key" button
 		And "ItemList" table contains lines
-			| 'Item'  |'Item key' |'Q'     | 'Unit' |
-			|'Dress' |'S/Yellow'  |'1,000' | 'pcs'  |
+			| 'Item'  |'Item key' |'Q'     | 'Unit' | 'Quantity in base unit' |
+			|'Dress' |'S/Yellow'  |'1,000' | 'pcs'  | '1,000'                 |
+		And I click the button named "SearchByBarcode"
+		And I input "2202283713" text in "InputFld" field
+		And I click "OK" button
+		And "ItemList" table contains lines
+			| 'Item'  |'Item key' |'Q'     | 'Unit' | 'Quantity in base unit' |
+			|'Dress' |'S/Yellow'  |'2,000' | 'pcs'  | '2,000'                 |
 	And I close all client application windows
 
 Scenario: check the barcode search in storage operations documents	
 	And I click the button named "FormCreate"
-	And I click "SearchByBarcode" button
+	And in the table "ItemList" I click the button named "SearchByBarcode"
 	And I input "2202283713" text in "InputFld" field
 	And I click "OK" button
 	* Check adding an items and filling in the price in the tabular part
+		And I click "Show row key" button
 		And "ItemList" table contains lines
-			| 'Item'    |'Item key'     | 'Unit' |
-			|'Dress' |'S/Yellow'  | 'pcs'  |
+			| 'Item'  | 'Item key' | 'Unit' | 'Quantity' | 'Quantity in base unit' |
+			| 'Dress' | 'S/Yellow' | 'pcs'  | '1,000'    | '1,000'                 |
+		And in the table "ItemList" I click the button named "SearchByBarcode"
+		And I input "2202283713" text in "InputFld" field
+		And I click "OK" button
+		And "ItemList" table contains lines
+			| 'Item'  | 'Item key' | 'Unit' | 'Quantity' | 'Quantity in base unit' |
+			| 'Dress' | 'S/Yellow' | 'pcs'  | '2,000'    | '2,000'                 |
 	And I close all client application windows
-
+	
+	
+		
 
 Scenario: check the barcode search in the product bundling documents
 	And I click the button named "FormCreate"
@@ -1693,9 +1703,16 @@ Scenario: check the barcode search in the product bundling documents
 	And I input "2202283713" text in "InputFld" field
 	And I click "OK" button
 	* Check adding an items and filling in the price in the tabular part
+		And I click "Show row key" button
 		And "ItemList" table contains lines
-			| 'Item'  |'Item key' |'Quantity'     | 'Unit' |
-			|'Dress' |'S/Yellow'  |'1,000' | 'pcs'  |
+			| 'Item'  | 'Item key' | 'Quantity' | 'Unit' | 'Quantity in base unit' |
+			| 'Dress' | 'S/Yellow' | '1,000'    | 'pcs'  | '1,000'                 |
+		And in the table "ItemList" I click "SearchByBarcode" button
+		And I input "2202283713" text in "InputFld" field
+		And I click "OK" button
+		And "ItemList" table contains lines
+			| 'Item'  | 'Item key' | 'Quantity' | 'Unit' | 'Quantity in base unit' |
+			| 'Dress' | 'S/Yellow' | '2,000'    | 'pcs'  | '2,000'                 |
 	And I close all client application windows
 
 Scenario: check the barcode search in the PhysicalInventory documents
@@ -1704,9 +1721,16 @@ Scenario: check the barcode search in the PhysicalInventory documents
 	And I input "2202283713" text in "InputFld" field
 	And I click "OK" button
 	* Check adding an items and filling in tabular part
+		And I click "Show row key" button
 		And "ItemList" table contains lines
-			| 'Item'    |'Item key'     | 'Unit' |
-			|'Dress' |'S/Yellow'  | 'pcs'  |
+			| 'Item'  | 'Item key' | 'Unit' | 'Phys. count' | 
+			| 'Dress' | 'S/Yellow' | 'pcs'  | '1,000'       |
+		And I click "SearchByBarcode" button
+		And I input "2202283713" text in "InputFld" field
+		And I click "OK" button
+		And "ItemList" table contains lines
+			| 'Item'  | 'Item key' | 'Unit' | 'Phys. count' |
+			| 'Dress' | 'S/Yellow' | 'pcs'  | '2,000'       |
 	And I close all client application windows
 
 Scenario: check the barcode search in the Item stock adjustment
@@ -1715,7 +1739,15 @@ Scenario: check the barcode search in the Item stock adjustment
 	And I input "2202283713" text in "InputFld" field
 	And I click "OK" button
 	* Check adding an items and filling in the price in the tabular part
+		And I click "Show row key" button
 		And "ItemList" table contains lines
-			| 'Item' |'Item key (surplus)'     | 'Unit' |
-			|'Dress' |'S/Yellow'               | 'pcs'  |
+			| 'Item' |'Item key (surplus)'     | 'Unit' | 'Quantity' | 'Quantity in base unit' |
+			|'Dress' |'S/Yellow'               | 'pcs'  | '1,000'    | '1,000'                 |
+		And I click "SearchByBarcode" button
+		And I input "2202283713" text in "InputFld" field
+		And I click "OK" button
+		And "ItemList" table contains lines
+			| 'Item' |'Item key (surplus)'     | 'Unit' | 'Quantity' | 'Quantity in base unit' |
+			|'Dress' |'S/Yellow'               | 'pcs'  | '2,000'    | '2,000'                 |
 	And I close all client application windows
+	
